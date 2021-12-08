@@ -44,12 +44,19 @@ model Accident {
   hitPerson           HitPerson[]
   thirdParty          ThirdParty[]
   injuryAccident      InjuryAccident[]
+  propertyAccident    PropertyAccident[]
 }
 
 model HitPerson {
-  id                  Int         @id @default(autoincrement())
-  accidentId          Int
-  accident            Accident[]  @relation(fields: [accidentId], references: [id])
+  id                    Int         @id @default(autoincrement())
+  accidentId            Int
+  accident              Accident[]  @relation(fields: [accidentId], references: [id])
+  medical_attention     Boolean
+  vehicle_or_pedestrian String
+  previous_damage       String
+  contact_infomation    Json
+
+  accident_pictures     Image[]
 }
 
 model ThirdParty {
@@ -61,6 +68,26 @@ model ThirdParty {
 
 model InjuryAccident {
   id                      Int         @id @default(autoincrement())
+  self_injured            Boolean
+  vehicle_number          String
+  amazon_logo             Boolean
+  exact_address           String
+  action_before_accident  Json
+  police_report           Json
+  weather                 String
+  wet_ground              Boolean
+  slippery_ground         Boolean
+  extra_info              String
+  rushed_prior            Boolean
+
+  accident_pictures       Image[]
+
+  accidentId              Int
+  accident                Accident[] @relation(fields: [accidentId], references: [id])
+}
+
+model PropertyAccident {
+  id                      Int       @id @default(autoincrement())
   self_injured            Boolean
   vehicle_number          String
   amazon_logo             Boolean
@@ -92,6 +119,12 @@ model Image {
 
   injuryAccidentId        Int
   injuryAccident          InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
+
+  hitPersonId             Int
+  hitPerson               HitPerson     @relation(fields: [hitPersonId], references: [id])
+
+  propertyAccidentId        Int
+  propertyAccident        PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
 }
 
 enum Role {
