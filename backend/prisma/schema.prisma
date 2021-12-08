@@ -43,6 +43,7 @@ model Accident {
   user                User        @relation(fields: [userId], references: [id])
   hitPerson           HitPerson[]
   thirdParty          ThirdParty[]
+  injuryAccident      InjuryAccident[]
 }
 
 model HitPerson {
@@ -56,6 +57,41 @@ model ThirdParty {
   accidentId          Int
   accident            Accident[]  @relation(fields: [accidentId], references: [id])
   location            String
+}
+
+model InjuryAccident {
+  id                      Int         @id @default(autoincrement())
+  self_injured            Boolean
+  vehicle_number          String
+  amazon_logo             Boolean
+  exact_address           String
+  action_before_accident  Json
+  police_report           Json
+  weather                 String
+  wet_ground              Boolean
+  slippery_ground         Boolean
+  extra_info              String
+  rushed_prior            Boolean
+
+  accident_pictures       Image[]
+
+  accidentId              Int
+  accident                Accident[] @relation(fields: [accidentId], references: [id])
+}
+
+model Image {
+  id                      Int       @id @default(autoincrement())
+  fieldname               String
+  path                    String
+  mimetype                String
+  size                    Int
+  originalname            String
+  encoding                String
+  destination             String
+  filename                String
+
+  injuryAccidentId        Int
+  injuryAccident          InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
 }
 
 enum Role {
