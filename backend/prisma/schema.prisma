@@ -18,22 +18,22 @@ model User {
   username            String      @unique
   email               String      @unique
   password            String
-  fico                Int
-  netradyne           Int
-  da                  Int
-  seatbelt            Boolean
-  speeding            Boolean
-  defects             Int
-  cdf                 Int
-  dar                 Int
-  dcr                 Int
-  pod                 Int
-  cc                  Int
-  sc                  Int
-  has_many_accidents  Int
-  belongs_to_team     Boolean
-  attendance          Json
-  productivity        Json
+  fico                Int?
+  netradyne           Int?
+  da                  Int?
+  seatbelt            Boolean?
+  speeding            Boolean?
+  defects             Int?
+  cdf                 Int?
+  dar                 Int?
+  dcr                 Int?
+  pod                 Int?
+  cc                  Int?
+  sc                  Int?
+  has_many_accidents  Int?
+  belongs_to_team     Boolean?
+  attendance          Json?
+  productivity        Json?
   accidents           Accident[]
 }
 

@@ -9,6 +9,8 @@ import {
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
 
+
+
 export default {
 	Query: {
 		getUser: async (_, {}, context) => {
@@ -34,7 +36,7 @@ export default {
 		 * @returns Signed up user in DB
 		 */
 
-		signupUser: async (_, { signupInput: { email, password, username } }) => {
+		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname } }) => {
 			try {
 				const { valid, errors } = validateRegisterInput(
 					username,
@@ -81,10 +83,13 @@ export default {
 						email: email,
 						username: username,
 						password: password,
+						firstname: firstname,
+						lastname: lastname
 					},
 				});
 			} catch (error) {
-				throw new Error(error);
+				console.log(error)
+				// throw new Error(error);
 			}
 		},
 

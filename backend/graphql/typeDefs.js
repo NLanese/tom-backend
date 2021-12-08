@@ -12,6 +12,7 @@ const typeDefs = gql`
         lastname:               String
         email:                  String
         password:               String
+        token:                  String
         fico:                   Int
         netradyne:              Int
         da:                     Int
