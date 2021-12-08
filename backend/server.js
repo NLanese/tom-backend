@@ -16,12 +16,14 @@ const startApolloServer = async () => {
     })
 
     const whitelist = [
-        "http://localhost:4000/graphql"
+        "http://localhost:3000",
+        "http://localhost:4000/graphql",        
+        "https://studio.apollographql.com",
     ]
 
-    app.use(cors({ origin: "*" }))
-    app.use(express.json)
-    app.use(express.urlencoded({ extended: true }));
+    app.use(cors({ /* credentials: true, */ origin: "*" })); 
+    app.use(express.json());
+	app.use(express.urlencoded({ extended: true }));
     
     app.get('/', (req, res) => {
 		res.send('Welcome to SQL');
