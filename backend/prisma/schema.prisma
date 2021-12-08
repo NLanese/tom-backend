@@ -55,6 +55,7 @@ model HitPerson {
   vehicle_or_pedestrian String
   previous_damage       String
   contact_infomation    Json
+  injury                String
 
   accident_pictures     Image[]
 }
@@ -104,6 +105,21 @@ model PropertyAccident {
 
   accidentId              Int
   accident                Accident[] @relation(fields: [accidentId], references: [id])
+}
+
+model InjuryReport {
+  id                      Int       @id @default(autoincrement())
+  immediate_attention     Boolean
+  late                    Json
+  self_injured            Boolean
+  injury_type             Json
+  other_injured           Boolean
+  before_injury           String
+  packages                Json
+  safety_equipment        Json
+  unsafe_conditions       Json
+  pain_level              Int
+  addtional_information   String
 }
 
 model Image {
