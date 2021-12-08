@@ -29,9 +29,50 @@ const typeDefs = gql`
         attendence:             JSON
         productivity:           JSON
 
-        accidents:              [Accidents]
+        accidents:              [Accident]
     }
 
+    type Accident {
+        id:                     ID
+        user:                   User
+        using_safety:           Boolean
+        safety_failed:          Boolean
+        number_package_carried: Int
+        safety_equipment_used:  JSON
+        failed_safety:          Boolean
+    }
+
+    # ---------------------------------------- END SCHEMAS ----------------------------------------
+
+    type Query {
+		# USER QUERIES
+		getUser: User
+    }
+
+    type Mutation {
+		# USER MUTATIONS
+		signupUser(signupInput: SignupInput): User!
+		signinUser(email: String!, password: String!): User!
+		updateUser(updateUser: UpdateUser): User!
+		deleteUser: User!
+    }
+
+    #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
+
+    input SignupInput {
+		email: String!
+		username: String!
+		firstname: String
+		lastname: String
+		password: String!
+	}
+	input UpdateUser {
+		email: String
+		username: String
+		firstname: String
+		lastname: String
+		password: String
+	}
 `;
 
 export default typeDefs;
