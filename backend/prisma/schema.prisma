@@ -45,6 +45,7 @@ model Accident {
   thirdParty          ThirdParty[]
   injuryAccident      InjuryAccident[]
   propertyAccident    PropertyAccident[]
+  injuryReport        InjuryReport[]
 }
 
 model HitPerson {
@@ -120,6 +121,9 @@ model InjuryReport {
   unsafe_conditions       Json
   pain_level              Int
   addtional_information   String
+
+  accidentId              Int
+  accident                Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model Image {
