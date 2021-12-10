@@ -3,6 +3,7 @@ import usersResolvers from './users.js';
 import accidentsResolvers from './accidents.js';
 import thirdPartyResolvers from './thirdParty.js';
 import injuryAccidentResolvers from './injuryAccident.js';
+import propertyAccidentResolvers from './propertyAccident.js';
 
 export default {
     Query: {
@@ -13,7 +14,8 @@ export default {
         ...usersResolvers.Mutation,
         ...accidentsResolvers.Mutation,
         ...thirdPartyResolvers.Mutation,
-        ...injuryAccidentResolvers.Mutation
+        ...injuryAccidentResolvers.Mutation,
+        ...propertyAccidentResolvers.Mutation,
     },
     JSON: GraphQLJSON,
 }
