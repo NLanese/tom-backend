@@ -163,7 +163,7 @@ const typeDefs = gql`
 		getUser: User
 
     # ACCIDENT QUERIES
-    getAccidents: Accidents
+    getAccidents: Accident
     }
 
     type Mutation {
@@ -172,6 +172,9 @@ const typeDefs = gql`
 		signinUser(email: String!, password: String!): User!
 		updateUser(updateUser: UpdateUser): User!
 		deleteUser: User!
+
+    # ACCIDENT MUTATIONS
+    createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident!
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
