@@ -5,6 +5,27 @@ const typeDefs = gql`
 	scalar Date
 	scalar JSON
 
+    type SuperAdmin {
+        id:                           ID
+        role:                         String
+        firstname:                    String
+        lastname:                     String
+        email:                        String
+        password:                     String
+        token:                        String
+    }
+
+    type Admin {
+        id:                           ID
+        role:                         String
+        firstname:                    String
+        lastname:                     String
+        email:                        String
+        password:                     String
+        token:                        String
+        users:                        [User]
+    }
+
     type User {
         id:                           ID
         role:                         String
