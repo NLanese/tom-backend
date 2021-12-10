@@ -29,6 +29,19 @@ export default {
 				throw new Error(error)
 			}
 		},
+
+		getUserById: async (_, {userId}, context) => {
+			const user = await checkAuth(context)
+			try{
+				return db.user.findUnique({
+					where:{
+						id: userId
+					}
+				})
+			}catch(error){
+				throw new Error(console.log(error))
+			}
+		}
 	},
 
 	Mutation: {
