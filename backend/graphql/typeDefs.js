@@ -214,8 +214,8 @@ const typeDefs = gql`
     input SignupInput {
 		email: String!
 		username: String!
-		firstname: String
-		lastname: String
+		firstname: String!
+		lastname: String!
 		password: String!
 	}
 
