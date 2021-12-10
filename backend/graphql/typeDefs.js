@@ -161,6 +161,9 @@ const typeDefs = gql`
     type Query {
 		# USER QUERIES
 		getUser: User
+
+    # ACCIDENT QUERIES
+    getAccidents: Accidents
     }
 
     type Mutation {
