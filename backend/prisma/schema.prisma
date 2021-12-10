@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -11,30 +12,30 @@ datasource db {
 }
 
 model User {
-  id                              Int         @id @default(autoincrement())
-  role                            Role        @default(USER)
-  firstname                       String
-  lastname                        String
-  username                        String      @unique
-  email                           String      @unique
-  password                        String
-  fico                            Int?        @default(0)
-  netradyne                       Int?        @default(0)
-  delivery_associate              Int?        @default(0)
-  seatbelt                        Boolean?    @default(true)
-  speeding                        Boolean?    @default(false)
-  defects                         Int?        @default(0) 
-  customer_delivery_feedback      Int?        @default(0)
-  delivered_and_recieved          Int?        @default(0)
-  delivery_completion_rate        Int?        @default(0)
-  photo_on_delivery               Int?        @default(0)
-  call_compliance                 Int?        @default(0)
-  scan_compliance                 Int?        @default(0)
-  has_many_accidents              Int?        @default(0)
-  belongs_to_team                 Boolean?    @default(false)
-  attendance                      Json?       @default("N/A")
-  productivity                    Json?       @default("N/A")
-  accidents                       Accident[]  
+  id                  Int         @id @default(autoincrement())
+  role                Role        @default(USER)
+  firstname           String
+  lastname            String
+  username            String      @unique
+  email               String      @unique
+  password            String
+  fico                Int?
+  netradyne           Int?
+  da                  Int?
+  seatbelt            Boolean?
+  speeding            Boolean?
+  defects             Int?
+  cdf                 Int?
+  dar                 Int?
+  dcr                 Int?
+  pod                 Int?
+  cc                  Int?
+  sc                  Int?
+  has_many_accidents  Int?
+  belongs_to_team     Boolean?
+  attendance          Json?
+  productivity        Json?
+  accidents           Accident[]
 }
 
 model Accident {
