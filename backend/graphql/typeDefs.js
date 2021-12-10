@@ -43,7 +43,7 @@ const typeDefs = gql`
         failed_safety:          Boolean
 
         hitPerson:              [HitPerson]
-        thirdParty:             [thirdParty]
+        thirdParty:             [ThirdParty]
         injuryAccident:         [InjuryAccident]
         propertyAccident:       [PropertyAccident]
         injuryReport:           [InjuryReport]
@@ -52,7 +52,7 @@ const typeDefs = gql`
 
     type HitPerson{
         id:                     ID
-        accidentID:             Int
+        # accidentID:             Int
         accident:               [Accident]
         medical_attention:      Boolean
         vehicle_or_pedestrian:  String
@@ -66,7 +66,7 @@ const typeDefs = gql`
 
     type ThirdParty{
         id:                     ID
-        accidentId:             Int
+        # accidentId:             Int
         accident:               [Accident]
         location:               String
     }
@@ -78,8 +78,8 @@ const typeDefs = gql`
         vehicle_number:         String
         amazon_logo:            Boolean
         exact_address:          String
-        action_before_accident: Json
-        police_report:          Json
+        action_before_accident: JSON
+        police_report:          JSON
         weather:                String
         wet_ground:             Boolean
         slippery_ground:        Boolean
@@ -88,7 +88,7 @@ const typeDefs = gql`
         
         accident_pictures:      [Image]
 
-        accidentId:             Int
+        # accidentId:             Int
         accident:               [Accident]
     }
 
@@ -99,8 +99,8 @@ const typeDefs = gql`
       vehicle_number:           String
       amazon_logo:              Boolean
       exact_address:            String
-      action_before_accident:   Json
-      police_report:            Json
+      action_before_accident:   JSON
+      police_report:            JSON
       weather:                  String
       wet_ground:               Boolean
       slippery_ground:          Boolean
@@ -109,26 +109,26 @@ const typeDefs = gql`
 
       accident_pictures:        [Image]
 
-      accidentId                Int
-      accident                  [Accident]
+      # accidentId                Int
+      accident:                 [Accident]
     }
 
 
     type InjuryReport{
       id:                     ID
       immediate_attentio:     Boolean
-      late:                   Json
+      late:                   JSON
       self_injured:           Boolean
-      injury_type:            Json
+      injury_type:            JSON
       other_injured:          Boolean
       before_injury:          String
-      packages:               Json
-      safety_equipment:       Json
-      unsafe_conditions:      Json
+      packages:               JSON
+      safety_equipment:       JSON
+      unsafe_conditions:      JSON
       pain_level:             Int
       addtional_information:  String
 
-      accidentID:             Int
+      # accidentID:             Int
       accident:               [Accident]
     }
 
@@ -145,13 +145,13 @@ const typeDefs = gql`
       destination:            String
       filename:               String
 
-      injuryAccidentId:       Int
+      # injuryAccidentId:       Int
       injuryAccident:         [InjuryAccident]
 
-      hitPersonId:            Int
-      hitPerson               [HitPerson]
+      # hitPersonId:            Int
+      hitPerson:              [HitPerson]
 
-      propertyAccidentId:     Int
+      # propertyAccidentId:     Int
       propertyAccident:       [PropertyAccident]       
     }
 
