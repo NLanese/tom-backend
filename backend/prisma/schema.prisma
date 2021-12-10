@@ -42,11 +42,11 @@ model Accident {
   id                      Int         @id @default(autoincrement())
   userId                  Int
   user                    User        @relation(fields: [userId], references: [id])
-  using_safety            Boolean
-  safety_failed           Boolean
-  number_package_carried  Int
-  safety_equipment_used   Json
-  failed_safety           Boolean
+  using_safety            Boolean?
+  safety_failed           Boolean?
+  number_package_carried  Int?
+  safety_equipment_used   Json?
+  failed_safety           Boolean?
   hitPerson               HitPerson[]
   thirdParty              ThirdParty[]
   injuryAccident          InjuryAccident[]

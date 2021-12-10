@@ -20,20 +20,26 @@ export default{
     }, 
 
     Mutation: {
-        createAccident: async (_, {using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
+        createAccident: async (_, { using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety }, context) => {
             const user = await checkAuth(context)
             
             try{
                 return db.accident.create({
-                    using_safety: using_safety,
-                    safety_failed: safety_failed,
-                    number_package_carried: number_package_carried,
-                    safety_equipment_used: safety_equipment_used,
-                    failed_safety: failed_safety
+                    data: {
+                        using_safety: using_safety,
+                        safety_failed: safety_failed,
+                        number_package_carried: number_package_carried,
+                        safety_equipment_used: safety_equipment_used,
+                        failed_safety: failed_safety,
+                        user: {
+                            connect: {
+                                id: user.id
+                            }
+                        }
+                    }
                 })
-            }
-            catch(error){
-                throw new Error(error)
+            } catch(error){
+                throw new Error(console.log(error))
             }
         }
     }
