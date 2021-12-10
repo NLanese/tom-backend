@@ -41,6 +41,29 @@ export default{
             } catch(error){
                 throw new Error(console.log(error))
             }
+        },
+
+
+        updateAccident: async (_, accidentId, {using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, contect) => {
+            const user = await checkAuth(context)
+               
+            try{
+                return db.accident.update({
+                    where: {
+                        id: accidentId
+                    },
+                    data:{
+                        using_safety: using_safety,
+                        safety_failed: safety_failed,
+                        number_package_carried: number_package_carried,
+                        safety_equipment_used: safety_equipment_used,
+                        failed_safety: failed_safety,
+                    }
+                })
+            }
+            catch(error){
+                throw new Error(console.log(error))
+            }
         }
     }
 }
