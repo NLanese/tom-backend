@@ -126,7 +126,7 @@ export default {
 		},
 
 		/* ADD PASSWORD HASHING FOR WHEN A USER UPDATES THEIR PASSWORD ALSO */
-		updateUser: async (_, { updateUser: { email, username, firstname, lastname, password } }, context) => {
+		updateUser: async (_, { updateUser: { email, username, firstname, lastname, password, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity, accidents } }, context) => {
 			const user = await checkAuth(context);
 			
 			if (password !== undefined || password !== null) {
@@ -146,7 +146,24 @@ export default {
 						username: username,
 						firstname: firstname,
 						lastname: lastname,
-						password: password
+						password: password, 
+						fico: fico,
+						netradyne: netradyne,
+						delivery_associate: delivery_associate,
+						seatbelt: seatbelt,
+						speeding: speeding,
+						defects: defects,
+						customer_delivery_feedback: customer_delivery_feedback,
+						delivered_and_recieved: delivered_and_recieved,
+						delivery_completion_rate: delivery_completion_rate,
+						photo_on_delivery: photo_on_delivery,
+						call_compliance: call_compliance,
+						scan_compliance: scan_compliance,
+						has_many_accidents: has_many_accidents,
+						belongs_to_team: belongs_to_team,
+						attendance: attendance,
+						productivity: productivity,
+						accidents: accidents
 					}
 				});
 

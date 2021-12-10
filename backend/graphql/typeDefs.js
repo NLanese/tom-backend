@@ -180,12 +180,30 @@ const typeDefs = gql`
 		lastname: String
 		password: String!
 	}
+
 	input UpdateUser {
 		email: String
 		username: String
 		firstname: String
 		lastname: String
 		password: String
+    fico: Int
+    netradyne: Int
+    delivery_associate: Int
+    seatbelt: Boolean
+    speeding: Boolean
+    defects: Int
+    customer_delivery_feedback: Int
+    delivered_and_recieved: Int
+    delivery_completion_rate: Int
+    photo_on_delivery: Int
+    call_compliance: Int
+    scan_compliance: Int
+    has_many_accidents: Int
+    belongs_to_team: Boolean
+    attendance: Json
+    productivity: Json
+    # accidents: Accident[]
 	}
 `;
 
