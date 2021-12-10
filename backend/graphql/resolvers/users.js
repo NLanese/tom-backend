@@ -32,6 +32,7 @@ export default {
 
 		getUserById: async (_, {userId}, context) => {
 			const user = await checkAuth(context)
+			
 			try{
 				return db.user.findUnique({
 					where:{
