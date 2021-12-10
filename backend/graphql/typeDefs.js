@@ -6,31 +6,31 @@ const typeDefs = gql`
 	scalar JSON
 
     type User {
-        id:                     ID
-        role:                   String
-        firstname:              String
-        lastname:               String
-        email:                  String
-        password:               String
-        token:                  String
-        fico:                   Int
-        netradyne:              Int
-        da:                     Int
-        seatbelt:               Boolean
-        speeding:               Boolean
-        defects:                Int
-        cdf:                    Int
-        dar:                    Int
-        dcr:                    Int
-        pod:                    Int
-        cc:                     Int
-        sc:                     Int
-        has_many_accidents:     Int
-        belongs_to_team:        Boolean
-        attendence:             JSON
-        productivity:           JSON
+        id:                           ID
+        role:                         String
+        firstname:                    String
+        lastname:                     String
+        email:                        String
+        password:                     String
+        token:                        String
+        fico:                         Int
+        netradyne:                    Int
+        delivery_associate:           Int
+        seatbelt:                     Boolean
+        speeding:                     Boolean
+        defects:                      Int
+        customer_delivery_feedback:   Int
+        delivered_and_recieved:       Int
+        delivery_completion_rate:     Int
+        photo_on_delivery:            Int
+        call_compliance:              Int
+        scan_compliance:              Int
+        has_many_accidents:           Int
+        belongs_to_team:              Boolean
+        attendence:                   JSON
+        productivity:                 JSON
 
-        accidents:              [Accident]
+        accidents:                    [Accident]
     }
 
     type Accident {
