@@ -161,6 +161,7 @@ const typeDefs = gql`
     type Query {
 		# USER QUERIES
 		getUser: User
+    getUserById: User
 
     # ACCIDENT QUERIES
     getAccidents: Accident
@@ -175,7 +176,7 @@ const typeDefs = gql`
 
     # ACCIDENT MUTATIONS
     createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
-    updateAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
+    updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------

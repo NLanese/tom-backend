@@ -44,7 +44,7 @@ export default{
         },
 
 
-        updateAccident: async (_, accidentId, {using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, contect) => {
+        updateAccident: async (_, {accidentId, using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
             const user = await checkAuth(context)
                
             try{
@@ -62,7 +62,7 @@ export default{
                 })
             }
             catch(error){
-                throw new Error(console.log(error))
+                throw new Error(error)
             }
         }
     }
