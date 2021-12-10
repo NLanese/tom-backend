@@ -161,7 +161,7 @@ const typeDefs = gql`
     type Query {
 		# USER QUERIES
 		getUser: User
-    getUserById: User
+    getUserById(userId: Int): User
 
     # ACCIDENT QUERIES
     getAccidents: Accident
