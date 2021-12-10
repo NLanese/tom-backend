@@ -174,7 +174,7 @@ const typeDefs = gql`
 		deleteUser: User!
 
     # ACCIDENT MUTATIONS
-    createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident!
+    createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
