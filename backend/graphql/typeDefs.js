@@ -201,8 +201,8 @@ const typeDefs = gql`
     scan_compliance: Int
     has_many_accidents: Int
     belongs_to_team: Boolean
-    attendance: Json
-    productivity: Json
+    attendance: JSON
+    productivity: JSON
     # accidents: Accident[]
 	}
 `;

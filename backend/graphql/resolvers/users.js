@@ -128,8 +128,16 @@ export default {
 		/* ADD PASSWORD HASHING FOR WHEN A USER UPDATES THEIR PASSWORD ALSO */
 		updateUser: async (_, { updateUser: { email, username, firstname, lastname, password, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity, accidents } }, context) => {
 			const user = await checkAuth(context);
+
+
+			// if (typeof password === "undefined") {
+			// 	console.log('password is undefined')
+			// }
+			// console.log(password.length)
+			// typeof(password) != String
 			
-			if (password !== undefined || password !== null) {
+			if (typeof password !== "undefined") {
+				// console.log('hit's)
 				password = await hashPassword(password)
 			}
 			
