@@ -32,14 +32,18 @@ export default {
 
 		getUserById: async (_, {userId}, context) => {
 			const user = await checkAuth(context)
+<<<<<<< HEAD
 			
 			try{
+=======
+			try {
+>>>>>>> 721d5a7cf01ecebaf147aa54d061577bc54e2239
 				return db.user.findUnique({
 					where:{
 						id: userId
 					}
 				})
-			}catch(error){
+			} catch(error) {
 				throw new Error(console.log(error))
 			}
 		}
