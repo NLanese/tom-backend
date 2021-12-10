@@ -180,10 +180,11 @@ const typeDefs = gql`
 
     # THIRD PARTY MUTATIONS
     createThirdParty(location: String): ThirdParty
+    updateThirdParty(location: String): ThirdParty
 
     # INJURY ACCIDENT MUTATIONS
-    createInjuryAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean  )
-
+    createInjuryAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
+    updateInjuryAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
 
     }
 

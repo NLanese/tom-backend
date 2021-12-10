@@ -4,7 +4,7 @@ import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
-        createThirdParty: async (_, {location}, context){
+        createThirdParty: async (_, {location}, context) => {
             const user = await checkAuth(context)
 
             try{
@@ -19,6 +19,16 @@ export default{
 
                     }
                 })
+            } catch(error){
+                throw new Error(error)
+            }
+        },
+
+        updateThirdParty: async (_, {location}, context) => {
+            const user = await checkAuth(context)
+
+            try{
+                return db.thirdParty.update({location: location})
             } catch(error){
                 throw new Error(error)
             }
