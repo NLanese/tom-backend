@@ -11,6 +11,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model SuperAdmin {
+  id                  Int         @id @default(autoincrement())
+  role                Role        @default(SUPERADMIN)
+  firstname           String
+  lastname            String
+  username            String      @unique
+  email               String      @unique
+  password            String
+}
+
+model Admin {
+  id                  Int         @id @default(autoincrement())
+  role                Role        @default(ADMIN)
+  firstname           String
+  lastname            String
+  username            String      @unique
+  email               String      @unique
+  password            String
+  users               User[]
+}
+
 model User {
   id                  Int         @id @default(autoincrement())
   role                Role        @default(USER)
@@ -35,6 +56,9 @@ model User {
   belongs_to_team     Boolean?
   attendance          Json?
   productivity        Json?
+
+  adminId             Int
+  admin               Admin         @relation(fields: [adminId], references: [id])
   accidents           Accident[]
 }
 
@@ -156,4 +180,5 @@ model Image {
 enum Role {
   USER
   ADMIN
+  SUPERADMIN
 }
