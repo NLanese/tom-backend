@@ -4,7 +4,7 @@ import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
-        createThirdParty: async (_, {location}, context) => {
+        createThirdParty: async (_, {accidentId, location}, context) => {
             const user = await checkAuth(context)
 
             try{
@@ -12,7 +12,7 @@ export default{
                     data: {
                         accident: {
                             connect: {
-                                id: user.id
+                                id: accidentId
                             }
                         },
                         location: location

@@ -3,7 +3,7 @@ import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
-        createInjuryAccident: async (_, { self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
+        createInjuryAccident: async (_, {accidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkAuth(context)
 
             try{
@@ -11,7 +11,7 @@ export default{
                     data: {
                         accident: {
                             connect: {
-                                id: user.id
+                                id: accidentId
                             }
                         },
                         self_injured: self_injured,

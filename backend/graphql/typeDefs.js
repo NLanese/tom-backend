@@ -179,11 +179,11 @@ const typeDefs = gql`
     updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
 
     # THIRD PARTY MUTATIONS
-    createThirdParty(location: String): ThirdParty
+    createThirdParty(accidentId: Int, location: String): ThirdParty
     updateThirdParty(location: String): ThirdParty
 
     # INJURY ACCIDENT MUTATIONS
-    createInjuryAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
+    createInjuryAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
     updateInjuryAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
 
     }
