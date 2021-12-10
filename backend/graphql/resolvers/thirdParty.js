@@ -10,16 +10,16 @@ export default{
             try{
                 return db.thirdParty.create({
                     data: {
+                        location: location,
                         accident: {
                             connect: {
                                 id: accidentId
                             }
                         },
-                        location: location
-
                     }
                 })
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         },

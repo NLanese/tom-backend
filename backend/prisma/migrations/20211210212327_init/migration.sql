@@ -2,32 +2,6 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
 
 -- CreateTable
-CREATE TABLE "SuperAdmin" (
-    "id" SERIAL NOT NULL,
-    "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-
-    CONSTRAINT "SuperAdmin_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Admin" (
-    "id" SERIAL NOT NULL,
-    "role" "Role" NOT NULL DEFAULT E'ADMIN',
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-
-    CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "role" "Role" NOT NULL DEFAULT E'USER',
@@ -52,7 +26,6 @@ CREATE TABLE "User" (
     "belongs_to_team" BOOLEAN,
     "attendance" JSONB,
     "productivity" JSONB,
-    "adminId" INTEGER NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -198,18 +171,6 @@ CREATE TABLE "_AccidentToInjuryReport" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SuperAdmin_username_key" ON "SuperAdmin"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "SuperAdmin_email_key" ON "SuperAdmin"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
@@ -244,9 +205,6 @@ CREATE UNIQUE INDEX "_AccidentToInjuryReport_AB_unique" ON "_AccidentToInjuryRep
 
 -- CreateIndex
 CREATE INDEX "_AccidentToInjuryReport_B_index" ON "_AccidentToInjuryReport"("B");
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
