@@ -5,7 +5,7 @@ import { ApolloError } from 'apollo-server';
 
 export default{
     Mutation: {
-        createThirdParty: async (_, {accidentId, location}, context) => {
+        createThirdParty: async (_, { accidentId, location }, context) => {
             const user = await checkAuth(context)
 
             try {
@@ -28,11 +28,18 @@ export default{
             
         },
 
-        updateThirdParty: async (_, {location}, context) => {
+        updateThirdParty: async (_, { thirdPartyId, location }, context) => {
             const user = await checkAuth(context)
 
             try{
-                return db.thirdParty.update({location: location})
+                return await db.thirdParty.update({
+                    where: {
+                        id: thirdPartyId
+                    },
+                    data: {
+                        location: location
+                    }
+                })
             } catch(error){
                 throw new Error(error)
             }
