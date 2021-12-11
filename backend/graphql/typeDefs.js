@@ -52,6 +52,7 @@ const typeDefs = gql`
         productivity:                 JSON
 
         accidents:                    [Accident]
+        # thirdParty:                   [ThirdParty]
     }
 
     type Accident {
@@ -87,7 +88,7 @@ const typeDefs = gql`
 
     type ThirdParty{
         id:                     ID
-        # accidentId:             Int
+        accidentId:             Int
         accident:               [Accident]
         location:               String
     }
@@ -95,6 +96,7 @@ const typeDefs = gql`
 
     type InjuryAccident{
         id:                     ID
+        # user:                   User
         self_injured:           Boolean
         vehicle_number:         String
         amazon_logo:            Boolean

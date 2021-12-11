@@ -60,6 +60,7 @@ model User {
   // adminId             Int?
   // admin               Admin?         @relation(fields: [adminId], references: [id])
   accidents           Accident[]
+  // thirdParty          ThirdParty[]
 }
 
 model Accident {
@@ -93,6 +94,8 @@ model HitPerson {
 
 model ThirdParty {
   id                  Int         @id @default(autoincrement())
+  // userId                  Int
+  // user                    User        @relation(fields: [userId], references: [id])
   accidentId          Int
   accident            Accident[]  @relation(fields: [accidentId], references: [id])
   location            String

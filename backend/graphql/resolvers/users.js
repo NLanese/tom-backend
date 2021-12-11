@@ -22,7 +22,11 @@ export default {
 						id: user.id
 					},
 					include: {
-						accidents: true
+						accidents: {
+							include: {
+								thirdParty: true
+							}
+						}
 					}
 				})
 			} catch (error) {
