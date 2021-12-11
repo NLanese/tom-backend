@@ -34,11 +34,14 @@ export default{
             }
         },
 
-        updateInjuryAccident:  async (_, { self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
+        updateInjuryAccident:  async (_, { injuryAccidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkAuth(context)
 
             try{
                 return db.injuryAccident.update({
+                    where: {
+                        id: injuryAccidentId
+                    },
                     data: {
                         self_injured: self_injured,
                         vehicle_number: vehicle_number,
