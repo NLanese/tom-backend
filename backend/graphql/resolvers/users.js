@@ -38,16 +38,29 @@ export default {
 			}
 		},
 
-		getUserById: async (_, {userId}, context) => {
+		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
+		getUserById: async (_, { userId }, context) => {
 			const user = await checkAuth(context)
+
 			try {
 				return db.user.findUnique({
 					where:{
 						id: userId
+					},
+					include: {
+						accidents: {
+							include: {
+								hitPerson: true,
+								thirdParty: true,
+								injuryAccident: true,
+								propertyAccident: true,
+								injuryReport: true
+							}
+						}
 					}
 				})
 			} catch(error) {
-				throw new Error(console.log(error))
+				throw new Error(error)
 			}
 		}
 	},
