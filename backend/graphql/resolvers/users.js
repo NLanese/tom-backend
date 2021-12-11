@@ -24,7 +24,11 @@ export default {
 					include: {
 						accidents: {
 							include: {
-								thirdParty: true
+								hitPerson: true,
+								thirdParty: true,
+								injuryAccident: true,
+								propertyAccident: true,
+								injuryReport: true
 							}
 						}
 					}
