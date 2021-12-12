@@ -20,8 +20,7 @@ export default{
                     }
                 })
             } catch(error) {
-                console.log(error)
-                throw new UserInputError(error)
+                throw new Error(error)
             }  
         },
 
