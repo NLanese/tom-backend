@@ -29,7 +29,6 @@ export default{
                     }
                 })
             } catch(error) {
-                console.log(error)
                 throw new Error(error)
             }
         },
@@ -38,7 +37,7 @@ export default{
             const user = await checkAuth(context)
 
             try{
-                return db.injuryAccident.update({
+                return await db.injuryAccident.update({
                     where: {
                         id: injuryAccidentId
                     },
@@ -57,6 +56,20 @@ export default{
                     }
                 })
             }catch(error){
+                throw new Error(error)
+            }
+        },
+
+        deleteInjuryAccident: async (_, { injuryAccidentId }, context) => {
+            const user = await checkAuth(context)
+
+            try {
+                return await db.injuryAccident.delete({
+                    where: {
+                        id: injuryAccidentId
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         }
