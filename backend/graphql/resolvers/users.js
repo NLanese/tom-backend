@@ -22,6 +22,7 @@ export default {
 						id: user.id
 					},
 					include: {
+						admin: true,
 						accidents: {
 							include: {
 								hitPerson: true,
