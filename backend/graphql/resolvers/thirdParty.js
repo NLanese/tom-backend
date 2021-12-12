@@ -1,7 +1,6 @@
 import { UserInputError } from 'apollo-server-errors';
 import checkAuth from '../../utils/check-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { ApolloError } from 'apollo-server';
 
 export default{
     Mutation: {
@@ -23,9 +22,7 @@ export default{
             } catch(error) {
                 console.log(error)
                 throw new UserInputError(error)
-            }
-
-            
+            }  
         },
 
         updateThirdParty: async (_, { thirdPartyId, location }, context) => {
@@ -43,6 +40,20 @@ export default{
             } catch(error){
                 throw new Error(error)
             }
+        },
+
+        deleteThirdParty: async (_, { thirdPartyId }, context) => {
+            const user = await checkAuth(context)
+    
+            try {
+                return await db.thirdParty.delete({
+                    where: {
+                        id: thirdPartyId
+                    }
+                })
+            } catch(error) {
+                throw new Error(error)
+            }
         }
-    }
+    },
 }
