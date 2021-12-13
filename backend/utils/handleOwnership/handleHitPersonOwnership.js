@@ -1,6 +1,6 @@
 import db from "../generatePrisma.js"
 
-export const handleHitPersonOwnership = (userId, hitPersonId) => {
+export const handleHitPersonOwnership = async (userId, hitPersonId) => {
     const hitPerson = await db.hitPerson.findUnique({
         where: {
             id: hitPersonId
