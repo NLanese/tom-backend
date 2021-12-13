@@ -38,6 +38,11 @@ export default {
                     password
                 );
 
+                email = await email.toUpperCase()
+                username = await username.toUpperCase()
+                firstname = await firstname.toUpperCase()
+                lastname = await lastname.toUpperCase()
+
                 if (!valid) {
                     throw new userInputError('Errors', { errors })
                 }
@@ -93,9 +98,11 @@ export default {
                 throw new userInputError('Errors', { errors })
             }
 
+            email = await email.toUpperCase()
+
             const foundUser = await db.admin.findUnique({
                 where: {
-                    email,
+                    email
                 }
             })
 
