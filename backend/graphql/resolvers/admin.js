@@ -123,6 +123,52 @@ export default {
             req.session = { token: `Bearer ${token}`}
 
             return { ...foundUser, token: token }
+        },
+
+        updateAdmin: async (_, { email, username, firstname, lastname, password }, context) => {
+            const admin = await checkAdminAuth(context)
+
+            if (typeof password !== "undefined") {
+				password = await hashPassword(password)
+			}
+
+            if (email) {
+                email = email.toUpperCase()
+            }
+
+            if (username) {
+                username = username.toUpperCase()
+            }
+
+            if (firstname) {
+                firstname = firstname.toUpperCase()
+            }
+
+            if (lastname) {
+                lastname = lastname.toUpperCase()
+            }
+
+            try {
+                if (!admin) {
+					errors.general = 'User not found';
+					throw new UserInputError('User not found', { errors });
+				}
+
+                return await db.admin.update({
+                    where: {
+                        id: admin.id
+                    },
+                    data: {
+                        email: email,
+						username: username,
+						firstname: firstname,
+						lastname: lastname,
+						password: password 
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import {
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
 import admin from './admin.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js'
 
 
 
@@ -44,24 +45,27 @@ export default {
 		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
 			const admin = await checkAdminAuth(context)
+			const verified = await handleAdminUserOwnership(admin.id, userId)
 
 			try {
-				return db.user.findUnique({
-					where:{
-						id: userId
-					},
-					include: {
-						accidents: {
-							include: {
-								hitPerson: true,
-								thirdParty: true,
-								injuryAccident: true,
-								propertyAccident: true,
-								injuryReport: true
+				if (verified) {
+					return await db.user.findUnique({
+						where:{
+							id: userId
+						},
+						include: {
+							accidents: {
+								include: {
+									hitPerson: true,
+									thirdParty: true,
+									injuryAccident: true,
+									propertyAccident: true,
+									injuryReport: true
+								}
 							}
 						}
-					}
-				})
+					})
+				}
 			} catch(error) {
 				throw new Error(error)
 			}
@@ -134,22 +138,26 @@ export default {
 
 				password = await hashPassword(password)
 
-				return db.user.create({
+				return await db.user.create({
 					data: {
+						admin: {
+							connect: {
+								id: foundAdmin.id 
+							}
+						},
 						email: email,
 						username: username,
 						password: password,
 						firstname: firstname,
 						lastname: lastname,
 						adminEmail: foundAdmin.email,
-						admin: {
-							connect: {
-								id: foundAdmin.id 
-							}
-						}
+						adminFirstname: foundAdmin.firstname,
+						adminLastname:	foundAdmin.lastname,
+						adminUsername: foundAdmin.username,
 					},
 				});
 			} catch (error) {
+				console.log(error)
 				throw new Error(error);
 			}
 		},
@@ -194,6 +202,22 @@ export default {
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)
 			}
+
+			if (email) {
+                email = email.toUpperCase()
+            }
+
+            if (username) {
+                username = username.toUpperCase()
+            }
+
+            if (firstname) {
+                firstname = firstname.toUpperCase()
+            }
+
+            if (lastname) {
+                lastname = lastname.toUpperCase()
+            }
 			
             try {
 				if (!user) {

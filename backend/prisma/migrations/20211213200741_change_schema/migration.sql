@@ -40,6 +40,9 @@ CREATE TABLE "User" (
     "attendance" JSONB,
     "productivity" JSONB,
     "adminId" INTEGER NOT NULL,
+    "adminFirstname" TEXT NOT NULL,
+    "adminLastname" TEXT NOT NULL,
+    "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -53,7 +56,6 @@ CREATE TABLE "Accident" (
     "safety_failed" BOOLEAN,
     "number_package_carried" INTEGER,
     "safety_equipment_used" JSONB,
-    "failed_safety" BOOLEAN,
 
     CONSTRAINT "Accident_pkey" PRIMARY KEY ("id")
 );
@@ -131,7 +133,7 @@ CREATE TABLE "InjuryReport" (
     "safety_equipment" JSONB NOT NULL,
     "unsafe_conditions" JSONB NOT NULL,
     "pain_level" INTEGER NOT NULL,
-    "addtional_information" TEXT NOT NULL,
+    "additional_information" TEXT NOT NULL,
     "accidentId" INTEGER NOT NULL,
 
     CONSTRAINT "InjuryReport_pkey" PRIMARY KEY ("id")

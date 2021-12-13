@@ -51,6 +51,10 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        adminId:                      Int
+        adminFirstname:               String
+        adminLastname:                String
+        adminUsername:                String
         adminEmail:                   String
 
         accidents:                    [Accident]
@@ -200,6 +204,7 @@ const typeDefs = gql`
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
+      updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
 
       # USER MUTATIONS
       signupUser(signupInput: SignupInput): User!
