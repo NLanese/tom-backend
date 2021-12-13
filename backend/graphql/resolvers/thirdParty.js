@@ -1,6 +1,7 @@
 import { UserInputError } from 'apollo-server-errors';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
+import { handleThirdPartyOwnership } from '../../utils/handleOwnership/handleThirdPartyOwnership.js';
 
 export default{
     Mutation: {
@@ -26,16 +27,19 @@ export default{
 
         updateThirdParty: async (_, { thirdPartyId, location }, context) => {
             const user = await checkUserAuth(context)
+            const verified = handleThirdPartyOwnership(user.id, thirdPartyId)
 
             try{
-                return await db.thirdParty.update({
-                    where: {
-                        id: thirdPartyId
-                    },
-                    data: {
-                        location: location
-                    }
-                })
+                if (verified){
+                    return await db.thirdParty.update({
+                        where: {
+                            id: thirdPartyId
+                        },
+                        data: {
+                            location: location
+                        }
+                    })
+                }
             } catch(error){
                 throw new Error(error)
             }
@@ -43,13 +47,16 @@ export default{
 
         deleteThirdParty: async (_, { thirdPartyId }, context) => {
             const user = await checkUserAuth(context)
+            const verified = handleThirdPartyOwnership(user.id, thirdPartyId)
     
             try {
-                return await db.thirdParty.delete({
-                    where: {
-                        id: thirdPartyId
-                    }
-                })
+                if (verified){
+                    return await db.thirdParty.delete({
+                        where: {
+                            id: thirdPartyId
+                        }
+                    })
+                }
             } catch(error) {
                 throw new Error(error)
             }
