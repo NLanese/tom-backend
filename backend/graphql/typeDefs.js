@@ -140,7 +140,7 @@ const typeDefs = gql`
 
     type InjuryReport{
       id:                     ID
-      immediate_attentio:     Boolean
+      immediate_attention:     Boolean
       late:                   JSON
       self_injured:           Boolean
       injury_type:            JSON
@@ -225,6 +225,11 @@ const typeDefs = gql`
       createHitPerson(accidentId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
       updateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
       deleteHitPerson(hitPersonId:Int): HitPerson
+
+      # INJURY REPORT MUTATIONS
+      createInjuryReport(accidentId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
+      updateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
+      deleteInjuryReport(injuryReportId): InjuryReport
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
