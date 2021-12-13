@@ -184,6 +184,9 @@ const typeDefs = gql`
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
     type Query {
+      # ADMIN QUERIES
+      getAdmin: Admin
+
       # USER QUERIES
       getUser: User
       getUserById(userId: Int): User
