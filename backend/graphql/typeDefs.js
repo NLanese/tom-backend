@@ -195,6 +195,7 @@ const typeDefs = gql`
     type Mutation {
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
+      signinAdmin(email: String!, password: String!): Admin!
 
       # USER MUTATIONS
       signupUser(signupInput: SignupInput): User!

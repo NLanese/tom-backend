@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
-import generateUserToken from '../../utils/generateToken/generateUserToken.js';
+import generateAdminToken from '../../utils/generateToken/generateAdminToken.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
@@ -66,5 +66,37 @@ export default {
                 throw new Error(error)
             }
         },
+
+        signinAdmin: async (_, { email, password }, { req }) => {
+            const { errors, valid } = validateLoginInput(email, password);
+
+            if (!valid) {
+                throw new userInputError('Errors', { errors })
+            }
+
+            const foundUser = await db.admin.findUnique({
+                where: {
+                    email,
+                }
+            })
+
+            if (!foundUser) {
+				errors.general = 'User not found';
+				throw new UserInputError('Incorrect Email', { errors });
+			}
+
+            const isValid = await bcrypt.compare(password, foundUser.password)
+
+            if (!isValid) {
+                errors.general = 'Incorrect Password'
+                throw new UserInputError('Incorrect Password', { errors })
+            }
+
+            const token = await generateAdminToken(foundUser.id)
+
+            req.session = { token: `Bearer ${token}`}
+
+            return { ...foundUser, token: token }
+        }
     }
 }
