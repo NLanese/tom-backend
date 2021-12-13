@@ -6,11 +6,11 @@ export const handleInjuryAccidentOwnership = (userId, injuryAccidentId) => {
             id: injuryAccidentId
         },
         include: {
-            user: true
+            accident: true
         }
     })
 
-    if (userId === injuryAccident.user.id){
+    if (userId === injuryAccident.accident.user.id){
         return true
     }
 
