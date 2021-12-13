@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
-import generateToken from '../../utils/generateToken.js';
+import generateUserToken from '../../utils/generateToken/generateUserToken.js';
 import checkAuth from '../../utils/check-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
@@ -155,7 +155,7 @@ export default {
 				throw new UserInputError('Incorrect Password', { errors });
 			}
 
-			const token = await generateToken(foundUser.id);
+			const token = await generateUserToken(foundUser.id);
 
 			req.session = { token: `Bearer ${token}` };
 
