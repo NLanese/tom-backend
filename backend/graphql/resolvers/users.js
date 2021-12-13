@@ -9,6 +9,7 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
+import admin from './admin.js';
 
 
 
@@ -75,7 +76,7 @@ export default {
 		 * @returns Signed up user in DB
 		 */
 
-		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname } }) => {
+		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname, adminEmail } }) => {
 			try {
 				const { valid, errors } = validateRegisterInput(
 					username,
@@ -87,6 +88,17 @@ export default {
                 username = await username.toUpperCase()
                 firstname = await firstname.toUpperCase()
                 lastname = await lastname.toUpperCase()
+				adminEmail = await adminEmail.toUpperCase()
+
+				const foundAdmin = await db.admin.findUnique({
+					where: {
+						email: adminEmail
+					}
+				})
+
+				if (!foundAdmin) {
+					throw new Error('Admin does not exist')
+				}
 
 				if (!valid) {
 					throw new userInputError('Errors', { errors });
@@ -128,7 +140,13 @@ export default {
 						username: username,
 						password: password,
 						firstname: firstname,
-						lastname: lastname
+						lastname: lastname,
+						adminEmail: foundAdmin.email,
+						admin: {
+							connect: {
+								id: foundAdmin.id 
+							}
+						}
 					},
 				});
 			} catch (error) {

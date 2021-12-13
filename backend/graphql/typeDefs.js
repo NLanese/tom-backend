@@ -51,6 +51,8 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        adminEmail:                   String
+
         accidents:                    [Accident]
         admin:                        [Admin]
         # thirdParty:                   [ThirdParty]
@@ -236,6 +238,7 @@ const typeDefs = gql`
 		firstname: String!
 		lastname: String!
 		password: String!
+    adminEmail: String!
 	}
 
 	input UpdateUser {
