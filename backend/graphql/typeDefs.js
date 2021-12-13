@@ -63,7 +63,6 @@ const typeDefs = gql`
         safety_failed:          Boolean
         number_package_carried: Int
         safety_equipment_used:  JSON
-        failed_safety:          Boolean
 
         hitPerson:              [HitPerson]
         thirdParty:             [ThirdParty]
