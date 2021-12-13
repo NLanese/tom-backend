@@ -221,6 +221,10 @@ const typeDefs = gql`
       updatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
       deletePropertyAccident(propertyAccidentId: Int): PropertyAccident
 
+      # HIT PERSON MUTATIONS 
+      createHitPerson(accidentId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
+      updateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
+      deleteHitPerson(hitPersonId:Int): HitPerson
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
