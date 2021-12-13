@@ -4,22 +4,24 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-const checkAuth = (context) => {
+const checkAdminAuth = (context) => {
 	const authHeader = context.req.headers.authorization
-	
+
 	if (authHeader) {
 		const token = authHeader;
+
 		if (token) {
 			try {
-				const user = jwt.verify(token, process.env.JWT_SECRET);
-				return user;
+				const admin = jwt.verify(token, process.env.JWT_ADMIN_SECRET);
+				return admin
 			} catch (err) {
-				throw new AuthenticationError('Invalid token');
+				throw new AuthenticationError('Invalid token')
 			}
 		}
-		throw new Error('Invalid Header, check header contents');
+		throw new Error('Invalid Header, check header contents')
 	}
+
 	throw new Error('No Auth header found');
 };
 
-export default checkAuth;
+export default checkAdminAuth;

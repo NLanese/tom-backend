@@ -1,11 +1,11 @@
 import { UserInputError } from 'apollo-server-errors';
-import checkAuth from '../../utils/check-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
         createThirdParty: async (_, { accidentId, location }, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
 
             try {
                 return await db.thirdParty.create({
@@ -25,7 +25,7 @@ export default{
         },
 
         updateThirdParty: async (_, { thirdPartyId, location }, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
 
             try{
                 return await db.thirdParty.update({
@@ -42,7 +42,7 @@ export default{
         },
 
         deleteThirdParty: async (_, { thirdPartyId }, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
     
             try {
                 return await db.thirdParty.delete({

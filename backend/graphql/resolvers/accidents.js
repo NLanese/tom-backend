@@ -1,10 +1,10 @@
-import checkAuth from '../../utils/check-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 
 export default{
     Query: {
         getAccidents: async (_, {}, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
 
             try {
                 return await db.accident.findMany({
@@ -21,7 +21,7 @@ export default{
 
     Mutation: {
         createAccident: async (_, { using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety }, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
             
             try{
                 return db.accident.create({
@@ -45,7 +45,7 @@ export default{
 
 
         updateAccident: async (_, {accidentId, using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
-            const user = await checkAuth(context)
+            const user = await checkUserAuth(context)
                
             try{
                 return db.accident.update({
