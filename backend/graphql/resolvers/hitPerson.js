@@ -12,8 +12,11 @@ export default{
                 return await db.hitPerson.create({
                     data: {
                         accident: {
-                            id: accidentId
+                            connect: {
+                                id: accidentId
+                            }
                         },
+                        accidentId: accidentId,
                         medical_attention: medical_attention,
                         vehicle_or_pedestrian: vehicle_or_pedestrian,
                         previous_damage: previous_damage,
@@ -22,6 +25,7 @@ export default{
                     }
                 })
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         },
@@ -52,16 +56,17 @@ export default{
 
         // ------- DELETE --------
         deleteHitPerson: async (_, {hitPersonId}, context) => {
+            // change this to admin = checkAdminAuth later
+            const user = await checkUserAuth(context)
+            
             try{
-                // change this to admin = checkAdminAuth later
-                const user = await checkUserAuth(context)
-
-                return await db.delete.hitPerson({
+                return await db.hitPerson.delete({
                     where: {
                         id: hitPersonId
                     }
                 })
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         }

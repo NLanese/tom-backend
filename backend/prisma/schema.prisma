@@ -153,7 +153,7 @@ model InjuryReport {
   safety_equipment        Json
   unsafe_conditions       Json
   pain_level              Int
-  addtional_information   String
+  additional_information  String
 
   accidentId              Int
   accident                Accident[] @relation(fields: [accidentId], references: [id])

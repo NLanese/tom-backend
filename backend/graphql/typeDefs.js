@@ -230,12 +230,12 @@ const typeDefs = gql`
       # HIT PERSON MUTATIONS 
       createHitPerson(accidentId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
       updateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
-      deleteHitPerson(hitPersonId:Int): HitPerson
+      deleteHitPerson(hitPersonId: Int): HitPerson
 
       # INJURY REPORT MUTATIONS
-      createInjuryReport(accidentId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
+      createInjuryReport(accidentId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, additional_information: String): InjuryReport
       updateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
-      deleteInjuryReport(injuryReportId): InjuryReport
+      deleteInjuryReport(injuryReportId: Int): InjuryReport
     }
 
     #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
