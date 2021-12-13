@@ -21,16 +21,16 @@ datasource db {
 //   password            String
 // }
 
-// model Admin {
-//   id                  Int         @id @default(autoincrement())
-//   role                Role        @default(ADMIN)
-//   firstname           String
-//   lastname            String
-//   username            String      @unique
-//   email               String      @unique
-//   password            String
-//   users               User[]
-// }
+model Admin {
+  id                  Int         @id @default(autoincrement())
+  role                Role        @default(ADMIN)
+  firstname           String
+  lastname            String
+  username            String      @unique
+  email               String      @unique
+  password            String
+  users               User[]
+}
 
 model User {
   id                  Int         @id @default(autoincrement())
@@ -57,9 +57,10 @@ model User {
   attendance          Json?
   productivity        Json?
 
-  // adminId             Int?
-  // admin               Admin?         @relation(fields: [adminId], references: [id])
+  adminId             Int?
+  admin               Admin?         @relation(fields: [adminId], references: [id])
   accidents           Accident[]
+  // thirdParty          ThirdParty[]
 }
 
 model Accident {
@@ -93,6 +94,8 @@ model HitPerson {
 
 model ThirdParty {
   id                  Int         @id @default(autoincrement())
+  // userId                  Int
+  // user                    User        @relation(fields: [userId], references: [id])
   accidentId          Int
   accident            Accident[]  @relation(fields: [accidentId], references: [id])
   location            String

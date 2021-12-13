@@ -1,16 +1,17 @@
-import { isHttpQueryError } from 'apollo-server-core';
-import checkAuth from '../../utils/check-auth.js';
+import { UserInputError } from 'apollo-server-errors';
+import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
-        createThirdParty: async (_, {accidentId, location}, context) => {
-            const user = await checkAuth(context)
+        createThirdParty: async (_, { accidentId, location }, context) => {
+            const user = await checkUserAuth(context)
 
-            try{
-                return db.thirdParty.create({
+            try {
+                return await db.thirdParty.create({
                     data: {
                         location: location,
+                        accidentId: accidentId,
                         accident: {
                             connect: {
                                 id: accidentId
@@ -18,20 +19,40 @@ export default{
                         },
                     }
                 })
+            } catch(error) {
+                throw new Error(error)
+            }  
+        },
+
+        updateThirdParty: async (_, { thirdPartyId, location }, context) => {
+            const user = await checkUserAuth(context)
+
+            try{
+                return await db.thirdParty.update({
+                    where: {
+                        id: thirdPartyId
+                    },
+                    data: {
+                        location: location
+                    }
+                })
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         },
 
-        updateThirdParty: async (_, {location}, context) => {
-            const user = await checkAuth(context)
-
-            try{
-                return db.thirdParty.update({location: location})
-            } catch(error){
+        deleteThirdParty: async (_, { thirdPartyId }, context) => {
+            const user = await checkUserAuth(context)
+    
+            try {
+                return await db.thirdParty.delete({
+                    where: {
+                        id: thirdPartyId
+                    }
+                })
+            } catch(error) {
                 throw new Error(error)
             }
         }
-    }
+    },
 }
