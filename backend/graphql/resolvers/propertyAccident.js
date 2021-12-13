@@ -3,6 +3,8 @@ import db from '../../utils/generatePrisma.js';
 
 export default{
     Mutation: {
+
+        // -------- CREATE ---------
         createPropertyAccident: async (_, {accidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
 
@@ -33,6 +35,7 @@ export default{
             }
         },
 
+        // ------- UPDATE -------         
         updatePropertyAccident:  async (_, {propertyAccidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
 
@@ -41,7 +44,7 @@ export default{
                     where: {
                         id: propertyAccidentId
                     }, 
-                    
+
                     data: {
                         self_injured: self_injured,
                         vehicle_number: vehicle_number,
@@ -57,6 +60,20 @@ export default{
                     }
                 })
             }catch(error){
+                throw new Error(error)
+            }
+        }, 
+
+        // ------- DELETE -------        
+        deletePropertyAccident: async (_, {propertyAccidentId}, context) => {
+            // change this to admin = checkAdminAuth later
+            const user = await checkUserAuth(context)
+
+            try{
+                return await db.propertyAccident.delete({
+                    where: {id: propertyAccidentId}
+                })
+            } catch(error){
                 throw new Error(error)
             }
         }
