@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateUserToken from '../../utils/generateToken/generateUserToken.js';
-import checkAuth from '../../utils/check-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
 	validateRegisterInput,
@@ -14,7 +14,7 @@ import db from '../../utils/generatePrisma.js';
 export default {
 	Query: {
 		getUser: async (_, {}, context) => {
-			const user = await checkAuth(context)
+			const user = await checkUserAuth(context)
 
 			try {
 				return await db.user.findUnique({
@@ -41,7 +41,7 @@ export default {
 
 		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
-			const user = await checkAuth(context)
+			const user = await checkUserAuth(context)
 
 			try {
 				return db.user.findUnique({
@@ -163,7 +163,7 @@ export default {
 		},
 
 		updateUser: async (_, { updateUser: { email, username, firstname, lastname, password, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity, accidents } }, context) => {
-			const user = await checkAuth(context);
+			const user = await checkUserAuth(context);
 			
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)
@@ -213,7 +213,7 @@ export default {
 		/* DOESNT WORK ---- GOING TO FIX ONCE ALL OTHER ROUTES ARE DONE */
 		/* NEED TO ADD --- CHATROOMS --- MESSAGES --- */
 		deleteUser: async (_, {}, context) => {
-			const user = await checkAuth(context);
+			const user = await checkUserAuth(context);
 			const userInformation = await db.user.findUnique({
 				where: {
 					id: user.id,
