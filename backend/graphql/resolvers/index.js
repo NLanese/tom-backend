@@ -1,4 +1,5 @@
 import GraphQLJSON from 'graphql-type-json';
+import adminResolvers from './admin.js'
 import usersResolvers from './users.js';
 import accidentsResolvers from './accidents.js';
 import thirdPartyResolvers from './thirdParty.js';
@@ -11,6 +12,7 @@ export default {
         ...accidentsResolvers.Query
     },
     Mutation: {
+        ...adminResolvers.Mutation,
         ...usersResolvers.Mutation,
         ...accidentsResolvers.Mutation,
         ...thirdPartyResolvers.Mutation,

@@ -184,38 +184,41 @@ const typeDefs = gql`
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
     type Query {
-		# USER QUERIES
-		getUser: User
-    getUserById(userId: Int): User
+      # USER QUERIES
+      getUser: User
+      getUserById(userId: Int): User
 
-    # ACCIDENT QUERIES
-    getAccidents: Accident
+      # ACCIDENT QUERIES
+      getAccidents: Accident
     }
 
     type Mutation {
-		# USER MUTATIONS
-		signupUser(signupInput: SignupInput): User!
-		signinUser(email: String!, password: String!): User!
-		updateUser(updateUser: UpdateUser): User!
-		deleteUser: User!
+      # ADMIN MUTATIONS
+      signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
 
-    # ACCIDENT MUTATIONS
-    createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
-    updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
+      # USER MUTATIONS
+      signupUser(signupInput: SignupInput): User!
+      signinUser(email: String!, password: String!): User!
+      updateUser(updateUser: UpdateUser): User!
+      deleteUser: User!
 
-    # THIRD PARTY MUTATIONS
-    createThirdParty(accidentId: Int, location: String): ThirdParty
-    updateThirdParty(thirdPartyId: Int, location: String): ThirdParty
-    deleteThirdParty(thirdPartyId: Int): ThirdParty
+      # ACCIDENT MUTATIONS
+      createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
+      updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
 
-    # INJURY ACCIDENT MUTATIONS
-    createInjuryAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
-    updateInjuryAccident(injuryAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
-    deleteInjuryAccident(injuryAccidentId: Int): InjuryAccident
+      # THIRD PARTY MUTATIONS
+      createThirdParty(accidentId: Int, location: String): ThirdParty
+      updateThirdParty(thirdPartyId: Int, location: String): ThirdParty
+      deleteThirdParty(thirdPartyId: Int): ThirdParty
 
-    # PROPERTY ACCIDENT MUTATIONS
-    createPropertyAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
-    updatePropertyAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
+      # INJURY ACCIDENT MUTATIONS
+      createInjuryAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
+      updateInjuryAccident(injuryAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
+      deleteInjuryAccident(injuryAccidentId: Int): InjuryAccident
+
+      # PROPERTY ACCIDENT MUTATIONS
+      createPropertyAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
+      updatePropertyAccident(self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
 
     }
 
