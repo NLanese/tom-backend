@@ -51,6 +51,8 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        adminEmail:                   String
+
         accidents:                    [Accident]
         admin:                        [Admin]
         # thirdParty:                   [ThirdParty]
@@ -184,6 +186,9 @@ const typeDefs = gql`
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
     type Query {
+      # ADMIN QUERIES
+      getAdmin: Admin
+
       # USER QUERIES
       getUser: User
       getUserById(userId: Int): User
@@ -233,6 +238,7 @@ const typeDefs = gql`
 		firstname: String!
 		lastname: String!
 		password: String!
+    adminEmail: String!
 	}
 
 	input UpdateUser {

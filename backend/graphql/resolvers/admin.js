@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateAdminToken from '../../utils/generateToken/generateAdminToken.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
 	validateRegisterInput,
@@ -10,6 +10,25 @@ import {
 import db from '../../utils/generatePrisma.js';
 
 export default {
+    Query: {
+        getAdmin: async (_, {}, context) => {
+            const admin = await checkAdminAuth(context)
+    
+            try {
+                return await db.admin.findUnique({
+                    where: {
+                        id: admin.id
+                    },
+                    include: {
+                        users: true
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
+    },
+
     Mutation: {
         signupAdmin: async (_, { email, password, username, firstname, lastname }, context) => {
             try {
@@ -18,6 +37,11 @@ export default {
                     email,
                     password
                 );
+
+                email = await email.toUpperCase()
+                username = await username.toUpperCase()
+                firstname = await firstname.toUpperCase()
+                lastname = await lastname.toUpperCase()
 
                 if (!valid) {
                     throw new userInputError('Errors', { errors })
@@ -74,9 +98,11 @@ export default {
                 throw new userInputError('Errors', { errors })
             }
 
+            email = await email.toUpperCase()
+
             const foundUser = await db.admin.findUnique({
                 where: {
-                    email,
+                    email
                 }
             })
 

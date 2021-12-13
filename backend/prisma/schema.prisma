@@ -57,8 +57,9 @@ model User {
   attendance          Json?
   productivity        Json?
 
-  adminId             Int?
-  admin               Admin?         @relation(fields: [adminId], references: [id])
+  adminId             Int
+  adminEmail          String
+  admin               Admin         @relation(fields: [adminId], references: [id])
   accidents           Accident[]
   // thirdParty          ThirdParty[]
 }

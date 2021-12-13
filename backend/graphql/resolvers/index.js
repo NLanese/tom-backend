@@ -8,6 +8,7 @@ import propertyAccidentResolvers from './propertyAccident.js';
 
 export default {
     Query: {
+        ...adminResolvers.Query,
         ...usersResolvers.Query,
         ...accidentsResolvers.Query
     },

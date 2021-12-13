@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateUserToken from '../../utils/generateToken/generateUserToken.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
@@ -8,6 +9,7 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
+import admin from './admin.js';
 
 
 
@@ -41,7 +43,7 @@ export default {
 
 		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
-			const user = await checkUserAuth(context)
+			const admin = await checkAdminAuth(context)
 
 			try {
 				return db.user.findUnique({
@@ -74,13 +76,29 @@ export default {
 		 * @returns Signed up user in DB
 		 */
 
-		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname } }) => {
+		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname, adminEmail } }) => {
 			try {
 				const { valid, errors } = validateRegisterInput(
 					username,
 					email,
 					password
 				);
+
+				email = await email.toUpperCase()
+                username = await username.toUpperCase()
+                firstname = await firstname.toUpperCase()
+                lastname = await lastname.toUpperCase()
+				adminEmail = await adminEmail.toUpperCase()
+
+				const foundAdmin = await db.admin.findUnique({
+					where: {
+						email: adminEmail
+					}
+				})
+
+				if (!foundAdmin) {
+					throw new Error('Admin does not exist')
+				}
 
 				if (!valid) {
 					throw new userInputError('Errors', { errors });
@@ -122,7 +140,13 @@ export default {
 						username: username,
 						password: password,
 						firstname: firstname,
-						lastname: lastname
+						lastname: lastname,
+						adminEmail: foundAdmin.email,
+						admin: {
+							connect: {
+								id: foundAdmin.id 
+							}
+						}
 					},
 				});
 			} catch (error) {
@@ -136,6 +160,8 @@ export default {
 			if (!valid) {
 				throw new userInputError('Errors', { errors });
 			}
+
+			email = await email.toUpperCase()
 
 			const foundUser = await db.user.findUnique({
 				where: {

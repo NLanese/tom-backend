@@ -79,6 +79,7 @@ export default{
                     where: {id: accidentId}
                 })
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         }
