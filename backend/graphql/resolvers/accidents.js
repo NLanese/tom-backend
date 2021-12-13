@@ -73,7 +73,7 @@ export default{
         deleteAccident: async (_, {accidentId}, context) => {
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
-
+                
             try{
                 return await db.accident.delete({
                     where: {id: accidentId}
