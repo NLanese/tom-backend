@@ -51,6 +51,10 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        adminId:                      Int
+        adminFirstname:               String
+        adminLastname:                String
+        adminUsername:                String
         adminEmail:                   String
 
         accidents:                    [Accident]

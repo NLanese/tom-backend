@@ -134,22 +134,26 @@ export default {
 
 				password = await hashPassword(password)
 
-				return db.user.create({
+				return await db.user.create({
 					data: {
+						admin: {
+							connect: {
+								id: foundAdmin.id 
+							}
+						},
 						email: email,
 						username: username,
 						password: password,
 						firstname: firstname,
 						lastname: lastname,
 						adminEmail: foundAdmin.email,
-						admin: {
-							connect: {
-								id: foundAdmin.id 
-							}
-						}
+						adminFirstname: foundAdmin.firstname,
+						adminLastname:	foundAdmin.lastname,
+						adminUsername: foundAdmin.username,
 					},
 				});
 			} catch (error) {
+				console.log(error)
 				throw new Error(error);
 			}
 		},
