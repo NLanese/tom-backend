@@ -198,6 +198,22 @@ export default {
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)
 			}
+
+			if (email) {
+                email = email.toUpperCase()
+            }
+
+            if (username) {
+                username = username.toUpperCase()
+            }
+
+            if (firstname) {
+                firstname = firstname.toUpperCase()
+            }
+
+            if (lastname) {
+                lastname = lastname.toUpperCase()
+            }
 			
             try {
 				if (!user) {
