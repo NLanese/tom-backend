@@ -7,7 +7,7 @@ export default{
             const user = await checkUserAuth(context)
 
             try{
-                return db.propertyAccident.create({
+                return await db.propertyAccident.create({
                     data: {
                         accident: {
                             connect: {
@@ -32,11 +32,15 @@ export default{
             }
         },
 
-        updatePropertyAccident:  async (_, { self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
+        updatePropertyAccident:  async (_, {propertyAccidentId self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
 
             try{
-                return db.propertyAccident.update({
+                return await db.propertyAccident.update({
+                    where: {
+                        id: propertyAccidentId
+                    }, 
+                    
                     data: {
                         self_injured: self_injured,
                         vehicle_number: vehicle_number,
