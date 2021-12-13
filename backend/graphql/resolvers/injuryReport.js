@@ -16,6 +16,7 @@ export default{
                                 id: accidentId
                             }
                         },
+                        accidentId: accidentId,
                         immediate_attention: immediate_attention,
                         late: late,
                         self_injured: self_injured,
@@ -30,6 +31,7 @@ export default{
                     }
                 })
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         },
