@@ -1,4 +1,5 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+
 import db from '../../utils/generatePrisma.js';
 
 export default{
@@ -23,8 +24,10 @@ export default{
         createAccident: async (_, { using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety }, context) => {
             const user = await checkUserAuth(context)
             
+
+        // ------- CREATE -------
             try{
-                return db.accident.create({
+                return await db.accident.create({
                     data: {
                         using_safety: using_safety,
                         safety_failed: safety_failed,
@@ -43,12 +46,12 @@ export default{
             }
         },
 
-
+        // ------- EDIT -------
         updateAccident: async (_, {accidentId, using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
             const user = await checkUserAuth(context)
                
             try{
-                return db.accident.update({
+                return await db.accident.update({
                     where: {
                         id: accidentId
                     },
@@ -62,6 +65,20 @@ export default{
                 })
             }
             catch(error){
+                throw new Error(error)
+            }
+        },
+
+        // ------- DELETE -------        
+        deleteAccident: async (_, {accidentId}, context) => {
+            // change this to admin = checkAdminAuth later
+            const user = await checkUserAuth(context)
+
+            try{
+                return await db.accident.delete({
+                    where: {id: accidentId}
+                })
+            } catch(error){
                 throw new Error(error)
             }
         }

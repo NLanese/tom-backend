@@ -206,6 +206,7 @@ const typeDefs = gql`
       # ACCIDENT MUTATIONS
       createAccident(using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
       updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON, failed_safety: Boolean): Accident
+      deleteAccident(accidentId: Int): Accident
 
       # THIRD PARTY MUTATIONS
       createThirdParty(accidentId: Int, location: String): ThirdParty
@@ -220,6 +221,7 @@ const typeDefs = gql`
       # PROPERTY ACCIDENT MUTATIONS
       createPropertyAccident(accidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
       updatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
+      deletePropertyAccident(propertyAccidentId: Int): PropertyAccident
 
     }
 
