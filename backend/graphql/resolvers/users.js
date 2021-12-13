@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateUserToken from '../../utils/generateToken/generateUserToken.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import {
@@ -41,7 +42,7 @@ export default {
 
 		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
-			const user = await checkUserAuth(context)
+			const admin = await checkAdminAuth(context)
 
 			try {
 				return db.user.findUnique({
