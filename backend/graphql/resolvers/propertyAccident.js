@@ -14,6 +14,7 @@ export default{
                                 id: accidentId
                             }
                         },
+                        accidentId: accidentId,
                         self_injured: self_injured,
                         vehicle_number: vehicle_number,
                         amazon_logo: amazon_logo,
@@ -32,7 +33,7 @@ export default{
             }
         },
 
-        updatePropertyAccident:  async (_, {propertyAccidentId self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
+        updatePropertyAccident:  async (_, {propertyAccidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
 
             try{
