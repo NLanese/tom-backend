@@ -205,6 +205,7 @@ const typeDefs = gql`
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
       updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
+      adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): ThirdParty
 
       # USER MUTATIONS
       signupUser(signupInput: SignupInput): User!
