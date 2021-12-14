@@ -1,7 +1,9 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import { handlePropertyAccidentOwnership } from '../../utils/handleOwnership/handlePropertyAccidentOwnership.js';
+import handleAdminPropertyAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminPropertyAccidentDeleteOwnership.js'
 
 export default{
     Mutation: {
@@ -84,8 +86,7 @@ export default{
 
         // ------- DELETE -------        
         deletePropertyAccident: async (_, {propertyAccidentId}, context) => {
-            // change this to admin = checkAdminAuth later
-            const user = await checkUserAuth(context)
+            const admin = await checkAdminAuth(context)
 
             const propertyAccident = await db.propertyAccident.findUnique({
                 where: {
@@ -97,7 +98,7 @@ export default{
                 throw new Error('Error: Property accident record does not exist')
             }
 
-            const verified = handlePropertyAccidentOwnership(user.id, propertyAccidentId)
+            const verified = await handleAdminPropertyAccidentDeleteOwnership(admin.id, propertyAccidentId)
 
             try{
                 if (verified){
