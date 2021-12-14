@@ -1,6 +1,8 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import db from '../../utils/generatePrisma.js';
+import handleAdminAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminAccidentDeleteOwnership.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 
 export default{
     Query: {
@@ -73,9 +75,61 @@ export default{
 
         // ------- DELETE -------        
         deleteAccident: async (_, {accidentId}, context) => {
-            // change this to admin = checkAdminAuth later
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminAccidentDeleteOwnership(admin.id, accidentId)
+
+            const accident = await db.accident.findUnique({
+                where: {
+                    id: accidentId
+                },
+                include: {
+                    hitPerson: true,
+					thirdParty: true,
+					injuryAccident: true,
+					propertyAccident: true,
+					injuryReport: true
+                }
+            })
+
+            if (accident.injuryReport.length !== 0) {
+                await db.injuryReport.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.propertyAccident.length !== 0) {
+                await db.propertyAccident.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.injuryAccident.length !== 0) {
+                await db.injuryAccident.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.thirdParty.length !== 0) {
+                await db.thirdParty.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.hitPerson.length !== 0) {
+                await db.hitPerson.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
                 
             try{
                 if (verified){
