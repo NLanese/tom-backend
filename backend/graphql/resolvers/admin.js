@@ -70,7 +70,33 @@ export default {
                 console.log(error)
                 throw new Error(error)
             }
-        }
+        },
+
+        adminGetUserAccidentsById: async (_, {userId}, context) => {
+            const admin = await checkAdminAuth(context)
+            const user = await db.user.findUnique({
+                where: {id: userId}, 
+                include: { accidents: true }
+            })
+            if (!user) {
+                throw new Error('Error: User does not exist')
+            }
+            const verified = await handleAdminUserOwnership(admin.id, user.id)
+            if (verified){
+                try {
+                    return await db.user.findUnique({
+                        where: {
+                            id: userId
+                        },
+                        include: {
+                            accidents: true
+                        }
+                    })
+                } catch (error) {
+                    throw new Error(error)
+                }
+            }
+        } 
     },
 
     Mutation: {
