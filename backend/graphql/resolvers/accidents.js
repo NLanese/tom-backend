@@ -76,6 +76,59 @@ export default{
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
             const verified = await handleAccidentOwnership(user.id, accidentId)
+
+            const accident = await db.accident.findUnique({
+                where: {
+                    id: accidentId
+                },
+                include: {
+                    hitPerson: true,
+					thirdParty: true,
+					injuryAccident: true,
+					propertyAccident: true,
+					injuryReport: true
+                }
+            })
+
+            if (accident.injuryReport.length !== 0) {
+                await db.injuryReport.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.propertyAccident.length !== 0) {
+                await db.propertyAccident.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.injuryAccident.length !== 0) {
+                await db.injuryAccident.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.thirdParty.length !== 0) {
+                await db.thirdParty.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
+
+            if (accident.hitPerson.length !== 0) {
+                await db.hitPerson.deleteMany({
+                    where: {
+                        accidentId: accidentId
+                    }
+                })
+            }
                 
             try{
                 if (verified){
