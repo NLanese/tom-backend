@@ -45,6 +45,17 @@ export default {
 		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
 			const admin = await checkAdminAuth(context)
+
+			const user = await db.user.findUnique({
+				where: {
+					id: userId
+				}
+			})
+
+			if (!user) {
+				throw new Error('Error: User does not exist')
+			}
+
 			const verified = await handleAdminUserOwnership(admin.id, userId)
 
 			try {

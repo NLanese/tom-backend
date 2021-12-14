@@ -32,8 +32,6 @@ export default {
         adminGetEmployees: async (_, {}, context) => {
             const admin = await checkAdminAuth(context)
 
-            console.log(admin.id)
-
             try{
                 return await db.admin.findUnique({
                     where: {
@@ -44,7 +42,6 @@ export default {
                     }
                 })
             }catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         }
@@ -66,7 +63,7 @@ export default {
                 lastname = await lastname.toUpperCase()
 
                 if (!valid) {
-                    throw new userInputError('Errors', { errors })
+                    throw new UserInputError('Errors', { errors })
                 }
 
                 const admin = await db.admin.findUnique({
@@ -120,7 +117,7 @@ export default {
             const { errors, valid } = validateLoginInput(email, password);
 
             if (!valid) {
-                throw new userInputError('Errors', { errors })
+                throw new UserInputError('Errors', { errors })
             }
 
             email = await email.toUpperCase()
@@ -204,9 +201,17 @@ export default {
         // ------ UPDATE USER -------
         adminUpdateEmployeeByID: async (_, {userId, adminEmail, adminFirstName, adminLastname, adminUsername, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity}, context) => {
             const admin = await checkAdminAuth(context)
-            const verified = await handleAdminUserOwnership(admin.id, userId)
+            const user = await db.user.findUnique({
+                where: {
+                    id: userId
+                }
+            })
 
-            console.log(userId)
+            if (!user) {
+                throw new Error('Error: User does not exist')
+            }
+
+            const verified = await handleAdminUserOwnership(admin.id, userId)
 
             try{
                 if (verified){
@@ -240,7 +245,6 @@ export default {
                     })
                 } 
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         }

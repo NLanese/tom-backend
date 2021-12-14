@@ -40,6 +40,17 @@ export default{
 
         updateInjuryAccident:  async (_, { injuryAccidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
+
+            const injuryAccident = await db.injuryAccident.findUnique({
+                where: {
+                    id: injuryAccidentId
+                }
+            })
+
+            if (!injuryAccident) {
+                throw new Error('Error: Injury accident record does not exist')
+            }
+
             const verified = await handleInjuryAccidentOwnership(user.id, injuryAccidentId)
 
             try{
@@ -70,6 +81,17 @@ export default{
 
         deleteInjuryAccident: async (_, { injuryAccidentId }, context) => {
             const user = await checkUserAuth(context)
+
+            const injuryAccident = await db.injuryAccident.findUnique({
+                where: {
+                    id: injuryAccidentId
+                }
+            })
+
+            if (!injuryAccident) {
+                throw new Error('Error: Injury accident record does not exist')
+            }
+
             const verified = await handleInjuryAccidentOwnership(user.id, injuryAccidentId)
 
             try {
