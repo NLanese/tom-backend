@@ -32,7 +32,6 @@ export default{
                         safety_failed: safety_failed,
                         number_package_carried: number_package_carried,
                         safety_equipment_used: safety_equipment_used,
-                        failed_safety: failed_safety,
                         user: {
                             connect: {
                                 id: user.id
@@ -41,7 +40,8 @@ export default{
                     }
                 })
             } catch(error){
-                throw new Error(console.log(error))
+                console.log(error)
+                throw new Error(error)
             }
         },
 
