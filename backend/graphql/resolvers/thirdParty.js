@@ -1,8 +1,10 @@
 import { UserInputError } from 'apollo-server-errors';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import { handleThirdPartyOwnership } from '../../utils/handleOwnership/handleThirdPartyOwnership.js';
+import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminThirdPartyOwnership.js';
+
 
 export default{
     Mutation: {
@@ -45,6 +47,36 @@ export default{
                     })
                 }
             } catch(error){
+                throw new Error(error)
+            }
+        },
+
+        adminUpdateThirdParty: async (_, { thirdPartyId, accidentId, location }, context) => {
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId, accidentId)
+
+            const thirdPartyRecord = await db.thirdParty.findUnique({
+                where: {
+                    id: thirdPartyId
+                }
+            })
+
+            if (!thirdPartyRecord) {
+                throw new Error('Error: Third party record does not exist')
+            }
+
+            try {
+                if (verified) {
+                    return await db.thirdParty.update({
+                        where: {
+                            id: thirdPartyId
+                        },
+                        data: {
+                            location: location
+                        }
+                    })
+                }
+            } catch (error) {
                 throw new Error(error)
             }
         },
