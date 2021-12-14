@@ -27,9 +27,29 @@ export default {
                 throw new Error(error)
             }
         },
+
+        getEmployees: async (_, {}, context) => {
+            const admin = await checkAdminAuth(context)
+
+            console.log(admin.id)
+
+            try{
+                return await db.admin.findUnique({
+                    where: {
+                        id: admin.id
+                    },
+                    include: {
+                        users: true 
+                    }
+                })
+            }catch(error){
+                throw new Error(error)
+            }
+        }
     },
 
     Mutation: {
+        // ------ CREATE -------
         signupAdmin: async (_, { email, password, username, firstname, lastname }, context) => {
             try {
                 const { valid, errors } = validateRegisterInput(
@@ -91,6 +111,9 @@ export default {
             }
         },
 
+
+
+        // ------ SIGN IN -------
         signinAdmin: async (_, { email, password }, { req }) => {
             const { errors, valid } = validateLoginInput(email, password);
 
@@ -125,6 +148,9 @@ export default {
             return { ...foundUser, token: token }
         },
 
+
+
+        // ------ UPDATE -------
         updateAdmin: async (_, { email, username, firstname, lastname, password }, context) => {
             const admin = await checkAdminAuth(context)
 
@@ -169,6 +195,53 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
+        },
+
+
+
+        // ------ UPDATE USER -------
+        updateEmployeeByID: async (_, {userId, newAdminId, adminEmail, adminFirstName, adminLastname, adminUsername, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendence, productivity}, context) => {
+            const admin = await checkAdminAuth(context)
+
+            try{
+                if (true){
+                    return await db.user.update({
+                        where: {
+                            id: userId
+                        },
+                        data: {
+                            admin: {
+                                connect: {
+                                    id: newAdminId
+                                }
+                            },
+                            adminEmail: adminEmail,
+                            adminFirstName: adminFirstName,
+                            adminLastname: adminLastname,
+                            adminUsername: adminUsername,
+                            fico: fico,
+                            netradyne: netradyne,
+                            delivery_associate: delivery_associate,
+                            seatbelt: seatbelt,
+                            speeding: speeding,
+                            defects: defects,
+                            customer_delivery_feedback: customer_delivery_feedback,
+                            delivered_and_recieved: delivered_and_recieved,
+                            delivery_completion_rate, delivery_completion_rate,
+                            photo_on_delivery: photo_on_delivery,
+                            call_compliance: call_compliance,
+                            scan_compliance: scan_compliance,
+                            has_many_accidents: has_many_accidents,
+                            belongs_to_team: belongs_to_team,
+                            attendance: attendance, 
+                            productivity: productivity
+                        }
+                    })
+                } 
+            } catch(error){
+                throw new Error(error)
+            }
         }
     }
+
 }
