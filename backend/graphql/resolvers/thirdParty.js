@@ -4,7 +4,7 @@ import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminThirdPartyOwnership.js';
-import propertyAccident from './propertyAccident.js';
+import handleAdminThirdPartyDeleteOwnership from '../../utils/handleOwnership/handleAdminThirdPartyDeleteOwnership.js';
 
 
 export default{
@@ -95,7 +95,7 @@ export default{
         },
 
         deleteThirdParty: async (_, { thirdPartyId }, context) => {
-            const user = await checkUserAuth(context)
+            const admin = await checkAdminAuth(context)
 
             const thirdParty = await db.thirdParty.findUnique({
                 where: {
@@ -107,7 +107,7 @@ export default{
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = handleThirdPartyOwnership(user.id, thirdPartyId)
+            const verified = await handleAdminThirdPartyDeleteOwnership(admin.id, thirdPartyId)
     
             try {
                 if (verified){

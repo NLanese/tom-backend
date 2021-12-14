@@ -42,7 +42,6 @@ export default {
 			}
 		},
 
-		/* ONLY ADMIN SHOULD BE ABLE TO GET THEIR EMPLOYEES BY THEIR ID */
 		getUserById: async (_, { userId }, context) => {
 			const admin = await checkAdminAuth(context)
 
@@ -168,7 +167,6 @@ export default {
 					},
 				});
 			} catch (error) {
-				console.log(error)
 				throw new Error(error);
 			}
 		},
