@@ -44,7 +44,56 @@ export default {
             }catch(error){
                 throw new Error(error)
             }
-        }
+        },
+
+        adminGetAccidentById: async (_, {accidentId}, context) => {
+            const admin = await checkAdminAuth(context)
+            const accident = await db.accident.findUnique({
+                where: { id: accidentId },
+                include: { user: true }
+            })
+            if (!accident) {
+                throw new Error("Error: Accident does not exist!")
+            }
+            const verified = handleAdminUserOwnership(admin.id, accident.user.id)
+            try{
+                if (verified){
+                    return await db.accident.findUnique({ 
+                        where: {id: accidentId},
+                        include: { user: true }
+                    })
+                }
+            }catch(error){
+                console.log(error)
+                throw new Error(error)
+            }
+        },
+
+        adminGetUserAccidentsById: async (_, {userId}, context) => {
+            const admin = await checkAdminAuth(context)
+            const user = await db.user.findUnique({
+                where: {id: userId}, 
+                include: { accidents: true }
+            })
+            if (!user) {
+                throw new Error('Error: User does not exist')
+            }
+            const verified = await handleAdminUserOwnership(admin.id, user.id)
+            if (verified){
+                try {
+                    return await db.user.findUnique({
+                        where: {
+                            id: userId
+                        },
+                        include: {
+                            accidents: true
+                        }
+                    })
+                } catch (error) {
+                    throw new Error(error)
+                }
+            }
+        } 
     },
 
     Mutation: {

@@ -192,6 +192,8 @@ const typeDefs = gql`
       # ADMIN QUERIES
       getAdmin: Admin
       adminGetEmployees: User
+      adminGetAccidentById(accidentId: Int): Accident
+      adminGetUserAccidentsById(userId: Int): User
 
       # USER QUERIES
       getUser: User
