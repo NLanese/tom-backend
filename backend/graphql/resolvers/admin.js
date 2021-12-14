@@ -53,18 +53,24 @@ export default {
                 include: { user: true }
             })
             if (!accident) {
-                throw new Error("Error: Accident does not exist!")
+                throw new Error("Error: Accident does not exist")
             }
             const verified = handleAdminUserOwnership(admin.id, accident.user.id)
             try{
                 if (verified){
                     return await db.accident.findUnique({ 
                         where: {id: accidentId},
-                        include: { user: true }
+                        include: { 
+                            user: true,
+                            thirdParty: true,
+                            hitPerson: true,
+                            injuryAccident: true,
+                            injuryReport: true,
+                            propertyAccident: true
+                        }
                     })
                 }
             }catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         },
