@@ -8,6 +8,7 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js';
 
 export default {
     Query: {
@@ -27,9 +28,30 @@ export default {
                 throw new Error(error)
             }
         },
+
+        adminGetEmployees: async (_, {}, context) => {
+            const admin = await checkAdminAuth(context)
+
+            console.log(admin.id)
+
+            try{
+                return await db.admin.findUnique({
+                    where: {
+                        id: admin.id
+                    },
+                    include: {
+                        users: true 
+                    }
+                })
+            }catch(error){
+                console.log(error)
+                throw new Error(error)
+            }
+        }
     },
 
     Mutation: {
+        // ------ CREATE -------
         signupAdmin: async (_, { email, password, username, firstname, lastname }, context) => {
             try {
                 const { valid, errors } = validateRegisterInput(
@@ -91,6 +113,9 @@ export default {
             }
         },
 
+
+
+        // ------ SIGN IN -------
         signinAdmin: async (_, { email, password }, { req }) => {
             const { errors, valid } = validateLoginInput(email, password);
 
@@ -125,6 +150,9 @@ export default {
             return { ...foundUser, token: token }
         },
 
+
+
+        // ------ UPDATE -------
         updateAdmin: async (_, { email, username, firstname, lastname, password }, context) => {
             const admin = await checkAdminAuth(context)
 
@@ -169,6 +197,53 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
+        },
+
+
+
+        // ------ UPDATE USER -------
+        adminUpdateEmployeeByID: async (_, {userId, adminEmail, adminFirstName, adminLastname, adminUsername, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity}, context) => {
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminUserOwnership(admin.id, userId)
+
+            console.log(userId)
+
+            try{
+                if (verified){
+                    return await db.user.update({
+                        where: {
+                            id: userId
+                        },
+                        data: {
+                            adminEmail: adminEmail,
+                            adminFirstName: adminFirstName,
+                            adminLastname: adminLastname,
+                            adminUsername: adminUsername,
+                            fico: fico,
+                            netradyne: netradyne,
+                            delivery_associate: delivery_associate,
+                            seatbelt: seatbelt,
+                            speeding: speeding,
+                            defects: defects,
+                            customer_delivery_feedback: customer_delivery_feedback,
+                            delivered_and_recieved: delivered_and_recieved,
+                            delivery_completion_rate, delivery_completion_rate,
+                            photo_on_delivery: photo_on_delivery,
+                            call_compliance: call_compliance,
+                            scan_compliance: scan_compliance,
+                            has_many_accidents: has_many_accidents,
+                            attendance: attendance,
+                            belongs_to_team: belongs_to_team,
+                            attendance: attendance, 
+                            productivity: productivity
+                        }
+                    })
+                } 
+            } catch(error){
+                console.log(error)
+                throw new Error(error)
+            }
         }
     }
+
 }

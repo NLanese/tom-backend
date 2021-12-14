@@ -4,7 +4,7 @@ import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminThirdPartyOwnership.js';
-import { handleThirdPartyOwnership } from '../../utils/handleOwnership/handleThirdPartyOwnership.js';
+
 
 export default{
     Mutation: {
