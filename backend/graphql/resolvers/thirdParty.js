@@ -1,25 +1,29 @@
 import { UserInputError } from 'apollo-server-errors';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
+import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import { handleThirdPartyOwnership } from '../../utils/handleOwnership/handleThirdPartyOwnership.js';
 
 export default{
     Mutation: {
         createThirdParty: async (_, { accidentId, location }, context) => {
             const user = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(user.id, accidentId)
 
             try {
-                return await db.thirdParty.create({
-                    data: {
-                        location: location,
-                        accidentId: accidentId,
-                        accident: {
-                            connect: {
-                                id: accidentId
-                            }
-                        },
-                    }
-                })
+                if (verified) {
+                    return await db.thirdParty.create({
+                        data: {
+                            location: location,
+                            accidentId: accidentId,
+                            accident: {
+                                connect: {
+                                    id: accidentId
+                                }
+                            },
+                        }
+                    })
+                }
             } catch(error) {
                 throw new Error(error)
             }  
@@ -27,7 +31,7 @@ export default{
 
         updateThirdParty: async (_, { thirdPartyId, location }, context) => {
             const user = await checkUserAuth(context)
-            const verified = handleThirdPartyOwnership(user.id, thirdPartyId)
+            const verified = await handleThirdPartyOwnership(user.id, thirdPartyId)
 
             try{
                 if (verified){

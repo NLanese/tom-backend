@@ -1,5 +1,6 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
+import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import { handleHitPersonOwnership } from '../../utils/handleOwnership/handleHitPersonOwnership.js';
 
 export default{
@@ -8,23 +9,26 @@ export default{
         // ------- CREATE --------
         createHitPerson: async (_, {accidentId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
             const user = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(user.id, accidentId)
             
             try{
-                return await db.hitPerson.create({
-                    data: {
-                        accident: {
-                            connect: {
-                                id: accidentId
-                            }
-                        },
-                        accidentId: accidentId,
-                        medical_attention: medical_attention,
-                        vehicle_or_pedestrian: vehicle_or_pedestrian,
-                        previous_damage: previous_damage,
-                        contact_infomation: contact_infomation,
-                        injury: injury
-                    }
-                })
+                if (verified) {
+                    return await db.hitPerson.create({
+                        data: {
+                            accident: {
+                                connect: {
+                                    id: accidentId
+                                }
+                            },
+                            accidentId: accidentId,
+                            medical_attention: medical_attention,
+                            vehicle_or_pedestrian: vehicle_or_pedestrian,
+                            previous_damage: previous_damage,
+                            contact_infomation: contact_infomation,
+                            injury: injury
+                        }
+                    })
+                }
             } catch(error){
                 console.log(error)
                 throw new Error(error)
@@ -35,7 +39,7 @@ export default{
         // ------- UPDATE --------
         updateHitPerson: async (_, {hitPersonId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
             const user = await checkUserAuth(context)
-            const verified = handleHitPersonOwnership(user.id, hitPersonId)
+            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
             
             try{
                 if (verified){
