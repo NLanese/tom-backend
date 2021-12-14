@@ -208,9 +208,8 @@ export default {
             })
 
             if (!user) {
-                throw new Error('User does not exist')
+                throw new Error('Error: User does not exist')
             }
-
 
             const verified = await handleAdminUserOwnership(admin.id, userId)
 
@@ -246,7 +245,6 @@ export default {
                     })
                 } 
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         }

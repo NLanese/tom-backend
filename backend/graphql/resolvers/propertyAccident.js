@@ -5,7 +5,6 @@ import { handlePropertyAccidentOwnership } from '../../utils/handleOwnership/han
 
 export default{
     Mutation: {
-
         // -------- CREATE ---------
         createPropertyAccident: async (_, {accidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
@@ -43,6 +42,17 @@ export default{
         // ------- UPDATE -------         
         updatePropertyAccident:  async (_, {propertyAccidentId, self_injured, vehicle_number, amazon_logo, exact_address, action_before_accident, police_report, weather, wet_ground, slippery_ground, extra_info, rushed_prior  }, context) => {
             const user = await checkUserAuth(context)
+
+            const propertyAccident = await db.propertyAccident.findUnique({
+                where: {
+                    id: propertyAccidentId
+                }
+            })
+
+            if (!propertyAccident) {
+                throw new Error('Error: Property accident record does not exist')
+            }
+
             const verified = await handlePropertyAccidentOwnership(user.id, propertyAccidentId)
 
             try{
@@ -76,6 +86,17 @@ export default{
         deletePropertyAccident: async (_, {propertyAccidentId}, context) => {
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
+
+            const propertyAccident = await db.propertyAccident.findUnique({
+                where: {
+                    id: propertyAccidentId
+                }
+            })
+
+            if (!propertyAccident) {
+                throw new Error('Error: Property accident record does not exist')
+            }
+
             const verified = handlePropertyAccidentOwnership(user.id, propertyAccidentId)
 
             try{

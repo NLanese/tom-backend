@@ -5,7 +5,6 @@ import { handleInjuryReportOwnership } from '../../utils/handleOwnership/handleI
 
 export default{
     Mutation: {
-
         // -------- CREATE --------
         createInjuryReport: async (_, {accidentId, immediate_attention, late, self_injured, injury_type, other_injured, before_injury, packages, safety_equipment, unsafe_conditions, pain_level, additional_information}, context) => {
             const user = await checkUserAuth(context)
@@ -45,6 +44,17 @@ export default{
          // -------- UPDATE --------
          updateInjuryReport: async (_, {injuryReportId, immediate_attention, late, self_injured, injury_type, other_injured, before_injury, packages, safety_equipment, unsafe_conditions, pain_level, additional_information}, context) => {
             const user = await checkUserAuth(context)
+
+            const injuryReport = await db.injuryReport.findUnique({
+                where: {
+                    id: injuryReportId
+                }
+            })
+
+            if (!injuryReport) {
+                throw new Error('Error: Injury report record does not exist')
+            }
+
             const verified = await handleInjuryReportOwnership(user.id, injuryReportId)
 
             try{
@@ -78,6 +88,17 @@ export default{
         deleteInjuryReport: async (_, {injuryReportId}, context) => {
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
+
+            const injuryReport = await db.injuryReport.findUnique({
+                where: {
+                    id: injuryReportId
+                }
+            })
+
+            if (!injuryReport) {
+                throw new Error('Error: Injury report record does not exist')
+            }
+
             const verified = handleInjuryReportOwnership(user.id, injuryReportId)
             
             try{

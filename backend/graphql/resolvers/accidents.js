@@ -42,7 +42,6 @@ export default{
                     }
                 })
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         },
@@ -50,7 +49,19 @@ export default{
         // ------- EDIT -------
         updateAccident: async (_, {accidentId, using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
             const user = await checkUserAuth(context)
+
+            const accident = await db.accident.findUnique({
+                where: {
+                    id: accidentId
+                }
+            })
+
+            if (!accident) {
+                throw new Error('Error: Accident record does not exist')
+            }
+            
             const verified = await handleAccidentOwnership(user.id, accidentId)
+
                
             try{
                 if (verified) {
@@ -90,6 +101,10 @@ export default{
 					injuryReport: true
                 }
             })
+
+            if (!accident) {
+                throw new Error('Error: Accident record does not exist')
+            }
 
             if (accident.injuryReport.length !== 0) {
                 await db.injuryReport.deleteMany({
@@ -138,7 +153,6 @@ export default{
                     })
                 }
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         }

@@ -5,7 +5,6 @@ import { handleHitPersonOwnership } from '../../utils/handleOwnership/handleHitP
 
 export default{
     Mutation: {
-
         // ------- CREATE --------
         createHitPerson: async (_, {accidentId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
             const user = await checkUserAuth(context)
@@ -30,7 +29,6 @@ export default{
                     })
                 }
             } catch(error){
-                console.log(error)
                 throw new Error(error)
             }
         },
@@ -39,9 +37,21 @@ export default{
         // ------- UPDATE --------
         updateHitPerson: async (_, {hitPersonId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
             const user = await checkUserAuth(context)
-            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
             
-            try{
+            const hitPerson = await db.hitPerson.findUnique({
+                where: {
+                    id: hitPersonId
+                }
+            })
+
+            if (!hitPerson) {
+                throw new Error('Error: Hit person record does not exist')
+            }
+
+            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
+
+            
+            try {
                 if (verified){
                     return await db.hitPerson.update({
                         where: {
@@ -66,6 +76,17 @@ export default{
         deleteHitPerson: async (_, {hitPersonId}, context) => {
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
+
+            const hitPerson = await db.hitPerson.findUnique({
+                where: {
+                    id: hitPersonId
+                }
+            })
+
+            if (!hitPerson) {
+                throw new Error('Error: Hit person record does not exist')
+            }
+
             const verified = handleHitPersonOwnership(user.id, hitPersonId)
 
             try{

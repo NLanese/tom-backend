@@ -4,6 +4,7 @@ import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminThirdPartyOwnership.js';
+import propertyAccident from './propertyAccident.js';
 
 
 export default{
@@ -33,6 +34,17 @@ export default{
 
         updateThirdParty: async (_, { thirdPartyId, location }, context) => {
             const user = await checkUserAuth(context)
+
+            const thirdParty = await db.thirdParty.findUnique({
+                where: {
+                    id: thirdPartyId
+                }
+            })
+
+            if (!thirdParty) {
+                throw new Error('Error: Third party record does not exist')
+            }
+
             const verified = await handleThirdPartyOwnership(user.id, thirdPartyId)
 
             try{
@@ -53,7 +65,6 @@ export default{
 
         adminUpdateThirdParty: async (_, { thirdPartyId, accidentId, location }, context) => {
             const admin = await checkAdminAuth(context)
-            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId, accidentId)
 
             const thirdPartyRecord = await db.thirdParty.findUnique({
                 where: {
@@ -64,6 +75,8 @@ export default{
             if (!thirdPartyRecord) {
                 throw new Error('Error: Third party record does not exist')
             }
+
+            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId, accidentId)
 
             try {
                 if (verified) {
@@ -83,6 +96,17 @@ export default{
 
         deleteThirdParty: async (_, { thirdPartyId }, context) => {
             const user = await checkUserAuth(context)
+
+            const thirdParty = await db.thirdParty.findUnique({
+                where: {
+                    id: thirdPartyId
+                }
+            })
+
+            if (!thirdParty) {
+                throw new Error('Error: Third party record does not exist')
+            }
+
             const verified = handleThirdPartyOwnership(user.id, thirdPartyId)
     
             try {
