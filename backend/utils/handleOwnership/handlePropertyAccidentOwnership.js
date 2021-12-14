@@ -6,13 +6,21 @@ export const handlePropertyAccidentOwnership = async (userId, propertyAccidentId
             id: propertyAccidentId
         },
         include: {
-            accident: true
+            accident: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
 
-    if (propertyAccident.accident.user.id === userId) {
+    if (!propertyAccident) {
+        throw new Error('Error: Accident record does not exist')
+    }
+
+    if (propertyAccident.accident[0].user.id === userId) {
         return true
     }
 
-    throw new Error('Not accident owner')
+    throw new Error('Error: Not owner of Property Accident report')
 }
