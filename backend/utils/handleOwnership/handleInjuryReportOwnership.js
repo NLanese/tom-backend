@@ -6,13 +6,21 @@ export const handleInjuryReportOwnership = async (userId, injuryReportId) => {
             id: injuryReportId
         },
         include: {
-            user: true
+            accident: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
 
-    if (injuryReport.user.id === userId){
+    if (!injuryReport) {
+        throw new Error('Accident record does not exist')
+    }
+
+    if (injuryReport.accident[0].user.id === userId){
         return true
     }
 
-    throw new Error("Error: not owner of injury report")
+    throw new Error("Error: Not owner of injury report")
 }

@@ -6,13 +6,21 @@ export const handleThirdPartyOwnership = async (userId, thirdPartyId) => {
             id: thirdPartyId
         },
         include: {
-            accident: true
+            accident: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
 
-    if (thirdParty.accident.user.id === userId) {
+    if (!thirdParty) {
+        throw new Error('Error: Accident record does not exist')
+    }
+
+    if (thirdParty.accident[0].user.id === userId) {
         return true
     }
 
-    throw new Error('Not accident owner')
+    throw new Error('Error: Not owner of Third Party report')
 }
