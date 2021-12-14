@@ -8,6 +8,7 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js';
 
 export default {
     Query: {
@@ -28,7 +29,7 @@ export default {
             }
         },
 
-        getEmployees: async (_, {}, context) => {
+        adminGetEmployees: async (_, {}, context) => {
             const admin = await checkAdminAuth(context)
 
             console.log(admin.id)
@@ -43,6 +44,7 @@ export default {
                     }
                 })
             }catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         }
@@ -200,21 +202,19 @@ export default {
 
 
         // ------ UPDATE USER -------
-        updateEmployeeByID: async (_, {userId, newAdminId, adminEmail, adminFirstName, adminLastname, adminUsername, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendence, productivity}, context) => {
+        adminUpdateEmployeeByID: async (_, {userId, adminEmail, adminFirstName, adminLastname, adminUsername, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity}, context) => {
             const admin = await checkAdminAuth(context)
+            const verified = await handleAdminUserOwnership(admin.id, userId)
+
+            console.log(userId)
 
             try{
-                if (true){
+                if (verified){
                     return await db.user.update({
                         where: {
                             id: userId
                         },
                         data: {
-                            admin: {
-                                connect: {
-                                    id: newAdminId
-                                }
-                            },
                             adminEmail: adminEmail,
                             adminFirstName: adminFirstName,
                             adminLastname: adminLastname,
@@ -232,6 +232,7 @@ export default {
                             call_compliance: call_compliance,
                             scan_compliance: scan_compliance,
                             has_many_accidents: has_many_accidents,
+                            attendance: attendance,
                             belongs_to_team: belongs_to_team,
                             attendance: attendance, 
                             productivity: productivity
@@ -239,6 +240,7 @@ export default {
                     })
                 } 
             } catch(error){
+                console.log(error)
                 throw new Error(error)
             }
         }

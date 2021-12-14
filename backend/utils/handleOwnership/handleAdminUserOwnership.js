@@ -6,7 +6,7 @@ const handleAdminUserOwnership = async (adminId, userId) => {
             id: userId
         }
     })
-
+    
     if (!user) {
         throw new Error('User does not exist')
     }

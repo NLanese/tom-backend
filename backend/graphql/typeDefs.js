@@ -191,7 +191,7 @@ const typeDefs = gql`
     type Query {
       # ADMIN QUERIES
       getAdmin: Admin
-      getEmployees: User
+      adminGetEmployees: User
 
       # USER QUERIES
       getUser: User
@@ -206,7 +206,7 @@ const typeDefs = gql`
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
       updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
-      updateEmployeeByID(userId: Int, newAdminId: Int, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON): User
+      adminUpdateEmployeeByID(userId: Int, newAdminId: Int, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON): User
 
       # USER MUTATIONS
       signupUser(signupInput: SignupInput): User!
