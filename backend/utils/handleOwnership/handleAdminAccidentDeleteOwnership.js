@@ -25,7 +25,7 @@ const handleAdminAccidentDeleteOwnership = async (adminId, accidentId) => {
     }
     
     if (!admin) {
-        throw new Error('Admin does not exist')
+        throw new Error('Error: Admin does not exist')
     }
 
     admin.users.forEach((user) => {
@@ -38,7 +38,7 @@ const handleAdminAccidentDeleteOwnership = async (adminId, accidentId) => {
         return true
     }
 
-    throw new Error('User is not your employee')
+    throw new Error('Error: User is not your employee')
 }
 
 export default handleAdminAccidentDeleteOwnership

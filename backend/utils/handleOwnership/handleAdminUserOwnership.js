@@ -8,14 +8,14 @@ const handleAdminUserOwnership = async (adminId, userId) => {
     })
     
     if (!user) {
-        throw new Error('User does not exist')
+        throw new Error('Error: User does not exist')
     }
 
     if (user.adminId === adminId) {
         return true
     }
 
-    throw new Error('User is not your employee')
+    throw new Error('Error: User is not your employee')
 }
 
 export default handleAdminUserOwnership

@@ -121,7 +121,7 @@ export default {
 				})
 
 				if (!foundAdmin) {
-					throw new Error('Admin does not exist')
+					throw new Error('Error: Admin does not exist')
 				}
 
 				if (!valid) {
