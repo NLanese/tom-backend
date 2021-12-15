@@ -59,6 +59,7 @@ const typeDefs = gql`
         adminUsername:                String
         adminEmail:                   String
         adminAccountStanding:         String
+        adminApproved:                String
 
         accidents:                    [Accident]
         admin:                        [Admin]

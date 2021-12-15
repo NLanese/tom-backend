@@ -87,7 +87,10 @@ export default {
         // ------- DELETE --------
         deleteHitPerson: async (_, {hitPersonId}, context) => {
             const admin = await checkAdminAuth(context)
+<<<<<<< HEAD
 
+=======
+>>>>>>> fcc3f8d79681ad99869556f44cbd5dc7b4905177
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
                     id: hitPersonId
