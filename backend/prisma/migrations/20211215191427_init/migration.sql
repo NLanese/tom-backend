@@ -47,6 +47,7 @@ CREATE TABLE "User" (
     "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
     "adminAccountStading" BOOLEAN NOT NULL,
+    "adminApproved" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
