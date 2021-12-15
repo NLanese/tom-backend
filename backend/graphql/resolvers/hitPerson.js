@@ -3,6 +3,7 @@ import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminHitPersonDeleteOwnership from '../../utils/handleOwnership/handleAdminHitPersonDeleteOwnership.js';
+import handleHitPersonOwnership from '../../utils/handleOwnership/handleHitPersonOwnership.js';
 
 export default {
     Mutation: {
@@ -62,7 +63,7 @@ export default {
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const verified = await handleAdminHitPersonDeleteOwnership(user.id, hitPersonId)
+            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
             try {
                 if (verified) {
                     return await db.hitPerson.update({
@@ -108,7 +109,6 @@ export default {
                     })
                 }
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }

@@ -24,3 +24,5 @@ export const handleHitPersonOwnership = async (userId, hitPersonId) => {
 
     throw new Error("Error: Not owner of accident record")
 }
+
+export default handleHitPersonOwnership
