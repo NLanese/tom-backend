@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native"]
@@ -29,6 +26,8 @@ model Admin {
   username            String      @unique
   email               String      @unique
   password            String
+  paid                Boolean
+  accountStatus       String      @default("Free")
   users               User[]
 }
 
@@ -52,19 +51,19 @@ model User {
   photo_on_delivery               Int?
   call_compliance                 Int?
   scan_compliance                 Int?
-  has_many_accidents  Int?
-  belongs_to_team     Boolean?
-  attendance          Json?
-  productivity        Json?
+  has_many_accidents              Int?
+  belongs_to_team                 Boolean?
+  attendance                      Json?
+  productivity                    Json?
 
-  adminId             Int
-  adminFirstname      String
-  adminLastname       String
-  adminUsername       String
-  adminEmail          String
+  adminId                         Int
+  adminFirstname                  String
+  adminLastname                   String
+  adminUsername                   String
+  adminEmail                      String
+  adminAccountStading             Boolean
   admin               Admin         @relation(fields: [adminId], references: [id])
   accidents           Accident[]
-  // thirdParty          ThirdParty[]
 }
 
 model Accident {
@@ -97,8 +96,6 @@ model HitPerson {
 
 model ThirdParty {
   id                  Int         @id @default(autoincrement())
-  // userId                  Int
-  // user                    User        @relation(fields: [userId], references: [id])
   accidentId          Int
   accident            Accident[]  @relation(fields: [accidentId], references: [id])
   location            String
