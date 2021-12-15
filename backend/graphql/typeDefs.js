@@ -23,6 +23,8 @@ const typeDefs = gql`
         email:                        String
         password:                     String
         token:                        String
+        paid:                         Boolean
+        accountStatus:                String
         users:                        [User]
     }
 
@@ -56,6 +58,7 @@ const typeDefs = gql`
         adminLastname:                String
         adminUsername:                String
         adminEmail:                   String
+        adminAccountStanding:         String
 
         accidents:                    [Accident]
         admin:                        [Admin]
