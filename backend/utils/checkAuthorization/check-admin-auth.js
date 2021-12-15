@@ -15,13 +15,13 @@ const checkAdminAuth = (context) => {
 				const admin = jwt.verify(token, process.env.JWT_ADMIN_SECRET);
 				return admin
 			} catch (err) {
-				throw new AuthenticationError('Invalid token')
+				throw new AuthenticationError('Error: Invalid token')
 			}
 		}
-		throw new Error('Invalid Header, check header contents')
+		throw new Error('Error: Invalid Header, check header contents')
 	}
 
-	throw new Error('No Auth header found');
+	throw new Error('Error: No Auth header found');
 };
 
 export default checkAdminAuth;
