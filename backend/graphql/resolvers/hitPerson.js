@@ -84,8 +84,8 @@ export default{
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const verified = handleAdminHitPersonDeleteOwnership(admin.id, hitPersonId)
-
+            const verified = await handleAdminHitPersonDeleteOwnership(admin.id, hitPersonId)
+            
             try{
                 if (verified){
                     return await db.hitPerson.delete({

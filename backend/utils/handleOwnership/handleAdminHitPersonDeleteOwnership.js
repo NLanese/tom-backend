@@ -5,11 +5,11 @@ const handleAdminHitPersonDeleteOwnership = async (adminId, hitPersonId) => {
         where: { id: hitPersonId }
     })
     if (!hitPerson){
-        throw new Error("Error: there is no record of this individual")
+        throw new Error("Error: Hit person record does not exist")
     }
 
     const accident = await db.accident.findUnique({
-        where: { id: hitPerson.accident },
+        where: { id: hitPerson.accidentId },
         include: { user: true }
     })
     if (!accident){
