@@ -10,6 +10,8 @@ CREATE TABLE "Admin" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "paid" BOOLEAN NOT NULL,
+    "accountStatus" TEXT NOT NULL DEFAULT E'Free',
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
@@ -44,6 +46,7 @@ CREATE TABLE "User" (
     "adminLastname" TEXT NOT NULL,
     "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
+    "adminAccountStading" BOOLEAN NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
