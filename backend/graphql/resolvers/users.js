@@ -9,7 +9,6 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
-import admin from './admin.js';
 import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js'
 
 
@@ -42,7 +41,9 @@ export default {
 			}
 		},
 
-		getUserById: async (_, { userId }, context) => {
+		getUserById: async (_, {
+			userId
+		}, context) => {
 			const admin = await checkAdminAuth(context)
 
 			const user = await db.user.findUnique({
@@ -60,7 +61,7 @@ export default {
 			try {
 				if (verified) {
 					return await db.user.findUnique({
-						where:{
+						where: {
 							id: userId
 						},
 						include: {
@@ -76,7 +77,7 @@ export default {
 						}
 					})
 				}
-			} catch(error) {
+			} catch (error) {
 				throw new Error(error)
 			}
 		}
@@ -90,7 +91,16 @@ export default {
 		 * @returns Signed up user in DB
 		 */
 
-		signupUser: async (_, { signupInput: { email, password, username, firstname, lastname, adminEmail } }) => {
+		signupUser: async (_, {
+			signupInput: {
+				email,
+				password,
+				username,
+				firstname,
+				lastname,
+				adminEmail
+			}
+		}) => {
 			try {
 				const { valid, errors } = validateRegisterInput(
 					username,
@@ -99,9 +109,9 @@ export default {
 				);
 
 				email = await email.toUpperCase()
-                username = await username.toUpperCase()
-                firstname = await firstname.toUpperCase()
-                lastname = await lastname.toUpperCase()
+				username = await username.toUpperCase()
+				firstname = await firstname.toUpperCase()
+				lastname = await lastname.toUpperCase()
 				adminEmail = await adminEmail.toUpperCase()
 
 				const foundAdmin = await db.admin.findUnique({
@@ -111,11 +121,13 @@ export default {
 				})
 
 				if (!foundAdmin) {
-					throw new Error('Admin does not exist')
+					throw new Error('Error: Admin does not exist')
 				}
 
 				if (!valid) {
-					throw new userInputError('Errors', { errors });
+					throw new userInputError('Errors', {
+						errors
+					});
 				}
 
 				const user = await db.user.findUnique({
@@ -152,7 +164,7 @@ export default {
 					data: {
 						admin: {
 							connect: {
-								id: foundAdmin.id 
+								id: foundAdmin.id
 							}
 						},
 						email: email,
@@ -162,7 +174,7 @@ export default {
 						lastname: lastname,
 						adminEmail: foundAdmin.email,
 						adminFirstname: foundAdmin.firstname,
-						adminLastname:	foundAdmin.lastname,
+						adminLastname: foundAdmin.lastname,
 						adminUsername: foundAdmin.username,
 					},
 				});
@@ -171,11 +183,18 @@ export default {
 			}
 		},
 
-		signinUser: async (_, { email, password }, { req }) => {
+		signinUser: async (_, {
+			email,
+			password
+		}, {
+			req
+		}) => {
 			const { errors, valid } = validateLoginInput(email, password);
 
 			if (!valid) {
-				throw new userInputError('Errors', { errors });
+				throw new userInputError('Errors', {
+					errors
+				});
 			}
 
 			email = await email.toUpperCase()
@@ -188,60 +207,98 @@ export default {
 
 			if (!foundUser) {
 				errors.general = 'User not found';
-				throw new UserInputError('Incorrect Email', { errors });
+				throw new UserInputError('Incorrect Email', {
+					errors
+				});
 			}
 
 			const isValid = await bcrypt.compare(password, foundUser.password);
 
 			if (!isValid) {
 				errors.general = 'Incorrect Password';
-				throw new UserInputError('Incorrect Password', { errors });
+				throw new UserInputError('Incorrect Password', {
+					errors
+				});
 			}
 
 			const token = await generateUserToken(foundUser.id);
 
-			req.session = { token: `Bearer ${token}` };
+			req.session = {
+				token: `Bearer ${token}`
+			};
 
-			return { ...foundUser, token: token };
+			return {
+				...foundUser,
+				token: token
+			};
 		},
 
-		updateUser: async (_, { updateUser: { email, username, firstname, lastname, password, fico, netradyne, delivery_associate, seatbelt, speeding, defects, customer_delivery_feedback, delivered_and_recieved, delivery_completion_rate, photo_on_delivery, call_compliance, scan_compliance, has_many_accidents, belongs_to_team, attendance, productivity, accidents } }, context) => {
+		updateUser: async (_, {
+			updateUser: {
+				email,
+				username,
+				firstname,
+				lastname,
+				password,
+				fico,
+				netradyne,
+				delivery_associate,
+				seatbelt,
+				speeding,
+				defects,
+				customer_delivery_feedback,
+				delivered_and_recieved,
+				delivery_completion_rate,
+				photo_on_delivery,
+				call_compliance,
+				scan_compliance,
+				has_many_accidents,
+				belongs_to_team,
+				attendance,
+				productivity,
+				accidents
+			}
+		}, context) => {
 			const user = await checkUserAuth(context);
-			
+
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)
 			}
 
 			if (email) {
-                email = email.toUpperCase()
-            }
+				email = email.toUpperCase()
+			}
 
-            if (username) {
-                username = username.toUpperCase()
-            }
+			if (username) {
+				username = username.toUpperCase()
+			}
 
-            if (firstname) {
-                firstname = firstname.toUpperCase()
-            }
+			if (firstname) {
+				firstname = firstname.toUpperCase()
+			}
 
-            if (lastname) {
-                lastname = lastname.toUpperCase()
-            }
-			
-            try {
+			if (lastname) {
+				lastname = lastname.toUpperCase()
+			}
+
+			try {
 				if (!user) {
 					errors.general = 'User not found';
-					throw new UserInputError('User not found', { errors });
+					throw new UserInputError('User not found', {
+						errors
+					});
 				}
 
 				const newUser = await db.user.update({
-					where: { id: user.id },
+					where: {
+						id: user.id
+					},
 					data: {
 						email: email,
 						username: username,
 						firstname: firstname,
 						lastname: lastname,
-						password: password, 
+						password: password,
 						fico: fico,
 						netradyne: netradyne,
 						delivery_associate: delivery_associate,
@@ -270,7 +327,7 @@ export default {
 		},
 
 		/* DOESNT WORK ---- GOING TO FIX ONCE ALL OTHER ROUTES ARE DONE */
-		/* NEED TO ADD --- CHATROOMS --- MESSAGES --- */
+		/* WILL BE CHANGED TO SUSPEND USER SO NO DATA IS DELETED */
 		deleteUser: async (_, {}, context) => {
 			const user = await checkUserAuth(context);
 			const userInformation = await db.user.findUnique({
@@ -311,7 +368,7 @@ export default {
 						}
 					})
 				}
-				
+
 				if (userInformation.recipes) {
 					await db.recipes.deleteMany({
 						where: {
@@ -319,7 +376,7 @@ export default {
 						}
 					});
 				}
-				
+
 				/* Add delete all users likes from the database. Deleting them here wont change the TotalLikeValue on the recope schema */
 				const deletedUser = await db.user.delete({
 					where: {

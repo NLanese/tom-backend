@@ -15,7 +15,7 @@ export const handleInjuryAccidentOwnership = async (userId, injuryAccidentId) =>
     })
 
     if (!injuryAccident) {
-        throw new Error('Accident record doesnt exist')
+        throw new Error('Error: Accident record doesnt exist')
     }
 
     if (userId === injuryAccident.accident[0].user.id){

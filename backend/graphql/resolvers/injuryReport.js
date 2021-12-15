@@ -3,14 +3,27 @@ import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import { handleInjuryReportOwnership } from '../../utils/handleOwnership/handleInjuryReportOwnership.js';
 
-export default{
+export default {
     Mutation: {
         // -------- CREATE --------
-        createInjuryReport: async (_, {accidentId, immediate_attention, late, self_injured, injury_type, other_injured, before_injury, packages, safety_equipment, unsafe_conditions, pain_level, additional_information}, context) => {
+        createInjuryReport: async (_, {
+            accidentId,
+            immediate_attention,
+            late,
+            self_injured,
+            injury_type,
+            other_injured,
+            before_injury,
+            packages,
+            safety_equipment,
+            unsafe_conditions,
+            pain_level,
+            additional_information
+        }, context) => {
             const user = await checkUserAuth(context)
             const verified = await handleAccidentOwnership(user.id, accidentId)
 
-            try{
+            try {
                 if (verified) {
                     return await db.injuryReport.create({
                         data: {
@@ -34,15 +47,27 @@ export default{
                         }
                     })
                 }
-            } catch(error){
-                console.log(error)
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
 
-         // -------- UPDATE --------
-         updateInjuryReport: async (_, {injuryReportId, immediate_attention, late, self_injured, injury_type, other_injured, before_injury, packages, safety_equipment, unsafe_conditions, pain_level, additional_information}, context) => {
+        // -------- UPDATE --------
+        updateInjuryReport: async (_, {
+            injuryReportId,
+            immediate_attention,
+            late,
+            self_injured,
+            injury_type,
+            other_injured,
+            before_injury,
+            packages,
+            safety_equipment,
+            unsafe_conditions,
+            pain_level,
+            additional_information
+        }, context) => {
             const user = await checkUserAuth(context)
 
             const injuryReport = await db.injuryReport.findUnique({
@@ -57,8 +82,8 @@ export default{
 
             const verified = await handleInjuryReportOwnership(user.id, injuryReportId)
 
-            try{
-                if (verified){
+            try {
+                if (verified) {
                     return await db.injuryReport.update({
                         where: {
                             id: injuryReportId
@@ -78,14 +103,16 @@ export default{
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
 
         // -------- DELETE --------
-        deleteInjuryReport: async (_, {injuryReportId}, context) => {
+        deleteInjuryReport: async (_, {
+            injuryReportId
+        }, context) => {
             // change this to admin = checkAdminAuth later
             const user = await checkUserAuth(context)
 
@@ -100,14 +127,16 @@ export default{
             }
 
             const verified = handleInjuryReportOwnership(user.id, injuryReportId)
-            
-            try{
-                if (verified){
+
+            try {
+                if (verified) {
                     return await db.injuryReport.delete({
-                        where: {id: injuryReportId}
+                        where: {
+                            id: injuryReportId
+                        }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         }
