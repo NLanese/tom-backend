@@ -4,14 +4,21 @@ import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminHitPersonDeleteOwnership from '../../utils/handleOwnership/handleAdminHitPersonDeleteOwnership.js';
 
-export default{
+export default {
     Mutation: {
         // ------- CREATE --------
-        createHitPerson: async (_, {accidentId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
+        createHitPerson: async (_, {
+            accidentId,
+            medical_attention,
+            vehicle_or_pedestrian,
+            previous_damage,
+            contact_infomation,
+            injury
+        }, context) => {
             const user = await checkUserAuth(context)
             const verified = await handleAccidentOwnership(user.id, accidentId)
-            
-            try{
+
+            try {
                 if (verified) {
                     return await db.hitPerson.create({
                         data: {
@@ -29,14 +36,21 @@ export default{
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
 
         // ------- UPDATE --------
-        updateHitPerson: async (_, {hitPersonId, medical_attention, vehicle_or_pedestrian, previous_damage, contact_infomation, injury}, context) => {
+        updateHitPerson: async (_, {
+            hitPersonId,
+            medical_attention,
+            vehicle_or_pedestrian,
+            previous_damage,
+            contact_infomation,
+            injury
+        }, context) => {
             const user = await checkUserAuth(context)
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
@@ -50,7 +64,7 @@ export default{
 
             const verified = await handleAdminHitPersonDeleteOwnership(user.id, hitPersonId)
             try {
-                if (verified){
+                if (verified) {
                     return await db.hitPerson.update({
                         where: {
                             id: hitPersonId
@@ -64,7 +78,7 @@ export default{
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
@@ -73,7 +87,6 @@ export default{
         // ------- DELETE --------
         deleteHitPerson: async (_, {hitPersonId}, context) => {
             const admin = await checkAdminAuth(context)
-
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
                     id: hitPersonId
@@ -94,7 +107,7 @@ export default{
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 console.log(error)
                 throw new Error(error)
             }

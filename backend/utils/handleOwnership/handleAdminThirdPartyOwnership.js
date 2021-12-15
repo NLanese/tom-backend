@@ -39,7 +39,7 @@ const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId, accidentId)
         return accident.thirdParty[0].id
     }
 
-    throw new Error('User is nor your employee')
+    throw new Error('Error: User is nor your employee')
 }
 
 export default handleAdminThirdPartyOwnership

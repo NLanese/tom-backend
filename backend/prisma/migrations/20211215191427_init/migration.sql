@@ -10,6 +10,8 @@ CREATE TABLE "Admin" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "paid" BOOLEAN NOT NULL,
+    "accountStatus" TEXT NOT NULL DEFAULT E'Free',
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
@@ -25,16 +27,16 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "fico" INTEGER,
     "netradyne" INTEGER,
-    "da" INTEGER,
+    "delivery_associate" INTEGER,
     "seatbelt" BOOLEAN,
     "speeding" BOOLEAN,
     "defects" INTEGER,
-    "cdf" INTEGER,
-    "dar" INTEGER,
-    "dcr" INTEGER,
-    "pod" INTEGER,
-    "cc" INTEGER,
-    "sc" INTEGER,
+    "customer_delivery_feedback" INTEGER,
+    "delivered_and_recieved" INTEGER,
+    "delivery_completion_rate" INTEGER,
+    "photo_on_delivery" INTEGER,
+    "call_compliance" INTEGER,
+    "scan_compliance" INTEGER,
     "has_many_accidents" INTEGER,
     "belongs_to_team" BOOLEAN,
     "attendance" JSONB,
@@ -44,6 +46,8 @@ CREATE TABLE "User" (
     "adminLastname" TEXT NOT NULL,
     "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
+    "adminAccountStading" BOOLEAN NOT NULL,
+    "adminApproved" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

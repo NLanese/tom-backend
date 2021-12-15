@@ -28,7 +28,7 @@ const handleAdminThirdPartyDeleteOwnership = async (adminId, thirdPartyId) => {
         return true
     }
 
-    throw new Error('User is nor your employee')
+    throw new Error('Error: User is nor your employee')
 }
 
 export default handleAdminThirdPartyDeleteOwnership
