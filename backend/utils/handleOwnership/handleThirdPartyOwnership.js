@@ -24,3 +24,5 @@ export const handleThirdPartyOwnership = async (userId, thirdPartyId) => {
 
     throw new Error('Error: Not owner of Third Party report')
 }
+
+export default handleThirdPartyOwnership

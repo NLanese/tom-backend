@@ -110,6 +110,61 @@ export default {
             }
         },
 
+        adminUpdatePropertyAccident: async (_, {
+            propertyAccidentId,
+            self_injured,
+            vehicle_number,
+            amazon_logo,
+            exact_address,
+            action_before_accident,
+            police_report,
+            weather,
+            wet_ground,
+            slippery_ground,
+            extra_info,
+            rushed_prior
+        }, context) => {
+            const admin = await checkAdminAuth(context)
+
+            const propertyAccident = await db.propertyAccident.findUnique({
+                where: {
+                    id: propertyAccidentId
+                }
+            })
+
+            if (!propertyAccident) {
+                throw new Error('Error: Property accident record does not exist')
+            }
+
+            const verified = await handleAdminPropertyAccidentDeleteOwnership(admin.id, propertyAccidentId)
+
+            try {
+                if (verified) {
+                    return await db.propertyAccident.update({
+                        where: {
+                            id: propertyAccidentId
+                        },
+
+                        data: {
+                            self_injured: self_injured,
+                            vehicle_number: vehicle_number,
+                            amazon_logo: amazon_logo,
+                            exact_address: exact_address,
+                            action_before_accident: action_before_accident,
+                            police_report: police_report,
+                            weather: weather,
+                            wet_ground: wet_ground,
+                            slippery_ground: slippery_ground,
+                            extra_info: extra_info,
+                            rushed_prior: rushed_prior
+                        }
+                    })
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
+
         // ------- DELETE -------        
         deletePropertyAccident: async (_, {
             propertyAccidentId
