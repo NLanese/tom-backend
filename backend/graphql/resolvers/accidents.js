@@ -1,10 +1,10 @@
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import db from '../../utils/generatePrisma.js';
-import handleAdminAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminAccidentDeleteOwnership.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
+import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
+import handleAdminAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminAccidentDeleteOwnership.js';
 
-export default{
+export default {
     Query: {
         getAccidents: async (_, {}, context) => {
             const user = await checkUserAuth(context)
@@ -20,14 +20,19 @@ export default{
             }
 
         }
-    }, 
+    },
 
     Mutation: {
-        createAccident: async (_, { using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety }, context) => {
-            const user = await checkUserAuth(context)    
+        createAccident: async (_, {
+            using_safety,
+            safety_failed,
+            number_package_carried,
+            safety_equipment_used
+        }, context) => {
+            const user = await checkUserAuth(context)
 
-        // ------- CREATE -------
-            try{
+            // ------- CREATE -------
+            try {
                 return await db.accident.create({
                     data: {
                         using_safety: using_safety,
@@ -41,13 +46,20 @@ export default{
                         }
                     }
                 })
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
         // ------- EDIT -------
-        updateAccident: async (_, {accidentId, using_safety, safety_failed, number_package_carried, safety_equipment_used, failed_safety}, context) => {
+        updateAccident: async (_, {
+            accidentId,
+            using_safety,
+            safety_failed,
+            number_package_carried,
+            safety_equipment_used,
+            failed_safety
+        }, context) => {
             const user = await checkUserAuth(context)
 
             const accident = await db.accident.findUnique({
@@ -59,17 +71,17 @@ export default{
             if (!accident) {
                 throw new Error('Error: Accident record does not exist')
             }
-            
+
             const verified = await handleAccidentOwnership(user.id, accidentId)
 
-               
-            try{
+
+            try {
                 if (verified) {
                     return await db.accident.update({
                         where: {
                             id: accidentId
                         },
-                        data:{
+                        data: {
                             using_safety: using_safety,
                             safety_failed: safety_failed,
                             number_package_carried: number_package_carried,
@@ -78,14 +90,15 @@ export default{
                         }
                     })
                 }
-            }
-            catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
         // ------- DELETE -------        
-        deleteAccident: async (_, {accidentId}, context) => {
+        deleteAccident: async (_, {
+            accidentId
+        }, context) => {
             const admin = await checkAdminAuth(context)
             const verified = await handleAdminAccidentDeleteOwnership(admin.id, accidentId)
 
@@ -95,10 +108,10 @@ export default{
                 },
                 include: {
                     hitPerson: true,
-					thirdParty: true,
-					injuryAccident: true,
-					propertyAccident: true,
-					injuryReport: true
+                    thirdParty: true,
+                    injuryAccident: true,
+                    propertyAccident: true,
+                    injuryReport: true
                 }
             })
 
@@ -145,14 +158,16 @@ export default{
                     }
                 })
             }
-                
-            try{
-                if (verified){
+
+            try {
+                if (verified) {
                     return await db.accident.delete({
-                        where: {id: accidentId}
+                        where: {
+                            id: accidentId
+                        }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         }
