@@ -1,6 +1,8 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
+import handleAdminInjuryAccidentOwnership from '../../utils/handleOwnership/handleAdminInjuryAccidentOwnership.js';
 import { handleInjuryAccidentOwnership } from '../../utils/handleOwnership/handleInjuryAccidentOwnership.js';
 
 export default {
@@ -108,22 +110,19 @@ export default {
         deleteInjuryAccident: async (_, {
             injuryAccidentId
         }, context) => {
-            const user = await checkUserAuth(context)
-
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminInjuryAccidentOwnership(admin.id, injuryAccidentId)
             const injuryAccident = await db.injuryAccident.findUnique({
                 where: {
                     id: injuryAccidentId
                 }
             })
-
             if (!injuryAccident) {
                 throw new Error('Error: Injury accident record does not exist')
             }
-
-            const verified = await handleInjuryAccidentOwnership(user.id, injuryAccidentId)
-
             try {
                 if (verified) {
+                    console.log("Delete in progress")
                     return await db.injuryAccident.delete({
                         where: {
                             id: injuryAccidentId
