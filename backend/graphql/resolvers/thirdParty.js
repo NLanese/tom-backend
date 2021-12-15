@@ -1,4 +1,3 @@
-import { UserInputError } from 'apollo-server-errors';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
@@ -7,9 +6,12 @@ import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAd
 import handleAdminThirdPartyDeleteOwnership from '../../utils/handleOwnership/handleAdminThirdPartyDeleteOwnership.js';
 
 
-export default{
+export default {
     Mutation: {
-        createThirdParty: async (_, { accidentId, location }, context) => {
+        createThirdParty: async (_, {
+            accidentId,
+            location
+        }, context) => {
             const user = await checkUserAuth(context)
             const verified = await handleAccidentOwnership(user.id, accidentId)
 
@@ -27,12 +29,15 @@ export default{
                         }
                     })
                 }
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error)
-            }  
+            }
         },
 
-        updateThirdParty: async (_, { thirdPartyId, location }, context) => {
+        updateThirdParty: async (_, {
+            thirdPartyId,
+            location
+        }, context) => {
             const user = await checkUserAuth(context)
 
             const thirdParty = await db.thirdParty.findUnique({
@@ -47,8 +52,8 @@ export default{
 
             const verified = await handleThirdPartyOwnership(user.id, thirdPartyId)
 
-            try{
-                if (verified){
+            try {
+                if (verified) {
                     return await db.thirdParty.update({
                         where: {
                             id: thirdPartyId
@@ -58,12 +63,16 @@ export default{
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
-        adminUpdateThirdParty: async (_, { thirdPartyId, accidentId, location }, context) => {
+        adminUpdateThirdParty: async (_, {
+            thirdPartyId,
+            accidentId,
+            location
+        }, context) => {
             const admin = await checkAdminAuth(context)
 
             const thirdPartyRecord = await db.thirdParty.findUnique({
@@ -94,7 +103,9 @@ export default{
             }
         },
 
-        deleteThirdParty: async (_, { thirdPartyId }, context) => {
+        deleteThirdParty: async (_, {
+            thirdPartyId
+        }, context) => {
             const admin = await checkAdminAuth(context)
 
             const thirdParty = await db.thirdParty.findUnique({
@@ -108,16 +119,16 @@ export default{
             }
 
             const verified = await handleAdminThirdPartyDeleteOwnership(admin.id, thirdPartyId)
-    
+
             try {
-                if (verified){
+                if (verified) {
                     return await db.thirdParty.delete({
                         where: {
                             id: thirdPartyId
                         }
                     })
                 }
-            } catch(error) {
+            } catch (error) {
                 throw new Error(error)
             }
         }
