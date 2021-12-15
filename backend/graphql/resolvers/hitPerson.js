@@ -1,7 +1,8 @@
+import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import { handleHitPersonOwnership } from '../../utils/handleOwnership/handleHitPersonOwnership.js';
+import handleAdminHitPersonDeleteOwnership from '../../utils/handleOwnership/handleAdminHitPersonDeleteOwnership.js';
 
 export default {
     Mutation: {
@@ -51,7 +52,6 @@ export default {
             injury
         }, context) => {
             const user = await checkUserAuth(context)
-
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
                     id: hitPersonId
@@ -62,9 +62,7 @@ export default {
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
-
-
+            const verified = await handleAdminHitPersonDeleteOwnership(user.id, hitPersonId)
             try {
                 if (verified) {
                     return await db.hitPerson.update({
@@ -87,12 +85,8 @@ export default {
 
 
         // ------- DELETE --------
-        deleteHitPerson: async (_, {
-            hitPersonId
-        }, context) => {
-            // change this to admin = checkAdminAuth later
-            const user = await checkUserAuth(context)
-
+        deleteHitPerson: async (_, {hitPersonId}, context) => {
+            const admin = await checkAdminAuth(context)
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
                     id: hitPersonId
@@ -103,10 +97,10 @@ export default {
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const verified = handleHitPersonOwnership(user.id, hitPersonId)
-
-            try {
-                if (verified) {
+            const verified = await handleAdminHitPersonDeleteOwnership(admin.id, hitPersonId)
+            
+            try{
+                if (verified){
                     return await db.hitPerson.delete({
                         where: {
                             id: hitPersonId
