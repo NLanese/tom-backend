@@ -174,6 +174,16 @@ export default {
                 throw new Error('Error: Injury accident record does not exist')
             }
             const verified = await handleAdminInjuryAccidentOwnership(admin.id, injuryAccidentId)
+
+            await db.injuryAccident.update({
+                where: {
+                    id: injuryAccidentId
+                },
+                data: {
+                    deleted: true
+                }
+            })
+            
             try {
                 if (verified) {
                     console.log("Delete in progress")

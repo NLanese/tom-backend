@@ -151,6 +151,15 @@ export default {
                 throw new Error('Error: Accident record does not exist')
             }
 
+            await db.accident.update({
+                where: {
+                    id: accidentId
+                },
+                data: {
+                    deleted: true
+                }
+            })
+
             if (accident.injuryReport.length !== 0) {
                 await db.injuryReport.deleteMany({
                     where: {

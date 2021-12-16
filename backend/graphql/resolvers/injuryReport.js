@@ -182,6 +182,15 @@ export default {
             }
 
             const verified = await handleAdminInjuryReportDeleteOwnership(admin.id, injuryReportId)
+
+            await db.injuryReport.update({
+                where: {
+                    id: injuryReportId
+                },
+                data: {
+                    deleted: true
+                }
+            })
             
             try {
                 if (verified) {
