@@ -28,6 +28,7 @@ model Admin {
   password            String
   paid                Boolean     @default(false)
   accountStatus       String      @default("Free")
+  deleted             Boolean     @default(false)
   users               User[]
 }
 
@@ -56,6 +57,9 @@ model User {
   attendance                      Json?
   productivity                    Json?
 
+  deleted                         Boolean     @default(false)
+
+
   adminId                         Int
   adminFirstname                  String
   adminLastname                   String
@@ -71,10 +75,13 @@ model Accident {
   id                      Int         @id @default(autoincrement())
   userId                  Int
   user                    User        @relation(fields: [userId], references: [id])
-  using_safety            Boolean?
-  safety_failed           Boolean?
-  number_package_carried  Int?
-  safety_equipment_used   Json?
+  using_safety            Boolean
+  safety_failed           Boolean
+  number_package_carried  Int
+  safety_equipment_used   Json
+
+  deleted                         Boolean     @default(false)
+
   hitPerson               HitPerson[]
   thirdParty              ThirdParty[]
   injuryAccident          InjuryAccident[]
@@ -92,6 +99,8 @@ model HitPerson {
   contact_infomation    Json
   injury                String
 
+  deleted                         Boolean     @default(false)
+
   accident_pictures     Image[]
 }
 
@@ -100,6 +109,8 @@ model ThirdParty {
   accidentId          Int
   accident            Accident[]  @relation(fields: [accidentId], references: [id])
   location            String
+
+  deleted                         Boolean     @default(false)
 }
 
 model InjuryAccident {
@@ -115,6 +126,8 @@ model InjuryAccident {
   slippery_ground         Boolean
   extra_info              String
   rushed_prior            Boolean
+
+  deleted                         Boolean     @default(false)
 
   accident_pictures       Image[]
 
@@ -136,6 +149,8 @@ model PropertyAccident {
   extra_info              String
   rushed_prior            Boolean
 
+  deleted                         Boolean     @default(false)
+
   accident_pictures       Image[]
 
   accidentId              Int
@@ -155,6 +170,8 @@ model InjuryReport {
   unsafe_conditions       Json
   pain_level              Int
   additional_information  String
+
+  deleted                         Boolean     @default(false)
 
   accidentId              Int
   accident                Accident[] @relation(fields: [accidentId], references: [id])
