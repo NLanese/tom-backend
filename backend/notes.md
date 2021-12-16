@@ -11,3 +11,5 @@ scorecard
 scheduling
 
 once admin approves employee admin updates the null fields for employee
+
+schema update

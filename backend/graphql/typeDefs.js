@@ -25,6 +25,7 @@ const typeDefs = gql`
         token:                        String
         paid:                         Boolean
         accountStatus:                String
+        deleted:                      Boolean
         users:                        [User]
     }
 
@@ -53,6 +54,8 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        deleted:                      Boolean
+
         adminId:                      Int
         adminFirstname:               String
         adminLastname:                String
@@ -74,6 +77,8 @@ const typeDefs = gql`
         number_package_carried: Int
         safety_equipment_used:  JSON
 
+        deleted:                      Boolean
+
         hitPerson:              [HitPerson]
         thirdParty:             [ThirdParty]
         injuryAccident:         [InjuryAccident]
@@ -92,6 +97,8 @@ const typeDefs = gql`
         contact_information:    JSON
         injury:                 String
 
+        deleted:                      Boolean
+
         accident_pictures:      [Image]
     }
 
@@ -102,6 +109,8 @@ const typeDefs = gql`
         accidentId:             Int
         accident:               [Accident]
         location:               String
+
+        deleted:                Boolean
     }
 
 
@@ -119,6 +128,8 @@ const typeDefs = gql`
         slippery_ground:        Boolean
         extra_info:             String
         rushed_prior:           Boolean
+
+        deleted:                Boolean
         
         accident_pictures:      [Image]
 
@@ -141,6 +152,8 @@ const typeDefs = gql`
       extra_info:               String
       rushed_prior:             Boolean
 
+      deleted:                  Boolean
+
       accident_pictures:        [Image]
 
       # accidentId                Int
@@ -161,6 +174,8 @@ const typeDefs = gql`
       unsafe_conditions:      JSON
       pain_level:             Int
       addtional_information:  String
+
+      deleted:                Boolean
 
       # accidentID:             Int
       accident:               [Accident]
