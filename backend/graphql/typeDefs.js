@@ -89,7 +89,7 @@ const typeDefs = gql`
 
     type HitPerson{
         id:                     ID
-        # accidentID:             Int
+        accidentId:             Int
         accident:               [Accident]
         medical_attention:      Boolean
         vehicle_or_pedestrian:  String
@@ -97,7 +97,7 @@ const typeDefs = gql`
         contact_information:    JSON
         injury:                 String
 
-        deleted:                      Boolean
+        deleted:                Boolean
 
         accident_pictures:      [Image]
     }
@@ -133,7 +133,7 @@ const typeDefs = gql`
         
         accident_pictures:      [Image]
 
-        # accidentId:             Int
+        accidentId:             Int
         accident:               [Accident]
     }
 
@@ -156,7 +156,7 @@ const typeDefs = gql`
 
       accident_pictures:        [Image]
 
-      # accidentId                Int
+      accidentId:               Int
       accident:                 [Accident]
     }
 
@@ -177,7 +177,7 @@ const typeDefs = gql`
 
       deleted:                Boolean
 
-      # accidentID:             Int
+      accidentId:             Int
       accident:               [Accident]
     }
 
@@ -224,7 +224,8 @@ const typeDefs = gql`
 
     type Mutation {
       # SUPER USER MUTATIONS
-      suspendAdmin(adminId: Int): Admin
+      suspendAdmin(adminId: Int!): Admin
+      deleteAdmin(adminId: Int!): Admin
 
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
@@ -243,7 +244,7 @@ const typeDefs = gql`
       signupUser(signupInput: SignupInput): User!
       signinUser(email: String!, password: String!): User!
       updateUser(updateUser: UpdateUser): User!
-      deleteUser: User!
+      deleteUser(userId: Int!): User!
 
       # ACCIDENT MUTATIONS
       createAccident(using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
