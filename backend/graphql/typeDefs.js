@@ -221,6 +221,7 @@ const typeDefs = gql`
 
       # ACCIDENT QUERIES
       getAccidents: [Accident]
+      getAccidentById(accidentId: Int!): Accident
     }
 
     type Mutation {

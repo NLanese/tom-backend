@@ -14,11 +14,40 @@ export default {
                     where: {
                         id: user.id
                     },
+                    include: {
+                        thirdParty: true,
+                        propertyAccident: true,
+                        injuryAccident: true,
+                        injuryReport: true,
+                        hitPerson: true
+                    }
                 })
             } catch (error) {
                 throw new Error(error)
             }
+        },
 
+        getAccidentById: async (_, {accidentId}, context) => {
+            const user = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(user.id, accidentId)
+            try{
+                if (verified){
+                    return await db.accident.findUnique({
+                        where: {
+                            id: accidentId
+                        }, 
+                        include: {
+                            thirdParty: true,
+                            propertyAccident: true,
+                            injuryAccident: true,
+                            injuryReport: true,
+                            hitPerson: true
+                        }
+                    })
+                }
+            } catch(error){
+                throw new Error(error)
+            }
         }
     },
 
