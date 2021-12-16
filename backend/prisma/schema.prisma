@@ -61,7 +61,7 @@ model User {
   adminLastname                   String
   adminUsername                   String
   adminEmail                      String
-  adminAccountStading             Boolean
+  adminAccountStading             String?    
   adminApproved                   Boolean   @default(false)
   admin               Admin         @relation(fields: [adminId], references: [id])
   accidents           Accident[]

@@ -7,6 +7,7 @@ import injuryAccidentResolvers from './injuryAccident.js';
 import propertyAccidentResolvers from './propertyAccident.js';
 import hitPersonResolvers from './hitPerson.js';
 import injuryReportResolvers from './injuryReport.js';
+import superUserResolvers from './superUser.js';
 
 export default {
     Query: {
@@ -22,7 +23,8 @@ export default {
         ...injuryAccidentResolvers.Mutation,
         ...propertyAccidentResolvers.Mutation,
         ...hitPersonResolvers.Mutation,
-        ...injuryReportResolvers.Mutation
+        ...injuryReportResolvers.Mutation,
+        ...superUserResolvers.Mutation
     },
     JSON: GraphQLJSON,
 }

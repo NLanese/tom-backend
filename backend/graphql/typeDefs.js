@@ -59,7 +59,7 @@ const typeDefs = gql`
         adminUsername:                String
         adminEmail:                   String
         adminAccountStanding:         String
-        adminApproved:                String
+        adminApproved:                Boolean
 
         accidents:                    [Accident]
         admin:                        [Admin]
@@ -208,6 +208,9 @@ const typeDefs = gql`
     }
 
     type Mutation {
+      # SUPER USER MUTATIONS
+      suspendAdmin(adminId: Int): Admin
+
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
