@@ -4,11 +4,16 @@ import dotenv from 'dotenv'
 import { ApolloServer } from 'apollo-server-express'
 import typeDefs from './graphql/typeDefs.js';
 import resolvers from './graphql/resolvers/index.js';
+import uploadFile from './s3/s3.js'
+import multer from 'multer'
 
 dotenv.config();
 
 const startApolloServer = async () => {
     const app = express()
+
+    const upload = multer({ dest: 'uploads/' })
+
     const server = new ApolloServer({
         typeDefs,
         resolvers,
@@ -28,6 +33,12 @@ const startApolloServer = async () => {
     app.get('/', (req, res) => {
 		res.send('Welcome to SQL');
 	});
+
+    app.post('/images', upload.single('image'), async (req, res) => {
+        const file = req.file
+        const result = await uploadFile(file)
+        res.send(200)
+    })
 
     await server.start()
     await server.applyMiddleware({ app, path: '/graphql', cors: false });
