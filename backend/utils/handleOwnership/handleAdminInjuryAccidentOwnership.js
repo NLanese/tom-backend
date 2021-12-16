@@ -24,8 +24,6 @@ const handleAdminInjuryAccidentOwnership = async (adminId, injuryAccidentId) => 
         throw new Error("Something whent wrong! The Injury Accident does not appear linked to an accident or a user")
     }
 
-    console.log("Admin ID: " + adminId + " | User's Admin ID: " + accident.user.adminId)
-
     if (accident.user.adminId === adminId){
         return true
     }

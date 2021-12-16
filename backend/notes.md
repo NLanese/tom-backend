@@ -4,6 +4,7 @@ suspend admin
     accountStatus = 'suspended'
     adminAccountStanding = 'suspended'
 
+adminUpdateAccident
 suspend user
 stripe
 scorecard
