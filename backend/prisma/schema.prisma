@@ -59,7 +59,6 @@ model User {
 
   deleted                         Boolean     @default(false)
 
-
   adminId                         Int
   adminFirstname                  String
   adminLastname                   String

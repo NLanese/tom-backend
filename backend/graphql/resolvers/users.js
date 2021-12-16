@@ -326,67 +326,16 @@ export default {
 			}
 		},
 
-		/* DOESNT WORK ---- GOING TO FIX ONCE ALL OTHER ROUTES ARE DONE */
-		/* WILL BE CHANGED TO SUSPEND USER SO NO DATA IS DELETED */
-		deleteUser: async (_, {}, context) => {
-			const user = await checkUserAuth(context);
-			const userInformation = await db.user.findUnique({
-				where: {
-					id: user.id,
-				},
-				include: {
-					recipes: true,
-					profile: true,
-					comments: true,
-					likes: true
-				},
-			});
+		/* NOT SURE IF NEEDED */
+		deleteUser: async (_, { userId }, context) => {
+			const admin = await checkAdminAuth(context);
 
-			await console.log(userInformation)
+
+			
 
 			try {
-				if (userInformation.likes) {
-					await db.likes.deleteMany({
-						where: {
-							authorId: user.id
-						}
-					})
-				}
-
-				if (userInformation.comments.id) {
-					await db.comment.deleteMany({
-						where: {
-							authorId: user.id
-						}
-					})
-				}
-
-				if (userInformation.profile !== null) {
-					await db.profile.delete({
-						where: {
-							authorId: user.id
-						}
-					})
-				}
-
-				if (userInformation.recipes) {
-					await db.recipes.deleteMany({
-						where: {
-							authorId: user.id,
-						}
-					});
-				}
-
-				/* Add delete all users likes from the database. Deleting them here wont change the TotalLikeValue on the recope schema */
-				const deletedUser = await db.user.delete({
-					where: {
-						id: user.id,
-					},
-				})
-
-				return deletedUser
+				
 			} catch (error) {
-				console.log(error)
 				throw new Error(error);
 			}
 		}
