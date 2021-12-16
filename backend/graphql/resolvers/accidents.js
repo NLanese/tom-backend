@@ -30,15 +30,18 @@ export default {
             }
         },
 
-        getAccidentById: async (_, {accidentId}, context) => {
+        getAccidentById: async (_, {
+            accidentId
+        }, context) => {
             const user = await checkUserAuth(context)
             const verified = await handleAccidentOwnership(user.id, accidentId)
-            try{
-                if (verified){
+
+            try {
+                if (verified) {
                     return await db.accident.findUnique({
                         where: {
                             id: accidentId
-                        }, 
+                        },
                         include: {
                             thirdParty: true,
                             propertyAccident: true,
@@ -48,7 +51,7 @@ export default {
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
         }
@@ -56,6 +59,7 @@ export default {
 
     Mutation: {
         createAccident: async (_, {
+            name,
             using_safety,
             safety_failed,
             number_package_carried,
@@ -67,6 +71,7 @@ export default {
             try {
                 return await db.accident.create({
                     data: {
+                        name: name,
                         using_safety: using_safety,
                         safety_failed: safety_failed,
                         number_package_carried: number_package_carried,
@@ -85,6 +90,7 @@ export default {
 
         adminCreateAccident: async (_, {
             userId,
+            name,
             using_safety,
             safety_failed,
             number_package_carried,
@@ -97,6 +103,7 @@ export default {
                 if (verified) {
                     return await db.accident.create({
                         data: {
+                            name: name,
                             using_safety: using_safety,
                             safety_failed: safety_failed,
                             number_package_carried: number_package_carried,
