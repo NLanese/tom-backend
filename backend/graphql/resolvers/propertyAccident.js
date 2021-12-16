@@ -183,6 +183,15 @@ export default {
 
             const verified = await handleAdminPropertyAccidentDeleteOwnership(admin.id, propertyAccidentId)
 
+            await db.propertyAccident.update({
+                where: {
+                    id: propertyAccidentId
+                },
+                data: {
+                    deleted: true
+                }
+            })
+
             try {
                 if (verified) {
                     return await db.propertyAccident.delete({
