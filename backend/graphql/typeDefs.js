@@ -72,6 +72,7 @@ const typeDefs = gql`
     type Accident {
         id:                     ID
         user:                   User
+        name:                   String
         using_safety:           Boolean
         safety_failed:          Boolean
         number_package_carried: Int
@@ -233,6 +234,7 @@ const typeDefs = gql`
       signinAdmin(email: String!, password: String!): Admin!
       updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
       adminUpdateEmployeeByID(userId: Int, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON): User
+      adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
       adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): ThirdParty
       adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
       adminUpdatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
@@ -249,7 +251,7 @@ const typeDefs = gql`
 
       # ACCIDENT MUTATIONS
       createAccident(using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
-      updateAccident(accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
+      updateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
       deleteAccident(accidentId: Int): Accident
 
       # THIRD PARTY MUTATIONS
