@@ -31,20 +31,42 @@ export default {
 
         adminGetEmployees: async (_, {}, context) => {
             const admin = await checkAdminAuth(context)
-
             try {
-                return await db.admin.findUnique({
+                return await db.user.findMany({
                     where: {
-                        id: admin.id
+                        adminId: admin.id,
+                        deleted: false
                     },
                     include: {
-                        users: true
+                        accidents: true
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         },
+
+        adminGetFiredEmployees: async (_, {}, context) => {
+            const admin = await checkAdminAuth(context)
+            try {
+                return await db.user.findMany({
+                    where: {
+                        adminId: admin.id,
+                        deleted: true
+                    },
+                    include: {
+                        accidents: true
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+                throw new Error(error)
+            }
+        },
+
+
+
 
         adminGetAccidentById: async (_, {
             accidentId
@@ -366,6 +388,29 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
+        },
+
+        adminSuspendUser: async (_, {
+            userId
+        }, context) => {
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminUserOwnership(admin.id, userId)
+
+            try{
+                if (verified){
+                    return await db.user.update({
+                        where: {
+                            id: userId
+                        },
+                        data: {
+                            deleted: true
+                        }
+                    })
+                }
+            } catch(error){
+                throw new Error(error)
+            }
+
         }
     }
 

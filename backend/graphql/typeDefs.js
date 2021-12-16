@@ -210,7 +210,8 @@ const typeDefs = gql`
     type Query {
       # ADMIN QUERIES
       getAdmin: Admin
-      adminGetEmployees: Admin
+      adminGetEmployees: [User]
+      adminGetFiredEmployees: [User]
       adminGetAccidentById(accidentId: Int): Accident
       adminGetUserAccidentsById(userId: Int): User
 
@@ -219,7 +220,7 @@ const typeDefs = gql`
       getUserById(userId: Int): User
 
       # ACCIDENT QUERIES
-      getAccidents: Accident
+      getAccidents: [Accident]
     }
 
     type Mutation {
@@ -236,6 +237,7 @@ const typeDefs = gql`
       adminUpdatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
       adminUpdateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
       adminUpdateInjuryAccident(injuryAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
+      adminSuspendUser(userId: Int): User
 
 
       # USER MUTATIONS
