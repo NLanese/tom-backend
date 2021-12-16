@@ -75,6 +75,7 @@ model Accident {
   id                      Int         @id @default(autoincrement())
   userId                  Int
   user                    User        @relation(fields: [userId], references: [id])
+  name                    String
   using_safety            Boolean
   safety_failed           Boolean
   number_package_carried  Int
