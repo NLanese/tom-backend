@@ -3,6 +3,7 @@ import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
 import handleAdminAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminAccidentDeleteOwnership.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js'
 
 export default {
     Query: {
@@ -46,6 +47,37 @@ export default {
                         }
                     }
                 })
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
+
+        adminCreateAccident: async (_, {
+            userId,
+            using_safety,
+            safety_failed,
+            number_package_carried,
+            safety_equipment_used
+        }, context) => {
+            const admin = await checkAdminAuth(context)
+            const verified = await handleAdminUserOwnership(admin.id, userId)
+
+            try {
+                if (verified) {
+                    return await db.accident.create({
+                        data: {
+                            using_safety: using_safety,
+                            safety_failed: safety_failed,
+                            number_package_carried: number_package_carried,
+                            safety_equipment_used: safety_equipment_used,
+                            user: {
+                                connect: {
+                                    id: userId
+                                }
+                            }
+                        }
+                    })
+                }
             } catch (error) {
                 throw new Error(error)
             }
