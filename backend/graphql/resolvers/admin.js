@@ -66,8 +66,6 @@ export default {
         },
 
 
-
-
         adminGetAccidentById: async (_, {
             accidentId
         }, context) => {

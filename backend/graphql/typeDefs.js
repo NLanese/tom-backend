@@ -234,7 +234,7 @@ const typeDefs = gql`
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
       updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
-      adminCreateAccident(userId: Int!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
+      adminCreateAccident(userId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
       adminUpdateEmployeeByID(userId: Int, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON): User
       adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
       adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): ThirdParty
@@ -252,7 +252,7 @@ const typeDefs = gql`
       deleteUser(userId: Int!): User!
 
       # ACCIDENT MUTATIONS
-      createAccident(using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
+      createAccident(name: String! using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
       updateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
       deleteAccident(accidentId: Int): Accident
 

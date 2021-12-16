@@ -58,6 +58,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Accident" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "name" TEXT NOT NULL,
     "using_safety" BOOLEAN NOT NULL,
     "safety_failed" BOOLEAN NOT NULL,
     "number_package_carried" INTEGER NOT NULL,
