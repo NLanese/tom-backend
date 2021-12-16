@@ -10,8 +10,9 @@ CREATE TABLE "Admin" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "paid" BOOLEAN NOT NULL,
+    "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStatus" TEXT NOT NULL DEFAULT E'Free',
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
@@ -41,12 +42,13 @@ CREATE TABLE "User" (
     "belongs_to_team" BOOLEAN,
     "attendance" JSONB,
     "productivity" JSONB,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "adminId" INTEGER NOT NULL,
     "adminFirstname" TEXT NOT NULL,
     "adminLastname" TEXT NOT NULL,
     "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
-    "adminAccountStading" BOOLEAN NOT NULL,
+    "adminAccountStading" TEXT,
     "adminApproved" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -56,10 +58,11 @@ CREATE TABLE "User" (
 CREATE TABLE "Accident" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "using_safety" BOOLEAN,
-    "safety_failed" BOOLEAN,
-    "number_package_carried" INTEGER,
-    "safety_equipment_used" JSONB,
+    "using_safety" BOOLEAN NOT NULL,
+    "safety_failed" BOOLEAN NOT NULL,
+    "number_package_carried" INTEGER NOT NULL,
+    "safety_equipment_used" JSONB NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Accident_pkey" PRIMARY KEY ("id")
 );
@@ -73,6 +76,7 @@ CREATE TABLE "HitPerson" (
     "previous_damage" TEXT NOT NULL,
     "contact_infomation" JSONB NOT NULL,
     "injury" TEXT NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "HitPerson_pkey" PRIMARY KEY ("id")
 );
@@ -82,6 +86,7 @@ CREATE TABLE "ThirdParty" (
     "id" SERIAL NOT NULL,
     "accidentId" INTEGER NOT NULL,
     "location" TEXT NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "ThirdParty_pkey" PRIMARY KEY ("id")
 );
@@ -100,6 +105,7 @@ CREATE TABLE "InjuryAccident" (
     "slippery_ground" BOOLEAN NOT NULL,
     "extra_info" TEXT NOT NULL,
     "rushed_prior" BOOLEAN NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "accidentId" INTEGER NOT NULL,
 
     CONSTRAINT "InjuryAccident_pkey" PRIMARY KEY ("id")
@@ -119,6 +125,7 @@ CREATE TABLE "PropertyAccident" (
     "slippery_ground" BOOLEAN NOT NULL,
     "extra_info" TEXT NOT NULL,
     "rushed_prior" BOOLEAN NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "accidentId" INTEGER NOT NULL,
 
     CONSTRAINT "PropertyAccident_pkey" PRIMARY KEY ("id")
@@ -138,6 +145,7 @@ CREATE TABLE "InjuryReport" (
     "unsafe_conditions" JSONB NOT NULL,
     "pain_level" INTEGER NOT NULL,
     "additional_information" TEXT NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "accidentId" INTEGER NOT NULL,
 
     CONSTRAINT "InjuryReport_pkey" PRIMARY KEY ("id")

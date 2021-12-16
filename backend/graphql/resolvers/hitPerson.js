@@ -150,10 +150,26 @@ export default {
         // ------- DELETE --------
         deleteHitPerson: async (_, {hitPersonId}, context) => {
             const admin = await checkAdminAuth(context)
+
+            const hitPerson = await db.hitPerson.findUnique({
+                where: {
+                    id: hitPersonId
+                }
+            })
+
             if (!hitPerson) {
                 throw new Error("Error: Hit Person record does not exist")
             }
             const verified = await handleAdminHitPersonDeleteOwnership(admin.id, hitPersonId)
+
+            await db.hitPerson.update({
+                where: {
+                    id: hitPersonId
+                },
+                data: {
+                    deleted: true
+                }
+            })
             
             try{
                 if (verified){

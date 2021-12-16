@@ -120,6 +120,15 @@ export default {
 
             const verified = await handleAdminThirdPartyDeleteOwnership(admin.id, thirdPartyId)
 
+            await db.thirdParty.update({
+                where: {
+                    id: thirdPartyId
+                },
+                data: {
+                    deleted: true
+                }
+            })
+
             try {
                 if (verified) {
                     return await db.thirdParty.delete({
