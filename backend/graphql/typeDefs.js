@@ -233,6 +233,7 @@ const typeDefs = gql`
       # SUPER USER MUTATIONS
       sSuspendAdmin(adminId: Int!): Admin
       sDeleteAdmin(adminId: Int!): Admin
+      sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean): Admin
 
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!

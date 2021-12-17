@@ -180,7 +180,10 @@ export default {
             username,
             firstname,
             lastname,
-            password
+            password,
+            paid,
+            accountStatus,
+            deleted
         }, context) => {
             // const super = await checkSuperAuth(context)
             try{
@@ -205,7 +208,7 @@ export default {
                 }
 
                 if (true){
-                    await db.admin.update({
+                    return await db.admin.update({
                         where: {
                             id: adminId
                         },
@@ -214,7 +217,10 @@ export default {
                             username: username,
                             firstname: firstname,
                             lastname: lastname,
-                            password: password
+                            password: password,
+                            paid: paid,
+                            accountStatus: accountStatus,
+                            deleted: deleted
                         }
                     })
                 }
