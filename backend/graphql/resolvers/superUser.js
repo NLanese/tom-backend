@@ -1,4 +1,12 @@
 import db from '../../utils/generatePrisma.js';
+import { UserInputError } from 'apollo-server-errors';
+import {
+    validateRegisterInput,
+    validateLoginInput,
+} from '../../utils/validators.js';
+import bcrypt from 'bcryptjs';
+import hashPassword from '../../utils/passwordHashing.js';
+import generateSuperToken from '../../utils/generateToken/generateSuperUserToken.js';
 
 export default {
     Query: {
@@ -17,6 +25,77 @@ export default {
     },
 
     Mutation: {
+        signupSuper: async (_, {
+            email,
+            password,
+            username,
+            firstname,
+            lastname,
+            phoneNumber
+        }, context) => {
+            try {
+                const { valid, errors } = validateRegisterInput(
+                    username,
+                    email,
+                    password
+                );
+
+                email = await email.toUpperCase()
+                username = await username.toUpperCase()
+                firstname = await firstname.toUpperCase()
+                lastname = await lastname.toUpperCase()
+
+                if (!valid) {
+                    throw new UserInputError('Errors', {
+                        errors
+                    })
+                }
+
+                const admin = await db.admin.findUnique({
+                    where: {
+                        email
+                    },
+                });
+
+                if (admin) {
+                    throw new UserInputError('email is taken', {
+                        errors: {
+                            email: 'Email is already taken',
+                        },
+                    });
+                }
+
+                const checkUsername = await db.admin.findUnique({
+                    where: {
+                        username
+                    },
+                });
+
+                if (checkUsername) {
+                    throw new UserInputError('username is taken', {
+                        errors: {
+                            email: 'Username is already taken',
+                        },
+                    });
+                }
+
+                password = await hashPassword(password)
+
+                return await db.admin.create({
+                    data: {
+                        email: email,
+                        username: username,
+                        password: password,
+                        firstname: firstname,
+                        lastname: lastname,
+                        phoneNumber: phoneNumber
+                    },
+                });
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
+        
         sSuspendAdmin: async (_, {
             adminId
         }, context) => {

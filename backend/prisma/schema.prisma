@@ -8,15 +8,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model SuperAdmin {
-//   id                  Int         @id @default(autoincrement())
-//   role                Role        @default(SUPERADMIN)
-//   firstname           String
-//   lastname            String
-//   username            String      @unique
-//   email               String      @unique
-//   password            String
-// }
+model SuperUser {
+  id                  Int         @id @default(autoincrement())
+  role                Role        @default(SUPERADMIN)
+  firstname           String
+  lastname            String
+  username            String      @unique
+  email               String      @unique
+  password            String
+  phoneNumber         String
+}
 
 model Admin {
   id                  Int         @id @default(autoincrement())
