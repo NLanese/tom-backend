@@ -25,7 +25,7 @@ export default {
     },
 
     Mutation: {
-        signupSuper: async (_, {
+        sSignupSuper: async (_, {
             email,
             password,
             username,
@@ -93,6 +93,51 @@ export default {
                 });
             } catch (error) {
                 throw new Error(error)
+            }
+        },
+
+        sSigninSuper: async (_, { email, password }, { req }) => {
+            const { errors, valid } = validateLoginInput(email, password);
+
+            if (!valid) {
+                throw new UserInputError('Errors', {
+                    errors
+                })
+            }
+
+            email = await email.toUpperCase()
+
+            const foundUser = await db.admin.findUnique({
+                where: {
+                    email
+                }
+            })
+
+            if (!foundUser) {
+                errors.general = 'User not found';
+                throw new UserInputError('Incorrect Email', {
+                    errors
+                });
+            }
+
+            const isValid = await bcrypt.compare(password, foundUser.password)
+
+            if (!isValid) {
+                errors.general = 'Incorrect Password'
+                throw new UserInputError('Incorrect Password', {
+                    errors
+                })
+            }
+
+            const token = await generateSuperToken(foundUser.id)
+
+            req.session = {
+                token: `Bearer ${token}`
+            }
+
+            return {
+                ...foundUser,
+                token: token
             }
         },
         

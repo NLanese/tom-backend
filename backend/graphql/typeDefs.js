@@ -236,7 +236,8 @@ const typeDefs = gql`
 
     type Mutation {
       # SUPER USER MUTATIONS
-      signupSuper(email: String!, password: String!, username: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser
+      sSignupSuper(email: String!, password: String!, username: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
+      sSigninSuper(email: String!, password: String!): SuperUser!
       sSuspendAdmin(adminId: Int!): Admin
       sDeleteAdmin(adminId: Int!): Admin
       sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
