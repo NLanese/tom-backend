@@ -217,6 +217,9 @@ const typeDefs = gql`
     type Query {
       # SUPER USER QUERIES
       sGetAllAdmins: [Admin]
+      sGetAdminById(adminId: Int!): Admin
+      sGetUserById(userId: Int!): User
+      sGetAccidentById(accidentId: Int!): Accident
 
       # ADMIN QUERIES
       getAdmin: Admin

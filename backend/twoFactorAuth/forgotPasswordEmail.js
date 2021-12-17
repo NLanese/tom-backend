@@ -40,8 +40,8 @@ const sendForgotPasswordEmail = async (userId) => {
         }
     })
     const mailOptions ={
-        from: 'PUT_EMAIL_HERE',
-        to: `${user.email}`,
+        from: 'Tom-App Support',
+        to: `${userEmail}`,
         subject: "Reset Your Password",
         text: `The code to reset your email is: ${token}` 
     }
