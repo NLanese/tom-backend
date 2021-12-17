@@ -3,15 +3,27 @@ import db from "../utils/generatePrisma.js"
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
-const sendForgotPasswordEmail = async (userEmail) => {
+const sendForgotPasswordEmail = async (userId) => {
+    console.log(userId)
+
     // Sets up constants
     dotenv.config()
     const token = crypto.randomBytes(8).toString('hex')
 
+    const user = await db.user.findUnique({
+        where: {
+            id: Number(userId)
+        }
+    })
+
+    if (!user) {
+        throw new Error("Error: User does not exist")
+    }
+
     // Sets User's Password Token and Expiration Timer
     await db.user.update({
         where: {
-            email: userEmail
+            email: user.email
         },
         data: {
             resetPasswordToken: token,
@@ -29,7 +41,7 @@ const sendForgotPasswordEmail = async (userEmail) => {
     })
     const mailOptions ={
         from: 'PUT_EMAIL_HERE',
-        to: `${userEmail}`,
+        to: `${user.email}`,
         subject: "Reset Your Password",
         text: `The code to reset your email is: ${token}` 
     }
