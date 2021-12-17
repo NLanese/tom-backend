@@ -28,7 +28,7 @@ const sendForgotPasswordEmail = (userEmail) => {
         }
     })
     const mailOptions ={
-        from: 'PUT_EMAIL_HERE',
+        from: 'support@kingwillystudios.com',
         to: `${userEmail}`,
         subject: "Reset Your Password",
         text: `The code to reset your email is: ${token}` 

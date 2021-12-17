@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/DylanDrechsel/Tom-App/issues"
   },
-  "homepage": "https://github.com/DylanDrechsel/Tom-App#readme"
+  "homepage": "https://github.com/DylanDrechsel/Tom-App#readme",
+  "dependencies": {
+    "messagemedia-messages-sdk": "^2.0.3",
+    "nodemailer": "^6.7.2"
+  }
 }
