@@ -13,7 +13,8 @@ export default {
     Query: {
         ...adminResolvers.Query,
         ...usersResolvers.Query,
-        ...accidentsResolvers.Query
+        ...accidentsResolvers.Query,
+        ...superUserResolvers.Query
     },
     Mutation: {
         ...adminResolvers.Mutation,

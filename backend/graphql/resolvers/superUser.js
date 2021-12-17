@@ -2,11 +2,22 @@ import db from '../../utils/generatePrisma.js';
 
 export default {
     Query: {
+        sGetAllAdmins: async (_, {}, context) => {
 
+            try {
+                return await db.admin.findMany({
+                    include: {
+                        users: true
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
     },
 
     Mutation: {
-        suspendAdmin: async (_, {
+        sSuspendAdmin: async (_, {
             adminId
         }, context) => {
             // const superUser = await checkSuperAuth(context)
@@ -37,7 +48,7 @@ export default {
             }
         },
 
-        deleteAdmin: async (_, {
+        sDeleteAdmin: async (_, {
             adminId
         }, context) => {
             const admin = await db.admin.findUnique({
@@ -68,8 +79,6 @@ export default {
                 })
 
                 foundUser.accidents.forEach( async (accident) => {
-                    console.log(accident)
-
                     const foundHitPerson = await db.hitPerson.findMany({
                         where: {
                             accidentId: accident.id
