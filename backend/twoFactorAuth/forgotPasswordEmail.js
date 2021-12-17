@@ -27,7 +27,7 @@ const sendForgotPasswordEmail = async (userId) => {
         },
         data: {
             resetPasswordToken: token,
-            resetPasswordTokenExpiration: Date.now() + 900 // That's fifiteen minutes
+            resetPasswordTokenExpiration: Date.now() + 300
         }
     })
 
@@ -43,7 +43,7 @@ const sendForgotPasswordEmail = async (userId) => {
         from: 'PUT_EMAIL_HERE',
         to: `${user.email}`,
         subject: "Reset Your Password",
-        text: `The code to reset your email is: ${token}` 
+        text: `The code to reset your password is: ${token}. It will expire in 5 minutes` 
     }
 
 
