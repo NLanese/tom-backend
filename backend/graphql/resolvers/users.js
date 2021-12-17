@@ -98,6 +98,7 @@ export default {
 				username,
 				firstname,
 				lastname,
+				phoneNumber,
 				adminEmail
 			}
 		}) => {
@@ -172,6 +173,7 @@ export default {
 						password: password,
 						firstname: firstname,
 						lastname: lastname,
+						phoneNumber: phoneNumber,
 						adminEmail: foundAdmin.email,
 						adminFirstname: foundAdmin.firstname,
 						adminLastname: foundAdmin.lastname,
@@ -240,6 +242,7 @@ export default {
 				firstname,
 				lastname,
 				password,
+				phoneNumber,
 				fico,
 				netradyne,
 				delivery_associate,
@@ -298,6 +301,7 @@ export default {
 						username: username,
 						firstname: firstname,
 						lastname: lastname,
+						phoneNumber: phoneNumber,
 						password: password,
 						fico: fico,
 						netradyne: netradyne,
