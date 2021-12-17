@@ -44,3 +44,5 @@ const sendForgotPasswordEmail = (userEmail) => {
         }
     })
 }
+
+export default sendForgotPasswordEmail
