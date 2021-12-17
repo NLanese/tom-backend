@@ -5,7 +5,7 @@ const typeDefs = gql`
 	scalar Date
 	scalar JSON
 
-    type SuperAdmin {
+    type SuperUser {
         id:                           ID
         role:                         String
         firstname:                    String
@@ -239,6 +239,8 @@ const typeDefs = gql`
 
     type Mutation {
       # SUPER USER MUTATIONS
+      sSignupSuper(email: String!, password: String!, username: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
+      sSigninSuper(email: String!, password: String!): SuperUser!
       sSuspendAdmin(adminId: Int!): Admin
       sDeleteAdmin(adminId: Int!): Admin
       sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin

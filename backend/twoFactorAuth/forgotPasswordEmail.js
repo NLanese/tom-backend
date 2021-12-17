@@ -4,8 +4,6 @@ import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
 const sendForgotPasswordEmail = async (userId) => {
-    console.log(userId)
-
     // Sets up constants
     dotenv.config()
     const token = crypto.randomBytes(8).toString('hex')
@@ -27,7 +25,7 @@ const sendForgotPasswordEmail = async (userId) => {
         },
         data: {
             resetPasswordToken: token,
-            resetPasswordTokenExpiration: Date.now() + 900 // That's fifiteen minutes
+            resetPasswordTokenExpiration: Date.now() + 300
         }
     })
 
@@ -43,7 +41,7 @@ const sendForgotPasswordEmail = async (userId) => {
         from: 'Tom-App Support',
         to: `${userEmail}`,
         subject: "Reset Your Password",
-        text: `The code to reset your email is: ${token}` 
+        text: `The code to reset your password is: ${token}. It will expire in 5 minutes` 
     }
 
 
