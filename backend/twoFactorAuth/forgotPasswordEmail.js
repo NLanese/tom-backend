@@ -4,8 +4,6 @@ import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
 const sendForgotPasswordEmail = async (userId) => {
-    console.log(userId)
-
     // Sets up constants
     dotenv.config()
     const token = crypto.randomBytes(8).toString('hex')
