@@ -46,6 +46,8 @@ CREATE TABLE "User" (
     "attendance" JSONB,
     "productivity" JSONB,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "resetPasswordToken" TEXT,
+    "resetPasswordTokenExpiration" INTEGER,
     "adminId" INTEGER NOT NULL,
     "adminFirstname" TEXT NOT NULL,
     "adminLastname" TEXT NOT NULL,

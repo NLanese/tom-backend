@@ -59,6 +59,8 @@ const typeDefs = gql`
         productivity:                 JSON
 
         deleted:                      Boolean
+        resetPasswordToken:           String
+        resetPasswordTokenExpiration: Int
 
         adminId:                      Int
         adminFirstname:               String
@@ -254,7 +256,7 @@ const typeDefs = gql`
 
 
       # USER MUTATIONS
-      signupUser(signupInput: SignupInput): User!
+      signupUser(signupInput: SignupInput!): User!
       signinUser(email: String!, password: String!): User!
       updateUser(updateUser: UpdateUser): User!
       deleteUser(userId: Int!): User!

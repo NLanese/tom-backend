@@ -8,6 +8,7 @@ import { uploadFile, getFileStream } from './s3/s3.js'
 import multer from 'multer'
 import fs from 'fs'
 import util from 'util'
+import sendForgotPasswordEmail from './twoFactorAuth/forgotPasswordEmail.js'
 
 dotenv.config();
 
@@ -37,6 +38,11 @@ const startApolloServer = async () => {
     app.get('/', (req, res) => {
 		res.send('Welcome to SQL');
 	});
+
+    app.get('/password/reset/:userId', async (req, res) => {
+        sendForgotPasswordEmail(req.params.userId)
+        res.send(200)
+    })
 
     app.get('/images/:key', async (req, res) => {
         const key = req.params.key

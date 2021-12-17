@@ -61,6 +61,8 @@ model User {
   productivity                    Json?
 
   deleted                         Boolean     @default(false)
+  resetPasswordToken              String?
+  resetPasswordTokenExpiration    Int?
 
   adminId                         Int
   adminFirstname                  String
