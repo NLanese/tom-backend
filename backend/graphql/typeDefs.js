@@ -210,6 +210,9 @@ const typeDefs = gql`
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
     type Query {
+      # SUPER USER QUERIES
+      sGetAllAdmins: [Admin]
+
       # ADMIN QUERIES
       getAdmin: Admin
       adminGetEmployees: [User]
@@ -228,8 +231,8 @@ const typeDefs = gql`
 
     type Mutation {
       # SUPER USER MUTATIONS
-      suspendAdmin(adminId: Int!): Admin
-      deleteAdmin(adminId: Int!): Admin
+      sSuspendAdmin(adminId: Int!): Admin
+      sDeleteAdmin(adminId: Int!): Admin
 
       # ADMIN MUTATIONS
       signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
