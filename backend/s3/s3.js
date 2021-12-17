@@ -16,7 +16,7 @@ const s3 = new S3({
     secretAccessKey
 })
 
-export default function uploadFile(file) {
+const uploadFile = (file) => {
     const fileStream = fs.createReadStream(file.path)
 
     const uploadParams = {
@@ -27,3 +27,14 @@ export default function uploadFile(file) {
 
     return s3.upload(uploadParams).promise()
 }
+
+const getFileStream = (fileKey) => {
+    const downloadParams = {
+        Key: fileKey,
+        Bucket: bucketName
+    }
+
+    return s3.getObject(downloadParams).createReadStream()
+}
+
+export { uploadFile, getFileStream }
