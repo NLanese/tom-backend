@@ -13,6 +13,83 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
+        },
+
+        sGetAdminById: async (_, {adminId}, context) => {
+            // const superUser = await checkSuperAuth(context)
+            try{
+                if(true){
+                    return await db.admin.findUnique({
+                        where: {
+                            id: adminId
+                        },
+                        include:{
+                            users: {
+                                include: {
+                                    accidents: {
+                                        include: {
+                                            thirdParty: true,
+                                            propertyAccident: true,
+                                            injuryAccident: true,
+                                            injuryReport: true,
+                                            hitPerson: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+            } catch (error){
+                throw new Error(error)
+            }
+        },
+
+        sGetUserById: async (_, {userId}, context) => {
+             // const superUser = await checkSuperAuth(context)
+             try{
+                if(true){
+                    return await db.user.findUnique({
+                        where: { id: userId },
+                        include: { 
+                            accidents: {
+                                include: {
+                                    thirdParty: true,
+                                    propertyAccident: true,
+                                    injuryAccident: true,
+                                    injuryReport: true,
+                                    hitPerson: true
+                                }
+                            }
+                        }
+                    })
+                }
+            } catch(error){
+                throw new Error(error)
+            }
+        },
+
+        sGetAccidentById: async (_, { accidentId }, context) => {
+            // const superUser = await checkSuperAuth(context)
+            try{
+                if (true){
+                    return await db.accident.findUnique({
+                        where: {
+                            id: accidentId
+                        },
+                        include: {
+                            thirdParty: true,
+                            propertyAccident: true,
+                            injuryAccident: true,
+                            injuryReport: true,
+                            hitPerson: true,
+                            user: true
+                        }
+                    })
+                }
+            } catch(error){
+                throw new Error(error)
+            }
         }
     },
 

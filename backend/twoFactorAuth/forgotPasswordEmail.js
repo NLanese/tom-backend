@@ -40,7 +40,7 @@ const sendForgotPasswordEmail = async (userId) => {
         }
     })
     const mailOptions ={
-        from: 'support@kingwillystudios.com',
+        from: 'Tom-App Support',
         to: `${userEmail}`,
         subject: "Reset Your Password",
         text: `The code to reset your email is: ${token}` 
