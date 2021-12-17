@@ -25,79 +25,83 @@ export default {
             }
         },
 
-        sGetAdminById: async (_, {adminId}, context) => {
-            // const superUser = await checkSuperAuth(context)
-            try{
-                if(true){
-                    return await db.admin.findUnique({
-                        where: {
-                            id: adminId
-                        },
-                        include:{
-                            users: {
-                                include: {
-                                    accidents: {
-                                        include: {
-                                            thirdParty: true,
-                                            propertyAccident: true,
-                                            injuryAccident: true,
-                                            injuryReport: true,
-                                            hitPerson: true
-                                        }
+        sGetAdminById: async (_, {
+            adminId
+        }, context) => {
+            const superUser = await checkSuperAuth(context)
+
+            try {
+                return await db.admin.findUnique({
+                    where: {
+                        id: adminId
+                    },
+                    include: {
+                        users: {
+                            include: {
+                                accidents: {
+                                    include: {
+                                        thirdParty: true,
+                                        propertyAccident: true,
+                                        injuryAccident: true,
+                                        injuryReport: true,
+                                        hitPerson: true
                                     }
                                 }
                             }
                         }
-                    })
-                }
-            } catch (error){
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
-        sGetUserById: async (_, {userId}, context) => {
-             // const superUser = await checkSuperAuth(context)
-             try{
-                if(true){
-                    return await db.user.findUnique({
-                        where: { id: userId },
-                        include: { 
-                            accidents: {
-                                include: {
-                                    thirdParty: true,
-                                    propertyAccident: true,
-                                    injuryAccident: true,
-                                    injuryReport: true,
-                                    hitPerson: true
-                                }
+        sGetUserById: async (_, {
+            userId
+        }, context) => {
+            const superUser = await checkSuperAuth(context)
+
+            try {
+                return await db.user.findUnique({
+                    where: {
+                        id: userId
+                    },
+                    include: {
+                        accidents: {
+                            include: {
+                                thirdParty: true,
+                                propertyAccident: true,
+                                injuryAccident: true,
+                                injuryReport: true,
+                                hitPerson: true
                             }
                         }
-                    })
-                }
-            } catch(error){
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         },
 
-        sGetAccidentById: async (_, { accidentId }, context) => {
-            // const superUser = await checkSuperAuth(context)
-            try{
-                if (true){
-                    return await db.accident.findUnique({
-                        where: {
-                            id: accidentId
-                        },
-                        include: {
-                            thirdParty: true,
-                            propertyAccident: true,
-                            injuryAccident: true,
-                            injuryReport: true,
-                            hitPerson: true,
-                            user: true
-                        }
-                    })
-                }
-            } catch(error){
+        sGetAccidentById: async (_, {
+            accidentId
+        }, context) => {
+            const superUser = await checkSuperAuth(context)
+            try {
+                return await db.accident.findUnique({
+                    where: {
+                        id: accidentId
+                    },
+                    include: {
+                        thirdParty: true,
+                        propertyAccident: true,
+                        injuryAccident: true,
+                        injuryReport: true,
+                        hitPerson: true,
+                        user: true
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         }
@@ -113,7 +117,10 @@ export default {
             phoneNumber
         }, context) => {
             try {
-                const { valid, errors } = validateRegisterInput(
+                const {
+                    valid,
+                    errors
+                } = validateRegisterInput(
                     username,
                     email,
                     password
@@ -175,8 +182,16 @@ export default {
             }
         },
 
-        sSigninSuper: async (_, { email, password }, { req }) => {
-            const { errors, valid } = validateLoginInput(email, password);
+        sSigninSuper: async (_, {
+            email,
+            password
+        }, {
+            req
+        }) => {
+            const {
+                errors,
+                valid
+            } = validateLoginInput(email, password);
 
             if (!valid) {
                 throw new UserInputError('Errors', {
@@ -219,34 +234,33 @@ export default {
                 token: token
             }
         },
-        
+
         sSuspendAdmin: async (_, {
             adminId
         }, context) => {
-            // const superUser = await checkSuperAuth(context)
-            try{
-                if (true){
-                    await db.user.updateMany({
-                        where: {
-                            adminId: adminId
-                        },
-                        data: {
-                            adminAccountStanding: "Suspended"
-                        }
-                    })
-                    return await db.admin.update({
-                        where: {
-                            id: adminId
-                        },
-                        data: {
-                            accountStatus: "Suspended"
-                        },
-                        include: {
-                            users: true
-                        }
-                    })
-                }
-            } catch(error){
+            const superUser = await checkSuperAuth(context)
+
+            try {
+                await db.user.updateMany({
+                    where: {
+                        adminId: adminId
+                    },
+                    data: {
+                        adminAccountStanding: "Suspended"
+                    }
+                })
+                return await db.admin.update({
+                    where: {
+                        id: adminId
+                    },
+                    data: {
+                        accountStatus: "Suspended"
+                    },
+                    include: {
+                        users: true
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         },
@@ -254,6 +268,8 @@ export default {
         sDeleteAdmin: async (_, {
             adminId
         }, context) => {
+            const superUser = await checkSuperAuth(context)
+
             const admin = await db.admin.findUnique({
                 where: {
                     id: adminId
@@ -263,7 +279,7 @@ export default {
                 }
             })
 
-            await admin.users.forEach( async (user) => {
+            await admin.users.forEach(async (user) => {
                 const foundUser = await db.user.findUnique({
                     where: {
                         id: user.id
@@ -281,7 +297,7 @@ export default {
                     }
                 })
 
-                foundUser.accidents.forEach( async (accident) => {
+                foundUser.accidents.forEach(async (accident) => {
                     const foundHitPerson = await db.hitPerson.findMany({
                         where: {
                             accidentId: accident.id
@@ -388,46 +404,45 @@ export default {
             accountStatus,
             deleted
         }, context) => {
-            // const super = await checkSuperAuth(context)
-            try{
+            const superUser = await checkSuperAuth(context)
+
+            try {
                 if (typeof password !== "undefined") {
                     password = await hashPassword(password)
                 }
-    
+
                 if (email) {
                     email = email.toUpperCase()
                 }
-    
+
                 if (username) {
                     username = username.toUpperCase()
                 }
-    
+
                 if (firstname) {
                     firstname = firstname.toUpperCase()
                 }
-    
+
                 if (lastname) {
                     lastname = lastname.toUpperCase()
                 }
 
-                if (true){
-                    return await db.admin.update({
-                        where: {
-                            id: adminId
-                        },
-                        data: {
-                            email: email,
-                            username: username,
-                            firstname: firstname,
-                            lastname: lastname,
-                            password: password,
-                            paid: paid,
-                            accountStatus: accountStatus,
-                            deleted: deleted
-                        }
-                    })
-                }
-            } catch(error){
+                return await db.admin.update({
+                    where: {
+                        id: adminId
+                    },
+                    data: {
+                        email: email,
+                        username: username,
+                        firstname: firstname,
+                        lastname: lastname,
+                        password: password,
+                        paid: paid,
+                        accountStatus: accountStatus,
+                        deleted: deleted
+                    }
+                })
+            } catch (error) {
                 throw new Error(error)
             }
         }
