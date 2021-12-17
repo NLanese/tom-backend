@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import { ApolloServer } from 'apollo-server-express'
 import typeDefs from './graphql/typeDefs.js';
 import resolvers from './graphql/resolvers/index.js';
-import uploadFile from './s3/s3.js'
+import { uploadFile, getFileStream } from './s3/s3.js'
 import multer from 'multer'
 
 dotenv.config();
@@ -34,10 +34,17 @@ const startApolloServer = async () => {
 		res.send('Welcome to SQL');
 	});
 
-    app.post('/images', upload.single('image'), async (req, res) => {
+    app.get('/images/:key', async (req, res) => {
+        const key = req.params.key
+        const readStream = await getFileStream(key)
+
+        readStream.pipe(res)
+    })
+
+    app.post('/images', upload.single('image'),  async (req, res)=> {
         const file = req.file
         const result = await uploadFile(file)
-        res.send(200)
+        res.send({imagePath: `/images/${result.Key}`})
     })
 
     await server.start()
