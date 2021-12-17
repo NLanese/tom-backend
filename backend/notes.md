@@ -13,3 +13,10 @@ scheduling
 once admin approves employee admin updates the null fields for employee
 
 schema update
+
+change handle function names
+set up react native repo 
+set up apollo server
+create mutation
+
+set up react repo
