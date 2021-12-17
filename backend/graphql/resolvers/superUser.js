@@ -7,10 +7,12 @@ import {
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateSuperToken from '../../utils/generateToken/generateSuperUserToken.js';
+import checkSuperAuth from '../../utils/checkAuthorization/check-super-auth.js';
 
 export default {
     Query: {
         sGetAllAdmins: async (_, {}, context) => {
+            const superUser = checkSuperAuth(context)
 
             try {
                 return await db.admin.findMany({
