@@ -39,6 +39,11 @@ const startApolloServer = async () => {
 		res.send('Welcome to SQL');
 	});
 
+    app.get('/password/reset/:userId', async (req, res) => {
+        sendForgotPasswordEmail(req.params.userId)
+        res.send(200)
+    })
+
     app.get('/images/:key', async (req, res) => {
         const key = req.params.key
         const readStream = await getFileStream(key)
