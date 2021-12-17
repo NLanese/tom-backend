@@ -13,6 +13,7 @@ const typeDefs = gql`
         email:                        String
         password:                     String
         token:                        String
+        phoneNumber:                  String
     }
 
     type Admin {
@@ -22,6 +23,7 @@ const typeDefs = gql`
         lastname:                     String
         email:                        String
         password:                     String
+        phoneNumber:                  String
         token:                        String
         paid:                         Boolean
         accountStatus:                String
@@ -36,6 +38,7 @@ const typeDefs = gql`
         lastname:                     String
         email:                        String
         password:                     String
+        phoneNumber:                  String
         token:                        String
         employeeId:                   String
         fico:                         Int
@@ -233,14 +236,14 @@ const typeDefs = gql`
       # SUPER USER MUTATIONS
       sSuspendAdmin(adminId: Int!): Admin
       sDeleteAdmin(adminId: Int!): Admin
-      sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean): Admin
+      sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
 
       # ADMIN MUTATIONS
-      signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!): Admin!
+      signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
-      updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String): Admin!
+      updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String, phoneNumber: String): Admin!
       adminCreateAccident(userId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
-      adminUpdateEmployeeByID(userId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON): User
+      adminUpdateEmployeeByID(userId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String): User
       adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
       adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): ThirdParty
       adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
@@ -292,6 +295,7 @@ const typeDefs = gql`
     input SignupInput {
 		email: String!
 		username: String!
+    phoneNumber: String!
 		firstname: String!
 		lastname: String!
 		password: String!
@@ -304,6 +308,7 @@ const typeDefs = gql`
 		firstname: String
 		lastname: String
 		password: String
+    phoneNumber: String
     fico: Int
     netradyne: Int
     delivery_associate: Int

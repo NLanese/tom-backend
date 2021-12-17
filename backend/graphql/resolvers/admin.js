@@ -143,7 +143,8 @@ export default {
             password,
             username,
             firstname,
-            lastname
+            lastname,
+            phoneNumber
         }, context) => {
             try {
                 const { valid, errors } = validateRegisterInput(
@@ -199,7 +200,8 @@ export default {
                         username: username,
                         password: password,
                         firstname: firstname,
-                        lastname: lastname
+                        lastname: lastname,
+                        phoneNumber: phoneNumber
                     },
                 });
             } catch (error) {
@@ -263,7 +265,8 @@ export default {
             username,
             firstname,
             lastname,
-            password
+            password,
+            phoneNumber
         }, context) => {
             const admin = await checkAdminAuth(context)
 
@@ -304,7 +307,8 @@ export default {
                         username: username,
                         firstname: firstname,
                         lastname: lastname,
-                        password: password
+                        password: password,
+                        phoneNumber: phoneNumber
                     }
                 })
             } catch (error) {
@@ -322,6 +326,7 @@ export default {
             adminLastname,
             adminUsername,
             employeeId,
+            phoneNumber,
             fico,
             netradyne,
             delivery_associate,
@@ -363,6 +368,7 @@ export default {
                             adminFirstName: adminFirstName,
                             adminLastname: adminLastname,
                             adminUsername: adminUsername,
+                            phoneNumber: phoneNumber,
                             employeeId: employeeId,
                             fico: fico,
                             netradyne: netradyne,

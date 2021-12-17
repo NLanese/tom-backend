@@ -25,6 +25,7 @@ model Admin {
   lastname            String
   username            String      @unique
   email               String      @unique
+  phoneNumber         String
   password            String
   paid                Boolean     @default(false)
   accountStatus       String      @default("Free")
@@ -39,6 +40,7 @@ model User {
   lastname                        String
   username                        String      @unique
   email                           String      @unique
+  phoneNumber                     String
   password                        String
   employeeId                      String?
   fico                            Int?
