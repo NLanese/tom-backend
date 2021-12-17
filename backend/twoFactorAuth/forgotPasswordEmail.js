@@ -1,12 +1,12 @@
-import crypto from ‘crypto’
+import crypto from "crypto"
 import db from "../utils/generatePrisma.js"
+import dotenv from 'dotenv'
+import nodemailer from 'nodemailer'
 
-const sendForgotPasswordEmail = (userEmail) => {
-
+const sendForgotPasswordEmail = async (userEmail) => {
     // Sets up constants
-    require('dotenv').config()
-    const nodemailer = require('nodemailer')
-    const token = crypto.randomBytes(integer).toString('hex')
+    dotenv.config()
+    const token = crypto.randomBytes(8).toString('hex')
 
     // Sets User's Password Token and Expiration Timer
     await db.user.update({
@@ -24,7 +24,7 @@ const sendForgotPasswordEmail = (userEmail) => {
         service: 'gmail',
         auth: {
             user: `${process.env.EMAIL_ADDRESS}`,
-            password: `${process.env.EMAIL_PASSWORD}`
+            pass: `${process.env.EMAIL_PASSWORD}`
         }
     })
     const mailOptions ={

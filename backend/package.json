@@ -27,6 +27,7 @@
     "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15"
   },
   "devDependencies": {
