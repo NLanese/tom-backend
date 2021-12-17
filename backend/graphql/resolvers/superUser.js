@@ -6,6 +6,7 @@ export default {
     },
 
     Mutation: {
+
         suspendAdmin: async (_, {
             adminId
         }, context) => {
@@ -161,6 +162,55 @@ export default {
                     }
                 })
             } catch (error) {
+                throw new Error(error)
+            }
+        },
+
+        sUpdateAdmin: async (_, {
+            adminId,
+            email,
+            username,
+            firstname,
+            lastname,
+            password
+        }, context) => {
+            // const super = await checkSuperAuth(context)
+            try{
+                if (typeof password !== "undefined") {
+                    password = await hashPassword(password)
+                }
+    
+                if (email) {
+                    email = email.toUpperCase()
+                }
+    
+                if (username) {
+                    username = username.toUpperCase()
+                }
+    
+                if (firstname) {
+                    firstname = firstname.toUpperCase()
+                }
+    
+                if (lastname) {
+                    lastname = lastname.toUpperCase()
+                }
+
+                if (true){
+                    await db.admin.update({
+                        where: {
+                            id: adminId
+                        },
+                        data: {
+                            email: email,
+                            username: username,
+                            firstname: firstname,
+                            lastname: lastname,
+                            password: password
+                        }
+                    })
+                }
+            } catch(error){
                 throw new Error(error)
             }
         }
