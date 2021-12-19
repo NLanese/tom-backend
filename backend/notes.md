@@ -20,3 +20,5 @@ set up apollo server
 create mutation
 
 set up react repo
+
+s3 AUTH 

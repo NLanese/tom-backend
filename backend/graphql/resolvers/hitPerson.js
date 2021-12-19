@@ -1,10 +1,9 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import handleAdminHitPersonDeleteOwnership from '../../utils/handleOwnership/handleAdminHitPersonDeleteOwnership.js';
-import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js';
-import handleHitPersonOwnership from '../../utils/handleOwnership/handleHitPersonOwnership.js';
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handleAdminHitPersonOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminHitPersonOwnership.js';
+import handleHitPersonOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleHitPersonOwnership.js';
 
 export default {
     Mutation: {
@@ -105,25 +104,7 @@ export default {
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const accident = await db.accident.findUnique({
-                where: {
-                    id: hitPerson.accidentId
-                }
-            })
-            if (!accident){
-                throw new Error('Error: Accident Record does not exist')
-            }
-
-            const user = await db.user.findUnique({
-                where:{
-                    id: accident.userId
-                }
-            })
-            if (!user){
-                throw new Error("Something went wrong! We have no record of the user that this accident belongs to")
-            }
-
-            const verified = await handleAdminUserOwnership(admin.id, user.id)
+            const verified = await handleAdminHitPersonOwnership(admin.id, hitPersonId)
             try {
                 if (verified) {
                     return await db.hitPerson.update({
@@ -148,7 +129,9 @@ export default {
 
 
         // ------- DELETE --------
-        deleteHitPerson: async (_, {hitPersonId}, context) => {
+        deleteHitPerson: async (_, {
+            hitPersonId
+        }, context) => {
             const admin = await checkAdminAuth(context)
 
             const hitPerson = await db.hitPerson.findUnique({
@@ -160,7 +143,7 @@ export default {
             if (!hitPerson) {
                 throw new Error("Error: Hit Person record does not exist")
             }
-            const verified = await handleAdminHitPersonDeleteOwnership(admin.id, hitPersonId)
+            const verified = await handleAdminHitPersonOwnership(admin.id, hitPersonId)
 
             await db.hitPerson.update({
                 where: {
@@ -170,9 +153,9 @@ export default {
                     deleted: true
                 }
             })
-            
-            try{
-                if (verified){
+
+            try {
+                if (verified) {
                     return await db.hitPerson.delete({
                         where: {
                             id: hitPersonId

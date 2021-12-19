@@ -1,9 +1,9 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import { handleInjuryReportOwnership } from '../../utils/handleOwnership/handleInjuryReportOwnership.js';
-import handleAdminInjuryReportDeleteOwnership from '../../utils/handleOwnership/handleAdminInjuryReportDeleteOwnership.js';
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handleInjuryReportOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleInjuryReportOwnership.js';
+import handleAdminInjuryReportOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminInjuryReportOwnership.js';
 
 export default {
     Mutation: {
@@ -136,7 +136,7 @@ export default {
                 throw new Error('Error: Injury report record does not exist')
             }
 
-            const verified = await handleAdminInjuryReportDeleteOwnership(admin.id, injuryReportId)
+            const verified = await handleAdminInjuryReportOwnership(admin.id, injuryReportId)
 
             try {
                 if (verified) {
@@ -181,7 +181,7 @@ export default {
                 throw new Error('Error: Injury report record does not exist')
             }
 
-            const verified = await handleAdminInjuryReportDeleteOwnership(admin.id, injuryReportId)
+            const verified = await handleAdminInjuryReportOwnership(admin.id, injuryReportId)
 
             await db.injuryReport.update({
                 where: {
@@ -191,7 +191,7 @@ export default {
                     deleted: true
                 }
             })
-            
+
             try {
                 if (verified) {
                     return await db.injuryReport.delete({

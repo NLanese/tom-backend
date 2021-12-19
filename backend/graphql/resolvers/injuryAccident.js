@@ -1,9 +1,9 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import handleAdminInjuryAccidentOwnership from '../../utils/handleOwnership/handleAdminInjuryAccidentOwnership.js';
-import { handleInjuryAccidentOwnership } from '../../utils/handleOwnership/handleInjuryAccidentOwnership.js';
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handleAdminInjuryAccidentOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminInjuryAccidentOwnership.js';
+import handleInjuryAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleInjuryAccidentOwnership.js';
 
 export default {
     Mutation: {
@@ -183,7 +183,7 @@ export default {
                     deleted: true
                 }
             })
-            
+
             try {
                 if (verified) {
                     console.log("Delete in progress")

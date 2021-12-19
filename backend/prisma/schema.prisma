@@ -20,18 +20,21 @@ model SuperUser {
 }
 
 model Admin {
-  id                  Int         @id @default(autoincrement())
-  role                Role        @default(ADMIN)
-  firstname           String
-  lastname            String
-  username            String      @unique
-  email               String      @unique
-  phoneNumber         String
-  password            String
-  paid                Boolean     @default(false)
-  accountStatus       String      @default("Free")
-  deleted             Boolean     @default(false)
-  users               User[]
+  id                              Int         @id @default(autoincrement())
+  role                            Role        @default(ADMIN)
+  firstname                       String
+  lastname                        String
+  username                        String      @unique
+  email                           String      @unique
+  phoneNumber                     String
+  password                        String
+  paid                            Boolean     @default(false)
+  accountStatus                   String      @default("Free")
+  deleted                         Boolean     @default(false)
+  resetPasswordToken              String?
+  resetPasswordTokenExpiration    Int?
+  adminSignUpToken                String?
+  users                           User[]
 }
 
 model User {
@@ -61,6 +64,7 @@ model User {
   attendance                      Json?
   productivity                    Json?
 
+  locked                          Boolean     @default(false) // Used to avoid driver from editing accident after report has been filed
   deleted                         Boolean     @default(false)
   resetPasswordToken              String?
   resetPasswordTokenExpiration    Int?
@@ -72,8 +76,8 @@ model User {
   adminEmail                      String
   adminAccountStanding            String?
   adminApproved                   Boolean   @default(false)
-  admin               Admin         @relation(fields: [adminId], references: [id])
-  accidents           Accident[]
+  admin                           Admin         @relation(fields: [adminId], references: [id])
+  accidents                       Accident[]
 }
 
 model Accident {

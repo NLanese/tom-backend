@@ -1,9 +1,9 @@
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import { handlePropertyAccidentOwnership } from '../../utils/handleOwnership/handlePropertyAccidentOwnership.js';
-import handleAdminPropertyAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminPropertyAccidentDeleteOwnership.js'
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handlePropertyAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handlePropertyAccidentOwnership.js';
+import handleAdminPropertyAccidentOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminPropertyAccidentOwnership.js'
 
 export default {
     Mutation: {
@@ -136,7 +136,7 @@ export default {
                 throw new Error('Error: Property accident record does not exist')
             }
 
-            const verified = await handleAdminPropertyAccidentDeleteOwnership(admin.id, propertyAccidentId)
+            const verified = await handleAdminPropertyAccidentOwnership(admin.id, propertyAccidentId)
 
             try {
                 if (verified) {
@@ -181,7 +181,7 @@ export default {
                 throw new Error('Error: Property accident record does not exist')
             }
 
-            const verified = await handleAdminPropertyAccidentDeleteOwnership(admin.id, propertyAccidentId)
+            const verified = await handleAdminPropertyAccidentOwnership(admin.id, propertyAccidentId)
 
             await db.propertyAccident.update({
                 where: {

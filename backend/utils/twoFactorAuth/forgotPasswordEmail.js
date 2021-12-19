@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import db from "../utils/generatePrisma.js"
+import db from "../../utils/generatePrisma.js"
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
@@ -37,17 +37,17 @@ const sendForgotPasswordEmail = async (userId) => {
             pass: `${process.env.EMAIL_PASSWORD}`
         }
     })
-    const mailOptions ={
+    const mailOptions = {
         from: 'Tom-App Support',
         to: `${userEmail}`,
         subject: "Reset Your Password",
-        text: `The code to reset your password is: ${token}. It will expire in 5 minutes` 
+        text: `The code to reset your password is: ${token}. It will expire in 5 minutes`
     }
 
 
     // Sends Email
     transporter.sendMail(mailOptions, (error, response) => {
-        if (error){
+        if (error) {
             throw new Error("Something went wrong!\n" + error)
         } else {
             response.status(200).json("Recover Email Sent")

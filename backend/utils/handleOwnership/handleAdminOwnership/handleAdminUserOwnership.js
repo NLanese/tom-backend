@@ -1,4 +1,4 @@
-import db from "../generatePrisma.js";
+import db from "../../generatePrisma.js";
 
 const handleAdminUserOwnership = async (adminId, userId) => {
     const user = await db.user.findUnique({

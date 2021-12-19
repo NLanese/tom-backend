@@ -1,9 +1,8 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import db from '../../utils/generatePrisma.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminThirdPartyOwnership.js';
-import handleAdminThirdPartyDeleteOwnership from '../../utils/handleOwnership/handleAdminThirdPartyDeleteOwnership.js';
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminThirdPartyOwnership.js';
 
 
 export default {
@@ -118,7 +117,7 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleAdminThirdPartyDeleteOwnership(admin.id, thirdPartyId)
+            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId)
 
             await db.thirdParty.update({
                 where: {
