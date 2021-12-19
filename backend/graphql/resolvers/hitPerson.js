@@ -129,7 +129,9 @@ export default {
 
 
         // ------- DELETE --------
-        deleteHitPerson: async (_, {hitPersonId}, context) => {
+        deleteHitPerson: async (_, {
+            hitPersonId
+        }, context) => {
             const admin = await checkAdminAuth(context)
 
             const hitPerson = await db.hitPerson.findUnique({
@@ -151,9 +153,9 @@ export default {
                     deleted: true
                 }
             })
-            
-            try{
-                if (verified){
+
+            try {
+                if (verified) {
                     return await db.hitPerson.delete({
                         where: {
                             id: hitPersonId

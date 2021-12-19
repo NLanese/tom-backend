@@ -144,7 +144,10 @@ export default {
             phoneNumber
         }, context) => {
             try {
-                const { valid, errors } = validateRegisterInput(
+                const {
+                    valid,
+                    errors
+                } = validateRegisterInput(
                     username,
                     email,
                     password
@@ -209,8 +212,16 @@ export default {
 
 
         // ------ SIGN IN -------
-        signinAdmin: async (_, { email, password }, { req }) => {
-            const { errors, valid } = validateLoginInput(email, password);
+        signinAdmin: async (_, {
+            email,
+            password
+        }, {
+            req
+        }) => {
+            const {
+                errors,
+                valid
+            } = validateLoginInput(email, password);
 
             if (!valid) {
                 throw new UserInputError('Errors', {
@@ -398,8 +409,8 @@ export default {
             const admin = await checkAdminAuth(context)
             const verified = await handleAdminUserOwnership(admin.id, userId)
 
-            try{
-                if (verified){
+            try {
+                if (verified) {
                     return await db.user.update({
                         where: {
                             id: userId
@@ -409,7 +420,7 @@ export default {
                         }
                     })
                 }
-            } catch(error){
+            } catch (error) {
                 throw new Error(error)
             }
 

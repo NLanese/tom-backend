@@ -1,9 +1,6 @@
 import db from '../../utils/generatePrisma.js';
 import { UserInputError } from 'apollo-server-errors';
-import {
-    validateRegisterInput,
-    validateLoginInput,
-} from '../../utils/validators.js';
+import { validateRegisterInput, validateLoginInput } from '../../utils/validators.js';
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateSuperToken from '../../utils/generateToken/generateSuperUserToken.js';

@@ -25,11 +25,11 @@ const sendForgotPasswordText = (userNumber) => {
 
     body.messages = []
 
-    body.messages[0].content = `Your code to reset your password is: ${token}` 
+    body.messages[0].content = `Your code to reset your password is: ${token}`
     body.messages[0].destinationNumber = `${userNumber}`
 
     controller.sendMEssage(body, (error, response, context) => {
-        if (error){
+        if (error) {
             throw new Error(error)
         } else {
             console.log(response)

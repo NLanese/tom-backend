@@ -4,10 +4,7 @@ import generateUserToken from '../../utils/generateToken/generateUserToken.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import { UserInputError } from 'apollo-server-errors';
-import {
-	validateRegisterInput,
-	validateLoginInput,
-} from '../../utils/validators.js';
+import { validateRegisterInput,	validateLoginInput } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
 import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminUserOwnership.js'
 
@@ -103,7 +100,10 @@ export default {
 			}
 		}) => {
 			try {
-				const { valid, errors } = validateRegisterInput(
+				const {
+					valid,
+					errors
+				} = validateRegisterInput(
 					username,
 					email,
 					password
@@ -191,7 +191,10 @@ export default {
 		}, {
 			req
 		}) => {
-			const { errors, valid } = validateLoginInput(email, password);
+			const {
+				errors,
+				valid
+			} = validateLoginInput(email, password);
 
 			if (!valid) {
 				throw new userInputError('Errors', {
@@ -331,14 +334,16 @@ export default {
 		},
 
 		/* NOT SURE IF NEEDED */
-		deleteUser: async (_, { userId }, context) => {
+		deleteUser: async (_, {
+			userId
+		}, context) => {
 			const admin = await checkAdminAuth(context);
 
 
-			
+
 
 			try {
-				
+
 			} catch (error) {
 				throw new Error(error);
 			}

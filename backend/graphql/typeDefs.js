@@ -112,7 +112,6 @@ const typeDefs = gql`
 
     type ThirdParty{
         id:                     ID
-        # Not sure if accidentId is needed waiting for testing with deleteAccident Mutation to see
         accidentId:             Int
         accident:               [Accident]
         location:               String

@@ -191,7 +191,7 @@ export default {
                     deleted: true
                 }
             })
-            
+
             try {
                 if (verified) {
                     return await db.injuryReport.delete({

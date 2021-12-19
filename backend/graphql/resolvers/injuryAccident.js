@@ -183,7 +183,7 @@ export default {
                     deleted: true
                 }
             })
-            
+
             try {
                 if (verified) {
                     console.log("Delete in progress")
