@@ -1,5 +1,5 @@
-import crypto from ‘crypto’
-import db from "../utils/generatePrisma.js"
+import crypto from 'crypto'
+import db from "../../utils/generatePrisma.js"
 
 const sendForgotPasswordText = (userNumber) => {
 

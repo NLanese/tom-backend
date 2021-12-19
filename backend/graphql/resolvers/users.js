@@ -9,7 +9,7 @@ import {
 	validateLoginInput,
 } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
-import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js'
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminUserOwnership.js'
 
 
 

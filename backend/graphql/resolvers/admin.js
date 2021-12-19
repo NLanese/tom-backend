@@ -4,11 +4,8 @@ import hashPassword from '../../utils/passwordHashing.js';
 import generateAdminToken from '../../utils/generateToken/generateAdminToken.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import { UserInputError } from 'apollo-server-errors';
-import {
-    validateRegisterInput,
-    validateLoginInput,
-} from '../../utils/validators.js';
-import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js';
+import { validateRegisterInput, validateLoginInput } from '../../utils/validators.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminUserOwnership.js';
 
 export default {
     Query: {

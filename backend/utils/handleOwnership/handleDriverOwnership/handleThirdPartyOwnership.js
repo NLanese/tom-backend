@@ -1,6 +1,6 @@
-import db from "../generatePrisma.js"
+import db from "../../generatePrisma.js"
 
-export const handleThirdPartyOwnership = async (userId, thirdPartyId) => {
+const handleThirdPartyOwnership = async (userId, thirdPartyId) => {
     const thirdParty = await db.thirdParty.findUnique({
         where: {
             id: thirdPartyId
@@ -14,7 +14,7 @@ export const handleThirdPartyOwnership = async (userId, thirdPartyId) => {
         }
     })
 
-    if (!thirdParty) {
+    if (!thirdParty || !thirdParty.accident || !thirdParty.accident.user) {
         throw new Error('Error: Accident record does not exist')
     }
 

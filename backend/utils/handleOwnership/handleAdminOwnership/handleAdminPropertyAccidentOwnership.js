@@ -1,6 +1,6 @@
-import db from "../generatePrisma.js";
+import db from "../../generatePrisma.js";
 
-const handleAdminPropertyAccidentDeleteOwnership = async (adminId, propertyAccidentId) => {
+const handleAdminPropertyAccidentOwnership = async (adminId, propertyAccidentId) => {
     const propertyAccident = await db.propertyAccident.findUnique({
          where: {
              id: propertyAccidentId
@@ -20,7 +20,7 @@ const handleAdminPropertyAccidentDeleteOwnership = async (adminId, propertyAccid
         }
     })
 
-    if (!accident) {
+    if (!accident || !accident.user) {
         throw new Error('Error: Accident record does not exist')
     }
 
@@ -32,4 +32,4 @@ const handleAdminPropertyAccidentDeleteOwnership = async (adminId, propertyAccid
 
 }
 
-export default handleAdminPropertyAccidentDeleteOwnership
+export default handleAdminPropertyAccidentOwnership

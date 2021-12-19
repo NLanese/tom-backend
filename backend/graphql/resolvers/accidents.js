@@ -1,10 +1,9 @@
 import db from '../../utils/generatePrisma.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import { handleAccidentOwnership } from '../../utils/handleOwnership/handleAccidentOwnership.js';
-import handleAdminAccidentDeleteOwnership from '../../utils/handleOwnership/handleAdminAccidentDeleteOwnership.js';
-import handleAdminAccidentOwnership from '../../utils/handleOwnership/handleAdminAccidentOwnership.js';
-import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminUserOwnership.js'
+import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
+import handleAdminAccidentOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminAccidentOwnership.js';
+import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminUserOwnership.js'
 
 
 export default {
@@ -210,7 +209,7 @@ export default {
             accidentId
         }, context) => {
             const admin = await checkAdminAuth(context)
-            const verified = await handleAdminAccidentDeleteOwnership(admin.id, accidentId)
+            const verified = await handleAdminAccidentOwnership(admin.id, accidentId)
 
             const accident = await db.accident.findUnique({
                 where: {

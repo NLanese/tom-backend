@@ -8,7 +8,7 @@ import { uploadFile, getFileStream } from './s3/s3.js'
 import multer from 'multer'
 import fs from 'fs'
 import util from 'util'
-import sendForgotPasswordEmail from './twoFactorAuth/forgotPasswordEmail.js'
+import sendForgotPasswordEmail from './utils/twoFactorAuth/forgotPasswordEmail.js'
 
 dotenv.config();
 

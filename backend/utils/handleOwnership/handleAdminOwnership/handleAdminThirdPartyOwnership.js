@@ -1,6 +1,6 @@
-import db from "../generatePrisma.js";
+import db from "../../generatePrisma.js";
 
-const handleAdminThirdPartyDeleteOwnership = async (adminId, thirdPartyId) => {
+const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId) => {
     const thirdParty = await db.thirdParty.findUnique({
         where: {
             id: thirdPartyId
@@ -20,7 +20,7 @@ const handleAdminThirdPartyDeleteOwnership = async (adminId, thirdPartyId) => {
         }
     })
 
-    if (!accident) {
+    if (!accident || !accident.user) {
         throw new Error('Error: Accident record does not exist')
     }
 
@@ -31,4 +31,4 @@ const handleAdminThirdPartyDeleteOwnership = async (adminId, thirdPartyId) => {
     throw new Error('Error: User is nor your employee')
 }
 
-export default handleAdminThirdPartyDeleteOwnership
+export default handleAdminThirdPartyOwnership

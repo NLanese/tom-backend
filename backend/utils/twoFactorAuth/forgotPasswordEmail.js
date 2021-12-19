@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import db from "../utils/generatePrisma.js"
+import db from "../../utils/generatePrisma.js"
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 

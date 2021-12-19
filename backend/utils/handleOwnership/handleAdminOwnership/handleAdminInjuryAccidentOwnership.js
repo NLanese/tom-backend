@@ -1,5 +1,4 @@
-import db from "../generatePrisma.js";
-
+import db from "../../generatePrisma.js";
 
 const handleAdminInjuryAccidentOwnership = async (adminId, injuryAccidentId) => {
     const injuryAccident = await db.injuryAccident.findUnique({
@@ -7,6 +6,7 @@ const handleAdminInjuryAccidentOwnership = async (adminId, injuryAccidentId) => 
             id: injuryAccidentId
         }
     })
+
     if (!injuryAccident){
         throw new Error("Error: Injury Accident does not exist!")
     }
