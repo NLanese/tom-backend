@@ -22,3 +22,10 @@ create mutation
 set up react repo
 
 s3 AUTH 
+
+SILVER
+-----------
+s3 Auth
+Error Codes
+Fix js files with comments
+Authorization check record Id
