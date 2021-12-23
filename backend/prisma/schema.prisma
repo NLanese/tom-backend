@@ -88,7 +88,7 @@ model Accident {
   using_safety            Boolean
   safety_failed           Boolean
   number_package_carried  Int
-  safety_equipment_used   Json
+  safety_equipment_used   String
 
   deleted                         Boolean     @default(false)
 
