@@ -17,7 +17,7 @@ export default {
                         id: user.id
                     },
                     include: {
-                        thirdParty: true,
+                        collision: true,
                         propertyAccident: true,
                         injuryAccident: true,
                         injuryReport: true,
@@ -42,7 +42,7 @@ export default {
                             id: accidentId
                         },
                         include: {
-                            thirdParty: true,
+                            collision: true,
                             propertyAccident: true,
                             injuryAccident: true,
                             injuryReport: true,
@@ -62,7 +62,8 @@ export default {
             using_safety,
             safety_failed,
             number_package_carried,
-            safety_equipment_used
+            safety_equipment_used,
+            location
         }, context) => {
             const user = await checkUserAuth(context)
 
@@ -75,6 +76,7 @@ export default {
                         safety_failed: safety_failed,
                         number_package_carried: number_package_carried,
                         safety_equipment_used: safety_equipment_used,
+                        location: location,
                         user: {
                             connect: {
                                 id: user.id
@@ -218,7 +220,7 @@ export default {
                 },
                 include: {
                     hitPerson: true,
-                    thirdParty: true,
+                    collision: true,
                     injuryAccident: true,
                     propertyAccident: true,
                     injuryReport: true
@@ -262,8 +264,8 @@ export default {
                 })
             }
 
-            if (accident.thirdParty.length !== 0) {
-                await db.thirdParty.deleteMany({
+            if (accident.collision.length !== 0) {
+                await db.collision.deleteMany({
                     where: {
                         accidentId: accidentId
                     }

@@ -2,7 +2,7 @@ import GraphQLJSON from 'graphql-type-json';
 import adminResolvers from './admin.js'
 import usersResolvers from './users.js';
 import accidentsResolvers from './accidents.js';
-import thirdPartyResolvers from './thirdParty.js';
+import thirdPartyResolvers from './collision.js';
 import injuryAccidentResolvers from './injuryAccident.js';
 import propertyAccidentResolvers from './propertyAccident.js';
 import hitPersonResolvers from './hitPerson.js';

@@ -87,7 +87,7 @@ export default {
                         },
                         include: {
                             user: true,
-                            thirdParty: true,
+                            collision: true,
                             hitPerson: true,
                             injuryAccident: true,
                             injuryReport: true,
@@ -141,7 +141,9 @@ export default {
             username,
             firstname,
             lastname,
-            phoneNumber
+            phoneNumber,
+            dsp_name,
+            dsp_shortcode
         }, context) => {
             try {
                 const {
@@ -157,6 +159,8 @@ export default {
                 username = await username.toUpperCase()
                 firstname = await firstname.toUpperCase()
                 lastname = await lastname.toUpperCase()
+                dsp_name = await dsp_name.toUpperCase()
+                dsp_shortcode = await dsp_shortcode.toUpperCase()
 
                 if (!valid) {
                     throw new UserInputError('Errors', {
@@ -201,7 +205,9 @@ export default {
                         password: password,
                         firstname: firstname,
                         lastname: lastname,
-                        phoneNumber: phoneNumber
+                        phoneNumber: phoneNumber,
+                        dsp_name: dsp_name,
+                        dsp_shortcode: dsp_shortcode
                     },
                 });
             } catch (error) {

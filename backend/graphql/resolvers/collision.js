@@ -16,7 +16,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.thirdParty.create({
+                    return await db.collision.create({
                         data: {
                             location: location,
                             accidentId: accidentId,
@@ -39,13 +39,13 @@ export default {
         }, context) => {
             const user = await checkUserAuth(context)
 
-            const thirdParty = await db.thirdParty.findUnique({
+            const collision = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
             })
 
-            if (!thirdParty) {
+            if (!collision) {
                 throw new Error('Error: Third party record does not exist')
             }
 
@@ -53,7 +53,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.thirdParty.update({
+                    return await db.collision.update({
                         where: {
                             id: thirdPartyId
                         },
@@ -74,7 +74,7 @@ export default {
         }, context) => {
             const admin = await checkAdminAuth(context)
 
-            const thirdPartyRecord = await db.thirdParty.findUnique({
+            const thirdPartyRecord = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
@@ -88,7 +88,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.thirdParty.update({
+                    return await db.collision.update({
                         where: {
                             id: thirdPartyId
                         },
@@ -107,19 +107,19 @@ export default {
         }, context) => {
             const admin = await checkAdminAuth(context)
 
-            const thirdParty = await db.thirdParty.findUnique({
+            const collision = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
             })
 
-            if (!thirdParty) {
+            if (!collision) {
                 throw new Error('Error: Third party record does not exist')
             }
 
             const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId)
 
-            await db.thirdParty.update({
+            await db.collision.update({
                 where: {
                     id: thirdPartyId
                 },
@@ -130,7 +130,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.thirdParty.delete({
+                    return await db.collision.delete({
                         where: {
                             id: thirdPartyId
                         }
