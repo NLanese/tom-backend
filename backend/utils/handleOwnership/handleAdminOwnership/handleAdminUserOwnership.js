@@ -1,21 +1,21 @@
 import db from "../../generatePrisma.js";
 
-const handleAdminUserOwnership = async (adminId, userId) => {
-    const user = await db.user.findUnique({
+const handleAdminUserOwnership = async (adminId, driverId) => {
+    const driver = await db.driver.findUnique({
         where: {
-            id: userId
+            id: driverId
         }
     })
     
-    if (!user) {
-        throw new Error('Error: User does not exist')
+    if (!driver) {
+        throw new Error('Error: Driver does not exist')
     }
 
-    if (user.adminId === adminId) {
+    if (driver.adminId === adminId) {
         return true
     }
 
-    throw new Error('Error: User is not your employee')
+    throw new Error('Error: Driver is not your employee')
 }
 
 export default handleAdminUserOwnership

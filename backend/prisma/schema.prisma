@@ -38,10 +38,10 @@ model Admin {
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
   adminSignUpToken             String?
-  users                        User[]
+  drivers                        Driver[]
 }
 
-model User {
+model Driver {
   id                         Int      @id @default(autoincrement())
   role                       Role     @default(USER)
   firstname                  String
@@ -89,8 +89,8 @@ model User {
 
 model Accident {
   id                     Int     @id @default(autoincrement())
-  userId                 Int
-  user                   User    @relation(fields: [userId], references: [id])
+  driverId                 Int
+  driver                   Driver    @relation(fields: [driverId], references: [id])
   name                   String
   using_safety           Boolean?
   safety_failed          Boolean?

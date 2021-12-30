@@ -3,25 +3,25 @@ import db from "../../utils/generatePrisma.js"
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
-const sendForgotPasswordEmail = async (userId) => {
+const sendForgotPasswordEmail = async (driverId) => {
     // Sets up constants
     dotenv.config()
     const token = crypto.randomBytes(8).toString('hex')
 
-    const user = await db.user.findUnique({
+    const driver = await db.driver.findUnique({
         where: {
-            id: Number(userId)
+            id: Number(driverId)
         }
     })
 
-    if (!user) {
-        throw new Error("Error: User does not exist")
+    if (!driver) {
+        throw new Error("Error: Driver does not exist")
     }
 
-    // Sets User's Password Token and Expiration Timer
-    await db.user.update({
+    // Sets Driver's Password Token and Expiration Timer
+    await db.driver.update({
         where: {
-            email: user.email
+            email: driver.email
         },
         data: {
             resetPasswordToken: token,
@@ -33,7 +33,7 @@ const sendForgotPasswordEmail = async (userId) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: `${process.env.EMAIL_ADDRESS}`,
+            driver: `${process.env.EMAIL_ADDRESS}`,
             pass: `${process.env.EMAIL_PASSWORD}`
         }
     })

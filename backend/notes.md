@@ -5,7 +5,7 @@ suspend admin
     adminAccountStanding = 'suspended'
 
 adminUpdateAccident
-suspend user
+suspend driver
 stripe
 scorecard
 scheduling

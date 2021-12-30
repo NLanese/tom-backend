@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
-import generateUserToken from '../../utils/generateToken/generateUserToken.js';
+import generateUserToken from '../../utils/generateToken/generateDriverToken.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput,	validateLoginInput } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
@@ -12,13 +12,13 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 
 export default {
 	Query: {
-		getUser: async (_, {}, context) => {
-			const user = await checkUserAuth(context)
+		getDriver: async (_, {}, context) => {
+			const driver = await checkUserAuth(context)
 
 			try {
-				return await db.user.findUnique({
+				return await db.driver.findUnique({
 					where: {
-						id: user.id
+						id: driver.id
 					},
 					include: {
 						admin: true,
@@ -38,28 +38,28 @@ export default {
 			}
 		},
 
-		getUserById: async (_, {
-			userId
+		getDriverById: async (_, {
+			driverId
 		}, context) => {
 			const admin = await checkAdminAuth(context)
 
-			const user = await db.user.findUnique({
+			const driver = await db.driver.findUnique({
 				where: {
-					id: userId
+					id: driverId
 				}
 			})
 
-			if (!user) {
-				throw new Error('Error: User does not exist')
+			if (!driver) {
+				throw new Error('Error: Driver does not exist')
 			}
 
-			const verified = await handleAdminUserOwnership(admin.id, userId)
+			const verified = await handleAdminUserOwnership(admin.id, driverId)
 
 			try {
 				if (verified) {
-					return await db.user.findUnique({
+					return await db.driver.findUnique({
 						where: {
-							id: userId
+							id: driverId
 						},
 						include: {
 							accidents: {
@@ -85,10 +85,10 @@ export default {
 		 *
 		 * @param {_} parent
 		 * @param { email, password, username } param1
-		 * @returns Signed up user in DB
+		 * @returns Signed up driver in DB
 		 */
 
-		signupUser: async (_, {
+		signupDriver: async (_, {
 			signupInput: {
 				email,
 				password,
@@ -131,13 +131,13 @@ export default {
 					});
 				}
 
-				const user = await db.user.findUnique({
+				const driver = await db.driver.findUnique({
 					where: {
 						email,
 					},
 				});
 
-				if (user) {
+				if (driver) {
 					throw new UserInputError('email is taken', {
 						errors: {
 							email: 'Email is already taken',
@@ -145,7 +145,7 @@ export default {
 					});
 				}
 
-				const checkUsername = await db.user.findUnique({
+				const checkUsername = await db.driver.findUnique({
 					where: {
 						username
 					},
@@ -161,7 +161,7 @@ export default {
 
 				password = await hashPassword(password)
 
-				return await db.user.create({
+				return await db.driver.create({
 					data: {
 						admin: {
 							connect: {
@@ -187,7 +187,7 @@ export default {
 			}
 		},
 
-		signinUser: async (_, {
+		signinDriver: async (_, {
 			email,
 			password
 		}, {
@@ -206,14 +206,14 @@ export default {
 
 			email = await email.toUpperCase()
 
-			const foundUser = await db.user.findUnique({
+			const foundUser = await db.driver.findUnique({
 				where: {
 					email,
 				},
 			});
 
 			if (!foundUser) {
-				errors.general = 'User not found';
+				errors.general = 'Driver not found';
 				throw new UserInputError('Incorrect Email', {
 					errors
 				});
@@ -240,8 +240,8 @@ export default {
 			};
 		},
 
-		updateUser: async (_, {
-			updateUser: {
+		updateDriver: async (_, {
+			updateDriver: {
 				email,
 				username,
 				firstname,
@@ -267,7 +267,7 @@ export default {
 				accidents
 			}
 		}, context) => {
-			const user = await checkUserAuth(context);
+			const driver = await checkUserAuth(context);
 
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)
@@ -290,16 +290,16 @@ export default {
 			}
 
 			try {
-				if (!user) {
-					errors.general = 'User not found';
-					throw new UserInputError('User not found', {
+				if (!driver) {
+					errors.general = 'Driver not found';
+					throw new UserInputError('Driver not found', {
 						errors
 					});
 				}
 
-				const newUser = await db.user.update({
+				const newUser = await db.driver.update({
 					where: {
-						id: user.id
+						id: driver.id
 					},
 					data: {
 						email: email,
@@ -336,8 +336,8 @@ export default {
 		},
 
 		/* NOT SURE IF NEEDED */
-		deleteUser: async (_, {
-			userId
+		deleteDriver: async (_, {
+			driverId
 		}, context) => {
 			const admin = await checkAdminAuth(context);
 

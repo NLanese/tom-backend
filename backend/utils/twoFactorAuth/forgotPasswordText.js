@@ -8,8 +8,8 @@ const sendForgotPasswordText = (userNumber) => {
     const lib = require('messagemedia-messages-sdk')
     const token = crypto.randomBytes(32).toString('hex')
 
-    // Sets User's Password Token and Expiration Timer
-    await db.user.update({
+    // Sets Driver's Password Token and Expiration Timer
+    await db.driver.update({
         where: {
             phoneNumber: userNumber
         },

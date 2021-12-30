@@ -1,5 +1,5 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
 import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminThirdPartyOwnership.js';
@@ -11,8 +11,8 @@ export default {
             accidentId,
             location
         }, context) => {
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const driver = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
                 if (verified) {
@@ -37,7 +37,7 @@ export default {
             thirdPartyId,
             location
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
 
             const collision = await db.collision.findUnique({
                 where: {
@@ -49,7 +49,7 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleThirdPartyOwnership(user.id, thirdPartyId)
+            const verified = await handleThirdPartyOwnership(driver.id, thirdPartyId)
 
             try {
                 if (verified) {

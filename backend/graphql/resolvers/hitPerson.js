@@ -1,5 +1,5 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
 import handleAdminHitPersonOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminHitPersonOwnership.js';
@@ -16,8 +16,8 @@ export default {
             contact_infomation,
             injury
         }, context) => {
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const driver = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
                 if (verified) {
@@ -52,7 +52,7 @@ export default {
             contact_infomation,
             injury
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
             const hitPerson = await db.hitPerson.findUnique({
                 where: {
                     id: hitPersonId
@@ -63,7 +63,7 @@ export default {
                 throw new Error('Error: Hit person record does not exist')
             }
 
-            const verified = await handleHitPersonOwnership(user.id, hitPersonId)
+            const verified = await handleHitPersonOwnership(driver.id, hitPersonId)
             try {
                 if (verified) {
                     return await db.hitPerson.update({

@@ -1,6 +1,6 @@
 import GraphQLJSON from 'graphql-type-json';
 import adminResolvers from './admin.js'
-import usersResolvers from './users.js';
+import usersResolvers from './drivers.js';
 import accidentsResolvers from './accidents.js';
 import thirdPartyResolvers from './collision.js';
 import injuryAccidentResolvers from './injuryAccident.js';

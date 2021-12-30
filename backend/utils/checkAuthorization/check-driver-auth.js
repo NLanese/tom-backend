@@ -12,8 +12,8 @@ const checkUserAuth = (context) => {
 
 		if (token) {
 			try {
-				const user = jwt.verify(token, process.env.JWT_USER_SECRET);
-				return user;
+				const driver = jwt.verify(token, process.env.JWT_DRIVER_SECRET);
+				return driver;
 			} catch (err) {
 				throw new AuthenticationError('Error: Invalid token');
 			}

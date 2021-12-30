@@ -38,7 +38,7 @@ CREATE TABLE "Admin" (
 );
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Driver" (
     "id" SERIAL NOT NULL,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "firstname" TEXT NOT NULL,
@@ -78,22 +78,22 @@ CREATE TABLE "User" (
     "adminAccountStanding" TEXT,
     "adminApproved" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Driver_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Accident" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "driverId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "using_safety" BOOLEAN NOT NULL,
-    "safety_failed" BOOLEAN NOT NULL,
-    "number_package_carried" INTEGER NOT NULL,
-    "safety_equipment_used" TEXT NOT NULL,
-    "police_report_information" JSONB NOT NULL,
-    "police_report_photos" JSONB NOT NULL,
-    "vehicle_number" TEXT NOT NULL,
-    "amazon_logo" BOOLEAN NOT NULL,
+    "using_safety" BOOLEAN,
+    "safety_failed" BOOLEAN,
+    "number_package_carried" INTEGER,
+    "safety_equipment_used" TEXT,
+    "police_report_information" JSONB,
+    "police_report_photos" JSONB,
+    "vehicle_number" TEXT,
+    "amazon_logo" BOOLEAN,
     "location" TEXT NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
 
@@ -245,10 +245,10 @@ CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+CREATE UNIQUE INDEX "Driver_username_key" ON "Driver"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AccidentToHitPerson_AB_unique" ON "_AccidentToHitPerson"("A", "B");
@@ -281,10 +281,10 @@ CREATE UNIQUE INDEX "_AccidentToInjuryReport_AB_unique" ON "_AccidentToInjuryRep
 CREATE INDEX "_AccidentToInjuryReport_B_index" ON "_AccidentToInjuryReport"("B");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Driver" ADD CONSTRAINT "Driver_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Accident" ADD CONSTRAINT "Accident_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -16,19 +16,19 @@ const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId) => {
             id: collision.accidentId
         },
         include: {
-            user: true
+            driver: true
         }
     })
 
-    if (!accident || !accident.user) {
+    if (!accident || !accident.driver) {
         throw new Error('Error: Accident record does not exist')
     }
 
-    if (accident.user.adminId === adminId) {
+    if (accident.driver.adminId === adminId) {
         return true
     }
 
-    throw new Error('Error: User is nor your employee')
+    throw new Error('Error: Driver is nor your employee')
 }
 
 export default handleAdminThirdPartyOwnership
