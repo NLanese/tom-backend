@@ -1,6 +1,6 @@
 import db from "../../generatePrisma.js";
 
-// Want to change to checking the accident user adminId and comparing
+// Want to change to checking the accident driver adminId and comparing
 // it to the Admins Id. However, this works for now
 const handleAdminAccidentOwnership = async (adminId, accidentId) => {
     let check = false
@@ -10,11 +10,11 @@ const handleAdminAccidentOwnership = async (adminId, accidentId) => {
             id: adminId
         },
         include: {
-            users: true
+            drivers: true
         }
     })
     
-    if (!admin || !admin.users) {
+    if (!admin || !admin.drivers) {
         throw new Error("Error: there is no record of this admin!")
     }
 
@@ -28,8 +28,8 @@ const handleAdminAccidentOwnership = async (adminId, accidentId) => {
         throw new Error("Error: there is no record of this accident")
     }
     
-    admin.users.forEach((user) => {
-        if (user.id === accident.userId) {
+    admin.drivers.forEach((driver) => {
+        if (driver.id === accident.driverId) {
             check = true
         }
     })
@@ -38,7 +38,7 @@ const handleAdminAccidentOwnership = async (adminId, accidentId) => {
         return true
     }
 
-    throw new Error("Error: you are not the administrator of the user who owns this accident record")
+    throw new Error("Error: you are not the administrator of the driver who owns this accident record")
 }
 
 export default handleAdminAccidentOwnership

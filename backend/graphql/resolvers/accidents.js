@@ -1,5 +1,5 @@
 import db from '../../utils/generatePrisma.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
 import handleAdminAccidentOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminAccidentOwnership.js';
@@ -9,15 +9,15 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 export default {
     Query: {
         getAccidents: async (_, {}, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
 
             try {
                 return await db.accident.findMany({
                     where: {
-                        id: user.id
+                        id: driver.id
                     },
                     include: {
-                        thirdParty: true,
+                        collision: true,
                         propertyAccident: true,
                         injuryAccident: true,
                         injuryReport: true,
@@ -32,8 +32,8 @@ export default {
         getAccidentById: async (_, {
             accidentId
         }, context) => {
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const driver = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
                 if (verified) {
@@ -42,7 +42,7 @@ export default {
                             id: accidentId
                         },
                         include: {
-                            thirdParty: true,
+                            collision: true,
                             propertyAccident: true,
                             injuryAccident: true,
                             injuryReport: true,
@@ -62,9 +62,10 @@ export default {
             using_safety,
             safety_failed,
             number_package_carried,
-            safety_equipment_used
+            safety_equipment_used,
+            location
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
 
             // ------- CREATE -------
             try {
@@ -75,9 +76,10 @@ export default {
                         safety_failed: safety_failed,
                         number_package_carried: number_package_carried,
                         safety_equipment_used: safety_equipment_used,
-                        user: {
+                        location: location,
+                        driver: {
                             connect: {
-                                id: user.id
+                                id: driver.id
                             }
                         }
                     }
@@ -89,7 +91,7 @@ export default {
         },
 
         adminCreateAccident: async (_, {
-            userId,
+            driverId,
             name,
             using_safety,
             safety_failed,
@@ -97,7 +99,7 @@ export default {
             safety_equipment_used
         }, context) => {
             const admin = await checkAdminAuth(context)
-            const verified = await handleAdminUserOwnership(admin.id, userId)
+            const verified = await handleAdminUserOwnership(admin.id, driverId)
 
             try {
                 if (verified) {
@@ -108,9 +110,9 @@ export default {
                             safety_failed: safety_failed,
                             number_package_carried: number_package_carried,
                             safety_equipment_used: safety_equipment_used,
-                            user: {
+                            driver: {
                                 connect: {
-                                    id: userId
+                                    id: driverId
                                 }
                             }
                         }
@@ -131,7 +133,7 @@ export default {
             safety_equipment_used,
             failed_safety
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
             const accident = await db.accident.findUnique({
                 where: {
                     id: accidentId
@@ -141,7 +143,7 @@ export default {
                 throw new Error('Error: Accident record does not exist')
             }
 
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
             try {
                 if (verified) {
                     return await db.accident.update({
@@ -218,7 +220,7 @@ export default {
                 },
                 include: {
                     hitPerson: true,
-                    thirdParty: true,
+                    collision: true,
                     injuryAccident: true,
                     propertyAccident: true,
                     injuryReport: true
@@ -262,8 +264,8 @@ export default {
                 })
             }
 
-            if (accident.thirdParty.length !== 0) {
-                await db.thirdParty.deleteMany({
+            if (accident.collision.length !== 0) {
+                await db.collision.deleteMany({
                     where: {
                         accidentId: accidentId
                     }

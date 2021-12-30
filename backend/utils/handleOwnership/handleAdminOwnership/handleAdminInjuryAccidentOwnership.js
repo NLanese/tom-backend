@@ -16,19 +16,19 @@ const handleAdminInjuryAccidentOwnership = async (adminId, injuryAccidentId) => 
             id: injuryAccident.accidentId
         },
         include: {
-            user: true
+            driver: true
         }
     })
 
-    if (!accident || !accident.user){
-        throw new Error("Something whent wrong! The Injury Accident does not appear linked to an accident or a user")
+    if (!accident || !accident.driver){
+        throw new Error("Something whent wrong! The Injury Accident does not appear linked to an accident or a driver")
     }
 
-    if (accident.user.adminId === adminId){
+    if (accident.driver.adminId === adminId){
         return true
     }
 
-    throw new Error("Error: You are not the admin of the Injury Accident's User")
+    throw new Error("Error: You are not the admin of the Injury Accident's Driver")
 }
 
 

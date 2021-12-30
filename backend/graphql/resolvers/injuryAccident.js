@@ -1,4 +1,4 @@
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
@@ -21,8 +21,8 @@ export default {
             extra_info,
             rushed_prior
         }, context) => {
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const driver = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
                 if (verified) {
@@ -67,7 +67,7 @@ export default {
             extra_info,
             rushed_prior
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
 
             const injuryAccident = await db.injuryAccident.findUnique({
                 where: {
@@ -79,7 +79,7 @@ export default {
                 throw new Error('Error: Injury accident record does not exist')
             }
 
-            const verified = await handleInjuryAccidentOwnership(user.id, injuryAccidentId)
+            const verified = await handleInjuryAccidentOwnership(driver.id, injuryAccidentId)
 
             try {
                 if (verified) {

@@ -1,22 +1,22 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-user-auth.js';
+import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
-import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminThirdPartyOwnership.js';
-
+import handleAdminCollisionOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminCollisionOwnership.js';
+import handleCollisionOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleCollisionOwnership.js';
 
 export default {
     Mutation: {
-        createThirdParty: async (_, {
+        createCollision: async (_, {
             accidentId,
             location
         }, context) => {
-            const user = await checkUserAuth(context)
-            const verified = await handleAccidentOwnership(user.id, accidentId)
+            const driver = await checkUserAuth(context)
+            const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
                 if (verified) {
-                    return await db.thirdParty.create({
+                    return await db.collision.create({
                         data: {
                             location: location,
                             accidentId: accidentId,
@@ -33,27 +33,27 @@ export default {
             }
         },
 
-        updateThirdParty: async (_, {
+        updateCollision: async (_, {
             thirdPartyId,
             location
         }, context) => {
-            const user = await checkUserAuth(context)
+            const driver = await checkUserAuth(context)
 
-            const thirdParty = await db.thirdParty.findUnique({
+            const collision = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
             })
 
-            if (!thirdParty) {
+            if (!collision) {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleThirdPartyOwnership(user.id, thirdPartyId)
+            const verified = await handleCollisionOwnership(driver.id, thirdPartyId)
 
             try {
                 if (verified) {
-                    return await db.thirdParty.update({
+                    return await db.collision.update({
                         where: {
                             id: thirdPartyId
                         },
@@ -67,14 +67,14 @@ export default {
             }
         },
 
-        adminUpdateThirdParty: async (_, {
+        adminUpdateCollision: async (_, {
             thirdPartyId,
             accidentId,
             location
         }, context) => {
             const admin = await checkAdminAuth(context)
 
-            const thirdPartyRecord = await db.thirdParty.findUnique({
+            const thirdPartyRecord = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
@@ -84,11 +84,11 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId, accidentId)
+            const verified = await handleAdminCollisionOwnership(admin.id, thirdPartyId, accidentId)
 
             try {
                 if (verified) {
-                    return await db.thirdParty.update({
+                    return await db.collision.update({
                         where: {
                             id: thirdPartyId
                         },
@@ -102,24 +102,24 @@ export default {
             }
         },
 
-        deleteThirdParty: async (_, {
+        deleteCollision: async (_, {
             thirdPartyId
         }, context) => {
             const admin = await checkAdminAuth(context)
 
-            const thirdParty = await db.thirdParty.findUnique({
+            const collision = await db.collision.findUnique({
                 where: {
                     id: thirdPartyId
                 }
             })
 
-            if (!thirdParty) {
+            if (!collision) {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId)
+            const verified = await handleAdminCollisionOwnership(admin.id, thirdPartyId)
 
-            await db.thirdParty.update({
+            await db.collision.update({
                 where: {
                     id: thirdPartyId
                 },
@@ -130,7 +130,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.thirdParty.delete({
+                    return await db.collision.delete({
                         where: {
                             id: thirdPartyId
                         }

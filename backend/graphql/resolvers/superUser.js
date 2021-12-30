@@ -14,7 +14,7 @@ export default {
             try {
                 return await db.admin.findMany({
                     include: {
-                        users: true
+                        drivers: true
                     }
                 })
             } catch (error) {
@@ -33,11 +33,11 @@ export default {
                         id: adminId
                     },
                     include: {
-                        users: {
+                        drivers: {
                             include: {
                                 accidents: {
                                     include: {
-                                        thirdParty: true,
+                                        collision: true,
                                         propertyAccident: true,
                                         injuryAccident: true,
                                         injuryReport: true,
@@ -54,19 +54,19 @@ export default {
         },
 
         sGetUserById: async (_, {
-            userId
+            driverId
         }, context) => {
             const superUser = await checkSuperAuth(context)
 
             try {
-                return await db.user.findUnique({
+                return await db.driver.findUnique({
                     where: {
-                        id: userId
+                        id: driverId
                     },
                     include: {
                         accidents: {
                             include: {
-                                thirdParty: true,
+                                collision: true,
                                 propertyAccident: true,
                                 injuryAccident: true,
                                 injuryReport: true,
@@ -90,12 +90,12 @@ export default {
                         id: accidentId
                     },
                     include: {
-                        thirdParty: true,
+                        collision: true,
                         propertyAccident: true,
                         injuryAccident: true,
                         injuryReport: true,
                         hitPerson: true,
-                        user: true
+                        driver: true
                     }
                 })
             } catch (error) {
@@ -205,7 +205,7 @@ export default {
             })
 
             if (!foundUser) {
-                errors.general = 'User not found';
+                errors.general = 'Driver not found';
                 throw new UserInputError('Incorrect Email', {
                     errors
                 });
@@ -238,7 +238,7 @@ export default {
             const superUser = await checkSuperAuth(context)
 
             try {
-                await db.user.updateMany({
+                await db.driver.updateMany({
                     where: {
                         adminId: adminId
                     },
@@ -254,7 +254,7 @@ export default {
                         accountStatus: "Suspended"
                     },
                     include: {
-                        users: true
+                        drivers: true
                     }
                 })
             } catch (error) {
@@ -272,20 +272,20 @@ export default {
                     id: adminId
                 },
                 include: {
-                    users: true
+                    drivers: true
                 }
             })
 
-            await admin.users.forEach(async (user) => {
-                const foundUser = await db.user.findUnique({
+            await admin.drivers.forEach(async (driver) => {
+                const foundUser = await db.driver.findUnique({
                     where: {
-                        id: user.id
+                        id: driver.id
                     },
                     include: {
                         accidents: {
                             include: {
                                 hitPerson: true,
-                                thirdParty: true,
+                                collision: true,
                                 injuryAccident: true,
                                 propertyAccident: true,
                                 injuryReport: true
@@ -309,14 +309,14 @@ export default {
                         })
                     }
 
-                    const foundThirdParty = await db.thirdParty.findMany({
+                    const foundThirdParty = await db.collision.findMany({
                         where: {
                             accidentId: accident.id
                         }
                     })
 
                     if (foundThirdParty.length !== 0) {
-                        await db.thirdParty.deleteMany({
+                        await db.collision.deleteMany({
                             where: {
                                 accidentId: accident.id
                             }
@@ -372,9 +372,9 @@ export default {
                     })
                 })
 
-                await db.user.delete({
+                await db.driver.delete({
                     where: {
-                        id: user.id
+                        id: driver.id
                     }
                 })
             })

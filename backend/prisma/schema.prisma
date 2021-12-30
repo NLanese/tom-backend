@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
 
@@ -9,203 +9,225 @@ datasource db {
 }
 
 model SuperUser {
-  id                  Int         @id @default(autoincrement())
-  role                Role        @default(SUPERADMIN)
-  firstname           String
-  lastname            String
-  username            String      @unique
-  email               String      @unique
-  password            String
-  phoneNumber         String
+  id          Int    @id @default(autoincrement())
+  role        Role   @default(SUPERADMIN)
+  firstname   String
+  lastname    String
+  username    String @unique
+  email       String @unique
+  password    String
+  phoneNumber String
 }
 
 model Admin {
-  id                              Int         @id @default(autoincrement())
-  role                            Role        @default(ADMIN)
-  firstname                       String
-  lastname                        String
-  username                        String      @unique
-  email                           String      @unique
-  phoneNumber                     String
-  password                        String
-  paid                            Boolean     @default(false)
-  accountStatus                   String      @default("Free")
-  deleted                         Boolean     @default(false)
-  resetPasswordToken              String?
-  resetPasswordTokenExpiration    Int?
-  adminSignUpToken                String?
-  users                           User[]
+  id                           Int     @id @default(autoincrement())
+  role                         Role    @default(ADMIN)
+  firstname                    String
+  lastname                     String
+  username                     String  @unique
+  email                        String  @unique
+  phoneNumber                  String
+  password                     String
+
+  dsp_name                     String
+  dsp_shortcode                String
+
+  paid                         Boolean @default(false)
+  accountStatus                String  @default("Free")
+  deleted                      Boolean @default(false)
+  resetPasswordToken           String?
+  resetPasswordTokenExpiration Int?
+  adminSignUpToken             String?
+  drivers                        Driver[]
 }
 
-model User {
-  id                              Int         @id @default(autoincrement())
-  role                            Role        @default(USER)
-  firstname                       String
-  lastname                        String
-  username                        String      @unique
-  email                           String      @unique
-  phoneNumber                     String
-  password                        String
-  employeeId                      String?
-  fico                            Int?
-  netradyne                       Int?
-  delivery_associate              Int?
-  seatbelt                        Boolean?
-  speeding                        Boolean?
-  defects                         Int?
-  customer_delivery_feedback      Int?
-  delivered_and_recieved          Int?
-  delivery_completion_rate        Int?
-  photo_on_delivery               Int?
-  call_compliance                 Int?
-  scan_compliance                 Int?
-  has_many_accidents              Int?
-  belongs_to_team                 Boolean?
-  attendance                      Json?
-  productivity                    Json?
+model Driver {
+  id                         Int      @id @default(autoincrement())
+  role                       Role     @default(USER)
+  firstname                  String
+  lastname                   String
+  username                   String   @unique
+  email                      String   @unique
+  phoneNumber                String
+  password                   String
+  employeeId                 String?
+  fico                       Int?
+  netradyne                  Int?
+  delivery_associate         Int?
+  seatbelt                   Boolean?
+  speeding                   Boolean?
+  defects                    Int?
+  customer_delivery_feedback Int?
+  delivered_and_recieved     Int?
+  delivery_completion_rate   Int?
+  photo_on_delivery          Int?
+  call_compliance            Int?
+  scan_compliance            Int?
+  has_many_accidents         Int?
+  belongs_to_team            Boolean?
+  attendance                 Json?
+  productivity               Json?
 
-  locked                          Boolean     @default(false) // Used to avoid driver from editing accident after report has been filed
-  deleted                         Boolean     @default(false)
-  resetPasswordToken              String?
-  resetPasswordTokenExpiration    Int?
+  dsp_name                   String?
+  dsp_shortcode              String?
 
-  adminId                         Int
-  adminFirstname                  String
-  adminLastname                   String
-  adminUsername                   String
-  adminEmail                      String
-  adminAccountStanding            String?
-  adminApproved                   Boolean   @default(false)
-  admin                           Admin         @relation(fields: [adminId], references: [id])
-  accidents                       Accident[]
+  locked                       Boolean @default(false) // Used to avoid driver from editing accident after report has been filed
+  deleted                      Boolean @default(false)
+  resetPasswordToken           String?
+  resetPasswordTokenExpiration Int?
+
+  adminId              Int
+  adminFirstname       String
+  adminLastname        String
+  adminUsername        String
+  adminEmail           String
+  adminAccountStanding String?
+  adminApproved        Boolean    @default(false)
+  admin                Admin      @relation(fields: [adminId], references: [id])
+  accidents            Accident[]
+  vehicle              Vehicle?
+}
+
+model Vehicle {
+  id                     Int     @id @default(autoincrement())
+  driverId                 Int
+  driver                   Driver    @relation(fields: [driverId], references: [id])
+  vehicle_number           String?
+  amazon_logo              String?
 }
 
 model Accident {
-  id                      Int         @id @default(autoincrement())
-  userId                  Int
-  user                    User        @relation(fields: [userId], references: [id])
-  name                    String
-  using_safety            Boolean
-  safety_failed           Boolean
-  number_package_carried  Int
-  safety_equipment_used   String
+  id                     Int     @id @default(autoincrement())
+  driverId                 Int
+  driver                   Driver    @relation(fields: [driverId], references: [id])
+  name                   String
+  using_safety           Boolean?
+  safety_failed          Boolean?
+  number_package_carried Int?
+  safety_equipment_used  String?
 
-  deleted                         Boolean     @default(false)
+  police_report_information Json?
+  police_report_photos      Json?
+  vehicle_number            String?
+  amazon_logo               Boolean?
 
-  hitPerson               HitPerson[]
-  thirdParty              ThirdParty[]
-  injuryAccident          InjuryAccident[]
-  propertyAccident        PropertyAccident[]
-  injuryReport            InjuryReport[]
+  location                String
+  deleted Boolean @default(false)
+
+  hitPerson        HitPerson[]
+  collision        Collision[]
+  injuryAccident   InjuryAccident[]
+  propertyAccident PropertyAccident[]
+  injuryReport     InjuryReport[]
 }
 
 model HitPerson {
-  id                    Int         @id @default(autoincrement())
+  id                    Int        @id @default(autoincrement())
   accidentId            Int
-  accident              Accident[]  @relation(fields: [accidentId], references: [id])
+  accident              Accident[] @relation(fields: [accidentId], references: [id])
   medical_attention     Boolean
   vehicle_or_pedestrian String
   previous_damage       String
   contact_infomation    Json
   injury                String
 
-  deleted                         Boolean     @default(false)
+  deleted Boolean @default(false)
 
-  accident_pictures     Image[]
+  accident_pictures Image[]
 }
 
-model ThirdParty {
-  id                  Int         @id @default(autoincrement())
-  accidentId          Int
-  accident            Accident[]  @relation(fields: [accidentId], references: [id])
-  location            String
+model Collision {
+  id         Int        @id @default(autoincrement())
+  accidentId Int
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
+  location   String
 
-  deleted                         Boolean     @default(false)
+  deleted Boolean @default(false)
 }
 
 model InjuryAccident {
-  id                      Int         @id @default(autoincrement())
-  self_injured            Boolean
-  vehicle_number          String
-  amazon_logo             Boolean
-  exact_address           String
-  action_before_accident  Json
-  police_report           Json
-  weather                 String
-  wet_ground              Boolean
-  slippery_ground         Boolean
-  extra_info              String
-  rushed_prior            Boolean
+  id                     Int     @id @default(autoincrement())
+  self_injured           Boolean
+  vehicle_number         String
+  amazon_logo            Boolean
+  exact_address          String
+  action_before_accident Json
+  police_report          Json
+  weather                String
+  wet_ground             Boolean
+  slippery_ground        Boolean
+  extra_info             String
+  rushed_prior           Boolean
 
-  deleted                         Boolean     @default(false)
+  deleted Boolean @default(false)
 
-  accident_pictures       Image[]
+  accident_pictures Image[]
 
-  accidentId              Int
-  accident                Accident[] @relation(fields: [accidentId], references: [id])
+  accidentId Int
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model PropertyAccident {
-  id                      Int       @id @default(autoincrement())
-  self_injured            Boolean
-  vehicle_number          String
-  amazon_logo             Boolean
-  exact_address           String
-  action_before_accident  Json
-  police_report           Json
-  weather                 String
-  wet_ground              Boolean
-  slippery_ground         Boolean
-  extra_info              String
-  rushed_prior            Boolean
+  id                     Int     @id @default(autoincrement())
+  self_injured           Boolean
+  vehicle_number         String
+  amazon_logo            Boolean
+  exact_address          String
+  action_before_accident Json
+  police_report          Json
+  weather                String
+  wet_ground             Boolean
+  slippery_ground        Boolean
+  extra_info             String
+  rushed_prior           Boolean
 
-  deleted                         Boolean     @default(false)
+  deleted Boolean @default(false)
 
-  accident_pictures       Image[]
+  accident_pictures Image[]
 
-  accidentId              Int
-  accident                Accident[] @relation(fields: [accidentId], references: [id])
+  accidentId Int
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model InjuryReport {
-  id                      Int       @id @default(autoincrement())
-  immediate_attention     Boolean
-  late                    Json
-  self_injured            Boolean
-  injury_type             Json
-  other_injured           Boolean
-  before_injury           String
-  packages                Json
-  safety_equipment        Json
-  unsafe_conditions       Json
-  pain_level              Int
-  additional_information  String
+  id                     Int     @id @default(autoincrement())
+  immediate_attention    Boolean
+  late                   Json
+  self_injured           Boolean
+  injury_type            Json
+  other_injured          Boolean
+  before_injury          String
+  packages               Json
+  safety_equipment       Json
+  unsafe_conditions      Json
+  pain_level             Int
+  additional_information String
 
-  deleted                         Boolean     @default(false)
+  deleted Boolean @default(false)
 
-  accidentId              Int
-  accident                Accident[] @relation(fields: [accidentId], references: [id])
+  accidentId Int
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model Image {
-  id                      Int       @id @default(autoincrement())
-  fieldname               String
-  path                    String
-  mimetype                String
-  size                    Int
-  originalname            String
-  encoding                String
-  destination             String
-  filename                String
+  id           Int    @id @default(autoincrement())
+  fieldname    String
+  path         String
+  mimetype     String
+  size         Int
+  originalname String
+  encoding     String
+  destination  String
+  filename     String
 
-  injuryAccidentId        Int
-  injuryAccident          InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
+  injuryAccidentId Int
+  injuryAccident   InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
 
-  hitPersonId             Int
-  hitPerson               HitPerson     @relation(fields: [hitPersonId], references: [id])
+  hitPersonId Int
+  hitPerson   HitPerson @relation(fields: [hitPersonId], references: [id])
 
-  propertyAccidentId        Int
-  propertyAccident        PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
+  propertyAccidentId Int
+  propertyAccident   PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
 }
 
 enum Role {

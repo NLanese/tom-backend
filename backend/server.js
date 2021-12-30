@@ -46,8 +46,8 @@ const startApolloServer = async () => {
         res.send('Welcome to SQL');
     });
 
-    app.get('/password/reset/:userId', async (req, res) => {
-        sendForgotPasswordEmail(req.params.userId)
+    app.get('/password/reset/:driverId', async (req, res) => {
+        sendForgotPasswordEmail(req.params.driverId)
         res.send(200)
     })
 

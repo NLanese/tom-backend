@@ -1,6 +1,6 @@
 import db from "../../generatePrisma.js"
 
-const handleInjuryAccidentOwnership = async (userId, injuryAccidentId) => {
+const handleInjuryAccidentOwnership = async (driverId, injuryAccidentId) => {
     const injuryAccident = await db.injuryAccident.findUnique({
         where: {
             id: injuryAccidentId
@@ -8,17 +8,17 @@ const handleInjuryAccidentOwnership = async (userId, injuryAccidentId) => {
         include: {
             accident: {
                 include: {
-                    user: true
+                    driver: true
                 }
             }
         }
     })
 
-    if (!injuryAccident || !injuryAccident.accident || !injuryAccident.accident.user) {
+    if (!injuryAccident || !injuryAccident.accident || !injuryAccident.accident[0].driver) {
         throw new Error('Error: Accident record doesnt exist')
     }
 
-    if (userId === injuryAccident.accident[0].user.id){
+    if (driverId === injuryAccident.accident[0].driver.id){
         return true
     }
 

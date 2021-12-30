@@ -16,19 +16,19 @@ const handleAdminInjuryReportOwnership = async (adminId, injuryReportId) => {
             id: injuryReport.accidentId
         },
         include: {
-            user: true
+            driver: true
         }
     })
 
-    if (!accident || !accident.user) {
+    if (!accident || !accident.driver) {
         throw new Error('Error: Accident does not exist')
     }
 
-    if (accident.user.adminId === adminId) {
+    if (accident.driver.adminId === adminId) {
         return true
     }
 
-    throw new Error('Error: User is not your employee')
+    throw new Error('Error: Driver is not your employee')
 
 }
 
