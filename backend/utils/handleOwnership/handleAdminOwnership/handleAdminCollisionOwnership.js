@@ -1,9 +1,9 @@
 import db from "../../generatePrisma.js";
 
-const handleAdminCollisionOwnership = async (adminId, thirdPartyId) => {
+const handleAdminCollisionOwnership = async (adminId, collisionId) => {
     const collision = await db.collision.findUnique({
         where: {
-            id: thirdPartyId
+            id: collisionId
         }
     })
 
