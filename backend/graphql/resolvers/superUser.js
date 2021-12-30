@@ -37,7 +37,7 @@ export default {
                             include: {
                                 accidents: {
                                     include: {
-                                        thirdParty: true,
+                                        collision: true,
                                         propertyAccident: true,
                                         injuryAccident: true,
                                         injuryReport: true,
@@ -66,7 +66,7 @@ export default {
                     include: {
                         accidents: {
                             include: {
-                                thirdParty: true,
+                                collision: true,
                                 propertyAccident: true,
                                 injuryAccident: true,
                                 injuryReport: true,
@@ -90,7 +90,7 @@ export default {
                         id: accidentId
                     },
                     include: {
-                        thirdParty: true,
+                        collision: true,
                         propertyAccident: true,
                         injuryAccident: true,
                         injuryReport: true,
@@ -285,7 +285,7 @@ export default {
                         accidents: {
                             include: {
                                 hitPerson: true,
-                                thirdParty: true,
+                                collision: true,
                                 injuryAccident: true,
                                 propertyAccident: true,
                                 injuryReport: true
@@ -309,14 +309,14 @@ export default {
                         })
                     }
 
-                    const foundThirdParty = await db.thirdParty.findMany({
+                    const foundThirdParty = await db.collision.findMany({
                         where: {
                             accidentId: accident.id
                         }
                     })
 
                     if (foundThirdParty.length !== 0) {
-                        await db.thirdParty.deleteMany({
+                        await db.collision.deleteMany({
                             where: {
                                 accidentId: accident.id
                             }

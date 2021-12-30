@@ -25,7 +25,7 @@ export default {
 						accidents: {
 							include: {
 								hitPerson: true,
-								thirdParty: true,
+								collision: true,
 								injuryAccident: true,
 								propertyAccident: true,
 								injuryReport: true
@@ -65,7 +65,7 @@ export default {
 							accidents: {
 								include: {
 									hitPerson: true,
-									thirdParty: true,
+									collision: true,
 									injuryAccident: true,
 									propertyAccident: true,
 									injuryReport: true
@@ -178,6 +178,8 @@ export default {
 						adminFirstname: foundAdmin.firstname,
 						adminLastname: foundAdmin.lastname,
 						adminUsername: foundAdmin.username,
+						dsp_name: foundAdmin.dsp_name,
+						dsp_shortcode: foundAdmin.dsp_shortcode
 					},
 				});
 			} catch (error) {

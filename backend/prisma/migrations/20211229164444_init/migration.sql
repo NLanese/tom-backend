@@ -2,6 +2,20 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
 
 -- CreateTable
+CREATE TABLE "SuperUser" (
+    "id" SERIAL NOT NULL,
+    "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
+    "firstname" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+
+    CONSTRAINT "SuperUser_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Admin" (
     "id" SERIAL NOT NULL,
     "role" "Role" NOT NULL DEFAULT E'ADMIN',
@@ -11,9 +25,14 @@ CREATE TABLE "Admin" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "dsp_name" TEXT NOT NULL,
+    "dsp_shortcode" TEXT NOT NULL,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStatus" TEXT NOT NULL DEFAULT E'Free',
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "resetPasswordToken" TEXT,
+    "resetPasswordTokenExpiration" INTEGER,
+    "adminSignUpToken" TEXT,
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
@@ -45,6 +64,9 @@ CREATE TABLE "User" (
     "belongs_to_team" BOOLEAN,
     "attendance" JSONB,
     "productivity" JSONB,
+    "dsp_name" TEXT,
+    "dsp_shortcode" TEXT,
+    "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
@@ -67,7 +89,12 @@ CREATE TABLE "Accident" (
     "using_safety" BOOLEAN NOT NULL,
     "safety_failed" BOOLEAN NOT NULL,
     "number_package_carried" INTEGER NOT NULL,
-    "safety_equipment_used" JSONB NOT NULL,
+    "safety_equipment_used" TEXT NOT NULL,
+    "police_report_information" JSONB NOT NULL,
+    "police_report_photos" JSONB NOT NULL,
+    "vehicle_number" TEXT NOT NULL,
+    "amazon_logo" BOOLEAN NOT NULL,
+    "location" TEXT NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Accident_pkey" PRIMARY KEY ("id")
@@ -88,13 +115,13 @@ CREATE TABLE "HitPerson" (
 );
 
 -- CreateTable
-CREATE TABLE "ThirdParty" (
+CREATE TABLE "Collision" (
     "id" SERIAL NOT NULL,
     "accidentId" INTEGER NOT NULL,
     "location" TEXT NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "ThirdParty_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Collision_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -182,7 +209,7 @@ CREATE TABLE "_AccidentToHitPerson" (
 );
 
 -- CreateTable
-CREATE TABLE "_AccidentToThirdParty" (
+CREATE TABLE "_AccidentToCollision" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -206,6 +233,12 @@ CREATE TABLE "_AccidentToInjuryReport" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SuperUser_username_key" ON "SuperUser"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SuperUser_email_key" ON "SuperUser"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
 
 -- CreateIndex
@@ -224,10 +257,10 @@ CREATE UNIQUE INDEX "_AccidentToHitPerson_AB_unique" ON "_AccidentToHitPerson"("
 CREATE INDEX "_AccidentToHitPerson_B_index" ON "_AccidentToHitPerson"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_AccidentToThirdParty_AB_unique" ON "_AccidentToThirdParty"("A", "B");
+CREATE UNIQUE INDEX "_AccidentToCollision_AB_unique" ON "_AccidentToCollision"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_AccidentToThirdParty_B_index" ON "_AccidentToThirdParty"("B");
+CREATE INDEX "_AccidentToCollision_B_index" ON "_AccidentToCollision"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AccidentToInjuryAccident_AB_unique" ON "_AccidentToInjuryAccident"("A", "B");
@@ -257,7 +290,7 @@ ALTER TABLE "Accident" ADD CONSTRAINT "Accident_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ThirdParty" ADD CONSTRAINT "ThirdParty_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Collision" ADD CONSTRAINT "Collision_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -284,10 +317,10 @@ ALTER TABLE "_AccidentToHitPerson" ADD FOREIGN KEY ("A") REFERENCES "Accident"("
 ALTER TABLE "_AccidentToHitPerson" ADD FOREIGN KEY ("B") REFERENCES "HitPerson"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AccidentToThirdParty" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccidentToCollision" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AccidentToThirdParty" ADD FOREIGN KEY ("B") REFERENCES "ThirdParty"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccidentToCollision" ADD FOREIGN KEY ("B") REFERENCES "Collision"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AccidentToInjuryAccident" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;

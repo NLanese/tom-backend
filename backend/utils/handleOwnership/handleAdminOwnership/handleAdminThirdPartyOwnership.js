@@ -1,19 +1,19 @@
 import db from "../../generatePrisma.js";
 
 const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId) => {
-    const thirdParty = await db.thirdParty.findUnique({
+    const collision = await db.collision.findUnique({
         where: {
             id: thirdPartyId
         }
     })
 
-    if (!thirdParty) {
+    if (!collision) {
         throw new Error('Error: Third party record does not exist')
     }
 
     const accident = await db.accident.findUnique({
         where: {
-            id: thirdParty.accidentId
+            id: collision.accidentId
         },
         include: {
             user: true

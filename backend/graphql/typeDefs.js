@@ -24,6 +24,10 @@ const typeDefs = gql`
         email:                        String
         password:                     String
         phoneNumber:                  String
+
+        dsp_name:                     String
+        dsp_shortcode:                String
+
         token:                        String
         paid:                         Boolean
         accountStatus:                String
@@ -58,6 +62,9 @@ const typeDefs = gql`
         attendence:                   JSON
         productivity:                 JSON
 
+        dsp_name:                     String
+        dsp_shortcode:                String
+
         deleted:                      Boolean
         resetPasswordToken:           String
         resetPasswordTokenExpiration: Int
@@ -72,7 +79,7 @@ const typeDefs = gql`
 
         accidents:                    [Accident]
         admin:                        [Admin]
-        # thirdParty:                   [ThirdParty]
+        # collision:                   [Collision]
     }
 
     type Accident {
@@ -82,12 +89,18 @@ const typeDefs = gql`
         using_safety:           Boolean
         safety_failed:          Boolean
         number_package_carried: Int
-        safety_equipment_used:  JSON
+        safety_equipment_used:  String
 
+        police_report_information: JSON
+        police_report_photos:      JSON
+        vehicle_number:            String
+        amazon_logo:               Boolean
+
+        location:               String
         deleted:                      Boolean
 
         hitPerson:              [HitPerson]
-        thirdParty:             [ThirdParty]
+        collision:             [Collision]
         injuryAccident:         [InjuryAccident]
         propertyAccident:       [PropertyAccident]
         injuryReport:           [InjuryReport]
@@ -110,7 +123,7 @@ const typeDefs = gql`
     }
 
 
-    type ThirdParty{
+    type Collision{
         id:                     ID
         accidentId:             Int
         accident:               [Accident]
@@ -245,13 +258,13 @@ const typeDefs = gql`
       sUpdateAdmin(adminId: Int!, email: String, username: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
 
       # ADMIN MUTATIONS
-      signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Admin!
+      signupAdmin(email: String!, username: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
       signinAdmin(email: String!, password: String!): Admin!
-      updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String, phoneNumber: String): Admin!
-      adminCreateAccident(userId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
+      updateAdmin(email: String, username: String, firstname: String, lastname: String, password: String, phoneNumber: String, dsp_name: String, dsp_shortcode: String): Admin!
+      adminCreateAccident(userId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: String!): Accident
       adminUpdateEmployeeByID(userId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, adminUsername: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String): User
-      adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
-      adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): ThirdParty
+      adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String): Accident
+      adminUpdateThirdParty(thirdPartyId: Int, accidentId: Int, location: String): Collision
       adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
       adminUpdatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
       adminUpdateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
@@ -266,14 +279,14 @@ const typeDefs = gql`
       deleteUser(userId: Int!): User!
 
       # ACCIDENT MUTATIONS
-      createAccident(name: String! using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: JSON!): Accident
-      updateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: JSON): Accident
+      createAccident(name: String! using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String, location: String!): Accident
+      updateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String, location: String): Accident
       deleteAccident(accidentId: Int): Accident
 
       # THIRD PARTY MUTATIONS
-      createThirdParty(accidentId: Int!, location: String!): ThirdParty
-      updateThirdParty(thirdPartyId: Int, location: String): ThirdParty
-      deleteThirdParty(thirdPartyId: Int): ThirdParty
+      createThirdParty(accidentId: Int!, location: String!): Collision
+      updateThirdParty(thirdPartyId: Int, location: String): Collision
+      deleteThirdParty(thirdPartyId: Int): Collision
 
       # INJURY ACCIDENT MUTATIONS
       createInjuryAccident(accidentId: Int!, self_injured: Boolean!, vehicle_number: String!, amazon_logo: Boolean!, exact_address: String!, action_before_accident: JSON!, police_report: JSON!, weather: String!, wet_ground: Boolean!, slippery_ground: Boolean!, extra_info: String!, rushed_prior: Boolean!): InjuryAccident
