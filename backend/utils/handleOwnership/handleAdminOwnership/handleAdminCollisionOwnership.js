@@ -1,6 +1,6 @@
 import db from "../../generatePrisma.js";
 
-const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId) => {
+const handleAdminCollisionOwnership = async (adminId, thirdPartyId) => {
     const collision = await db.collision.findUnique({
         where: {
             id: thirdPartyId
@@ -31,4 +31,4 @@ const handleAdminThirdPartyOwnership = async (adminId, thirdPartyId) => {
     throw new Error('Error: Driver is nor your employee')
 }
 
-export default handleAdminThirdPartyOwnership
+export default handleAdminCollisionOwnership

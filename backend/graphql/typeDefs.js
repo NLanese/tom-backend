@@ -79,7 +79,14 @@ const typeDefs = gql`
 
         accidents:                    [Accident]
         admin:                        [Admin]
-        # collision:                   [Collision]
+        vehicle:                      Vehicle
+    }
+
+    type Vehicle {
+      id:         ID
+      driver:     Driver
+      vehicle_number: String
+      amazon_logo: String
     }
 
     type Accident {

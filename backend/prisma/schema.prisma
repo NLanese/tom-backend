@@ -85,6 +85,15 @@ model Driver {
   adminApproved        Boolean    @default(false)
   admin                Admin      @relation(fields: [adminId], references: [id])
   accidents            Accident[]
+  vehicle              Vehicle?
+}
+
+model Vehicle {
+  id                     Int     @id @default(autoincrement())
+  driverId                 Int
+  driver                   Driver    @relation(fields: [driverId], references: [id])
+  vehicle_number           String?
+  amazon_logo              String?
 }
 
 model Accident {

@@ -28,7 +28,8 @@ export default {
 								collision: true,
 								injuryAccident: true,
 								propertyAccident: true,
-								injuryReport: true
+								injuryReport: true,
+								vehicle: true
 							}
 						}
 					}
@@ -68,7 +69,8 @@ export default {
 									collision: true,
 									injuryAccident: true,
 									propertyAccident: true,
-									injuryReport: true
+									injuryReport: true,
+									vehicle:	true
 								}
 							}
 						}

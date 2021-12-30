@@ -14,7 +14,7 @@ const handleInjuryAccidentOwnership = async (driverId, injuryAccidentId) => {
         }
     })
 
-    if (!injuryAccident || !injuryAccident.accident || !injuryAccident.accident.driver) {
+    if (!injuryAccident || !injuryAccident.accident || !injuryAccident.accident[0].driver) {
         throw new Error('Error: Accident record doesnt exist')
     }
 

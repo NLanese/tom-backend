@@ -1,6 +1,6 @@
 import db from "../../generatePrisma.js"
 
-const handleThirdPartyOwnership = async (driverId, thirdPartyId) => {
+const handleCollisionOwnership = async (driverId, thirdPartyId) => {
     const collision = await db.collision.findUnique({
         where: {
             id: thirdPartyId
@@ -14,7 +14,9 @@ const handleThirdPartyOwnership = async (driverId, thirdPartyId) => {
         }
     })
 
-    if (!collision || !collision.accident || !collision.accident.driver) {
+    console.log(collision)
+
+    if (!collision || !collision.accident || !collision.accident[0].driver) {
         throw new Error('Error: Accident record does not exist')
     }
 
@@ -25,4 +27,4 @@ const handleThirdPartyOwnership = async (driverId, thirdPartyId) => {
     throw new Error('Error: Not owner of Third Party report')
 }
 
-export default handleThirdPartyOwnership
+export default handleCollisionOwnership

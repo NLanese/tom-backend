@@ -2,8 +2,8 @@ import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
-import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminThirdPartyOwnership.js';
-
+import handleAdminCollisionOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminCollisionOwnership.js';
+import handleCollisionOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleCollisionOwnership.js';
 
 export default {
     Mutation: {
@@ -49,7 +49,7 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleThirdPartyOwnership(driver.id, thirdPartyId)
+            const verified = await handleCollisionOwnership(driver.id, thirdPartyId)
 
             try {
                 if (verified) {
@@ -84,7 +84,7 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId, accidentId)
+            const verified = await handleAdminCollisionOwnership(admin.id, thirdPartyId, accidentId)
 
             try {
                 if (verified) {
@@ -117,7 +117,7 @@ export default {
                 throw new Error('Error: Third party record does not exist')
             }
 
-            const verified = await handleAdminThirdPartyOwnership(admin.id, thirdPartyId)
+            const verified = await handleAdminCollisionOwnership(admin.id, thirdPartyId)
 
             await db.collision.update({
                 where: {
