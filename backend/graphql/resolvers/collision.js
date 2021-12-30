@@ -7,7 +7,7 @@ import handleAdminThirdPartyOwnership from '../../utils/handleOwnership/handleAd
 
 export default {
     Mutation: {
-        createThirdParty: async (_, {
+        createCollision: async (_, {
             accidentId,
             location
         }, context) => {
@@ -33,7 +33,7 @@ export default {
             }
         },
 
-        updateThirdParty: async (_, {
+        updateCollision: async (_, {
             thirdPartyId,
             location
         }, context) => {
@@ -67,7 +67,7 @@ export default {
             }
         },
 
-        adminUpdateThirdParty: async (_, {
+        adminUpdateCollision: async (_, {
             thirdPartyId,
             accidentId,
             location
@@ -102,7 +102,7 @@ export default {
             }
         },
 
-        deleteThirdParty: async (_, {
+        deleteCollision: async (_, {
             thirdPartyId
         }, context) => {
             const admin = await checkAdminAuth(context)
