@@ -250,6 +250,7 @@ const typeDefs = gql`
       # DRIVER QUERIES
       getDriver: Driver
       getDriverById(driverId: Int): Driver
+      getDriversForDspByFico: [Driver] 
 
       # ACCIDENT QUERIES
       getAccidents: [Accident]

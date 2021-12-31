@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-const checkUserAuth = (context) => {
+const checkDriverAuth = (context) => {
 	const authHeader = context.req.headers.authorization
 		
 	if (authHeader) {
@@ -24,4 +24,4 @@ const checkUserAuth = (context) => {
 	throw new Error('Error: No Auth header found');
 };
 
-export default checkUserAuth;
+export default checkDriverAuth;

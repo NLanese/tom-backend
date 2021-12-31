@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import hashPassword from '../../utils/passwordHashing.js';
 import generateUserToken from '../../utils/generateToken/generateDriverToken.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
+import checkDriverAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput,	validateLoginInput } from '../../utils/validators.js';
 import db from '../../utils/generatePrisma.js';
@@ -13,7 +13,7 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 export default {
 	Query: {
 		getDriver: async (_, {}, context) => {
-			const driver = await checkUserAuth(context)
+			const driver = await checkDriverAuth(context)
 
 			try {
 				return await db.driver.findUnique({
@@ -76,6 +76,41 @@ export default {
 						}
 					})
 				}
+			} catch (error) {
+				throw new Error(error)
+			}
+		},
+
+		getDriversForDspByFico: async (_, {}, context) => {
+			const driver = await checkDriverAuth(context)
+
+			const foundDriver = await db.driver.findUnique({
+				where: {
+					id: driver.id
+				}
+			})
+
+			if (!foundDriver) {
+				throw new Error('Error: Driver does not exist')
+			}
+
+			const drivers = await db.driver.findMany({
+				where: {
+					dsp_name: foundDriver.dsp_name
+				},
+				orderBy: [
+					{
+						fico: 'desc'
+					}
+				]
+			})
+
+			if (!drivers) {
+				throw new Error('Error: No drivers with dsp name')
+			}
+
+			try {
+				return drivers
 			} catch (error) {
 				throw new Error(error)
 			}
@@ -269,7 +304,7 @@ export default {
 				accidents
 			}
 		}, context) => {
-			const driver = await checkUserAuth(context);
+			const driver = await checkDriverAuth(context);
 
 			if (typeof password !== "undefined") {
 				password = await hashPassword(password)

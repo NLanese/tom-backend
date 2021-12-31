@@ -1,4 +1,4 @@
-import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
+import checkDriverAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
@@ -22,7 +22,7 @@ export default {
             pain_level,
             additional_information
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
             const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
@@ -70,7 +70,7 @@ export default {
             pain_level,
             additional_information
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
 
             const injuryReport = await db.injuryReport.findUnique({
                 where: {
