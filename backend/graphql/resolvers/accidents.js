@@ -1,5 +1,5 @@
 import db from '../../utils/generatePrisma.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
+import checkDriverAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
 import handleAdminAccidentOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminAccidentOwnership.js';
@@ -9,7 +9,7 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 export default {
     Query: {
         getAccidents: async (_, {}, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
 
             try {
                 return await db.accident.findMany({
@@ -32,7 +32,7 @@ export default {
         getAccidentById: async (_, {
             accidentId
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
             const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
@@ -65,7 +65,7 @@ export default {
             safety_equipment_used,
             location
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
 
             // ------- CREATE -------
             try {
@@ -133,7 +133,7 @@ export default {
             safety_equipment_used,
             failed_safety
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
             const accident = await db.accident.findUnique({
                 where: {
                     id: accidentId

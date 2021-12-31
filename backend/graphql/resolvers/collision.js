@@ -1,5 +1,5 @@
 import checkAdminAuth from '../../utils/checkAuthorization/check-admin-auth.js';
-import checkUserAuth from '../../utils/checkAuthorization/check-driver-auth.js';
+import checkDriverAuth from '../../utils/checkAuthorization/check-driver-auth.js';
 import db from '../../utils/generatePrisma.js';
 import handleAccidentOwnership from '../../utils/handleOwnership/handleDriverOwnership/handleAccidentOwnership.js';
 import handleAdminCollisionOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminCollisionOwnership.js';
@@ -11,7 +11,7 @@ export default {
             accidentId,
             location
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
             const verified = await handleAccidentOwnership(driver.id, accidentId)
 
             try {
@@ -37,7 +37,7 @@ export default {
             collisionId,
             location
         }, context) => {
-            const driver = await checkUserAuth(context)
+            const driver = await checkDriverAuth(context)
 
             const collision = await db.collision.findUnique({
                 where: {
