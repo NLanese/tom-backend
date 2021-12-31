@@ -101,6 +101,9 @@ export default {
 				orderBy: [
 					{
 						fico: 'desc'
+					},
+					{
+						netradyne: 'asc'
 					}
 				]
 			})
