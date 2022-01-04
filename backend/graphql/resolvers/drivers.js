@@ -81,7 +81,7 @@ export default {
 			}
 		},
 
-		getDriversForDspByFico: async (_, {}, context) => {
+		getDriversForDspForSafetyAndCompliance: async (_, {}, context) => {
 			const driver = await checkDriverAuth(context)
 
 			const foundDriver = await db.driver.findUnique({
@@ -104,6 +104,85 @@ export default {
 					},
 					{
 						netradyne: 'asc'
+					}
+				]
+			})
+
+			if (!drivers) {
+				throw new Error('Error: No drivers with dsp name')
+			}
+
+			try {
+				return drivers
+			} catch (error) {
+				throw new Error(error)
+			}
+		},
+
+		getDriversForDspForTeam: async (_, {}, context) => {
+			const driver = await checkDriverAuth(context)
+
+			const foundDriver = await db.driver.findUnique({
+				where: {
+					id: driver.id
+				}
+			})
+
+			if (!foundDriver) {
+				throw new Error('Error: Driver does not exist')
+			}
+
+			const drivers = await db.driver.findMany({
+				where: {
+					dsp_name: foundDriver.dsp_name
+				},
+				orderBy: [
+					{
+						defects: 'desc'
+					},
+					{
+						customer_delivery_feedback: 'desc'
+					}
+				]
+			})
+
+			if (!drivers) {
+				throw new Error('Error: No drivers with dsp name')
+			}
+
+			try {
+				return drivers
+			} catch (error) {
+				throw new Error(error)
+			}
+		},
+
+		getDriversForScorecardQuality: async (_, {}, context) => {
+			const driver = await checkDriverAuth(context)
+
+			const foundDriver = await db.driver.findUnique({
+				where: {
+					id: driver.id
+				}
+			})
+
+			if (!foundDriver) {
+				throw new Error('Error: Driver does not exist')
+			}
+
+			const drivers = await db.driver.findMany({
+				where: {
+					dsp_name: foundDriver.dsp_name
+				},
+				orderBy: [
+					{
+						delivery_completion_rate: 'desc'
+					},
+					{
+						delivered_and_recieved: 'desc'
+					},
+					{
+						photo_on_delivery: 'desc'
 					}
 				]
 			})
