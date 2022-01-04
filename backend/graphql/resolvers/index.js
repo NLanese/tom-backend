@@ -8,13 +8,15 @@ import propertyAccidentResolvers from './propertyAccident.js';
 import hitPersonResolvers from './hitPerson.js';
 import injuryReportResolvers from './injuryReport.js';
 import superUserResolvers from './superUser.js';
+import messagesResolvers from './messages.js'
 
 export default {
     Query: {
         ...adminResolvers.Query,
         ...usersResolvers.Query,
         ...accidentsResolvers.Query,
-        ...superUserResolvers.Query
+        ...superUserResolvers.Query,
+        ...messagesResolvers.Query,
     },
     Mutation: {
         ...adminResolvers.Mutation,
@@ -25,7 +27,8 @@ export default {
         ...propertyAccidentResolvers.Mutation,
         ...hitPersonResolvers.Mutation,
         ...injuryReportResolvers.Mutation,
-        ...superUserResolvers.Mutation
+        ...superUserResolvers.Mutation,
+        ...messagesResolvers.Mutation,
     },
     JSON: GraphQLJSON,
 }

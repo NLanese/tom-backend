@@ -29,7 +29,8 @@ export default {
 								injuryAccident: true,
 								propertyAccident: true,
 								injuryReport: true,
-								vehicle: true
+								vehicle: true,
+								messages: true
 							}
 						}
 					}

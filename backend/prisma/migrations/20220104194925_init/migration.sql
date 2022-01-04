@@ -4,6 +4,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
 -- CreateTable
 CREATE TABLE "SuperUser" (
     "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
@@ -18,6 +19,7 @@ CREATE TABLE "SuperUser" (
 -- CreateTable
 CREATE TABLE "Admin" (
     "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'ADMIN',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
@@ -25,6 +27,7 @@ CREATE TABLE "Admin" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "profile_Pick" JSONB,
     "dsp_name" TEXT NOT NULL,
     "dsp_shortcode" TEXT NOT NULL,
     "paid" BOOLEAN NOT NULL DEFAULT false,
@@ -40,6 +43,7 @@ CREATE TABLE "Admin" (
 -- CreateTable
 CREATE TABLE "Driver" (
     "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
@@ -47,12 +51,12 @@ CREATE TABLE "Driver" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "profile_Pick" JSONB,
     "employeeId" TEXT,
     "fico" INTEGER,
     "netradyne" INTEGER,
     "delivery_associate" INTEGER,
-    "seatbelt" BOOLEAN,
-    "speeding" BOOLEAN,
+    "seatbelt_and_speeding" INTEGER,
     "defects" INTEGER,
     "customer_delivery_feedback" INTEGER,
     "delivered_and_recieved" INTEGER,
@@ -82,8 +86,30 @@ CREATE TABLE "Driver" (
 );
 
 -- CreateTable
+CREATE TABLE "Messages" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "content" TEXT NOT NULL,
+    "driverId" INTEGER NOT NULL,
+    "adminId" INTEGER NOT NULL,
+
+    CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Vehicle" (
+    "id" SERIAL NOT NULL,
+    "driverId" INTEGER NOT NULL,
+    "vehicle_number" TEXT,
+    "amazon_logo" TEXT,
+
+    CONSTRAINT "Vehicle_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Accident" (
     "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "driverId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "using_safety" BOOLEAN,
@@ -96,6 +122,7 @@ CREATE TABLE "Accident" (
     "amazon_logo" BOOLEAN,
     "location" TEXT NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "filled" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Accident_pkey" PRIMARY KEY ("id")
 );
@@ -251,6 +278,9 @@ CREATE UNIQUE INDEX "Driver_username_key" ON "Driver"("username");
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_AccidentToHitPerson_AB_unique" ON "_AccidentToHitPerson"("A", "B");
 
 -- CreateIndex
@@ -282,6 +312,15 @@ CREATE INDEX "_AccidentToInjuryReport_B_index" ON "_AccidentToInjuryReport"("B")
 
 -- AddForeignKey
 ALTER TABLE "Driver" ADD CONSTRAINT "Driver_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
