@@ -93,13 +93,6 @@ const typeDefs = gql`
     admin:  Admin
   }
 
-  # type AdminMessages {
-  #   id:        ID
-  #   createdAt: Date
-  #   content: String
-	# 	author: Admin
-  # }
-
   type Vehicle {
     id:         ID
     driver:     Driver
@@ -360,6 +353,7 @@ const typeDefs = gql`
     netradyne: Int
     delivery_associate: Int
     defects: Int
+    seatbelt_and_speeding: Int
     customer_delivery_feedback: Int
     delivered_and_recieved: Int
     delivery_completion_rate: Int
@@ -370,7 +364,6 @@ const typeDefs = gql`
     belongs_to_team: Boolean
     attendance: JSON
     productivity: JSON
-    # accidents: Accident[]
 	}
 `;
 
