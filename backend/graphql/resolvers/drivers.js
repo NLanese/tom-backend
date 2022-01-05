@@ -29,13 +29,14 @@ export default {
 								injuryAccident: true,
 								propertyAccident: true,
 								injuryReport: true,
-								vehicle: true,
-								messages: true
 							}
-						}
+						},
+						vehicle: true,
+						messages: true
 					}
 				})
 			} catch (error) {
+				console.log(error)
 				throw new Error(error)
 			}
 		},
