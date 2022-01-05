@@ -8,7 +8,6 @@ CREATE TABLE "SuperUser" (
     "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
@@ -23,7 +22,6 @@ CREATE TABLE "Admin" (
     "role" "Role" NOT NULL DEFAULT E'ADMIN',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -47,7 +45,6 @@ CREATE TABLE "Driver" (
     "role" "Role" NOT NULL DEFAULT E'USER',
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -77,8 +74,8 @@ CREATE TABLE "Driver" (
     "adminId" INTEGER NOT NULL,
     "adminFirstname" TEXT NOT NULL,
     "adminLastname" TEXT NOT NULL,
-    "adminUsername" TEXT NOT NULL,
     "adminEmail" TEXT NOT NULL,
+    "adminPhoneNumber" TEXT NOT NULL,
     "adminAccountStanding" TEXT,
     "adminApproved" BOOLEAN NOT NULL DEFAULT false,
 
@@ -260,19 +257,10 @@ CREATE TABLE "_AccidentToInjuryReport" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SuperUser_username_key" ON "SuperUser"("username");
-
--- CreateIndex
 CREATE UNIQUE INDEX "SuperUser_email_key" ON "SuperUser"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Driver_username_key" ON "Driver"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");

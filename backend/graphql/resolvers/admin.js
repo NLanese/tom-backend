@@ -138,7 +138,6 @@ export default {
         signupAdmin: async (_, {
             email,
             password,
-            username,
             firstname,
             lastname,
             phoneNumber,
@@ -150,13 +149,11 @@ export default {
                     valid,
                     errors
                 } = validateRegisterInput(
-                    username,
                     email,
                     password
                 );
 
                 email = await email.toUpperCase()
-                username = await username.toUpperCase()
                 firstname = await firstname.toUpperCase()
                 lastname = await lastname.toUpperCase()
                 dsp_name = await dsp_name.toUpperCase()
@@ -182,26 +179,11 @@ export default {
                     });
                 }
 
-                const checkUsername = await db.admin.findUnique({
-                    where: {
-                        username
-                    },
-                });
-
-                if (checkUsername) {
-                    throw new UserInputError('username is taken', {
-                        errors: {
-                            email: 'Username is already taken',
-                        },
-                    });
-                }
-
                 password = await hashPassword(password)
 
                 return await db.admin.create({
                     data: {
                         email: email,
-                        username: username,
                         password: password,
                         firstname: firstname,
                         lastname: lastname,
@@ -211,6 +193,7 @@ export default {
                     },
                 });
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         },
@@ -276,7 +259,6 @@ export default {
         // ------ UPDATE -------
         updateAdmin: async (_, {
             email,
-            username,
             firstname,
             lastname,
             password,
@@ -290,10 +272,6 @@ export default {
 
             if (email) {
                 email = email.toUpperCase()
-            }
-
-            if (username) {
-                username = username.toUpperCase()
             }
 
             if (firstname) {
@@ -318,7 +296,6 @@ export default {
                     },
                     data: {
                         email: email,
-                        username: username,
                         firstname: firstname,
                         lastname: lastname,
                         password: password,
@@ -338,7 +315,6 @@ export default {
             adminEmail,
             adminFirstName,
             adminLastname,
-            adminUsername,
             employeeId,
             phoneNumber,
             fico,
@@ -381,7 +357,6 @@ export default {
                             adminEmail: adminEmail,
                             adminFirstName: adminFirstName,
                             adminLastname: adminLastname,
-                            adminUsername: adminUsername,
                             phoneNumber: phoneNumber,
                             employeeId: employeeId,
                             fico: fico,
