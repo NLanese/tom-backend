@@ -51,8 +51,7 @@ const typeDefs = gql`
     fico:                         Int
     netradyne:                    Int
     delivery_associate:           Int
-    seatbelt:                     Boolean
-    speeding:                     Boolean
+    seatbelt_and_speeding:        Int
     defects:                      Int
     customer_delivery_feedback:   Int
     delivered_and_recieved:       Int
@@ -93,13 +92,6 @@ const typeDefs = gql`
 		driver: Driver
     admin:  Admin
   }
-
-  # type AdminMessages {
-  #   id:        ID
-  #   createdAt: Date
-  #   content: String
-	# 	author: Admin
-  # }
 
   type Vehicle {
     id:         ID
@@ -290,7 +282,7 @@ const typeDefs = gql`
     signinAdmin(email: String!, password: String!): Admin!
     updateAdmin(email: String, firstname: String, lastname: String, password: String, phoneNumber: String, dsp_name: String, dsp_shortcode: String): Admin!
     adminCreateAccident(driverId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: String!): Accident
-    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt: Boolean, speeding: Boolean, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String): Driver
+    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: Int, netradyne: Int, delivery_associate: Int, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String, seatbelt_and_speeding: Int): Driver
     adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String): Accident
     adminUpdateCollision(collisionId: Int, accidentId: Int, location: String): Collision
     adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
@@ -360,9 +352,8 @@ const typeDefs = gql`
     fico: Int
     netradyne: Int
     delivery_associate: Int
-    seatbelt: Boolean
-    speeding: Boolean
     defects: Int
+    seatbelt_and_speeding: Int
     customer_delivery_feedback: Int
     delivered_and_recieved: Int
     delivery_completion_rate: Int
@@ -373,7 +364,6 @@ const typeDefs = gql`
     belongs_to_team: Boolean
     attendance: JSON
     productivity: JSON
-    # accidents: Accident[]
 	}
 `;
 
