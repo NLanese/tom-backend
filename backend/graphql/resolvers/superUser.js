@@ -108,7 +108,6 @@ export default {
         sSignupSuper: async (_, {
             email,
             password,
-            username,
             firstname,
             lastname,
             phoneNumber
@@ -118,13 +117,11 @@ export default {
                     valid,
                     errors
                 } = validateRegisterInput(
-                    username,
                     email,
                     password
                 );
 
                 email = await email.toUpperCase()
-                username = await username.toUpperCase()
                 firstname = await firstname.toUpperCase()
                 lastname = await lastname.toUpperCase()
 
@@ -148,26 +145,11 @@ export default {
                     });
                 }
 
-                const checkUsername = await db.admin.findUnique({
-                    where: {
-                        username
-                    },
-                });
-
-                if (checkUsername) {
-                    throw new UserInputError('username is taken', {
-                        errors: {
-                            email: 'Username is already taken',
-                        },
-                    });
-                }
-
                 password = await hashPassword(password)
 
                 return await db.admin.create({
                     data: {
                         email: email,
-                        username: username,
                         password: password,
                         firstname: firstname,
                         lastname: lastname,
@@ -393,7 +375,6 @@ export default {
         sUpdateAdmin: async (_, {
             adminId,
             email,
-            username,
             firstname,
             lastname,
             password,
@@ -412,10 +393,6 @@ export default {
                     email = email.toUpperCase()
                 }
 
-                if (username) {
-                    username = username.toUpperCase()
-                }
-
                 if (firstname) {
                     firstname = firstname.toUpperCase()
                 }
@@ -430,7 +407,6 @@ export default {
                     },
                     data: {
                         email: email,
-                        username: username,
                         firstname: firstname,
                         lastname: lastname,
                         password: password,
