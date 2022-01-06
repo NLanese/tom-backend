@@ -121,15 +121,6 @@ model NotifiedMessages {
   admin  Admin?  @relation(fields: [adminId], references: [id])
 }
 
-
-// model AdmimMessages {
-//   id Int @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   content String
-//   adminId Int
-//   author Admin @relation(fields: [adminId], references: [id])
-// }
-
 model Vehicle {
   id Int @id @default(autoincrement())
   driverId Int

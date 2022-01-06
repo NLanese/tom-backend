@@ -289,6 +289,7 @@ const typeDefs = gql`
     getNotifiedMessages: [NotifiedMessages]
 
   }
+  
   type Mutation {
     # SUPER USER MUTATIONS
     sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
