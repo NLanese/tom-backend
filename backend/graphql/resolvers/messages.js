@@ -76,7 +76,7 @@ export default {
 
             try {
                 if (verified) {
-                    return await db.messages.create({
+                    const message = await db.messages.create({
                         data: {
                             content: content,
                             driver: {
@@ -85,12 +85,36 @@ export default {
                                 }
                             },
                             admin: {
-							    connect: {
-								    id: admin.id
-							    }
+                                connect: {
+                                    id: admin.id
+                                }
                             }    
                         }
-                    }) 
+                    })
+
+                    await db.notifiedMessages.create({
+                        data: {
+                            admin: {
+                                connect: {
+                                    id: admin.id
+                                },
+                            },
+                            content: content,
+                            type: 'message',
+                            from: driver.firstname
+                        }
+                    })
+
+                    await db.admin.update({
+                        where:{
+                            id: admin.id
+                        },
+                        data: {
+                            notified: true
+                        }
+                    })
+
+                    return message
                 } 
             } catch (error) {
                 throw new Error(error)
@@ -110,11 +134,16 @@ export default {
                 throw new Error('Error: Driver does not exist')
             }
 
-            const verified = await handleAdminUserOwnership(admin.id, foundDriver.id)
+            const adminObj = await db.admin.findUnique({
+                where: {
+                    id: admin.id
+                }
+            })
 
+            const verified = await handleAdminUserOwnership(admin.id, foundDriver.id)
             try {
                 if (verified) {
-                    return await db.messages.create({
+                    const message = await db.messages.create({
                         data: {
                             content: content,
                             driver: {
@@ -129,6 +158,30 @@ export default {
                             } 
                         }
                     })
+
+                    await db.notifiedMessages.create({
+                        data: {
+                            content: content,
+                            type: 'message',
+                            from: adminObj.firstname,
+                            driver: {
+                                connect: {
+                                    id: driverId
+                                },
+                            },
+                        }
+                    })
+
+                    await db.driver.update({
+                        where:{
+                            id: driverId
+                        },
+                        data: {
+                            notified: true
+                        }
+                    })
+
+                    return message
                 }
             } catch (error) {
                 throw new Error(error)

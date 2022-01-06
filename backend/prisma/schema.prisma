@@ -35,12 +35,14 @@ model Admin {
 
   paid Boolean @default(false)
   accountStatus String @default("Free")
+  notified Boolean @default(false)
   deleted Boolean @default(false)
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
   adminSignUpToken String?
   drivers Driver[]
   messages Messages[]
+  notifiedMessages NotifiedMessages[] 
 }
 
 model Driver {
@@ -74,6 +76,7 @@ model Driver {
   dsp_name String?
   dsp_shortcode String?
 
+  notified Boolean @default(false)
   locked Boolean @default(false) // Used to avoid driver from editing accident after report has been filed
   deleted Boolean @default(false)
   resetPasswordToken String?
@@ -91,6 +94,7 @@ model Driver {
   admin Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
+  notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
 }
 
@@ -103,6 +107,20 @@ model Messages {
   driver Driver @relation(fields: [driverId], references: [id])
   admin  Admin  @relation(fields: [adminId], references: [id])
 }
+
+model NotifiedMessages {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  read    Boolean @default(false)
+  content String
+  from    String
+  type    String
+  driverId Int?
+  adminId  Int?
+  driver Driver? @relation(fields: [driverId], references: [id])
+  admin  Admin?  @relation(fields: [adminId], references: [id])
+}
+
 
 // model AdmimMessages {
 //   id Int @id @default(autoincrement())

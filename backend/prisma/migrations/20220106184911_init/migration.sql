@@ -30,6 +30,7 @@ CREATE TABLE "Admin" (
     "dsp_shortcode" TEXT NOT NULL,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStatus" TEXT NOT NULL DEFAULT E'Free',
+    "notified" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
@@ -67,6 +68,7 @@ CREATE TABLE "Driver" (
     "productivity" JSONB,
     "dsp_name" TEXT,
     "dsp_shortcode" TEXT,
+    "notified" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
@@ -91,6 +93,20 @@ CREATE TABLE "Messages" (
     "adminId" INTEGER NOT NULL,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotifiedMessages" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "content" TEXT NOT NULL,
+    "from" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "driverId" INTEGER,
+    "adminId" INTEGER,
+
+    CONSTRAINT "NotifiedMessages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -306,6 +322,12 @@ ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("dri
 
 -- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
