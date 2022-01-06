@@ -13,9 +13,7 @@ const handleCollisionOwnership = async (driverId, collisionId) => {
             }
         }
     })
-
-    console.log(collision)
-
+    
     if (!collision || !collision.accident || !collision.accident[0].driver) {
         throw new Error('Error: Accident record does not exist')
     }
