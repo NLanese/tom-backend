@@ -139,7 +139,7 @@ export default {
 				},
 				orderBy: [
 					{
-						defects: 'desc'
+						defects: 'asc'
 					},
 					{
 						customer_delivery_feedback: 'desc'
