@@ -35,6 +35,7 @@ const typeDefs = gql`
     deleted:                      Boolean
     drivers:                      [Driver]
     messages:                     [Messages]
+    NotifiedMessages:             [NotifiedMessages]
   }
 
   type Driver {
@@ -83,6 +84,7 @@ const typeDefs = gql`
     admin:                        [Admin]
     vehicle:                      Vehicle
     messages:                     [Messages]
+    NotifiedMessages:             [NotifiedMessages]
   }
 
   type Messages {
@@ -93,6 +95,25 @@ const typeDefs = gql`
     admin:  Admin
   }
 
+  type NotifiedMessages {
+    id:         ID
+    createdAt:  Date
+    content:    String
+    from:       String
+    type:       String
+    driverId:   Int
+    adminId:    Int 
+    driver:     Driver
+    admin:      Admin
+  }
+
+  # type AdminMessages {
+  #   id:        ID
+  #   createdAt: Date
+  #   content: String
+	# 	author: Admin
+  # }
+  
   type Vehicle {
     id:         ID
     driver:     Driver
@@ -268,7 +289,6 @@ const typeDefs = gql`
     getMessages: [Messages]
     adminGetMessagesWithDriver(driverId: Int!): [Messages]
   }
-
   type Mutation {
     # SUPER USER MUTATIONS
     sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!

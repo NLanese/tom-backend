@@ -41,6 +41,7 @@ model Admin {
   adminSignUpToken String?
   drivers Driver[]
   messages Messages[]
+  notifiedMessages NotifiedMessages[] 
 }
 
 model Driver {
@@ -91,6 +92,7 @@ model Driver {
   admin Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
+  notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
 }
 
@@ -103,6 +105,19 @@ model Messages {
   driver Driver @relation(fields: [driverId], references: [id])
   admin  Admin  @relation(fields: [adminId], references: [id])
 }
+
+model NotifiedMessages {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  content String
+  from    String
+  type    String
+  driverId Int?
+  adminId  Int?
+  driver Driver? @relation(fields: [driverId], references: [id])
+  admin  Admin?  @relation(fields: [adminId], references: [id])
+}
+
 
 // model AdmimMessages {
 //   id Int @id @default(autoincrement())
