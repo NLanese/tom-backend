@@ -186,7 +186,6 @@ export default {
 
             try {
                 if (verified) {
-                    console.log("Delete in progress")
                     return await db.injuryAccident.delete({
                         where: {
                             id: injuryAccidentId

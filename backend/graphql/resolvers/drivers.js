@@ -265,8 +265,6 @@ export default {
 
 				password = await hashPassword(password)
 
-				console.log("hit")
-				console.log(firstname + " " + lastname)
 				return await db.driver.create({
 					data: {
 						admin: {
@@ -288,7 +286,6 @@ export default {
 					},
 				});
 			} catch (error) {
-				console.log(error)
 				throw new Error(error);
 			}
 		},
@@ -303,7 +300,6 @@ export default {
 				errors,
 				valid
 			} = validateLoginInput(email, password);
-			console.log("hit")
 			if (!valid) {
 				throw new userInputError('Errors', {
 					errors
