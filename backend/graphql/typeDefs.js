@@ -32,6 +32,7 @@ const typeDefs = gql`
     token:                        String
     paid:                         Boolean
     accountStatus:                String
+    notified:                     Boolean
     deleted:                      Boolean
     drivers:                      [Driver]
     messages:                     [Messages]
@@ -68,6 +69,7 @@ const typeDefs = gql`
     dsp_name:                     String
     dsp_shortcode:                String
 
+    notified:                     Boolean
     deleted:                      Boolean
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
@@ -98,6 +100,7 @@ const typeDefs = gql`
   type NotifiedMessages {
     id:         ID
     createdAt:  Date
+    read:       Boolean
     content:    String
     from:       String
     type:       String
@@ -107,13 +110,6 @@ const typeDefs = gql`
     admin:      Admin
   }
 
-  # type AdminMessages {
-  #   id:        ID
-  #   createdAt: Date
-  #   content: String
-	# 	author: Admin
-  # }
-  
   type Vehicle {
     id:         ID
     driver:     Driver
@@ -288,7 +284,12 @@ const typeDefs = gql`
     # MESSAGES QUERIES
     getMessages: [Messages]
     adminGetMessagesWithDriver(driverId: Int!): [Messages]
+
+    # NOTIFIED MESSAGES QUERIES
+    getNotifiedMessages: [NotifiedMessages]
+
   }
+  
   type Mutation {
     # SUPER USER MUTATIONS
     sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
@@ -302,7 +303,7 @@ const typeDefs = gql`
     signinAdmin(email: String!, password: String!): Admin!
     updateAdmin(email: String, firstname: String, lastname: String, password: String, phoneNumber: String, dsp_name: String, dsp_shortcode: String): Admin!
     adminCreateAccident(driverId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: String!): Accident
-    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: Int, netradyne: Int, delivery_associate: Int, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String, seatbelt_and_speeding: Int): Driver
+    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt_and_speeding: Int, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: Int, photo_on_delivery: Int, call_compliance: Int, scan_compliance: Int, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String): Driver
     adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String): Accident
     adminUpdateCollision(collisionId: Int, accidentId: Int, location: String): Collision
     adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
@@ -314,6 +315,10 @@ const typeDefs = gql`
     # MESSAGE MUTATIOINS
     sendMessageToAdmin(content: String!): Messages
     adminSendMessageToDriver(driverId: Int!, content: String!): Messages
+
+    # NOTIFIED MESSAGES MUTATIONS
+    readNotifiedMessage(notifiedMessageId: Int!): NotifiedMessages
+    notifiedToFalse: Driver
 
     # DRIVER MUTATIONS
     signupDriver(signupInput: SignupInput!): Driver!
