@@ -76,6 +76,26 @@ export default {
 
             try {
                 if (verified) {
+                    await db.notifiedMessages.create({
+                        data: {
+                            admin: {
+                                connect: {
+                                    id: admin.id
+                                },
+                            },
+                            content: content,
+                            type: 'message',
+                            from: driver.firstname
+                        }
+                    })
+                    await db.admin.update({
+                        where:{
+                            id: admin.id
+                        },
+                        data: {
+                            notified: true
+                        }
+                    })
                     return await db.messages.create({
                         data: {
                             content: content,
@@ -110,10 +130,35 @@ export default {
                 throw new Error('Error: Driver does not exist')
             }
 
-            const verified = await handleAdminUserOwnership(admin.id, foundDriver.id)
+            const adminObj = await db.admin.findUnique({
+                where: {
+                    id: admin.id
+                }
+            })
 
+            const verified = await handleAdminUserOwnership(admin.id, foundDriver.id)
             try {
                 if (verified) {
+                    await db.notifiedMessages.create({
+                        data: {
+                            content: content,
+                            type: 'message',
+                            from: adminObj.firstname,
+                            driver: {
+                                connect: {
+                                    id: driverId
+                                },
+                            },
+                        }
+                    })
+                    await db.driver.update({
+                        where:{
+                            id: driverId
+                        },
+                        data: {
+                            notified: true
+                        }
+                    })
                     return await db.messages.create({
                         data: {
                             content: content,

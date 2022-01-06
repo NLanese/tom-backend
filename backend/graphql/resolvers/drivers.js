@@ -32,7 +32,8 @@ export default {
 							}
 						},
 						vehicle: true,
-						messages: true
+						messages: true,
+						notifiedMessages: true
 					}
 				})
 			} catch (error) {

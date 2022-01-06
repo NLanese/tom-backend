@@ -32,6 +32,7 @@ const typeDefs = gql`
     token:                        String
     paid:                         Boolean
     accountStatus:                String
+    notified:                     Boolean
     deleted:                      Boolean
     drivers:                      [Driver]
     messages:                     [Messages]
@@ -68,6 +69,7 @@ const typeDefs = gql`
     dsp_name:                     String
     dsp_shortcode:                String
 
+    notified:                     Boolean
     deleted:                      Boolean
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
@@ -98,6 +100,7 @@ const typeDefs = gql`
   type NotifiedMessages {
     id:         ID
     createdAt:  Date
+    read:       Boolean
     content:    String
     from:       String
     type:       String
