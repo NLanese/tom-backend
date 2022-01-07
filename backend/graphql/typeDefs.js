@@ -93,6 +93,7 @@ const typeDefs = gql`
     id:        ID
     createdAt: Date
     content: String
+    from: String
 		driver: Driver
     admin:  Admin
   }
@@ -284,6 +285,7 @@ const typeDefs = gql`
     # MESSAGES QUERIES
     getMessages: [Messages]
     adminGetMessagesWithDriver(driverId: Int!): [Messages]
+    getMessageWithAdmin: [Messages]
 
     # NOTIFIED MESSAGES QUERIES
     getNotifiedMessages: [NotifiedMessages]

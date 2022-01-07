@@ -102,6 +102,7 @@ model Messages {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   content String
+  from  String
   driverId Int
   adminId  Int
   driver Driver @relation(fields: [driverId], references: [id])
