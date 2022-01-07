@@ -11,7 +11,12 @@ export default {
                     include: {
                         driver: true,
                         admin: true
-                    }
+                    },
+                    orderBy: [
+                        {
+                            id: 'desc'
+                        },
+                    ]
                 })
             } catch (error) {
                 throw new Error(error)
@@ -38,13 +43,50 @@ export default {
                     return await db.messages.findMany({
                         where: {
                             driverId: foundDriver.id,
-                        }
+                        },
                     })
                 }
             } catch (error) {
                 throw new Error(error)
             }
+        },
 
+        getMessageWithAdmin: async (_, {}, context) => {
+            const driver = await checkDriverAuth(context)
+
+            const foundDriver = await db.driver.findUnique({
+                where: {
+                    id: driver.id
+                }
+            })
+
+            if (!foundDriver) {
+                throw new Error('Error: Driver does not exist')
+            }
+
+            const admin = await db.admin.findUnique({
+                where: {
+                    id: foundDriver.adminId
+                }
+            })
+
+            if (!admin) {
+                throw new Error('Error: Admin does not exist')
+            }
+
+            const verified = handleAdminUserOwnership(admin.id, foundDriver.id)
+
+            try {
+                if (verified) {
+                    return await db.messages.findMany({
+                        where: {
+                            driverId: foundDriver.id,
+                        },
+                    })
+                }
+            } catch (error) {
+                throw new Error(error)
+            }
         }
     },
 
@@ -79,6 +121,7 @@ export default {
                     const message = await db.messages.create({
                         data: {
                             content: content,
+                            from: foundDriver.firstname,
                             driver: {
                                 connect: {
                                     id: driver.id
@@ -101,7 +144,7 @@ export default {
                             },
                             content: content,
                             type: 'message',
-                            from: driver.firstname
+                            from: foundDriver.firstname
                         }
                     })
 
@@ -141,11 +184,13 @@ export default {
             })
 
             const verified = await handleAdminUserOwnership(admin.id, foundDriver.id)
+
             try {
                 if (verified) {
                     const message = await db.messages.create({
                         data: {
                             content: content,
+                            from: adminObj.firstname,
                             driver: {
                                 connect: {
                                     id: foundDriver.id
