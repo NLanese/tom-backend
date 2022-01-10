@@ -12,7 +12,12 @@ export default {
                 return await db.notifiedMessages.findMany({
                     where: {
                         driverId: driver.id
-                    }
+                    },
+                    orderBy: [
+                        {
+                            id: 'desc'
+                        },
+                    ]
                 })
             } catch (error) {
                 throw new Error(error)
