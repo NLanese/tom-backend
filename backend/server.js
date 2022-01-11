@@ -53,7 +53,6 @@ const startApolloServer = async () => {
     app.use(express.urlencoded({
         extended: true
     }));
-    // app.use(fileUpload());
 
     app.get('/', (req, res) => {
         res.send('Welcome to SQL');
@@ -80,24 +79,16 @@ const startApolloServer = async () => {
     })
 
     app.post('/pdfparse', uploadStorage.single("file"), async (req, res) => {
-        await pdfToExcel(req.file)
-        // const parseData = await parseExcel(req)
+        let parseData;
+        const file = req.file
+        await pdfToExcel(file)
 
-        // await console.log(parseData)
-
-        await res.send(200)
+        setTimeout(async () => {
+            let parseData = await parseExcel(req)
+            await console.log(parseData)
+            await res.send(parseData)
+        }, 3000)
     })
-
-    // app.post("/extract-text", (req, res) => {
-    //     if (!req.files && !req.files.pdfFile) {
-    //         res.status(400);
-    //         res.end();
-    //     }
-    
-    //     pdfParse(req.files.pdfFile).then(result => {
-    //         res.send(result.text);
-    //     });
-    // });
 
     await server.start()
     await server.applyMiddleware({
