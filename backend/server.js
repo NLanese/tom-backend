@@ -18,6 +18,17 @@ const startApolloServer = async () => {
     const upload = multer({
         dest: 'uploads/'
     })
+
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, "uploads/")
+        },
+        filename: (req, file, cb) => {
+          cb(null, Date.now() + "-" + file.originalname)
+        },
+      })
+    const uploadStorage = multer({ storage: storage })
+
     const unlinkFile = util.promisify(fs.unlink)
 
     const server = new ApolloServer({
@@ -68,13 +79,13 @@ const startApolloServer = async () => {
         })
     })
 
-    app.post('/pdfparse', async (req, res) => {
-        await pdfToExcel(req)
-        const parseData = await parseExcel(req)
+    app.post('/pdfparse', uploadStorage.single("file"), async (req, res) => {
+        await pdfToExcel(req.file)
+        // const parseData = await parseExcel(req)
 
-        await console.log(parseData)
+        // await console.log(parseData)
 
-        await res.send(parseData)
+        await res.send(200)
     })
 
     // app.post("/extract-text", (req, res) => {

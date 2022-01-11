@@ -22,9 +22,7 @@ const pdfToExcel = async (pdfFile) => {
     });
     
     var form = await req.form();
-    await form.append('file', fs.createReadStream('./just-the-scorecard.pdf'));
-
-    return true
+    await form.append('file', fs.createReadStream(`./${pdfFile.path}`));
 }
 
 const parseExcel = async (filePath) => {
