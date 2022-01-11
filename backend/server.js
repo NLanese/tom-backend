@@ -9,7 +9,7 @@ import multer from 'multer'
 import fs from 'fs'
 import util from 'util'
 import sendForgotPasswordEmail from './utils/twoFactorAuth/forgotPasswordEmail.js'
-import pdfToExcel from './utils/pdfParser/pdfParser.js'
+import { pdfToExcel, parseExcel } from './utils/pdfParser/pdfParser.js'
 
 dotenv.config();
 
@@ -69,10 +69,10 @@ const startApolloServer = async () => {
     })
 
     app.post('/pdfparse', async (req, res) => {
-        // console.log(req.file)
-        pdfToExcel(req)
+        await pdfToExcel(req)
+        await parseExcel(req)
 
-        res.send(200)
+        await res.send(200)
     })
 
     // app.post("/extract-text", (req, res) => {
