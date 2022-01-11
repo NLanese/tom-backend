@@ -70,9 +70,11 @@ const startApolloServer = async () => {
 
     app.post('/pdfparse', async (req, res) => {
         await pdfToExcel(req)
-        await parseExcel(req)
+        const parseData = await parseExcel(req)
 
-        await res.send(200)
+        await console.log(parseData)
+
+        await res.send(parseData)
     })
 
     // app.post("/extract-text", (req, res) => {

@@ -7,9 +7,9 @@ var url = 'https://pdftables.com/api?key=6fzoiba56y4g&format=xlsx-single';
 // const readXlsxFile = require('read-excel-file/node')
 
 const pdfToExcel = async (pdfFile) => {
-    var req = await request.post({encoding: null, url: url}, function (err, resp, body) {
-        if (!err && resp.statusCode == 200) {
-            fs.writeFile("output.xlsx", body, function(err) {
+    var req = await request.post({encoding: null, url: url}, async function (err, resp, body) {
+        if (await !err && resp.statusCode == 200) {
+            await fs.writeFile("output.xlsx", body, function(err) {
                 if (err) {
                     console.log('error writing file');
                 }
@@ -23,11 +23,15 @@ const pdfToExcel = async (pdfFile) => {
     
     var form = await req.form();
     await form.append('file', fs.createReadStream('./just-the-scorecard.pdf'));
+
+    return true
 }
 
 const parseExcel = async (filePath) => {
     const workSheetsFromFile = await xlsx.parse(`./output.xlsx`);
-    await console.log(workSheetsFromFile[0].data)
+
+    return workSheetsFromFile[0].data
+    // await console.log(workSheetsFromFile[0].data)
 }
 
 export {
