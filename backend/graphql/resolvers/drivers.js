@@ -282,7 +282,8 @@ export default {
 						adminLastname: foundAdmin.lastname,
 						adminPhoneNumber: foundAdmin.phoneNumber,
 						dsp_name: foundAdmin.dsp_name,
-						dsp_shortcode: foundAdmin.dsp_shortcode
+						dsp_shortcode: foundAdmin.dsp_shortcode,
+						notified: false
 					},
 				});
 			} catch (error) {

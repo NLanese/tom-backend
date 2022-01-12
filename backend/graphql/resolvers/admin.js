@@ -492,7 +492,9 @@ export default {
 					});
 				}
 
-				// password = await hashPassword(employeeId)
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(password, salt);
+                password = hash;
 
                 return await db.driver.create({
 					data: {
@@ -502,7 +504,7 @@ export default {
 							}
 						},
 						email: email,
-						password: employeeId,
+						password: password,
 						firstname: firstname,
 						lastname: lastname,
 						phoneNumber: phoneNumber,
@@ -530,10 +532,12 @@ export default {
                         attended_delivery_accuracy: attended_delivery_accuracy,
                         dnr: dnr,
                         pod_opps: pod_opps,
-                        cc_opps: cc_opps
+                        cc_opps: cc_opps,
+                        notified: false
 					},
 				});
             } catch (error) {
+                console.log(email)
                 console.log(error)
                 throw new Error(error)
             }
