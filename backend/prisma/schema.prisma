@@ -56,18 +56,31 @@ model Driver {
   password String
   profile_Pick Json?
 
+  rank  Int?
   employeeId String?
-  fico Int?
+  tier String?
+  delivered Int?
+  key_focus_area String?
+  fico String?
+  seatbelt_and_speeding String?
+  distractions_rate String?
+  following_distance_rate String?
+  signal_violations_rate String?
+  delivery_completion_rate String?
+  delivered_and_recieved Int?
+  photo_on_delivery String?
+  call_compliance String?
+  scan_compliance String?
+  attended_delivery_accuracy Int?
+  dnr Int?
+  pod_opps Int?
+  cc_opps Int?
+
+
   netradyne Int?
   delivery_associate Int?
-  seatbelt_and_speeding Int?
   defects Int?
   customer_delivery_feedback Int?
-  delivered_and_recieved Int?
-  delivery_completion_rate Int?
-  photo_on_delivery Int?
-  call_compliance Int?
-  scan_compliance Int?
   has_many_accidents Int?
   belongs_to_team Boolean?
   attendance Json?

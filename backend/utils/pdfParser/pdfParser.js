@@ -12,9 +12,6 @@ const pdfToExcel = (pdfFile) => {
             fs.writeFile("output.xlsx", body, function(err) {
                 if (err) {
                     console.log('error writing file');
-                } else {
-                    console.log('complete')
-                    // return true
                 }
             });
         } else {
@@ -29,12 +26,8 @@ const pdfToExcel = (pdfFile) => {
 }
 
 const parseExcel = async (filePath) => {
-    console.log('jshHAJKDHASKJDH')
-
     const workSheetsFromFile = await xlsx.parse(`./output.xlsx`);
-
     return workSheetsFromFile[0].data
-    // await console.log(workSheetsFromFile[0].data)
 }
 
 export {

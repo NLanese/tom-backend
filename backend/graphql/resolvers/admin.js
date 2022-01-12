@@ -329,7 +329,18 @@ export default {
             has_many_accidents,
             belongs_to_team,
             attendance,
-            productivity
+            productivity,
+            rank,
+            tier,
+            delivered,
+            key_focus_area,
+            distractions_rate,
+            following_distance_rate,
+            signal_violations_rate,
+            attended_delivery_accuracy,
+            dnr,
+            pod_opps,
+            cc_opps
         }, context) => {
             const admin = await checkAdminAuth(context)
             const driver = await db.driver.findUnique({
@@ -372,7 +383,18 @@ export default {
                             attendance: attendance,
                             belongs_to_team: belongs_to_team,
                             attendance: attendance,
-                            productivity: productivity
+                            productivity: productivity,
+                            rank: rank,
+                            tier: tier,
+                            delivered: delivered,
+                            key_focus_area: key_focus_area,
+                            distractions_rate: distractions_rate,
+                            following_distance_rate: following_distance_rate,
+                            signal_violations_rate: signal_violations_rate,
+                            attended_delivery_accuracy: attended_delivery_accuracy,
+                            dnr: dnr,
+                            pod_opps: pod_opps,
+                            cc_opps: cc_opps
                         }
                     })
                 }
@@ -402,7 +424,123 @@ export default {
                 throw new Error(error)
             }
 
+        },
+
+        adminCreateDriverAccounts: async (_, {
+            email,
+            password,
+            firstname,
+            lastname,
+            phoneNumber,
+            adminEmail,
+            rank,
+            employeeId,
+            tier,
+            delivered,
+            key_focus_area,
+            fico,
+            seatbelt_and_speeding,
+            distractions_rate,
+            following_distance_rate,
+            signal_violations_rate,
+            delivery_completion_rate,
+            delivered_and_recieved,
+            photo_on_delivery,
+            call_compliance,
+            scan_compliance,
+            attended_delivery_accuracy,
+            dnr,
+            pod_opps,
+            cc_opps
+        }, context) => {
+            try {
+                const { valid, errors } = validateRegisterInput(email, password);
+                const admin = await checkAdminAuth(context)
+
+                email = await email.toUpperCase()
+				firstname = await firstname.toUpperCase()
+				lastname = await lastname.toUpperCase()
+				adminEmail = await adminEmail.toUpperCase()
+
+				const foundAdmin = await db.admin.findUnique({
+					where: {
+						id: admin.id
+					}
+				})
+
+				if (!foundAdmin) {
+					throw new Error('Error: Admin does not exist')
+				}
+
+				if (!valid) {
+					throw new userInputError('Errors', {
+						errors
+					});
+				}
+
+				const driver = await db.driver.findUnique({
+					where: {
+						email,
+					},
+				});
+
+				if (driver) {
+					throw new UserInputError('email is taken', {
+						errors: {
+							email: 'Email is already taken',
+						},
+					});
+				}
+
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(password, salt);
+                password = hash;
+
+                return await db.driver.create({
+					data: {
+						admin: {
+							connect: {
+								id: admin.id
+							}
+						},
+						email: email,
+						password: password,
+						firstname: firstname,
+						lastname: lastname,
+						phoneNumber: phoneNumber,
+						adminEmail: foundAdmin.email,
+						adminFirstname: foundAdmin.firstname,
+						adminLastname: foundAdmin.lastname,
+						adminPhoneNumber: foundAdmin.phoneNumber,
+						dsp_name: foundAdmin.dsp_name,
+						dsp_shortcode: foundAdmin.dsp_shortcode,
+                        rank: rank,
+                        employeeId: employeeId,
+                        tier: tier,
+                        delivered: delivered,
+                        key_focus_area: key_focus_area,
+                        fico: fico,
+                        seatbelt_and_speeding: seatbelt_and_speeding,
+                        distractions_rate: distractions_rate,
+                        following_distance_rate: following_distance_rate,
+                        signal_violations_rate: signal_violations_rate,
+                        delivery_completion_rate: delivery_completion_rate,
+                        delivered_and_recieved: delivered_and_recieved,
+                        photo_on_delivery: photo_on_delivery,
+                        call_compliance: call_compliance,
+                        scan_compliance: scan_compliance,
+                        attended_delivery_accuracy: attended_delivery_accuracy,
+                        dnr: dnr,
+                        pod_opps: pod_opps,
+                        cc_opps: cc_opps,
+                        notified: false
+					},
+				});
+            } catch (error) {
+                console.log(email)
+                console.log(error)
+                throw new Error(error)
+            }
         }
     }
-
 }
