@@ -63,6 +63,8 @@ model Driver {
   key_focus_area String?
   fico String?
   seatbelt_and_speeding String?
+  seatbelt_off_rate String?
+  speeding_event_rate String?
   distractions_rate String?
   following_distance_rate String?
   signal_violations_rate String?

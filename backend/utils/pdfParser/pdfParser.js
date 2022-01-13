@@ -1,15 +1,13 @@
 import request from 'request'
 import fs from 'fs'
-// import readXlsxFile from 'read-excel-file/node';
 import xlsx from 'node-xlsx';
 
-var url = 'https://pdftables.com/api?key=dxn1z7pa5li5&format=xlsx-single';
-// const readXlsxFile = require('read-excel-file/node')
+var url = 'https://pdftables.com/api?key=770oukvvx1wl&format=xlsx-single';
 
 const pdfToExcel = (pdfFile) => {
     var req = request.post({encoding: null, url: url}, async function (err, resp, body) {
         if (!err && resp.statusCode == 200) {
-            fs.writeFile("output.xlsx", body, function(err) {
+            fs.writeFile(`${pdfFile.path}.xlsx`, body, function(err) {
                 if (err) {
                     console.log('error writing file');
                 }
@@ -26,7 +24,7 @@ const pdfToExcel = (pdfFile) => {
 }
 
 const parseExcel = async (filePath) => {
-    const workSheetsFromFile = await xlsx.parse(`./output.xlsx`);
+    const workSheetsFromFile = await xlsx.parse(`./${filePath.path}.xlsx`);
     return workSheetsFromFile[0].data
 }
 
