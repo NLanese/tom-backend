@@ -317,8 +317,8 @@ export default {
             fico,
             netradyne,
             delivery_associate,
-            seatbelt,
-            speeding,
+            seatbelt_off_rate,
+            speeding_event_rate,
             defects,
             customer_delivery_feedback,
             delivered_and_recieved,
@@ -370,8 +370,8 @@ export default {
                             fico: fico,
                             netradyne: netradyne,
                             delivery_associate: delivery_associate,
-                            seatbelt: seatbelt,
-                            speeding: speeding,
+                            seatbelt_off_rate: seatbelt_off_rate,
+                            speeding_event_rate: speeding_event_rate,
                             defects: defects,
                             customer_delivery_feedback: customer_delivery_feedback,
                             delivered_and_recieved: delivered_and_recieved,
@@ -440,6 +440,8 @@ export default {
             key_focus_area,
             fico,
             seatbelt_and_speeding,
+            seatbelt_off_rate,
+            speeding_event_rate,
             distractions_rate,
             following_distance_rate,
             signal_violations_rate,
@@ -456,6 +458,9 @@ export default {
             try {
                 const { valid, errors } = validateRegisterInput(email, password);
                 const admin = await checkAdminAuth(context)
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(password, salt);
+                password = hash;
 
                 email = await email.toUpperCase()
 				firstname = await firstname.toUpperCase()
@@ -484,17 +489,41 @@ export default {
 					},
 				});
 
-				if (driver) {
-					throw new UserInputError('email is taken', {
-						errors: {
-							email: 'Email is already taken',
-						},
-					});
-				}
-
-                const salt = await bcrypt.genSalt(10);
-                const hash = await bcrypt.hash(password, salt);
-                password = hash;
+				if (await driver && employeeId === driver.employeeId) {
+					return await db.driver.update({
+                        where: {
+                            id: driver.id
+                        },
+                        data: {
+                            email: email,
+                            password: password,
+                            firstname: firstname,
+                            lastname: lastname,
+                            phoneNumber: phoneNumber,
+                            rank: rank,
+                            employeeId: employeeId,
+                            tier: tier,
+                            delivered: delivered,
+                            key_focus_area: key_focus_area,
+                            fico: fico,
+                            seatbelt_and_speeding: seatbelt_and_speeding,
+                            speeding_event_rate: speeding_event_rate,
+                            seatbelt_off_rate: seatbelt_off_rate,
+                            distractions_rate: distractions_rate,
+                            following_distance_rate: following_distance_rate,
+                            signal_violations_rate: signal_violations_rate,
+                            delivery_completion_rate: delivery_completion_rate,
+                            delivered_and_recieved: delivered_and_recieved,
+                            photo_on_delivery: photo_on_delivery,
+                            call_compliance: call_compliance,
+                            scan_compliance: scan_compliance,
+                            attended_delivery_accuracy: attended_delivery_accuracy,
+                            dnr: dnr,
+                            pod_opps: pod_opps,
+                            cc_opps: cc_opps
+                        },
+                    });
+				};
 
                 return await db.driver.create({
 					data: {
@@ -521,6 +550,8 @@ export default {
                         key_focus_area: key_focus_area,
                         fico: fico,
                         seatbelt_and_speeding: seatbelt_and_speeding,
+                        speeding_event_rate: speeding_event_rate,
+                        seatbelt_off_rate: seatbelt_off_rate,
                         distractions_rate: distractions_rate,
                         following_distance_rate: following_distance_rate,
                         signal_violations_rate: signal_violations_rate,
@@ -532,12 +563,10 @@ export default {
                         attended_delivery_accuracy: attended_delivery_accuracy,
                         dnr: dnr,
                         pod_opps: pod_opps,
-                        cc_opps: cc_opps,
-                        notified: false
+                        cc_opps: cc_opps
 					},
 				});
             } catch (error) {
-                console.log(email)
                 console.log(error)
                 throw new Error(error)
             }
