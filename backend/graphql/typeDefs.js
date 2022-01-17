@@ -50,64 +50,69 @@ const typeDefs = gql`
   }
 
   type Driver {
+    # BASIC INFORMATION
     id:                           ID
     createdAt:                    Date
     role:                         String
     firstname:                    String
     lastname:                     String
     email:                        String
-    password:                     String
     phoneNumber:                  String
+    password:                     String
+    profile_Pick:                 JSON
     token:                        String
+    
+    # DATA FROM SCORECARD
+    rank:                         JSON
     employeeId:                   String
-    tier:                         String
-    fico:                         String
-    seatbelt_and_speeding:        String
-    key_focus_area:               String
-    distractions_rate:            String
-    following_distance_rate:      String
-    signal_violations_rate:       String
-    delivery_completion_rate:     String
-    photo_on_delivery:            String
-    scan_compliance:              String
-    call_compliance:              String
-    rank:                         Int
-    delivered:                    Int
-    netradyne:                    Int
-    delivery_associate:           Int
-    defects:                      Int
-    customer_delivery_feedback:   Int
-    delivered_and_recieved:       Int
-    attended_delivery_accuracy:   Int
-    dnr:                          Int
-    pod_opps:                     Int
-    cc_opps:                      Int
-    has_many_accidents:           Int
-    belongs_to_team:              Boolean
-    attendence:                   JSON
+    tier:                         JSON
+    delivered:                    JSON
+    keyFocusArea:                 JSON
+    fico:                         JSON
+    seatbeltOffRate:              JSON
+    speedingEventRate:            JSON
+    distractionsRate:             JSON
+    followingDistanceRate:        JSON
+    signalViolationsRate:         JSON
+    deliveryCompletionRate:       JSON
+    deliveredNotRecieved:         JSON
+    photoOnDelivery:              JSON
+    callCompliance:               JSON
+    scanCompliance:               JSON
+    attendedDeliveryAccuracy:     JSON
+
+    # ADDITIONAL INFORMATION
+    netradyne:                    JSON
+    deliveryssociate:             JSON
+    defects:                      JSON
+    customerDeliveryFeedback:     JSON
+    hasManyAccidents:             JSON
+    belongsToTeam:                JSON
+    attendance:                   JSON
     productivity:                 JSON
 
-    dsp_name:                     String
-    dsp_shortcode:                String
-
+    # NOTIFICATIONS
     notified:                     Boolean
+
+    # ACCOUNT INFORMATION
+    accountStanding:              String
+    locked:                       Boolean
     deleted:                      Boolean
+
+    # RESET PASSWORD
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
 
+    # RELATIONSHIPS
+    ownerId:                      Int
+    owner:                        Owner
     adminId:                      Int
-    adminFirstname:               String
-    adminLastname:                String
-    adminEmail:                   String
-    adminPhoneNumber:             String
-    adminAccountStanding:         String
-    adminApproved:                Boolean
-
-    accidents:                    [Accident]
-    admin:                        [Admin]
-    vehicle:                      Vehicle
+    admin:                        Admin
+    accidents:                    [Accidents]
     messages:                     [Messages]
-    NotifiedMessages:             [NotifiedMessages]
+    notifiedMessages:             [NotifiedMessages]
+    vehicle:                      Vehicle
+    dsp:                          Dsp
   }
 
   type Messages {
