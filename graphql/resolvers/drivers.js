@@ -283,7 +283,6 @@ export default {
 						adminPhoneNumber: foundAdmin.phoneNumber,
 						dsp_name: foundAdmin.dsp_name,
 						dsp_shortcode: foundAdmin.dsp_shortcode,
-						notified: false
 					},
 				});
 			} catch (error) {
