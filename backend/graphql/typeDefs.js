@@ -115,6 +115,34 @@ const typeDefs = gql`
     dsp:                          Dsp
   }
 
+  type Dsp {
+    # BASIC INFORMATION
+    id:                           Int
+    createdAt:                    Date
+    name:                         String
+    shortcode:                    String
+
+    # DSP SETTINGS
+    leaderBoardLimit:             JSON
+    ficoLimits:                   JSON
+    seatbeltLimits:               JSON
+    speedingLimits:               JSON
+    distractionLimits:            JSON
+    followLimits:                 JSON
+    signalLimits:                 JSON
+    deliveryCompletionRateLimits: JSON
+    scanComplianceLimits:         JSON
+    callComplianceLimits:         JSON
+    deliveryNotRecievedLimits:    JSON
+    photoOnDeliveryLimits:        JSON
+
+    # RELATIONSHIPS
+    admins:                       [Admin]
+    drivers:                      [Driver]
+    ownerId:                      Int
+    owner:                        Owner
+  }
+
   type Messages {
     id:        ID
     createdAt: Date
