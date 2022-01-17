@@ -83,7 +83,7 @@ const typeDefs = gql`
 
     # ADDITIONAL INFORMATION
     netradyne:                    JSON
-    deliveryssociate:             JSON
+    deliveryAssociate:            JSON
     defects:                      JSON
     customerDeliveryFeedback:     JSON
     hasManyAccidents:             JSON
@@ -355,12 +355,12 @@ const typeDefs = gql`
     sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
 
     # ADMIN MUTATIONS
-    signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
+    signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!): Admin!
     signinAdmin(email: String!, password: String!): Admin!
     updateAdmin(email: String, firstname: String, lastname: String, password: String, phoneNumber: String, dsp_name: String, dsp_shortcode: String): Admin!
-    adminCreateDriverAccounts(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, adminEmail: String!, rank: Int!, employeeId: String!, tier: String!, delivered: Int!, key_focus_area: String!, fico: String!, seatbelt_and_speeding: String!, distractions_rate: String!, following_distance_rate: String!, signal_violations_rate: String!, delivery_completion_rate: String!, delivered_and_recieved: Int!, photo_on_delivery: String!, call_compliance: String!, scan_compliance: String!, attended_delivery_accuracy: Int!, dnr: Int!, pod_opps: Int!, cc_opps: Int!): Driver
+    adminCreateDriverAccounts(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, adminEmail: String!, rank: JSON!, employeeId: String!, tier: JSON!, delivered: JSON!, keyFocusArea: JSON!, fico: JSON!, seatbeltOffRate: JSON!, speedingEventRate: JSON! distractionsRate: JSON!, followingDistanceRate: JSON!, signalViolationsRate: JSON!, deliveryCompletionRate: JSON!, deliveryNotRecieved: JSON!, photoOnDelivery: JSON!, callCompliance: JSON!, scanCompliance: JSON!, attendedDeliveryAccuracy: JSON!, netradyne: JSON!, defects: JSON!, customerDeliveryFeedback: JSON!, attendance: JSON!): Driver
     adminCreateAccident(driverId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: String!): Accident
-    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: Int, netradyne: Int, delivery_associate: Int, seatbelt_and_speeding: Int, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: String, photo_on_delivery: String, call_compliance: String, scan_compliance: String, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String, rank: Int, tier: String, delivered: Int, key_focus_area: String, distractions_rate: String, following_distance_rate: String, signal_violations_rate: String, attended_delivery_accuracy: Int, dnr: Int, pod_opps: Int, cc_opps: Int): Driver
+    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, adminEmail: String!, rank: JSON!, employeeId: String!, tier: JSON!, delivered: JSON!, keyFocusArea: JSON!, fico: JSON!, seatbeltOffRate: JSON!, speedingEventRate: JSON! distractionsRate: JSON!, followingDistanceRate: JSON!, signalViolationsRate: JSON!, deliveryCompletionRate: JSON!, deliveryNotRecieved: JSON!, photoOnDelivery: JSON!, callCompliance: JSON!, scanCompliance: JSON!, attendedDeliveryAccuracy: JSON!, netradyne: JSON!, defects: JSON!, customerDeliveryFeedback: JSON!, attendance: JSON!): Driver
     adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String): Accident
     adminUpdateCollision(collisionId: Int, accidentId: Int, location: String): Collision
     adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
