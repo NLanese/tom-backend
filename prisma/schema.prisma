@@ -46,13 +46,9 @@ model SuperUser {
 //   // RESET AND SIGNUP TOKEN
 //   resetPasswordToken String?
 //   resetPasswordTokenExpiration Int?
-//   adminSignUpToken String? // Used for Driver signing up on the app
+//   signUpToken String? // Used for Driver/Admin signing up on the app
 
-//   // ADMIN PORTAL SETTINGS
-//   leaderBoardAmount Int?
-//   badFeedbackSettings Int?
-//   mediumFeedbackSettings Int?
-//   goodFeedbackSettings Int?
+
 // }
 
 model Admin {
@@ -83,16 +79,11 @@ model Admin {
   resetPasswordTokenExpiration Int?
   adminSignUpToken String? // Used for Driver signing up on the app
 
-  // ADMIN PORTAL SETTINGS
-  leaderBoardAmount Int? // Used for keeping track how many Drivers are shown on the leaderboards
-  badFeedbackSettings Int? // Limit for bad feedback
-  mediumFeedbackSettings Int? // Limit for medium feedback
-  goodFeedbackSettings Int? // Linit for good feedback
-
   // RELATIONSHIPS
   drivers Driver[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
+  dsp Dsp?
 }
 
 model Driver {
@@ -163,18 +154,37 @@ model Driver {
   adminAccountStanding String?
   adminApproved Boolean @default(false)
 
-  // ADMIN PORTAL SETTINGS
-  leaderBoardAmount Int?
-  badFeedbackSettings Int?
-  mediumFeedbackSettings Int?
-  goodFeedbackSettings Int?
-
   // RELATIONSHIPS
   admin Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
+  dsp Dsp?
+}
+
+model Dsp {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name String
+  shortcode String
+
+  // DSP SETTINGS
+  leaderBoardLimit Json
+  ficoLimits Json
+  seatbeltLimits Json
+  speedingLimits Json
+  distractionLimits Json
+  followLimits Json
+  signalLimits Json
+  dcrLimits Json
+  scanComplianceLimits Json
+
+  // RELATIONSHIPS
+  adminId Int
+  admin Admin @relation(fields: [adminId], references: [id])
+  driverId Int
+  driver Driver @relation(fields: [driverId], references: [id])
 }
 
 model Messages {
