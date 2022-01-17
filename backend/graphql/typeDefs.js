@@ -325,6 +325,15 @@ const typeDefs = gql`
     adminGetUserAccidentsById(driverId: Int): Driver
     # adminGetMessages: [AdminMessages]
 
+    # OWNER QUERIES
+    getOwner: Owner
+    ownerGetDrivers: [Driver]
+    ownerGetFiredDrivers: [Driver]
+    ownerGetAdmins: [Admin]
+    ownerGetFiredAdmins: [Admin]
+    ownerGetAccidentById(accidentId: Int!): Accident
+    ownerGetUserAccidentsById(accidentId: Int!): Accident
+
     # DRIVER QUERIES
     getDriver: Driver
     getDriverById(driverId: Int): Driver
