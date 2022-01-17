@@ -8,6 +8,7 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
+// FOR INTERNAL KING WILLY USE
 model SuperUser {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -18,6 +19,41 @@ model SuperUser {
   password String
   phoneNumber String
 }
+
+// model Owner {
+//   id Int @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   role Role @default(ADMIN)
+//   firstname String
+//   lastname String
+//   email String @unique
+//   phoneNumber String
+//   password String
+//   profile_Pick Json?
+
+//   // DSP INFORMATION 
+//   dsp_name String
+//   dsp_shortcode String
+
+//   // ACCOUNT INFORMATION
+//   paid Boolean @default(false)  // Keeps track of the admin has paid 
+//   accountStatus String @default("Free") // Keeps track of the Admins Account Status
+//   deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
+
+//   // NOTIFACTION SYSTEM
+//   notified Boolean @default(false)
+
+//   // RESET AND SIGNUP TOKEN
+//   resetPasswordToken String?
+//   resetPasswordTokenExpiration Int?
+//   adminSignUpToken String? // Used for Driver signing up on the app
+
+//   // ADMIN PORTAL SETTINGS
+//   leaderBoardAmount Int?
+//   badFeedbackSettings Int?
+//   mediumFeedbackSettings Int?
+//   goodFeedbackSettings Int?
+// }
 
 model Admin {
   id Int @id @default(autoincrement())
@@ -30,16 +66,30 @@ model Admin {
   password String
   profile_Pick Json?
 
+  // DSP INFORMATION 
   dsp_name String
   dsp_shortcode String
 
-  paid Boolean @default(false)
-  accountStatus String @default("Free")
+  // ACCOUNT INFORMATION
+  paid Boolean @default(false)  // Keeps track of the admin has paid 
+  accountStatus String @default("Free") // Keeps track of the Admins Account Status
+  deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
+  
+  // NOTIFACTION SYSTEM
   notified Boolean @default(false)
-  deleted Boolean @default(false)
+
+  // RESET AND SIGNUP TOKEN
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
-  adminSignUpToken String?
+  adminSignUpToken String? // Used for Driver signing up on the app
+
+  // ADMIN PORTAL SETTINGS
+  leaderBoardAmount Int? // Used for keeping track how many Drivers are shown on the leaderboards
+  badFeedbackSettings Int? // Limit for bad feedback
+  mediumFeedbackSettings Int? // Limit for medium feedback
+  goodFeedbackSettings Int? // Linit for good feedback
+
+  // RELATIONSHIPS
   drivers Driver[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
@@ -56,47 +106,55 @@ model Driver {
   password String
   profile_Pick Json?
 
-  rank  Int?
+  // DATA FROM SCORECARD TOOL
+  rank  Json?
   employeeId String?
-  tier String?
-  delivered Int?
-  key_focus_area String?
-  fico String?
-  seatbelt_and_speeding String?
-  seatbelt_off_rate String?
-  speeding_event_rate String?
-  distractions_rate String?
-  following_distance_rate String?
-  signal_violations_rate String?
-  delivery_completion_rate String?
-  delivered_and_recieved Int?
-  photo_on_delivery String?
-  call_compliance String?
-  scan_compliance String?
-  attended_delivery_accuracy Int?
-  dnr Int?
-  pod_opps Int?
-  cc_opps Int?
+  tier Json?
+  delivered Json?
+  key_focus_area Json?
+  fico Json?
+  seatbelt_and_speeding Json?
+  seatbelt_off_rate Json?
+  speeding_event_rate Json?
+  distractions_rate Json?
+  following_distance_rate Json?
+  signal_violations_rate Json?
+  delivery_completion_rate Json?
+  delivered_and_recieved Json?
+  photo_on_delivery Json?
+  call_compliance Json?
+  scan_compliance Json?
+  attended_delivery_accuracy Json?
+  dnr Json?
+  pod_opps Json?
+  cc_opps Json?
 
-
-  netradyne Int?
-  delivery_associate Int?
-  defects Int?
-  customer_delivery_feedback Int?
-  has_many_accidents Int?
-  belongs_to_team Boolean?
+  // ADDITIONAL INFORMATION
+  netradyne Json?
+  delivery_associate Json?
+  defects Json?
+  customer_delivery_feedback Json?
+  has_many_accidents Json?
+  belongs_to_team Json?
   attendance Json?
   productivity Json?
 
+  // DSP INFORMATION
   dsp_name String?
   dsp_shortcode String?
 
+  // NOTIFACTION SYSTEM
   notified Boolean @default(false)
-  locked Boolean @default(false) // Used to avoid driver from editing accident after report has been filed
-  deleted Boolean @default(false)
+
+  // ACCOUNT INFORMATION
+  locked Boolean @default(false) // Used to lock the Drivers Account if needed
+  deleted Boolean @default(false) // Keeps track if the Driver account has been deleted
+
+  // RESET PASSWORD
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
 
+  // ADMIN INFROMATION
   adminId Int
   adminFirstname String
   adminLastname String
@@ -105,7 +163,13 @@ model Driver {
   adminAccountStanding String?
   adminApproved Boolean @default(false)
 
-  
+  // ADMIN PORTAL SETTINGS
+  leaderBoardAmount Int?
+  badFeedbackSettings Int?
+  mediumFeedbackSettings Int?
+  goodFeedbackSettings Int?
+
+  // RELATIONSHIPS
   admin Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
