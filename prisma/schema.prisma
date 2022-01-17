@@ -20,40 +20,39 @@ model SuperUser {
   phoneNumber String
 }
 
-// model Owner {
-//   id Int @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   role Role @default(ADMIN)
-//   firstname String
-//   lastname String
-//   email String @unique
-//   phoneNumber String
-//   password String
-//   profile_Pick Json?
+model Owner {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  role Role @default(ADMIN)
+  firstname String
+  lastname String
+  email String @unique
+  phoneNumber String
+  password String
+  profile_Pick Json?
 
-//   // DSP INFORMATION 
-//   dsp_name String
-//   dsp_shortcode String
+  // ACCOUNT INFORMATION
+  paid Boolean @default(false)  // Keeps track of the owner has paid 
+  accountStanding String @default("Free") // Keeps track of the Owners Account Status
+  locked Boolean @default(false) // Used to lock the Drivers Account if needed
+  deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
 
-//   // ACCOUNT INFORMATION
-//   paid Boolean @default(false)  // Keeps track of the admin has paid 
-//   accountStatus String @default("Free") // Keeps track of the Admins Account Status
-//   deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
+  // NOTIFACTION SYSTEM
+  notified Boolean @default(false)
 
-//   // NOTIFACTION SYSTEM
-//   notified Boolean @default(false)
+  // RESET AND SIGNUP TOKEN
+  resetPasswordToken String?
+  resetPasswordTokenExpiration Int?
+  signUpToken String? // Used for Driver/Admin signing up on the app
 
-//   // RESET AND SIGNUP TOKEN
-//   resetPasswordToken String?
-//   resetPasswordTokenExpiration Int?
-//   adminSignUpToken String? // Used for Driver signing up on the app
+  // RELATIONSHIPS
+  driver Driver[]
+  admin Admin[]
+  messages Messages[]
+  notifiedMessages NotifiedMessages[]
+  dsp Dsp?
 
-//   // ADMIN PORTAL SETTINGS
-//   leaderBoardAmount Int?
-//   badFeedbackSettings Int?
-//   mediumFeedbackSettings Int?
-//   goodFeedbackSettings Int?
-// }
+}
 
 model Admin {
   id Int @id @default(autoincrement())
@@ -66,14 +65,10 @@ model Admin {
   password String
   profile_Pick Json?
 
-  // DSP INFORMATION 
-  dsp_name String
-  dsp_shortcode String
-
   // ACCOUNT INFORMATION
-  paid Boolean @default(false)  // Keeps track of the admin has paid 
-  accountStatus String @default("Free") // Keeps track of the Admins Account Status
-  deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
+  accountStanding String @default("Free") // Keeps track of the Owners Account Status
+  locked Boolean @default(false) // Used to lock the Admins Account if needed
+  deleted Boolean @default(false) // Keeps track if the Admins Account has been deleted
   
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
@@ -81,18 +76,14 @@ model Admin {
   // RESET AND SIGNUP TOKEN
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
-  adminSignUpToken String? // Used for Driver signing up on the app
-
-  // ADMIN PORTAL SETTINGS
-  leaderBoardAmount Int? // Used for keeping track how many Drivers are shown on the leaderboards
-  badFeedbackSettings Int? // Limit for bad feedback
-  mediumFeedbackSettings Int? // Limit for medium feedback
-  goodFeedbackSettings Int? // Linit for good feedback
 
   // RELATIONSHIPS
+  ownerId Int
+  owner Owner @relation(fields: [ownerId], references: [id])
   drivers Driver[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
+  dsp Dsp?
 }
 
 model Driver {
@@ -111,70 +102,82 @@ model Driver {
   employeeId String?
   tier Json?
   delivered Json?
-  key_focus_area Json?
+  keyFocusArea Json?
   fico Json?
-  seatbelt_and_speeding Json?
-  seatbelt_off_rate Json?
-  speeding_event_rate Json?
-  distractions_rate Json?
-  following_distance_rate Json?
-  signal_violations_rate Json?
-  delivery_completion_rate Json?
-  delivered_and_recieved Json?
-  photo_on_delivery Json?
-  call_compliance Json?
-  scan_compliance Json?
-  attended_delivery_accuracy Json?
-  dnr Json?
-  pod_opps Json?
-  cc_opps Json?
+  seatbeltAndSpeeding Json?
+  seatbeltOffRate Json?
+  speedingEventRate Json?
+  distractionsRate Json?
+  followingDistanceRate Json?
+  signalViolationsRate Json?
+  deliveryCompletionRate Json?
+  deliveredNotRecieved Json? // dnr
+  photoOnDelivery Json? // pod_opps
+  callCompliance Json? // cc_opps
+  scanCompliance Json?
+  attendedDeliveryAccuracy Json?
 
   // ADDITIONAL INFORMATION
   netradyne Json?
-  delivery_associate Json?
+  deliveryAssociate Json?
   defects Json?
-  customer_delivery_feedback Json?
-  has_many_accidents Json?
-  belongs_to_team Json?
+  customerDeliveryFeedback Json?
+  hasManyAccidents Json?
+  belongsToTeam Json?
   attendance Json?
   productivity Json?
-
-  // DSP INFORMATION
-  dsp_name String?
-  dsp_shortcode String?
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
   // ACCOUNT INFORMATION
+  accountStanding String @default("Free") // Keeps track of the Owners Account Status
   locked Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Driver account has been deleted
+  deleted Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
   // RESET PASSWORD
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
 
-  // ADMIN INFROMATION
-  adminId Int
-  adminFirstname String
-  adminLastname String
-  adminEmail String
-  adminPhoneNumber String
-  adminAccountStanding String?
-  adminApproved Boolean @default(false)
-
-  // ADMIN PORTAL SETTINGS
-  leaderBoardAmount Int?
-  badFeedbackSettings Int?
-  mediumFeedbackSettings Int?
-  goodFeedbackSettings Int?
-
   // RELATIONSHIPS
+  ownerId Int
+  owner Owner @relation(fields: [ownerId], references: [id])
+  adminId Int
   admin Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
+  dsp Dsp?
+}
+
+model Dsp {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name String @unique
+  shortcode String @unique
+
+  // DSP SETTINGS
+  leaderBoardLimit Json
+  ficoLimits Json
+  seatbeltLimits Json
+  speedingLimits Json
+  distractionLimits Json
+  followLimits Json
+  signalLimits Json
+  deliveryCompletionRateLimits Json
+  scanComplianceLimits Json
+  callComplianceLimits Json
+  deliveryNotRecievedLimits Json
+  photoOnDeliveryLimits Json
+
+  // RELATIONSHIPS
+  adminId Int
+  admin Admin @relation(fields: [adminId], references: [id])
+  driverId Int
+  driver Driver @relation(fields: [driverId], references: [id])
+  ownerId Int
+  owner Owner @relation(fields: [ownerId], references: [id])
 }
 
 model Messages {
@@ -182,8 +185,10 @@ model Messages {
   createdAt DateTime @default(now())
   content String
   from  String
+  ownerId Int
   driverId Int
   adminId  Int
+  owner Owner @relation(fields: [ownerId], references: [id])
   driver Driver @relation(fields: [driverId], references: [id])
   admin  Admin  @relation(fields: [adminId], references: [id])
 }
@@ -197,6 +202,8 @@ model NotifiedMessages {
   type    String
   driverId Int?
   adminId  Int?
+  ownerId Int
+  owner Owner @relation(fields: [ownerId], references: [id])
   driver Driver? @relation(fields: [driverId], references: [id])
   admin  Admin?  @relation(fields: [adminId], references: [id])
 }
