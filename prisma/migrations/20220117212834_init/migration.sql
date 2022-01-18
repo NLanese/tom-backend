@@ -16,6 +16,29 @@ CREATE TABLE "SuperUser" (
 );
 
 -- CreateTable
+CREATE TABLE "Owner" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "role" "Role" NOT NULL DEFAULT E'ADMIN',
+    "firstname" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "profile_Pick" JSONB,
+    "paid" BOOLEAN NOT NULL DEFAULT false,
+    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
+    "locked" BOOLEAN NOT NULL DEFAULT false,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "notified" BOOLEAN NOT NULL DEFAULT false,
+    "resetPasswordToken" TEXT,
+    "resetPasswordTokenExpiration" INTEGER,
+    "signUpToken" TEXT,
+
+    CONSTRAINT "Owner_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Admin" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -26,19 +49,13 @@ CREATE TABLE "Admin" (
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profile_Pick" JSONB,
-    "dsp_name" TEXT NOT NULL,
-    "dsp_shortcode" TEXT NOT NULL,
-    "paid" BOOLEAN NOT NULL DEFAULT false,
-    "accountStatus" TEXT NOT NULL DEFAULT E'Free',
+    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
+    "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
-    "adminSignUpToken" TEXT,
-    "leaderBoardAmount" INTEGER,
-    "badFeedbackSettings" INTEGER,
-    "mediumFeedbackSettings" INTEGER,
-    "goodFeedbackSettings" INTEGER,
+    "ownerId" INTEGER NOT NULL,
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
@@ -58,51 +75,63 @@ CREATE TABLE "Driver" (
     "employeeId" TEXT,
     "tier" JSONB,
     "delivered" JSONB,
-    "key_focus_area" JSONB,
+    "keyFocusArea" JSONB,
     "fico" JSONB,
-    "seatbelt_and_speeding" JSONB,
-    "seatbelt_off_rate" JSONB,
-    "speeding_event_rate" JSONB,
-    "distractions_rate" JSONB,
-    "following_distance_rate" JSONB,
-    "signal_violations_rate" JSONB,
-    "delivery_completion_rate" JSONB,
-    "delivered_and_recieved" JSONB,
-    "photo_on_delivery" JSONB,
-    "call_compliance" JSONB,
-    "scan_compliance" JSONB,
-    "attended_delivery_accuracy" JSONB,
-    "dnr" JSONB,
-    "pod_opps" JSONB,
-    "cc_opps" JSONB,
+    "seatbeltAndSpeeding" JSONB,
+    "seatbeltOffRate" JSONB,
+    "speedingEventRate" JSONB,
+    "distractionsRate" JSONB,
+    "followingDistanceRate" JSONB,
+    "signalViolationsRate" JSONB,
+    "deliveryCompletionRate" JSONB,
+    "deliveredNotRecieved" JSONB,
+    "photoOnDelivery" JSONB,
+    "callCompliance" JSONB,
+    "scanCompliance" JSONB,
+    "attendedDeliveryAccuracy" JSONB,
     "netradyne" JSONB,
-    "delivery_associate" JSONB,
+    "deliveryAssociate" JSONB,
     "defects" JSONB,
-    "customer_delivery_feedback" JSONB,
-    "has_many_accidents" JSONB,
-    "belongs_to_team" JSONB,
+    "customerDeliveryFeedback" JSONB,
+    "hasManyAccidents" JSONB,
+    "belongsToTeam" JSONB,
     "attendance" JSONB,
     "productivity" JSONB,
-    "dsp_name" TEXT,
-    "dsp_shortcode" TEXT,
     "notified" BOOLEAN NOT NULL DEFAULT false,
+    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
+    "ownerId" INTEGER NOT NULL,
     "adminId" INTEGER NOT NULL,
-    "adminFirstname" TEXT NOT NULL,
-    "adminLastname" TEXT NOT NULL,
-    "adminEmail" TEXT NOT NULL,
-    "adminPhoneNumber" TEXT NOT NULL,
-    "adminAccountStanding" TEXT,
-    "adminApproved" BOOLEAN NOT NULL DEFAULT false,
-    "leaderBoardAmount" INTEGER,
-    "badFeedbackSettings" INTEGER,
-    "mediumFeedbackSettings" INTEGER,
-    "goodFeedbackSettings" INTEGER,
 
     CONSTRAINT "Driver_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Dsp" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
+    "shortcode" TEXT NOT NULL,
+    "leaderBoardLimit" JSONB NOT NULL,
+    "ficoLimits" JSONB NOT NULL,
+    "seatbeltLimits" JSONB NOT NULL,
+    "speedingLimits" JSONB NOT NULL,
+    "distractionLimits" JSONB NOT NULL,
+    "followLimits" JSONB NOT NULL,
+    "signalLimits" JSONB NOT NULL,
+    "deliveryCompletionRateLimits" JSONB NOT NULL,
+    "scanComplianceLimits" JSONB NOT NULL,
+    "callComplianceLimits" JSONB NOT NULL,
+    "deliveryNotRecievedLimits" JSONB NOT NULL,
+    "photoOnDeliveryLimits" JSONB NOT NULL,
+    "adminId" INTEGER NOT NULL,
+    "driverId" INTEGER NOT NULL,
+    "ownerId" INTEGER NOT NULL,
+
+    CONSTRAINT "Dsp_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,6 +140,7 @@ CREATE TABLE "Messages" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
     "from" TEXT NOT NULL,
+    "ownerId" INTEGER NOT NULL,
     "driverId" INTEGER NOT NULL,
     "adminId" INTEGER NOT NULL,
 
@@ -127,6 +157,7 @@ CREATE TABLE "NotifiedMessages" (
     "type" TEXT NOT NULL,
     "driverId" INTEGER,
     "adminId" INTEGER,
+    "ownerId" INTEGER NOT NULL,
 
     CONSTRAINT "NotifiedMessages_pkey" PRIMARY KEY ("id")
 );
@@ -298,10 +329,28 @@ CREATE TABLE "_AccidentToInjuryReport" (
 CREATE UNIQUE INDEX "SuperUser_email_key" ON "SuperUser"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Owner_email_key" ON "Owner"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_name_key" ON "Dsp"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_shortcode_key" ON "Dsp"("shortcode");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_adminId_key" ON "Dsp"("adminId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_driverId_key" ON "Dsp"("driverId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
@@ -337,13 +386,34 @@ CREATE UNIQUE INDEX "_AccidentToInjuryReport_AB_unique" ON "_AccidentToInjuryRep
 CREATE INDEX "_AccidentToInjuryReport_B_index" ON "_AccidentToInjuryReport"("B");
 
 -- AddForeignKey
+ALTER TABLE "Admin" ADD CONSTRAINT "Admin_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Driver" ADD CONSTRAINT "Driver_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Driver" ADD CONSTRAINT "Driver_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -358,19 +428,19 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "HitPerson" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Collision" ADD CONSTRAINT "Collision_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Collision" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryReport" ADD CONSTRAINT "InjuryReport_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryReport" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_injuryAccidentId_fkey" FOREIGN KEY ("injuryAccidentId") REFERENCES "InjuryAccident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
