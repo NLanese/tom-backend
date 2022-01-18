@@ -9,7 +9,6 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 
 export default {
     Query:{
-
         getOwner: async (_, {}, context) => {
             const owner = await checkAdminAuth(context)
 
@@ -165,7 +164,6 @@ export default {
 
     },
     Mutation:{
-
         signupOwner: async (_, {
             email,
             password,

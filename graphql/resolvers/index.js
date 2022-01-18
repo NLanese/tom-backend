@@ -10,7 +10,7 @@ import injuryReportResolvers from './injuryReport.js';
 import superUserResolvers from './superUser.js';
 import messagesResolvers from './messages.js';
 import notifiedMessagesResolvers from './notifiedMessages.js';
-import ownerReslovers from './owner/ownerIndex.js';
+import ownerReslovers from './owner/ownerResolvers.js';
 
 export default {
     Query: {

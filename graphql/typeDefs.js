@@ -404,6 +404,7 @@ const typeDefs = gql`
 
     # OWNER MUTATIONS
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
+    ownerSignIn(email: String!, password: String!): Owner
 
     # ADMIN MUTATIONS
     signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
