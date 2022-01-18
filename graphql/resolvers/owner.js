@@ -8,17 +8,19 @@ import { validateRegisterInput, validateLoginInput } from '../../utils/validator
 import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwnership/handleAdminUserOwnership.js';
 
 export default {
-    Query: {
-        getAdmin: async (_, {}, context) => {
-            const admin = await checkAdminAuth(context)
+    Query:{
+
+        getOwner: async (_, {}, context) => {
+            const owner = await checkAdminAuth(context)
 
             try {
-                return await db.admin.findUnique({
+                return await db.owner.findUnique({
                     where: {
-                        id: admin.id
+                        id: owner.id
                     },
                     include: {
-                        drivers: true
+                        drivers: true,
+                        admins: true
                     }
                 })
             } catch (error) {
@@ -26,12 +28,12 @@ export default {
             }
         },
 
-        adminGetEmployees: async (_, {}, context) => {
-            const admin = await checkAdminAuth(context)
+        ownerGetDrivers: async (_, {}, context) => {
+            const owner = await checkAdminAuth(context)
             try {
                 return await db.driver.findMany({
                     where: {
-                        adminId: admin.id,
+                        ownerId: owner.id,
                         deleted: false
                     },
                     include: {
@@ -43,12 +45,12 @@ export default {
             }
         },
 
-        adminGetFiredEmployees: async (_, {}, context) => {
-            const admin = await checkAdminAuth(context)
+        ownerGetFiredDrivers: async (_, {}, context) => {
+            const owner = await checkAdminAuth(context)
             try {
                 return await db.driver.findMany({
                     where: {
-                        adminId: admin.id,
+                        ownerId: owner.id,
                         deleted: true
                     },
                     include: {
@@ -60,11 +62,43 @@ export default {
             }
         },
 
+        ownerGetAdmins: async (_, {}, context) => {
+            const owner = await checkAdminAuth(context)
+            try {
+                return await db.admin.findMany({
+                    where: {
+                        ownerId: owner.id,
+                        deleted: false
+                    },
+                    include: {
+                        drivers: true
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
 
-        adminGetAccidentById: async (_, {
+        ownerGetFiredAdmins: async (_, {}, context) => {
+            const owner = await checkAdminAuth(context)
+            try {
+                return await db.admin.findMany({
+                    where: {
+                        ownerId: owner.id,
+                        deleted: true
+                    },
+                    include: {
+                        drivers: true
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
+            }
+        },
+        ownerGetAccidentById: async (_, {
             accidentId
         }, context) => {
-            const admin = await checkAdminAuth(context)
+            const owner = await checkAdminAuth(context)
             const accident = await db.accident.findUnique({
                 where: {
                     id: accidentId
@@ -76,7 +110,7 @@ export default {
             if (!accident) {
                 throw new Error("Error: Accident does not exist")
             }
-            const verified = handleAdminUserOwnership(admin.id, accident.driver.id)
+            const verified = handleAdminUserOwnership(owner.id, accident.driver.id)
             try {
                 if (verified) {
                     return await db.accident.findUnique({
@@ -97,11 +131,10 @@ export default {
                 throw new Error(error)
             }
         },
-
-        adminGetUserAccidentsById: async (_, {
+        ownerGetUserAccidentsById: async (_, {
             driverId
         }, context) => {
-            const admin = await checkAdminAuth(context)
+            const owner = await checkAdminAuth(context)
             const driver = await db.driver.findUnique({
                 where: {
                     id: driverId
@@ -113,7 +146,7 @@ export default {
             if (!driver) {
                 throw new Error('Error: Driver does not exist')
             }
-            const verified = await handleAdminUserOwnership(admin.id, driver.id)
+            const verified = await handleAdminUserOwnership(owner.id, driver.id)
             if (verified) {
                 try {
                     return await db.driver.findUnique({
@@ -128,12 +161,12 @@ export default {
                     throw new Error(error)
                 }
             }
-        }
-    },
+        },
 
-    Mutation: {
-        // ------ CREATE -------
-        signupAdmin: async (_, {
+    },
+    Mutation:{
+
+        signupOwner: async (_, {
             email,
             password,
             firstname,
@@ -163,13 +196,13 @@ export default {
                     })
                 }
 
-                const admin = await db.admin.findUnique({
+                const owner = await db.owner.findUnique({
                     where: {
                         email
                     },
                 });
 
-                if (admin) {
+                if (owner) {
                     throw new UserInputError('email is taken', {
                         errors: {
                             email: 'Email is already taken',
@@ -179,7 +212,7 @@ export default {
 
                 password = await hashPassword(password)
 
-                return await db.admin.create({
+                return await db.owner.create({
                     data: {
                         email: email,
                         password: password,
@@ -194,11 +227,7 @@ export default {
                 throw new Error(error)
             }
         },
-
-
-
-        // ------ SIGN IN -------
-        signinAdmin: async (_, {
+        signinOwner: async (_, {
             email,
             password
         }, {
@@ -217,7 +246,7 @@ export default {
 
             email = await email.toUpperCase()
 
-            const foundUser = await db.admin.findUnique({
+            const foundUser = await db.owner.findUnique({
                 where: {
                     email
                 }
@@ -250,18 +279,14 @@ export default {
                 token: token
             }
         },
-
-
-
-        // ------ UPDATE -------
-        updateAdmin: async (_, {
+        updateOwner: async (_, {
             email,
             firstname,
             lastname,
             password,
             phoneNumber
         }, context) => {
-            const admin = await checkAdminAuth(context)
+            const owner = await checkAdminAuth(context)
 
             if (typeof password !== "undefined") {
                 password = await hashPassword(password)
@@ -280,16 +305,16 @@ export default {
             }
 
             try {
-                if (!admin) {
+                if (!owner) {
                     errors.general = 'Driver not found';
                     throw new UserInputError('Driver not found', {
                         errors
                     });
                 }
 
-                return await db.admin.update({
+                return await db.owner.update({
                     where: {
-                        id: admin.id
+                        id: owner.id
                     },
                     data: {
                         email: email,
@@ -303,11 +328,7 @@ export default {
                 throw new Error(error)
             }
         },
-
-
-
-        // ------ UPDATE USER -------
-        adminUpdateEmployeeByID: async (_, {
+        ownerUpdateEmployeeByID: async (_, {
             driverId,
             adminEmail,
             adminFirstName,
@@ -403,11 +424,10 @@ export default {
                 throw new Error(error)
             }
         },
-
-        adminSuspendUser: async (_, {
+        ownerSuspendDriver: async (_, {
             driverId
         }, context) => {
-            const admin = await checkAdminAuth(context)
+            const owner = await checkAdminAuth(context)
             const verified = await handleAdminUserOwnership(admin.id, driverId)
 
             try {
@@ -426,7 +446,7 @@ export default {
             }
 
         },
-        adminCreateDriverAccounts: async (_, {
+        ownerCreateDriverAccounts: async (_, {
             email,
             password,
             firstname,
@@ -456,7 +476,7 @@ export default {
         }, context) => {
             try {
                 const { valid, errors } = validateRegisterInput(email, password);
-                const admin = await checkAdminAuth(context)
+                const owner = await checkAdminAuth(context)
                 const salt = await bcrypt.genSalt(10);
                 const hash = await bcrypt.hash(password, salt);
                 password = hash;
@@ -466,14 +486,14 @@ export default {
 				lastname = await lastname.toUpperCase()
 				adminEmail = await adminEmail.toUpperCase()
 
-				const foundAdmin = await db.admin.findUnique({
+				const foundAdmin = await db.owner.findUnique({
 					where: {
-						id: admin.id
+						id: owner.id
 					}
 				})
 
 				if (!foundAdmin) {
-					throw new Error('Error: Admin does not exist')
+					throw new Error('Error: Owner does not exist')
 				}
 
 				if (!valid) {
@@ -523,52 +543,5 @@ export default {
                         },
                     });
 				};
-
-                return await db.driver.create({
-					data: {
-						admin: {
-							connect: {
-								id: admin.id
-							}
-						},
-						email: email,
-						password: password,
-						firstname: firstname,
-						lastname: lastname,
-						phoneNumber: phoneNumber,
-						adminEmail: foundAdmin.email,
-						adminFirstname: foundAdmin.firstname,
-						adminLastname: foundAdmin.lastname,
-						adminPhoneNumber: foundAdmin.phoneNumber,
-						dsp_name: foundAdmin.dsp_name,
-						dsp_shortcode: foundAdmin.dsp_shortcode,
-                        rank: rank,
-                        employeeId: employeeId,
-                        tier: tier,
-                        delivered: delivered,
-                        key_focus_area: key_focus_area,
-                        fico: fico,
-                        seatbelt_and_speeding: seatbelt_and_speeding,
-                        speeding_event_rate: speeding_event_rate,
-                        seatbelt_off_rate: seatbelt_off_rate,
-                        distractions_rate: distractions_rate,
-                        following_distance_rate: following_distance_rate,
-                        signal_violations_rate: signal_violations_rate,
-                        delivery_completion_rate: delivery_completion_rate,
-                        delivered_and_recieved: delivered_and_recieved,
-                        photo_on_delivery: photo_on_delivery,
-                        call_compliance: call_compliance,
-                        scan_compliance: scan_compliance,
-                        attended_delivery_accuracy: attended_delivery_accuracy,
-                        dnr: dnr,
-                        pod_opps: pod_opps,
-                        cc_opps: cc_opps
-					},
-				});
-            } catch (error) {
-                console.log(error)
-                throw new Error(error)
-            }
-        }
     }
 }
