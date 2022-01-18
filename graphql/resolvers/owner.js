@@ -541,5 +541,8 @@ export default {
                         },
                     });
 				};
+    } catch (error) {
+        throw new Error(error)
     }
+        }}
 }

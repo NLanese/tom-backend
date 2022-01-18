@@ -1,12 +1,16 @@
 import db from "../../../../utils/generatePrisma.js";
-import bcrypt from "bcryptjs";
-import { UserInputError } from 'apollo-server-errors';
 import { validateLoginInput } from "../../../../utils/validators.js";
-import generateOwnerToken from "../../../../utils/generateToken/generateOwnerToken.js"
+import { UserInputError } from 'apollo-server-errors';
+import generateAdminToken from "../../../../utils/generateToken/generateAdminToken.js";
+import bcrypt from "bcryptjs";
+
 
 export default {
     Mutation: {
-        ownerSignIn: async (_, { email, password }, { req }) => {
+        managerSignIn: async (_, {
+            email,
+            password
+        }, { req }) => {
             const { errors, valid } = validateLoginInput(email, password)
     
             if (!valid) {
@@ -17,7 +21,7 @@ export default {
     
             email = await email.toUpperCase()
     
-            const foundUser = await db.owner.findUnique({
+            const foundUser = await db.admin.findUnique({
                 where: {
                     email
                 }
@@ -39,8 +43,8 @@ export default {
                 })
             }
     
-            const token = await generateOwnerToken(foundUser.id)
-
+            const token = await generateAdminToken(foundUser.id)
+    
             req.session = {
                 token: `Bearer ${token}`
             }

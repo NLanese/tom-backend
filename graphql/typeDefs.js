@@ -107,7 +107,7 @@ const typeDefs = gql`
     # RELATIONSHIPS
     owner:                        Owner
     accidents:                    [Accident]
-    admin:                        [Admin]
+    admins:                        [Admin]
     vehicle:                      Vehicle
     messages:                     [Messages]
     NotifiedMessages:             [NotifiedMessages]
@@ -365,6 +365,16 @@ const typeDefs = gql`
     sGetUserById(driverId: Int!): Driver
     sGetAccidentById(accidentId: Int!): Accident
 
+    # OWNER QUERIES
+    getOwner: Owner
+    ownerGetDrivers: [Driver]
+
+    # MANAGER QUERIES
+    getManager: Admin
+
+    # DRIVER QUERIES
+    getDriver: Driver
+
     # ADMIN QUERIES
     getAdmin: Admin
     adminGetEmployees: [Driver]
@@ -373,8 +383,7 @@ const typeDefs = gql`
     adminGetUserAccidentsById(driverId: Int): Driver
     # adminGetMessages: [AdminMessages]
 
-    # DRIVER QUERIES
-    getDriver: Driver
+    # DRIVER QUERIES OLD
     getDriverById(driverId: Int): Driver
     getDriversForDspForSafetyAndCompliance: [Driver] 
     getDriversForDspForTeam: [Driver]
@@ -391,7 +400,6 @@ const typeDefs = gql`
 
     # NOTIFIED MESSAGES QUERIES
     getNotifiedMessages: [NotifiedMessages]
-
   }
   
   type Mutation {
@@ -405,6 +413,15 @@ const typeDefs = gql`
     # OWNER MUTATIONS
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerSignIn(email: String!, password: String!): Owner
+    updateOwner(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
+
+    # MANAGER MUTATIONS
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Admin
+    managerSignIn(email: String!, password: String!): Admin
+
+    # DRIVER MUTATIONS
+    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Driver
+    driverSignIn(email: String!, password: String!): Driver
 
     # ADMIN MUTATIONS
     signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
@@ -429,7 +446,7 @@ const typeDefs = gql`
     readNotifiedMessage(notifiedMessageId: Int!): NotifiedMessages
     notifiedToFalse: Driver
 
-    # DRIVER MUTATIONS
+    # DRIVER MUTATIONS OLD
     signupDriver(signupInput: SignupInput!): Driver!
     signinDriver(email: String!, password: String!): Driver!
     updateDriver(updateDriver: UpdateDriver): Driver!

@@ -48,8 +48,8 @@ model Owner {
   signUpToken String? // Used for Driver/Admin signing up on the app
 
   // RELATIONSHIPS
-  driver Driver[]
-  admin Admin[]
+  drivers Driver[]
+  admins Admin[]
   messages Messages[]
   notifiedMessages NotifiedMessages[]
   dsp Dsp?
@@ -115,7 +115,7 @@ model Driver {
   ownerId Int
   owner Owner @relation(fields: [ownerId], references: [id])
   adminId Int
-  admin Admin @relation(fields: [adminId], references: [id])
+  admins Admin @relation(fields: [adminId], references: [id])
   accidents Accident[]
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
