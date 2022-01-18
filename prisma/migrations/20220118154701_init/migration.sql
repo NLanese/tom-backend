@@ -1,16 +1,18 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'OWNER', 'SUPERADMIN');
 
 -- CreateTable
 CREATE TABLE "SuperUser" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
+    "token" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
+    "profilePick" JSONB,
 
     CONSTRAINT "SuperUser_pkey" PRIMARY KEY ("id")
 );
@@ -18,16 +20,16 @@ CREATE TABLE "SuperUser" (
 -- CreateTable
 CREATE TABLE "Owner" (
     "id" SERIAL NOT NULL,
+    "uuid" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "role" "Role" NOT NULL DEFAULT E'ADMIN',
+    "role" "Role" NOT NULL DEFAULT E'OWNER',
+    "token" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profile_Pick" JSONB,
-    "paid" BOOLEAN NOT NULL DEFAULT false,
-    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
+    "profilePick" JSONB,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
@@ -43,13 +45,13 @@ CREATE TABLE "Admin" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'ADMIN',
+    "token" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profile_Pick" JSONB,
-    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
@@ -65,42 +67,16 @@ CREATE TABLE "Driver" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'USER',
+    "token" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profile_Pick" JSONB,
-    "rank" JSONB,
-    "employeeId" TEXT,
-    "tier" JSONB,
-    "delivered" JSONB,
-    "keyFocusArea" JSONB,
-    "fico" JSONB,
-    "seatbeltAndSpeeding" JSONB,
-    "seatbeltOffRate" JSONB,
-    "speedingEventRate" JSONB,
-    "distractionsRate" JSONB,
-    "followingDistanceRate" JSONB,
-    "signalViolationsRate" JSONB,
-    "deliveryCompletionRate" JSONB,
-    "deliveredNotRecieved" JSONB,
-    "photoOnDelivery" JSONB,
-    "callCompliance" JSONB,
-    "scanCompliance" JSONB,
-    "attendedDeliveryAccuracy" JSONB,
-    "netradyne" JSONB,
-    "deliveryAssociate" JSONB,
-    "defects" JSONB,
-    "customerDeliveryFeedback" JSONB,
-    "hasManyAccidents" JSONB,
-    "belongsToTeam" JSONB,
-    "attendance" JSONB,
-    "productivity" JSONB,
-    "notified" BOOLEAN NOT NULL DEFAULT false,
-    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
+    "profilePick" JSONB,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
     "ownerId" INTEGER NOT NULL,
@@ -115,6 +91,7 @@ CREATE TABLE "Dsp" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
     "shortcode" TEXT NOT NULL,
+    "timeZone" TEXT NOT NULL,
     "leaderBoardLimit" JSONB NOT NULL,
     "ficoLimits" JSONB NOT NULL,
     "seatbeltLimits" JSONB NOT NULL,
@@ -127,11 +104,53 @@ CREATE TABLE "Dsp" (
     "callComplianceLimits" JSONB NOT NULL,
     "deliveryNotRecievedLimits" JSONB NOT NULL,
     "photoOnDeliveryLimits" JSONB NOT NULL,
+    "paid" BOOLEAN NOT NULL DEFAULT false,
+    "accountStanding" TEXT NOT NULL DEFAULT E'Free',
     "adminId" INTEGER NOT NULL,
     "driverId" INTEGER NOT NULL,
     "ownerId" INTEGER NOT NULL,
 
     CONSTRAINT "Dsp_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "WeeklyReport" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "week" TEXT NOT NULL,
+    "hadAccident" BOOLEAN NOT NULL DEFAULT false,
+    "feedback" TEXT,
+    "feedbackStatus" TEXT,
+    "acknowledged" BOOLEAN NOT NULL DEFAULT false,
+    "acknowledgedAt" TEXT,
+    "rank" INTEGER NOT NULL,
+    "employeeId" TEXT NOT NULL,
+    "tier" TEXT NOT NULL,
+    "delivered" INTEGER NOT NULL,
+    "keyFocusArea" TEXT NOT NULL,
+    "fico" TEXT NOT NULL,
+    "seatbeltOffRate" TEXT NOT NULL,
+    "speedingEventRate" TEXT NOT NULL,
+    "distractionsRate" TEXT NOT NULL,
+    "followingDistanceRate" TEXT NOT NULL,
+    "signalViolationsRate" TEXT NOT NULL,
+    "deliveryCompletionRate" TEXT NOT NULL,
+    "deliveredNotRecieved" TEXT NOT NULL,
+    "photoOnDelivery" TEXT NOT NULL,
+    "callCompliance" TEXT NOT NULL,
+    "scanCompliance" TEXT NOT NULL,
+    "attendedDeliveryAccuracy" INTEGER NOT NULL,
+    "netradyne" JSONB,
+    "deliveryAssociate" JSONB,
+    "defects" JSONB,
+    "customerDeliveryFeedback" JSONB,
+    "hasManyAccidents" JSONB,
+    "belongsToTeam" JSONB,
+    "attendance" JSONB,
+    "productivity" JSONB,
+    "driverId" INTEGER NOT NULL,
+
+    CONSTRAINT "WeeklyReport_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -329,6 +348,9 @@ CREATE TABLE "_AccidentToInjuryReport" (
 CREATE UNIQUE INDEX "SuperUser_email_key" ON "SuperUser"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Owner_uuid_key" ON "Owner"("uuid");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Owner_email_key" ON "Owner"("email");
 
 -- CreateIndex
@@ -404,6 +426,9 @@ ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_driverId_fkey" FOREIGN KEY ("driverId") RE
 ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -428,19 +453,19 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Collision" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Collision" ADD CONSTRAINT "Collision_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryReport" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryReport" ADD CONSTRAINT "InjuryReport_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_injuryAccidentId_fkey" FOREIGN KEY ("injuryAccidentId") REFERENCES "InjuryAccident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
