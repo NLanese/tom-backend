@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = "postgresql://nick:Abc!123@localhost:5432/tom?schema=public"
+  url = env("DATABASE_URL")
 }
 
 // FOR INTERNAL KING WILLY USE
@@ -13,34 +13,36 @@ model SuperUser {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   role Role @default(SUPERADMIN)
+  token String?
   firstname String
   lastname String
   email String @unique
   password String
   phoneNumber String
+  profilePick Json?
 }
 
 model Owner {
   id Int @id @default(autoincrement())
+  uuid String @default(uuid()) @unique
   createdAt DateTime @default(now())
-  role Role @default(ADMIN)
+  role Role @default(OWNER)
+  token String?
   firstname String
   lastname String
   email String @unique
   phoneNumber String
   password String
-  profile_Pick Json?
+  profilePick Json?
 
   // ACCOUNT INFORMATION
-  paid Boolean @default(false)  // Keeps track of the owner has paid 
-  accountStanding String @default("Free") // Keeps track of the Owners Account Status
   locked Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
-  // RESET AND SIGNUP TOKEN
+  // RESET PASSWORD
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
   signUpToken String? // Used for Driver/Admin signing up on the app
@@ -58,6 +60,7 @@ model Admin {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   role Role @default(ADMIN)
+  token String?
   firstname String
   lastname String
   email String @unique
@@ -66,14 +69,13 @@ model Admin {
   profile_Pick Json?
 
   // ACCOUNT INFORMATION
-  accountStanding String @default("Free") // Keeps track of the Owners Account Status
   locked Boolean @default(false) // Used to lock the Admins Account if needed
   deleted Boolean @default(false) // Keeps track if the Admins Account has been deleted
   
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
-  // RESET AND SIGNUP TOKEN
+  // RESET PASSWORD
   resetPasswordToken String?
   resetPasswordTokenExpiration Int?
 
@@ -90,50 +92,20 @@ model Driver {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   role Role @default(USER)
+  token String?
   firstname String
   lastname String
   email String @unique
   phoneNumber String
   password String
-  profile_Pick Json?
+  profilePick Json?
 
-  // DATA FROM SCORECARD TOOL
-  rank  Json?
-  employeeId String?
-  tier Json?
-  delivered Json?
-  keyFocusArea Json?
-  fico Json?
-  seatbeltAndSpeeding Json?
-  seatbeltOffRate Json?
-  speedingEventRate Json?
-  distractionsRate Json?
-  followingDistanceRate Json?
-  signalViolationsRate Json?
-  deliveryCompletionRate Json?
-  deliveredNotRecieved Json? // dnr
-  photoOnDelivery Json? // pod_opps
-  callCompliance Json? // cc_opps
-  scanCompliance Json?
-  attendedDeliveryAccuracy Json?
-
-  // ADDITIONAL INFORMATION
-  netradyne Json?
-  deliveryAssociate Json?
-  defects Json?
-  customerDeliveryFeedback Json?
-  hasManyAccidents Json?
-  belongsToTeam Json?
-  attendance Json?
-  productivity Json?
+  // ACCOUNT INFORMATION
+  locked Boolean @default(false) // Used to lock the Drivers Account if needed
+  deleted Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
-
-  // ACCOUNT INFORMATION
-  accountStanding String @default("Free") // Keeps track of the Owners Account Status
-  locked Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
   // RESET PASSWORD
   resetPasswordToken String?
@@ -149,6 +121,7 @@ model Driver {
   notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
   dsp Dsp?
+  weeklyReport WeeklyReport[]
 }
 
 model Dsp {
@@ -156,6 +129,7 @@ model Dsp {
   createdAt DateTime @default(now())
   name String @unique
   shortcode String @unique
+  timeZone String
 
   // DSP SETTINGS
   leaderBoardLimit Json
@@ -171,6 +145,10 @@ model Dsp {
   deliveryNotRecievedLimits Json
   photoOnDeliveryLimits Json
 
+  // DSP INFORMATION
+  paid Boolean @default(false)  // Keeps track if the Dsp has paid 
+  accountStanding String @default("Free") // Keeps track of the Dsp Account Status
+
   // RELATIONSHIPS
   adminId Int
   admin Admin @relation(fields: [adminId], references: [id])
@@ -178,6 +156,50 @@ model Dsp {
   driver Driver @relation(fields: [driverId], references: [id])
   ownerId Int
   owner Owner @relation(fields: [ownerId], references: [id])
+}
+
+model WeeklyReport {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  week String
+  hadAccident Boolean @default(false)
+  feedback String?
+  feedbackStatus String?
+  acknowledged Boolean @default(false)
+  acknowledgedAt String?
+
+  // DATA FROM SCORECARD TOOL
+  rank  Int
+  employeeId String
+  tier String
+  delivered Int
+  keyFocusArea String
+  fico String
+  seatbeltOffRate String
+  speedingEventRate String
+  distractionsRate String
+  followingDistanceRate String
+  signalViolationsRate String
+  deliveryCompletionRate String
+  deliveredNotRecieved String // dnr
+  photoOnDelivery String // pod_opps
+  callCompliance String // cc_opps
+  scanCompliance String
+  attendedDeliveryAccuracy Int
+
+  // ADDITIONAL INFORMATION
+  netradyne Json?
+  deliveryAssociate Json?
+  defects Json?
+  customerDeliveryFeedback Json?
+  hasManyAccidents Json?
+  belongsToTeam Json?
+  attendance Json?
+  productivity Json?
+
+  // RELATIONSHIPS
+  driverId Int
+  driver Driver @relation(fields: [driverId], references: [id])
 }
 
 model Messages {
@@ -355,5 +377,6 @@ model Image {
 enum Role {
   USER
   ADMIN
+  OWNER
   SUPERADMIN
 }
