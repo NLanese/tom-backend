@@ -402,6 +402,9 @@ const typeDefs = gql`
     sDeleteAdmin(adminId: Int!): Admin
     sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
 
+    # OWNER MUTATIONS
+    ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
+
     # ADMIN MUTATIONS
     signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
     signinAdmin(email: String!, password: String!): Admin!

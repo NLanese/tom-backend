@@ -10,6 +10,7 @@ import injuryReportResolvers from './injuryReport.js';
 import superUserResolvers from './superUser.js';
 import messagesResolvers from './messages.js';
 import notifiedMessagesResolvers from './notifiedMessages.js';
+import ownerReslovers from './owner/ownerIndex.js';
 
 export default {
     Query: {
@@ -31,7 +32,8 @@ export default {
         ...injuryReportResolvers.Mutation,
         ...superUserResolvers.Mutation,
         ...messagesResolvers.Mutation,
-        ...notifiedMessagesResolvers.Mutation
+        ...notifiedMessagesResolvers.Mutation,
+        ...ownerReslovers.Mutation
     },
     JSON: GraphQLJSON,
 }
