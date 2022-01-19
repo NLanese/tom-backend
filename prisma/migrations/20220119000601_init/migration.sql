@@ -3,7 +3,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'OWNER', 'SUPERADMIN');
 
 -- CreateTable
 CREATE TABLE "SuperUser" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'SUPERADMIN',
     "token" TEXT,
@@ -19,8 +19,7 @@ CREATE TABLE "SuperUser" (
 
 -- CreateTable
 CREATE TABLE "Owner" (
-    "id" SERIAL NOT NULL,
-    "uuid" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'OWNER',
     "token" TEXT,
@@ -42,7 +41,7 @@ CREATE TABLE "Owner" (
 
 -- CreateTable
 CREATE TABLE "Admin" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'ADMIN',
     "token" TEXT,
@@ -57,14 +56,14 @@ CREATE TABLE "Admin" (
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
-    "ownerId" INTEGER NOT NULL,
+    "ownerId" TEXT NOT NULL,
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Driver" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "token" TEXT,
@@ -79,15 +78,14 @@ CREATE TABLE "Driver" (
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
-    "ownerId" INTEGER NOT NULL,
-    "adminId" INTEGER,
+    "ownerId" TEXT NOT NULL,
 
     CONSTRAINT "Driver_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Dsp" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,
     "shortcode" TEXT NOT NULL,
@@ -106,16 +104,16 @@ CREATE TABLE "Dsp" (
     "photoOnDeliveryLimits" JSONB NOT NULL,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStanding" TEXT NOT NULL DEFAULT E'Free',
-    "adminId" INTEGER NOT NULL,
-    "driverId" INTEGER NOT NULL,
-    "ownerId" INTEGER NOT NULL,
+    "adminId" TEXT,
+    "driverId" TEXT,
+    "ownerId" TEXT NOT NULL,
 
     CONSTRAINT "Dsp_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "WeeklyReport" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "week" TEXT NOT NULL,
     "hadAccident" BOOLEAN NOT NULL DEFAULT false,
@@ -148,7 +146,7 @@ CREATE TABLE "WeeklyReport" (
     "belongsToTeam" JSONB,
     "attendance" JSONB,
     "productivity" JSONB,
-    "driverId" INTEGER NOT NULL,
+    "driverId" TEXT NOT NULL,
 
     CONSTRAINT "WeeklyReport_pkey" PRIMARY KEY ("id")
 );
@@ -159,9 +157,9 @@ CREATE TABLE "Messages" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
     "from" TEXT NOT NULL,
-    "ownerId" INTEGER NOT NULL,
-    "driverId" INTEGER NOT NULL,
-    "adminId" INTEGER NOT NULL,
+    "ownerId" TEXT,
+    "driverId" TEXT,
+    "adminId" TEXT,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
@@ -174,9 +172,9 @@ CREATE TABLE "NotifiedMessages" (
     "content" TEXT NOT NULL,
     "from" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "driverId" INTEGER,
-    "adminId" INTEGER,
-    "ownerId" INTEGER NOT NULL,
+    "driverId" TEXT,
+    "adminId" TEXT,
+    "ownerId" TEXT,
 
     CONSTRAINT "NotifiedMessages_pkey" PRIMARY KEY ("id")
 );
@@ -184,7 +182,7 @@ CREATE TABLE "NotifiedMessages" (
 -- CreateTable
 CREATE TABLE "Vehicle" (
     "id" SERIAL NOT NULL,
-    "driverId" INTEGER NOT NULL,
+    "driverId" TEXT NOT NULL,
     "vehicle_number" TEXT,
     "amazon_logo" TEXT,
 
@@ -195,7 +193,7 @@ CREATE TABLE "Vehicle" (
 CREATE TABLE "Accident" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "driverId" INTEGER NOT NULL,
+    "driverId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "using_safety" BOOLEAN,
     "safety_failed" BOOLEAN,
@@ -315,6 +313,12 @@ CREATE TABLE "Image" (
 );
 
 -- CreateTable
+CREATE TABLE "_AdminToDriver" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_AccidentToHitPerson" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -345,19 +349,31 @@ CREATE TABLE "_AccidentToInjuryReport" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SuperUser_id_key" ON "SuperUser"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "SuperUser_email_key" ON "SuperUser"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Owner_uuid_key" ON "Owner"("uuid");
+CREATE UNIQUE INDEX "Owner_id_key" ON "Owner"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Owner_email_key" ON "Owner"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Admin_id_key" ON "Admin"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Dsp_id_key" ON "Dsp"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Dsp_name_key" ON "Dsp"("name");
@@ -375,7 +391,16 @@ CREATE UNIQUE INDEX "Dsp_driverId_key" ON "Dsp"("driverId");
 CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_AdminToDriver_AB_unique" ON "_AdminToDriver"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_AdminToDriver_B_index" ON "_AdminToDriver"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AccidentToHitPerson_AB_unique" ON "_AccidentToHitPerson"("A", "B");
@@ -414,13 +439,10 @@ ALTER TABLE "Admin" ADD CONSTRAINT "Admin_ownerId_fkey" FOREIGN KEY ("ownerId") 
 ALTER TABLE "Driver" ADD CONSTRAINT "Driver_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Driver" ADD CONSTRAINT "Driver_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -429,16 +451,16 @@ ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFE
 ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -453,19 +475,19 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "HitPerson" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Collision" ADD CONSTRAINT "Collision_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Collision" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryReport" ADD CONSTRAINT "InjuryReport_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryReport" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_injuryAccidentId_fkey" FOREIGN KEY ("injuryAccidentId") REFERENCES "InjuryAccident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -475,6 +497,12 @@ ALTER TABLE "Image" ADD CONSTRAINT "Image_hitPersonId_fkey" FOREIGN KEY ("hitPer
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_propertyAccidentId_fkey" FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AdminToDriver" ADD FOREIGN KEY ("A") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AdminToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AccidentToHitPerson" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
