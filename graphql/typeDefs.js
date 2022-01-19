@@ -19,7 +19,6 @@ const typeDefs = gql`
 
   type Owner {
     id:                           ID
-    uuid:                         String
     createdAt:                    Date
     role:                         String
     token:                        String
@@ -107,7 +106,7 @@ const typeDefs = gql`
     # RELATIONSHIPS
     owner:                        Owner
     accidents:                    [Accident]
-    admins:                        [Admin]
+    admins:                       [Admin]
     vehicle:                      Vehicle
     messages:                     [Messages]
     NotifiedMessages:             [NotifiedMessages]
@@ -413,7 +412,7 @@ const typeDefs = gql`
     # OWNER MUTATIONS
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerSignIn(email: String!, password: String!): Owner
-    updateOwner(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
+    ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
 
     # MANAGER MUTATIONS
     managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Admin

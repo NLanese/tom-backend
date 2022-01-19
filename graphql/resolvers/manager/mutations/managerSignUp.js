@@ -3,6 +3,7 @@ import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput } from "../../../../utils/validators.js";
 
+/* SIGNS UP THE MANAGER AND RELATES THEM TO THE OWNER */
 export default {
     Mutation: {
         managerSignUp: async (_, {

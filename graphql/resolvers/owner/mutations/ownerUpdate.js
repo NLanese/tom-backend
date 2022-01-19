@@ -3,7 +3,7 @@ import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-aut
 
 export default {
     Mutation: {
-        updateOwner: async (_, {
+        ownerUpdate: async (_, {
             email,
             password,
             firstname,

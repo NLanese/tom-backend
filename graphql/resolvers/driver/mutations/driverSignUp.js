@@ -3,6 +3,7 @@ import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput } from "../../../../utils/validators.js";
 
+/* SIGNS UP THE DRIVER AND RELATES THEM TO THE OWNER AND ALL THEIR MANAGERS */
 export default {
     Mutation: {
         driverSignUp: async (_, {
@@ -72,18 +73,26 @@ export default {
                 })
 
                 owner.admins.forEach( async (admin) => {
-                    await db.driver.update({
+                    const foundAdmin = await db.admin.findUnique({
                         where: {
-                            id: newDriver.id
-                        },
-                        data: {
-                            admin: {
-                                connect: {
-                                    id: admin.id 
-                                }
-                            },
+                            id: admin.id
                         }
                     })
+
+                    if (foundAdmin) {
+                        await db.driver.update({
+                            where: {
+                                id: newDriver.id
+                            },
+                            data: {
+                                admins: {
+                                    connect: {
+                                        id: admin.id 
+                                    }
+                                },
+                            }
+                        })
+                    }
                 })
 
                 return newDriver

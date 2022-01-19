@@ -277,7 +277,7 @@ export default {
                 token: token
             }
         },
-        updateOwner: async (_, {
+        ownerUpdate: async (_, {
             email,
             firstname,
             lastname,

@@ -2,7 +2,7 @@ import GraphQLJSON from 'graphql-type-json';
 import ownerSignUp from './mutations/ownerSignUp.js';
 import ownerSignIn from './mutations/ownerSignIn.js';
 import getOwner from './queries/getOwner.js';
-import updateOwner from './mutations/updateOwner.js';
+import ownerUpdate from './mutations/ownerUpdate.js';
 
 export default {
     Query: {
@@ -11,7 +11,7 @@ export default {
     Mutation: {
         ...ownerSignUp.Mutation,
         ...ownerSignIn.Mutation,
-        ...updateOwner.Mutation
+        ...ownerUpdate.Mutation
     },
     JSON: GraphQLJSON,
 }

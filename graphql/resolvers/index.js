@@ -11,10 +11,11 @@ import superUserResolvers from './superUser.js';
 import messagesResolvers from './messages.js';
 import notifiedMessagesResolvers from './notifiedMessages.js';
 
-
+// NEW RESOLVERS
 import ownerReslovers from './owner/ownerResolvers.js';
 import managerResolvers from './manager/managerResolvers.js';
 import driverResolvers from './driver/driverResolvers.js';
+import dspResolvers from './dsp/dspResolvers.js';
 
 export default {
     Query: {
@@ -24,9 +25,11 @@ export default {
         ...superUserResolvers.Query,
         ...messagesResolvers.Query,
         ...notifiedMessagesResolvers.Query,
+
         ...ownerReslovers.Query,
         ...managerResolvers.Query,
-        ...driverResolvers.Query
+        ...driverResolvers.Query,
+        ...dspResolvers.Query
     },
     Mutation: {
         ...adminResolvers.Mutation,
@@ -40,9 +43,11 @@ export default {
         ...superUserResolvers.Mutation,
         ...messagesResolvers.Mutation,
         ...notifiedMessagesResolvers.Mutation,
+
         ...ownerReslovers.Mutation,
         ...managerResolvers.Mutation,
-        ...driverResolvers.Mutation
+        ...driverResolvers.Mutation,
+        ...dspResolvers.Mutation
     },
     JSON: GraphQLJSON,
 }
