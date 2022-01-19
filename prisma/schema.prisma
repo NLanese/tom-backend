@@ -1,278 +1,278 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 // FOR INTERNAL KING WILLY USE
 model SuperUser {
-  id String @id @default(uuid()) @unique
-  createdAt DateTime @default(now())
-  role Role @default(SUPERADMIN)
-  token String?
-  firstname String
-  lastname String
-  email String @unique
-  password String
+  id          String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  role        Role     @default(SUPERADMIN)
+  token       String?
+  firstname   String
+  lastname    String
+  email       String   @unique
+  password    String
   phoneNumber String
   profilePick Json?
 }
 
 model Owner {
-  id String @id @default(uuid()) @unique 
-  createdAt DateTime @default(now())
-  role Role @default(OWNER)
-  token String?
-  firstname String
-  lastname String
-  email String @unique
+  id          String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  role        Role     @default(OWNER)
+  token       String?
+  firstname   String
+  lastname    String
+  email       String   @unique
   phoneNumber String
-  password String
+  password    String
   profilePick Json?
 
   // ACCOUNT INFORMATION
-  locked Boolean @default(false) // Used to lock the Drivers Account if needed
+  locked  Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
   // RESET PASSWORD
-  resetPasswordToken String?
+  resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken String? // Used for Driver/Admin signing up on the app
+  signUpToken                  String? // Used for Driver/Admin signing up on the app
 
   // RELATIONSHIPS
-  drivers Driver[]
-  admins Admin[]
-  messages Messages[]
+  drivers          Driver[]
+  admins           Admin[]
+  messages         Messages[]
   notifiedMessages NotifiedMessages[]
-  dsp Dsp?
+  dsp              Dsp?
 }
 
 model Admin {
-  id String @id @default(uuid()) @unique
-  createdAt DateTime @default(now())
-  role Role @default(MANAGER)
-  token String?
-  firstname String
-  lastname String
-  email String @unique
+  id          String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  role        Role     @default(MANAGER)
+  token       String?
+  firstname   String
+  lastname    String
+  email       String   @unique
   phoneNumber String
-  password String
+  password    String
   profilePick Json?
 
   // ACCOUNT INFORMATION
-  locked Boolean @default(false) // Used to lock the Admins Account if needed
+  locked  Boolean @default(false) // Used to lock the Admins Account if needed
   deleted Boolean @default(false) // Keeps track if the Admins Account has been deleted
-  
+
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
   // RESET PASSWORD
-  resetPasswordToken String?
+  resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
 
   // RELATIONSHIPS
-  ownerId String
-  owner Owner @relation(fields: [ownerId], references: [id])
-  drivers Driver[]
-  messages Messages[]
+  ownerId          String
+  owner            Owner              @relation(fields: [ownerId], references: [id])
+  drivers          Driver[]
+  messages         Messages[]
   notifiedMessages NotifiedMessages[]
-  dspId String? 
-  dsp Dsp? @relation(fields: [dspId], references: [id])
+  dspId            String?
+  dsp              Dsp?               @relation(fields: [dspId], references: [id])
 }
 
 model Driver {
-  id String @id @default(uuid()) @unique
-  createdAt DateTime @default(now())
-  role Role @default(USER)
-  token String?
-  firstname String
-  lastname String
-  email String @unique
+  id          String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  role        Role     @default(USER)
+  token       String?
+  firstname   String
+  lastname    String
+  email       String   @unique
   phoneNumber String
-  password String
+  password    String
   profilePick Json?
 
   // ACCOUNT INFORMATION
-  locked Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Drivers account has been deleted
+  transporterId String? @unique
+  locked        Boolean @default(false) // Used to lock the Drivers Account if needed
+  deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
   // RESET PASSWORD
-  resetPasswordToken String?
+  resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
 
   // RELATIONSHIPS
-  ownerId String
-  owner Owner @relation(fields: [ownerId], references: [id])
-  admins Admin[] 
-  accidents Accident[]
-  messages Messages[]
-  notifiedMessages NotifiedMessages[] 
-  vehicle Vehicle?
-  dspId String? 
-  dsp Dsp? @relation(fields: [dspId], references: [id])
-  weeklyReport WeeklyReport[]
+  ownerId          String
+  owner            Owner              @relation(fields: [ownerId], references: [id])
+  admins           Admin[]
+  accidents        Accident[]
+  messages         Messages[]
+  notifiedMessages NotifiedMessages[]
+  vehicle          Vehicle?
+  dspId            String?
+  dsp              Dsp?               @relation(fields: [dspId], references: [id])
+  weeklyReport     WeeklyReport[]
 }
 
 model Dsp {
-  id String @id @default(uuid()) @unique
+  id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
-  name String @unique
-  shortcode String @unique
-  timeZone String
+  name      String   @unique
+  shortcode String   @unique
+  timeZone  String
 
   // DSP SETTINGS
-  leaderBoardLimits Json
-  ficoLimits Json
-  seatbeltLimits Json
-  speedingLimits Json
-  distractionLimits Json
-  followLimits Json
-  signalLimits Json
+  leaderBoardLimits            Json
+  ficoLimits                   Json
+  seatbeltLimits               Json
+  speedingLimits               Json
+  distractionLimits            Json
+  followLimits                 Json
+  signalLimits                 Json
   deliveryCompletionRateLimits Json
-  scanComplianceLimits Json
-  callComplianceLimits Json
-  deliveryNotRecievedLimits Json
-  photoOnDeliveryLimits Json
-  topCardLimits Int
-  smallCardLimits Int
+  scanComplianceLimits         Json
+  callComplianceLimits         Json
+  deliveryNotRecievedLimits    Json
+  photoOnDeliveryLimits        Json
+  topCardLimits                Int
+  smallCardLimits              Int
 
   // DSP INFORMATION
-  paid Boolean @default(false)  // Keeps track if the Dsp has paid 
-  accountStanding String @default("Free") // Keeps track of the Dsp Account Status
+  paid            Boolean @default(false) // Keeps track if the Dsp has paid 
+  accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
 
   // RELATIONSHIPS
-  admins Admin[]
+  admins  Admin[]
   drivers Driver[]
-  ownerId String
-  owner Owner @relation(fields: [ownerId], references: [id])
+  ownerId String   @unique
+  owner   Owner    @relation(fields: [ownerId], references: [id])
 }
 
 model WeeklyReport {
-  id String @id @default(uuid()) @unique
-  createdAt DateTime @default(now())
-  week String
-  hadAccident Boolean @default(false)
-  feedback String?
+  id             String   @id @unique @default(uuid())
+  createdAt      DateTime @default(now())
+  date           String   @unique
+  hadAccident    Boolean  @default(false)
+  feedback       String?
   feedbackStatus String?
-  acknowledged Boolean @default(false)
+  acknowledged   Boolean  @default(false)
   acknowledgedAt String?
 
   // DATA FROM SCORECARD TOOL
-  rank  Int
-  employeeId String
-  tier String
-  delivered Int
-  keyFocusArea String
-  fico String
-  seatbeltOffRate String
-  speedingEventRate String
-  distractionsRate String
-  followingDistanceRate String
-  signalViolationsRate String
-  deliveryCompletionRate String
-  deliveredNotRecieved String // dnr
-  photoOnDelivery String // pod_opps
-  callCompliance String // cc_opps
-  scanCompliance String
+  rank                     Int
+  tier                     String
+  delivered                Int
+  keyFocusArea             String
+  fico                     String
+  seatbeltOffRate          String
+  speedingEventRate        String
+  distractionsRate         String
+  followingDistanceRate    String
+  signalViolationsRate     String
+  deliveryCompletionRate   String
+  deliveredNotRecieved     String // dnr
+  photoOnDelivery          String // pod_opps
+  callCompliance           String // cc_opps
+  scanCompliance           String
   attendedDeliveryAccuracy Int
 
   // ADDITIONAL INFORMATION
-  netradyne Json?
-  deliveryAssociate Json?
-  defects Json?
+  netradyne                Json?
+  deliveryAssociate        Json?
+  defects                  Json?
   customerDeliveryFeedback Json?
-  hasManyAccidents Json?
-  belongsToTeam Json?
-  attendance Json?
-  productivity Json?
+  hasManyAccidents         Json?
+  belongsToTeam            Json?
+  attendance               Json?
+  productivity             Json?
 
   // RELATIONSHIPS
   driverId String
-  driver Driver @relation(fields: [driverId], references: [id])
+  driver   Driver @relation(fields: [driverId], references: [id])
 }
 
 model Messages {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  content String
-  from  String
-  ownerId String?
-  driverId String?
-  adminId  String?
-  owner Owner? @relation(fields: [ownerId], references: [id])
-  driver Driver? @relation(fields: [driverId], references: [id])
-  admin  Admin?  @relation(fields: [adminId], references: [id])
+  content   String
+  from      String
+  ownerId   String?
+  driverId  String?
+  adminId   String?
+  owner     Owner?   @relation(fields: [ownerId], references: [id])
+  driver    Driver?  @relation(fields: [driverId], references: [id])
+  admin     Admin?   @relation(fields: [adminId], references: [id])
 }
 
 model NotifiedMessages {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  read    Boolean @default(false)
-  content String
-  from    String
-  type    String
-  driverId String?
-  adminId  String?
-  ownerId String?
-  owner Owner? @relation(fields: [ownerId], references: [id])
-  driver Driver? @relation(fields: [driverId], references: [id])
-  admin  Admin?  @relation(fields: [adminId], references: [id])
+  read      Boolean  @default(false)
+  content   String
+  from      String
+  type      String
+  driverId  String?
+  adminId   String?
+  ownerId   String?
+  owner     Owner?   @relation(fields: [ownerId], references: [id])
+  driver    Driver?  @relation(fields: [driverId], references: [id])
+  admin     Admin?   @relation(fields: [adminId], references: [id])
 }
 
 model Vehicle {
-  id Int @id @default(autoincrement())
-  driverId String
-  driver Driver @relation(fields: [driverId], references: [id])
+  id            Int     @id @default(autoincrement())
+  driverId      String  @unique
+  driver        Driver  @relation(fields: [driverId], references: [id])
   vehicleNumber String?
-  amazonLogo String?
+  amazonLogo    String?
 }
 
 model Accident {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  driverId String
-  driver Driver @relation(fields: [driverId], references: [id])
-  name String
-  using_safety Boolean?
-  safety_failed Boolean?
+  id                     Int      @id @default(autoincrement())
+  createdAt              DateTime @default(now())
+  driverId               String
+  driver                 Driver   @relation(fields: [driverId], references: [id])
+  name                   String
+  using_safety           Boolean?
+  safety_failed          Boolean?
   number_package_carried Int?
-  safety_equipment_used String?
+  safety_equipment_used  String?
 
   police_report_information Json?
-  police_report_photos Json?
-  vehicle_number String?
-  amazon_logo Boolean?
+  police_report_photos      Json?
+  vehicle_number            String?
+  amazon_logo               Boolean?
 
   location String
-  deleted Boolean @default(false)
-  filled Boolean @default(false)
+  deleted  Boolean @default(false)
+  filled   Boolean @default(false)
 
-  hitPerson HitPerson[]
-  collision Collision[]
-  injuryAccident InjuryAccident[]
+  hitPerson        HitPerson[]
+  collision        Collision[]
+  injuryAccident   InjuryAccident[]
   propertyAccident PropertyAccident[]
-  injuryReport InjuryReport[]
+  injuryReport     InjuryReport[]
 }
 
 model HitPerson {
-  id Int @id @default(autoincrement())
-  accidentId Int
-  accident Accident[] @relation(fields: [accidentId], references: [id])
-  medical_attention Boolean
+  id                    Int        @id @default(autoincrement())
+  accidentId            Int
+  accident              Accident[] @relation(fields: [accidentId], references: [id])
+  medical_attention     Boolean
   vehicle_or_pedestrian String
-  previous_damage String
-  contact_infomation Json
-  injury String
+  previous_damage       String
+  contact_infomation    Json
+  injury                String
 
   deleted Boolean @default(false)
 
@@ -280,97 +280,97 @@ model HitPerson {
 }
 
 model Collision {
-  id Int @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   accidentId Int
-  accident Accident[] @relation(fields: [accidentId], references: [id])
-  location String
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
+  location   String
 
   deleted Boolean @default(false)
 }
 
 model InjuryAccident {
-  id Int @id @default(autoincrement())
-  self_injured Boolean
-  vehicle_number String
-  amazon_logo Boolean
-  exact_address String
+  id                     Int     @id @default(autoincrement())
+  self_injured           Boolean
+  vehicle_number         String
+  amazon_logo            Boolean
+  exact_address          String
   action_before_accident Json
-  police_report Json
-  weather String
-  wet_ground Boolean
-  slippery_ground Boolean
-  extra_info String
-  rushed_prior Boolean
+  police_report          Json
+  weather                String
+  wet_ground             Boolean
+  slippery_ground        Boolean
+  extra_info             String
+  rushed_prior           Boolean
 
   deleted Boolean @default(false)
 
   accident_pictures Image[]
 
   accidentId Int
-  accident Accident[] @relation(fields: [accidentId], references: [id])
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model PropertyAccident {
-  id Int @id @default(autoincrement())
-  self_injured Boolean
-  vehicle_number String
-  amazon_logo Boolean
-  exact_address String
+  id                     Int     @id @default(autoincrement())
+  self_injured           Boolean
+  vehicle_number         String
+  amazon_logo            Boolean
+  exact_address          String
   action_before_accident Json
-  police_report Json
-  weather String
-  wet_ground Boolean
-  slippery_ground Boolean
-  extra_info String
-  rushed_prior Boolean
+  police_report          Json
+  weather                String
+  wet_ground             Boolean
+  slippery_ground        Boolean
+  extra_info             String
+  rushed_prior           Boolean
 
   deleted Boolean @default(false)
 
   accident_pictures Image[]
 
   accidentId Int
-  accident Accident[] @relation(fields: [accidentId], references: [id])
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model InjuryReport {
-  id Int @id @default(autoincrement())
-  immediate_attention Boolean
-  late Json
-  self_injured Boolean
-  injury_type Json
-  other_injured Boolean
-  before_injury String
-  packages Json
-  safety_equipment Json
-  unsafe_conditions Json
-  pain_level Int
+  id                     Int     @id @default(autoincrement())
+  immediate_attention    Boolean
+  late                   Json
+  self_injured           Boolean
+  injury_type            Json
+  other_injured          Boolean
+  before_injury          String
+  packages               Json
+  safety_equipment       Json
+  unsafe_conditions      Json
+  pain_level             Int
   additional_information String
 
   deleted Boolean @default(false)
 
   accidentId Int
-  accident Accident[] @relation(fields: [accidentId], references: [id])
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 model Image {
-  id Int @id @default(autoincrement())
-  fieldname String
-  path String
-  mimetype String
-  size Int
+  id           Int    @id @default(autoincrement())
+  fieldname    String
+  path         String
+  mimetype     String
+  size         Int
   originalname String
-  encoding String
-  destination String
-  filename String
+  encoding     String
+  destination  String
+  filename     String
 
   injuryAccidentId Int
-  injuryAccident InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
+  injuryAccident   InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
 
   hitPersonId Int
-  hitPerson HitPerson @relation(fields: [hitPersonId], references: [id])
+  hitPerson   HitPerson @relation(fields: [hitPersonId], references: [id])
 
   propertyAccidentId Int
-  propertyAccident PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
+  propertyAccident   PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
 }
 
 enum Role {

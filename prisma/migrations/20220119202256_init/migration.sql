@@ -50,7 +50,7 @@ CREATE TABLE "Admin" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profile_Pick" JSONB,
+    "profilePick" JSONB,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
@@ -74,6 +74,7 @@ CREATE TABLE "Driver" (
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profilePick" JSONB,
+    "transporterId" TEXT,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
@@ -117,14 +118,13 @@ CREATE TABLE "Dsp" (
 CREATE TABLE "WeeklyReport" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "week" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
     "hadAccident" BOOLEAN NOT NULL DEFAULT false,
     "feedback" TEXT,
     "feedbackStatus" TEXT,
     "acknowledged" BOOLEAN NOT NULL DEFAULT false,
     "acknowledgedAt" TEXT,
     "rank" INTEGER NOT NULL,
-    "employeeId" TEXT NOT NULL,
     "tier" TEXT NOT NULL,
     "delivered" INTEGER NOT NULL,
     "keyFocusArea" TEXT NOT NULL,
@@ -185,8 +185,8 @@ CREATE TABLE "NotifiedMessages" (
 CREATE TABLE "Vehicle" (
     "id" SERIAL NOT NULL,
     "driverId" TEXT NOT NULL,
-    "vehicle_number" TEXT,
-    "amazon_logo" TEXT,
+    "vehicleNumber" TEXT,
+    "amazonLogo" TEXT,
 
     CONSTRAINT "Vehicle_pkey" PRIMARY KEY ("id")
 );
@@ -375,6 +375,9 @@ CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Driver_transporterId_key" ON "Driver"("transporterId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Dsp_id_key" ON "Dsp"("id");
 
 -- CreateIndex
@@ -388,6 +391,9 @@ CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "WeeklyReport_date_key" ON "WeeklyReport"("date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
