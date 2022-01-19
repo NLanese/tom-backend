@@ -421,7 +421,10 @@ const typeDefs = gql`
 
     # DSP MUTATIONS
     ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, leaderBoardLimits: JSON!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!): Dsp
+    ownerUpdateDsp(name: String, shortcode: String, timeZone: String, leaderBoardLimits: JSON, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
     ownerDeleteDsp(dspId: String!): Dsp
+
+    managerUpdateDsp(leaderBoardLimits: JSON, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
 
     # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
 
