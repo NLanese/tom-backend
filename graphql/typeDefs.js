@@ -8,98 +8,185 @@ const typeDefs = gql`
     id:                           ID
     createdAt:                    Date
     role:                         String
+    token:                        String
     firstname:                    String
     lastname:                     String
     email:                        String
     password:                     String
-    token:                        String
     phoneNumber:                  String
+    profilePick:                  JSON
+  }
+
+  type Owner {
+    id:                           ID
+    uuid:                         String
+    createdAt:                    Date
+    role:                         String
+    token:                        String
+    firstname:                    String
+    lastname:                     String
+    email:                        String
+    password:                     String
+    phoneNumber:                  String
+    profilePick:                  JSON
+
+    # ACCOUNT INFORMATION
+    locked:                       Boolean
+    deleted:                      Boolean
+
+    # NOTIFACTION SYSTEM
+    notified:                     Boolean
+
+    # RESET PASSWORD
+    resetPasswordToken:           String
+    resetPasswordTokenExpiration: Int
+    signUpToken:                  String
+
+    # RELATIONSHIPS
+    drivers:                      [Driver]
+    admins:                       [Admin]
+    messages:                     [Messages]
+    notifiedMessages:             [NotifiedMessages]
+    dsp:                          Dsp
   }
 
   type Admin {
     id:                           ID
     createdAt:                    Date
     role:                         String
+    token:                        String
     firstname:                    String
     lastname:                     String
     email:                        String
     password:                     String
     phoneNumber:                  String
+    profilePick:                  JSON
 
-    dsp_name:                     String
-    dsp_shortcode:                String
-
-    token:                        String
-    paid:                         Boolean
-    accountStatus:                String
-    notified:                     Boolean
+    # ACCOUNT INFORMATION
+    locked:                       Boolean
     deleted:                      Boolean
+
+    # NOTIFACTION SYSTEM
+    notified:                     Boolean
+
+    # RESET PASSWORD
+    resetPasswordToken:           String
+    resetPasswordTokenExpiration: Int
+    
+    # RELATIONSHIPS
+    owner:                        Owner
     drivers:                      [Driver]
     messages:                     [Messages]
     NotifiedMessages:             [NotifiedMessages]
+    dsp:                          Dsp
   }
 
   type Driver {
     id:                           ID
     createdAt:                    Date
     role:                         String
+    token:                        String
     firstname:                    String
     lastname:                     String
     email:                        String
     password:                     String
     phoneNumber:                  String
-    token:                        String
-    employeeId:                   String
-    tier:                         String
-    fico:                         String
-    seatbelt_and_speeding:        String
-    seatbelt_off_rate:            String
-    speeding_event_rate:          String 
-    key_focus_area:               String
-    distractions_rate:            String
-    following_distance_rate:      String
-    signal_violations_rate:       String
-    delivery_completion_rate:     String
-    photo_on_delivery:            String
-    scan_compliance:              String
-    call_compliance:              String
-    rank:                         Int
-    delivered:                    Int
-    netradyne:                    Int
-    delivery_associate:           Int
-    defects:                      Int
-    customer_delivery_feedback:   Int
-    delivered_and_recieved:       Int
-    attended_delivery_accuracy:   Int
-    dnr:                          Int
-    pod_opps:                     Int
-    cc_opps:                      Int
-    has_many_accidents:           Int
-    belongs_to_team:              Boolean
-    attendence:                   JSON
-    productivity:                 JSON
+    profilePick:                  String
 
-    dsp_name:                     String
-    dsp_shortcode:                String
-
-    notified:                     Boolean
+    # ACCOUNT INFORMATION
+    locked:                       Boolean
     deleted:                      Boolean
+
+    # NOTIFACTION SYSTEM
+    notified:                     Boolean
+
+    # RESET PASSWORD
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
 
-    adminId:                      Int
-    adminFirstname:               String
-    adminLastname:                String
-    adminEmail:                   String
-    adminPhoneNumber:             String
-    adminAccountStanding:         String
-    adminApproved:                Boolean
-
+    # RELATIONSHIPS
+    owner:                        Owner
     accidents:                    [Accident]
-    admin:                        [Admin]
+    admins:                        [Admin]
     vehicle:                      Vehicle
     messages:                     [Messages]
     NotifiedMessages:             [NotifiedMessages]
+    dsp:                          Dsp
+    weeklyReport:                 [WeeklyReport]
+  }
+
+  type Dsp {
+    id:                           ID
+    createdAt:                    Date
+    name:                         String
+    shortcode:                    String
+    timeZone:                     String
+
+    # DSP SETTINGS
+    leaderBoardLimits:            JSON
+    ficoLimits:                   JSON
+    seatbeltLimits:               JSON
+    speedingLimits:               JSON
+    distractionsLimits:           JSON
+    followLimits:                 JSON
+    signalLimits:                 JSON
+    deliveryCompletionRateLimits: JSON
+    scanComplianceLimits:         JSON
+    callComplianceLimits:         JSON
+    deliveryNotRecievedLimits:    JSON
+    photoOnDeliveryLimits:        JSON
+
+    # DSP INFORMATION
+    paid:                         Boolean
+    accountStanding:              String
+
+    # RELATIONSHIPS
+    owner:                        Owner
+    admin:                        Admin
+    driver:                       Driver
+  }
+
+  type WeeklyReport {
+    id:                           ID
+    createdAt:                    Date
+    week:                         String
+    hadAccident:                  Boolean
+    feedback:                     String
+    feedbackStatus:               String
+    acknowledged:                 Boolean
+    acknowledgedAt:               String
+
+    # DATA FROM SCORECARD TOOL
+    rank:                         Int
+    employeeId:                   String
+    tier:                         String
+    delivered:                    Int
+    keyFocusArea:                 String
+    fico:                         String
+    seatbeltOffRate:              String
+    speedingEventRate:            String
+    distractionsRate:             String
+    followingDistanceRate:        String
+    signalViolationsRate:         String
+    deliveryCompletionRate:       String
+    deliveryNotRecieved:          String
+    photoOnDelivery:              String
+    callCompliance:               String
+    scanCompliance:               String
+    attendedDeliveryAccuracy:     Int
+
+    # ADDITIONAL INFORMATION
+    netradyne:                    JSON
+    deliveryAssociate:            JSON
+    defects:                      JSON
+    customerDeliveryFeedback:     JSON
+    hasManyAccidents:             JSON
+    belongsToTeam:                JSON
+    attendence:                   JSON
+    productivity:                 JSON
+
+    # RELATIONSHIPS
+    driver:                       Driver
   }
 
   type Messages {
@@ -107,6 +194,8 @@ const typeDefs = gql`
     createdAt: Date
     content: String
     from: String
+
+    # RELATIONSHIPS
 		driver: Driver
     admin:  Admin
   }
@@ -276,6 +365,16 @@ const typeDefs = gql`
     sGetUserById(driverId: Int!): Driver
     sGetAccidentById(accidentId: Int!): Accident
 
+    # OWNER QUERIES
+    getOwner: Owner
+    ownerGetDrivers: [Driver]
+
+    # MANAGER QUERIES
+    getManager: Admin
+
+    # DRIVER QUERIES
+    getDriver: Driver
+
     # ADMIN QUERIES
     getAdmin: Admin
     adminGetEmployees: [Driver]
@@ -284,8 +383,7 @@ const typeDefs = gql`
     adminGetUserAccidentsById(driverId: Int): Driver
     # adminGetMessages: [AdminMessages]
 
-    # DRIVER QUERIES
-    getDriver: Driver
+    # DRIVER QUERIES OLD
     getDriverById(driverId: Int): Driver
     getDriversForDspForSafetyAndCompliance: [Driver] 
     getDriversForDspForTeam: [Driver]
@@ -302,7 +400,6 @@ const typeDefs = gql`
 
     # NOTIFIED MESSAGES QUERIES
     getNotifiedMessages: [NotifiedMessages]
-
   }
   
   type Mutation {
@@ -312,6 +409,19 @@ const typeDefs = gql`
     sSuspendAdmin(adminId: Int!): Admin
     sDeleteAdmin(adminId: Int!): Admin
     sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
+
+    # OWNER MUTATIONS
+    ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
+    ownerSignIn(email: String!, password: String!): Owner
+    updateOwner(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
+
+    # MANAGER MUTATIONS
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Admin
+    managerSignIn(email: String!, password: String!): Admin
+
+    # DRIVER MUTATIONS
+    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Driver
+    driverSignIn(email: String!, password: String!): Driver
 
     # ADMIN MUTATIONS
     signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
@@ -336,7 +446,7 @@ const typeDefs = gql`
     readNotifiedMessage(notifiedMessageId: Int!): NotifiedMessages
     notifiedToFalse: Driver
 
-    # DRIVER MUTATIONS
+    # DRIVER MUTATIONS OLD
     signupDriver(signupInput: SignupInput!): Driver!
     signinDriver(email: String!, password: String!): Driver!
     updateDriver(updateDriver: UpdateDriver): Driver!

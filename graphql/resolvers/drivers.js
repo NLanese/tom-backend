@@ -12,34 +12,34 @@ import handleAdminUserOwnership from '../../utils/handleOwnership/handleAdminOwn
 
 export default {
 	Query: {
-		getDriver: async (_, {}, context) => {
-			const driver = await checkDriverAuth(context)
+		// getDriver: async (_, {}, context) => {
+		// 	const driver = await checkDriverAuth(context)
 
-			try {
-				return await db.driver.findUnique({
-					where: {
-						id: driver.id
-					},
-					include: {
-						admin: true,
-						accidents: {
-							include: {
-								hitPerson: true,
-								collision: true,
-								injuryAccident: true,
-								propertyAccident: true,
-								injuryReport: true,
-							}
-						},
-						vehicle: true,
-						messages: true,
-						notifiedMessages: true
-					}
-				})
-			} catch (error) {
-				throw new Error(error)
-			}
-		},
+		// 	try {
+		// 		return await db.driver.findUnique({
+		// 			where: {
+		// 				id: driver.id
+		// 			},
+		// 			include: {
+		// 				admin: true,
+		// 				accidents: {
+		// 					include: {
+		// 						hitPerson: true,
+		// 						collision: true,
+		// 						injuryAccident: true,
+		// 						propertyAccident: true,
+		// 						injuryReport: true,
+		// 					}
+		// 				},
+		// 				vehicle: true,
+		// 				messages: true,
+		// 				notifiedMessages: true
+		// 			}
+		// 		})
+		// 	} catch (error) {
+		// 		throw new Error(error)
+		// 	}
+		// },
 
 		getDriverById: async (_, {
 			driverId
