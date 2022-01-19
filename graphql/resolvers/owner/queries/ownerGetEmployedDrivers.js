@@ -3,7 +3,7 @@ import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-aut
 
 export default {
     Query: {
-        ownerGetDrivers: async (_, {}, context) => {
+        ownerGetEmployedDrivers: async (_, {}, context) => {
             const owner = await checkOwnerAuth(context)
 
             try {

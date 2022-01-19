@@ -362,10 +362,11 @@ const typeDefs = gql`
   type Query {
     # OWNER QUERIES
     getOwner: Owner
-    ownerGetDrivers: [Driver]
+    ownerGetEmployedDrivers: [Driver]
 
     # MANAGER QUERIES
     getManager: Admin
+    managerGetEmployedDrivers: [Driver]
 
     # DRIVER QUERIES
     getDriver: Driver
