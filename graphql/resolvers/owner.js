@@ -27,7 +27,7 @@ export default {
             }
         },
 
-        ownerGetDrivers: async (_, {}, context) => {
+        ownerGetEmployedDrivers: async (_, {}, context) => {
             const owner = await checkAdminAuth(context)
             try {
                 return await db.driver.findMany({

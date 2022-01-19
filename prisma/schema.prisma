@@ -64,7 +64,7 @@ model Admin {
   email String @unique
   phoneNumber String
   password String
-  profile_Pick Json?
+  profilePick Json?
 
   // ACCOUNT INFORMATION
   locked Boolean @default(false) // Used to lock the Admins Account if needed
@@ -233,8 +233,8 @@ model Vehicle {
   id Int @id @default(autoincrement())
   driverId String
   driver Driver @relation(fields: [driverId], references: [id])
-  vehicle_number String?
-  amazon_logo String?
+  vehicleNumber String?
+  amazonLogo String?
 }
 
 model Accident {
