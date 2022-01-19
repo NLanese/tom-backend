@@ -13,7 +13,8 @@ export default {
                     },
                     include: {
                         owner: true,
-                        drivers: true
+                        drivers: true,
+                        dsp: true
                     }
                 })
             } catch (error) {

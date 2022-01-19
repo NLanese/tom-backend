@@ -48,7 +48,8 @@ export default {
                     email: ownerEmail
                 },
                 include: {
-                    admins: true
+                    admins: true,
+                    dsp: true
                 }
             })
 
@@ -57,20 +58,46 @@ export default {
             }
             
             try {
-                const newDriver = await db.driver.create({
-                    data: {
-                        owner: {
-                            connect: {
-                                id: owner.id
-                            }
-                        },
-                        email: email,
-                        password: password,
-                        firstname: firstname,
-                        lastname: lastname,
-                        phoneNumber: phoneNumber
-                    }
-                })
+                let newDriver
+
+                if (owner.dsp) {
+                    newDriver = await db.driver.create({
+                        data: {
+                            owner: {
+                                connect: {
+                                    id: owner.id
+                                }
+                            },
+                            dsp: {
+                                connect: {
+                                    id: owner.dsp.id
+                                }
+                            },
+                            email: email,
+                            password: password,
+                            firstname: firstname,
+                            lastname: lastname,
+                            phoneNumber: phoneNumber
+                        }
+                    })
+                }
+
+                if (!owner.dsp) {
+                    newDriver = await db.driver.create({
+                        data: {
+                            owner: {
+                                connect: {
+                                    id: owner.id
+                                }
+                            },
+                            email: email,
+                            password: password,
+                            firstname: firstname,
+                            lastname: lastname,
+                            phoneNumber: phoneNumber
+                        }
+                    })
+                }
 
                 owner.admins.forEach( async (admin) => {
                     const foundAdmin = await db.admin.findUnique({
