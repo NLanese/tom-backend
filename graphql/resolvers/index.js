@@ -16,6 +16,7 @@ import ownerReslovers from './owner/ownerResolvers.js';
 import managerResolvers from './manager/managerResolvers.js';
 import driverResolvers from './driver/driverResolvers.js';
 import dspResolvers from './dsp/dspResolvers.js';
+import weeklyReportResolvers from './weeklyReport/weeklyReportResolvers.js';
 
 export default {
     Query: {
@@ -29,7 +30,8 @@ export default {
         ...ownerReslovers.Query,
         ...managerResolvers.Query,
         ...driverResolvers.Query,
-        ...dspResolvers.Query
+        ...dspResolvers.Query,
+        ...weeklyReportResolvers.Query
     },
     Mutation: {
         ...adminResolvers.Mutation,
@@ -47,7 +49,8 @@ export default {
         ...ownerReslovers.Mutation,
         ...managerResolvers.Mutation,
         ...driverResolvers.Mutation,
-        ...dspResolvers.Mutation
+        ...dspResolvers.Mutation,
+        ...weeklyReportResolvers.Mutation
     },
     JSON: GraphQLJSON,
 }

@@ -93,6 +93,7 @@ const typeDefs = gql`
     profilePick:                  String
 
     # ACCOUNT INFORMATION
+    transporterId:                String
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -150,7 +151,7 @@ const typeDefs = gql`
   type WeeklyReport {
     id:                           ID
     createdAt:                    Date
-    week:                         String
+    date:                         String
     hadAccident:                  Boolean
     feedback:                     String
     feedbackStatus:               String
@@ -159,7 +160,6 @@ const typeDefs = gql`
 
     # DATA FROM SCORECARD TOOL
     rank:                         Int
-    employeeId:                   String
     tier:                         String
     delivered:                    Int
     keyFocusArea:                 String
@@ -426,6 +426,9 @@ const typeDefs = gql`
     ownerDeleteDsp(dspId: String!): Dsp
 
     managerUpdateDsp(leaderBoardLimits: JSON, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
+
+    # WEEKLY REPORT MUTATIONS
+    ownerCreateWeeklyReport(driverId: String!, date: String!, feedback: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveryNotRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!): WeeklyReport
 
     # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
 
