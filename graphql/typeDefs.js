@@ -126,7 +126,7 @@ const typeDefs = gql`
     ficoLimits:                   JSON
     seatbeltLimits:               JSON
     speedingLimits:               JSON
-    distractionsLimits:           JSON
+    distractionLimits:            JSON
     followLimits:                 JSON
     signalLimits:                 JSON
     deliveryCompletionRateLimits: JSON
@@ -134,6 +134,8 @@ const typeDefs = gql`
     callComplianceLimits:         JSON
     deliveryNotRecievedLimits:    JSON
     photoOnDeliveryLimits:        JSON
+    topCardLimits:                Int
+    smallCardLimits:              Int
 
     # DSP INFORMATION
     paid:                         Boolean
@@ -141,8 +143,8 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    admin:                        Admin
-    driver:                       Driver
+    admin:                        [Admin]
+    driver:                       [Driver]
   }
 
   type WeeklyReport {
@@ -358,12 +360,6 @@ const typeDefs = gql`
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
-    # SUPER USER QUERIES
-    sGetAllAdmins: [Admin]
-    sGetAdminById(adminId: Int!): Admin
-    sGetUserById(driverId: Int!): Driver
-    sGetAccidentById(accidentId: Int!): Accident
-
     # OWNER QUERIES
     getOwner: Owner
     ownerGetDrivers: [Driver]
@@ -373,6 +369,14 @@ const typeDefs = gql`
 
     # DRIVER QUERIES
     getDriver: Driver
+
+    # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
+
+    # SUPER USER QUERIES
+    sGetAllAdmins: [Admin]
+    sGetAdminById(adminId: Int!): Admin
+    sGetUserById(driverId: Int!): Driver
+    sGetAccidentById(accidentId: Int!): Accident
 
     # ADMIN QUERIES
     getAdmin: Admin
@@ -402,13 +406,6 @@ const typeDefs = gql`
   }
   
   type Mutation {
-    # SUPER USER MUTATIONS
-    sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
-    sSigninSuper(email: String!, password: String!): SuperUser!
-    sSuspendAdmin(adminId: Int!): Admin
-    sDeleteAdmin(adminId: Int!): Admin
-    sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
-
     # OWNER MUTATIONS
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerSignIn(email: String!, password: String!): Owner
@@ -421,6 +418,19 @@ const typeDefs = gql`
     # DRIVER MUTATIONS
     driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Driver
     driverSignIn(email: String!, password: String!): Driver
+
+    # DSP MUTATIONS
+    ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, leaderBoardLimits: JSON!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!): Dsp
+    ownerDeleteDsp(dspId: String!): Dsp
+
+    # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
+
+    # SUPER USER MUTATIONS
+    sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
+    sSigninSuper(email: String!, password: String!): SuperUser!
+    sSuspendAdmin(adminId: Int!): Admin
+    sDeleteAdmin(adminId: Int!): Admin
+    sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
 
     # ADMIN MUTATIONS
     signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!

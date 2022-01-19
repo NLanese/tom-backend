@@ -46,6 +46,10 @@ export default {
             const owner = await db.owner.findUnique({
                 where: {
                     email: ownerEmail
+                },
+                include: {
+                    drivers: true,
+                    dsp: true
                 }
             })
 
@@ -54,20 +58,71 @@ export default {
             }
 
             try {
-                return await db.admin.create({
-                    data: {
-                        owner: {
-                            connect: {
-                                id: owner.id
+                let newManager
+
+                if (owner.dsp) {
+                    newManager = await db.admin.create({
+                        data: {
+                            owner: {
+                                connect: {
+                                    id: owner.id
+                                }
+                            },
+                            dsp: {
+                                connect: {
+                                    id: owner.dsp.id
+                                }
+                            },
+                            email: email,
+                            password: password,
+                            firstname: firstname,
+                            lastname: lastname,
+                            phoneNumber: phoneNumber
+                        }
+                    })
+                }
+
+                if (!owner.dsp) {
+                    newManager = await db.admin.create({
+                        data: {
+                            owner: {
+                                connect: {
+                                    id: owner.id
+                                }
+                            },
+                            email: email,
+                            password: password,
+                            firstname: firstname,
+                            lastname: lastname,
+                            phoneNumber: phoneNumber
+                        }
+                    })
+                }
+
+                owner.drivers.forEach( async (driver) => {
+                    const foundDriver = await db.driver.findUnique({
+                        where: {
+                            id: driver.id
+                        }
+                    })
+
+                    if (foundDriver) {
+                        await db.admin.update({
+                            where: {
+                                id: newManager.id
+                            },
+                            data: {
+                                drivers: {
+                                    connect: {
+                                        id: driver.id
+                                    }
+                                }
                             }
-                        },
-                        email: email,
-                        password: password,
-                        firstname: firstname,
-                        lastname: lastname,
-                        phoneNumber: phoneNumber
+                        })
                     }
                 })
+
+                return newManager
             } catch (error) {
                 throw new Error(error)
             }

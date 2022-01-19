@@ -52,13 +52,12 @@ model Owner {
   messages Messages[]
   notifiedMessages NotifiedMessages[]
   dsp Dsp?
-
 }
 
 model Admin {
   id String @id @default(uuid()) @unique
   createdAt DateTime @default(now())
-  role Role @default(ADMIN)
+  role Role @default(MANAGER)
   token String?
   firstname String
   lastname String
@@ -83,8 +82,9 @@ model Admin {
   owner Owner @relation(fields: [ownerId], references: [id])
   drivers Driver[]
   messages Messages[]
-  notifiedMessages NotifiedMessages[] 
-  dsp Dsp?
+  notifiedMessages NotifiedMessages[]
+  dspId String? 
+  dsp Dsp? @relation(fields: [dspId], references: [id])
 }
 
 model Driver {
@@ -118,7 +118,8 @@ model Driver {
   messages Messages[]
   notifiedMessages NotifiedMessages[] 
   vehicle Vehicle?
-  dsp Dsp?
+  dspId String? 
+  dsp Dsp? @relation(fields: [dspId], references: [id])
   weeklyReport WeeklyReport[]
 }
 
@@ -130,7 +131,7 @@ model Dsp {
   timeZone String
 
   // DSP SETTINGS
-  leaderBoardLimit Json
+  leaderBoardLimits Json
   ficoLimits Json
   seatbeltLimits Json
   speedingLimits Json
@@ -142,16 +143,16 @@ model Dsp {
   callComplianceLimits Json
   deliveryNotRecievedLimits Json
   photoOnDeliveryLimits Json
+  topCardLimits Int
+  smallCardLimits Int
 
   // DSP INFORMATION
   paid Boolean @default(false)  // Keeps track if the Dsp has paid 
   accountStanding String @default("Free") // Keeps track of the Dsp Account Status
 
   // RELATIONSHIPS
-  adminId String?
-  admin Admin? @relation(fields: [adminId], references: [id])
-  driverId String?
-  driver Driver? @relation(fields: [driverId], references: [id])
+  admins Admin[]
+  drivers Driver[]
   ownerId String
   owner Owner @relation(fields: [ownerId], references: [id])
 }
@@ -374,7 +375,7 @@ model Image {
 
 enum Role {
   USER
-  ADMIN
+  MANAGER
   OWNER
   SUPERADMIN
 }

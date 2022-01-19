@@ -6,16 +6,6 @@ export default {
         getDriver: async (_, {}, context) => {
             const driver = await checkDriverAuth(context)
 
-            console.log(await db.driver.findUnique({
-                where: {
-                    id: driver.id
-                },
-                include: {
-                    owner: true,
-                    admin: true
-                }
-            }))
-
             try {
                 return await db.driver.findUnique({
                     where: {
@@ -23,11 +13,11 @@ export default {
                     },
                     include: {
                         owner: true,
-                        admin: true
+                        admins: true,
+                        dsp: true
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }
