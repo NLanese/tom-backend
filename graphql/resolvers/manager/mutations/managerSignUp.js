@@ -2,6 +2,7 @@ import db from "../../../../utils/generatePrisma.js";
 import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput } from "../../../../utils/validators.js";
+import generateAdminToken from "../../../../utils/generateToken/generateAdminToken.js"
 
 /* SIGNS UP THE MANAGER AND RELATES THEM TO THE OWNER */
 export default {
@@ -13,7 +14,7 @@ export default {
             lastname,
             phoneNumber,
             signUpToken
-        }, context) => {
+        }, { req }) => {
             const { valid, errors } = validateRegisterInput(email, password)
 
             if (!valid) {
@@ -127,7 +128,16 @@ export default {
                     }
                 })
 
-                return newManager
+                const token = await generateAdminToken(newManager.id)
+
+                req.session = {
+                    token: `Bearer ${token}`
+                }
+
+                return {
+                    ...newManager,
+                    token: token
+                }
             } catch (error) {
                 throw new Error(error)
             }

@@ -3,6 +3,7 @@ import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from "apollo-server-errors";
 import { validateRegisterInput } from "../../../../utils/validators.js";
 import tokenGenerator from "../../../../utils/tokenGenerator.js"
+import generateOwnerToken from "../../../../utils/generateToken/generateOwnerToken.js"
 
 export default {
     Mutation: {
@@ -12,7 +13,7 @@ export default {
             firstname,
             lastname,
             phoneNumber
-        }, context) => {
+        }, { req }) => {
             const { valid, errors } = validateRegisterInput(email, password)
 
             if (!valid) {
@@ -49,7 +50,7 @@ export default {
             const signUpToken = await tokenGenerator(10)
 
             try {
-                return await db.owner.create({
+                const newOwner = await db.owner.create({
                     data: {
                         email: email,
                         password: password,
@@ -59,6 +60,17 @@ export default {
                         signUpToken: signUpToken
                     }
                 })
+
+                const token = await generateOwnerToken(newOwner.id)
+
+                req.session = {
+                    token: `Bearer ${token}`
+                }
+
+                return {
+                    ...newOwner,
+                    token: token
+                }
             } catch (error) {
                 throw new Error(error)
             }
