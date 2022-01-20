@@ -146,7 +146,7 @@ model Dsp {
   photoOnDeliveryLimits        Json
   topCardLimits                Int
   smallCardLimits              Int
-
+  
   // DSP INFORMATION
   paid            Boolean @default(false) // Keeps track if the Dsp has paid 
   accountStanding String  @default("Free") // Keeps track of the Dsp Account Status

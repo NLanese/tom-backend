@@ -14,7 +14,8 @@ export default {
                     include: {
                         owner: true,
                         admins: true,
-                        dsp: true
+                        dsp: true,
+                        weeklyReport: true
                     }
                 })
             } catch (error) {
