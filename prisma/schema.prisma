@@ -119,7 +119,7 @@ model Driver {
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   vehicle          Vehicle?
-  dspId            String?
+  dspId            String?            
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
 }

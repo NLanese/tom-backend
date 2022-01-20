@@ -21,12 +21,26 @@ export default {
             const foundOwner = await db.owner.findUnique({
                 where: {
                     email
+                },
+                include: {
+                    drivers: true,
+                    admins: true,
+                    dsp: true,
+                    messages: true,
+                    notifiedMessages: true
                 }
             })
 
             const foundManager = await db.admin.findUnique({
                 where: {
                     email
+                },
+                include: {
+                    owner: true,
+                    drivers: true,
+                    dsp: true,
+                    messages: true,
+                    notifiedMessages: true
                 }
             })
 
