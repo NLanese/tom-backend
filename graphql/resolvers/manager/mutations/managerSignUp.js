@@ -12,7 +12,7 @@ export default {
             firstname,
             lastname,
             phoneNumber,
-            ownerEmail
+            signUpToken
         }, context) => {
             const { valid, errors } = validateRegisterInput(email, password)
 
@@ -25,15 +25,20 @@ export default {
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
-            ownerEmail = await ownerEmail.toUpperCase()
 
-            const admin = await db.admin.findUnique({
+            const foundManager = await db.admin.findUnique({
                 where: {
                     email
                 },
             });
 
-            if (admin) {
+            const foundOwner = await db.owner.findUnique({
+                where: {
+                    email
+                }
+            })
+
+            if (foundManager || foundOwner) {
                 throw new UserInputError('email is taken', {
                     errors: {
                         email: 'Email is already taken',
@@ -45,7 +50,7 @@ export default {
 
             const owner = await db.owner.findUnique({
                 where: {
-                    email: ownerEmail
+                    signUpToken: signUpToken
                 },
                 include: {
                     drivers: true,

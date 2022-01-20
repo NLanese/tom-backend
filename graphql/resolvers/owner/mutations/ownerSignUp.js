@@ -25,13 +25,19 @@ export default {
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
 
-            const owner = await db.owner.findUnique({
+            const foundOwner = await db.owner.findUnique({
                 where: {
                     email
                 }
             })
 
-            if (owner) {
+            const foundManager = await db.admin.findUnique({
+                where: {
+                    email
+                }
+            })
+
+            if (foundOwner || foundManager) {
                 throw new UserInputError('email is taken', {
                     errors: {
                         email: 'Email is already taken',
@@ -40,6 +46,7 @@ export default {
             }
 
             password = await hashPassword(password)
+            const signUpToken = await tokenGenerator(10)
 
             try {
                 return await db.owner.create({
@@ -49,6 +56,7 @@ export default {
                         firstname: firstname,
                         lastname: lastname,
                         phoneNumber: phoneNumber,
+                        signUpToken: signUpToken
                     }
                 })
             } catch (error) {
