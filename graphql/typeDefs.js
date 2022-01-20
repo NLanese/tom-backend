@@ -369,6 +369,7 @@ const typeDefs = gql`
 
     # DRIVER QUERIES
     getDriver: Driver
+    getDriversFromDsp: [Driver]
 
     # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
 
