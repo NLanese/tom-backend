@@ -413,11 +413,11 @@ const typeDefs = gql`
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
 
     # MANAGER MUTATIONS
-    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Admin
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Admin
     managerSignIn(email: String!, password: String!): Admin
 
     # DRIVER MUTATIONS
-    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Driver
+    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver
     driverSignIn(email: String!, password: String!): Driver
 
     # DSP MUTATIONS
@@ -429,6 +429,9 @@ const typeDefs = gql`
 
     # WEEKLY REPORT MUTATIONS
     ownerCreateWeeklyReport(driverId: String!, date: String!, feedback: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveryNotRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!): WeeklyReport
+
+    # ADDITIONAL MUTATIONS
+    dynamicSignIn(email: String!, password: String!): Owner
 
     # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
 

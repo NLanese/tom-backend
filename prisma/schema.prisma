@@ -44,7 +44,7 @@ model Owner {
   // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken                  String? // Used for Driver/Admin signing up on the app
+  signUpToken                  String @unique // Used for Driver/Admin signing up on the app
 
   // RELATIONSHIPS
   drivers          Driver[]

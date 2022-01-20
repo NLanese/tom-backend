@@ -12,7 +12,7 @@ export default {
             firstname,
             lastname,
             phoneNumber,
-            ownerEmail
+            signUpToken
         }, context) => {
             const { valid, errors } = validateRegisterInput(email, password)
 
@@ -25,7 +25,6 @@ export default {
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
-            ownerEmail = await ownerEmail.toUpperCase()
 
             const driver = await db.driver.findUnique({
                 where: {
@@ -45,7 +44,7 @@ export default {
 
             const owner = await db.owner.findUnique({
                 where: {
-                    email: ownerEmail
+                    signUpToken: signUpToken
                 },
                 include: {
                     admins: true,
@@ -124,6 +123,7 @@ export default {
 
                 return newDriver
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
