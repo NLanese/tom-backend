@@ -7,11 +7,13 @@ import driverUpdate from "./mutations/driverUpdate.js";
 
 // DRIVER QUERIES
 import getDriver from "./queries/getDriver.js";
+import getDriversFromDsp from "./queries/getDriversFromDsp.js";
 
 export default {
     Query: {
         // DRIVER QUERIES
-        ...getDriver.Query
+        ...getDriver.Query,
+        ...getDriversFromDsp.Query
     },
     Mutation: {
         // DRIVER MUTATIONS

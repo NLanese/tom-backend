@@ -4,7 +4,6 @@ import checkAdminAuth from "../../../../../utils/checkAuthorization/check-admin-
 export default {
     Mutation: {
         managerUpdateDsp: async (_, {
-            leaderBoardLimits,
             ficoLimits,
             seatbeltLimits,
             speedingLimits,
@@ -40,7 +39,6 @@ export default {
                         id: foundManager.dsp.id
                     },
                     data: {
-                        leaderBoardLimits: leaderBoardLimits,
                         ficoLimits: ficoLimits,
                         seatbeltLimits: seatbeltLimits,
                         speedingLimits: speedingLimits,

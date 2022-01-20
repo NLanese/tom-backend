@@ -132,7 +132,6 @@ model Dsp {
   timeZone  String
 
   // DSP SETTINGS
-  leaderBoardLimits            Json
   ficoLimits                   Json
   seatbeltLimits               Json
   speedingLimits               Json
@@ -146,7 +145,7 @@ model Dsp {
   photoOnDeliveryLimits        Json
   topCardLimits                Int
   smallCardLimits              Int
-  
+
   // DSP INFORMATION
   paid            Boolean @default(false) // Keeps track if the Dsp has paid 
   accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
