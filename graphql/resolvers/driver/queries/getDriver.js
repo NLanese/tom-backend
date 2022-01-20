@@ -14,7 +14,14 @@ export default {
                     include: {
                         owner: true,
                         admins: true,
-                        dsp: true
+                        dsp: true,
+                        weeklyReport: {
+                            orderBy: [
+                                {
+                                    date: "desc"
+                                }
+                            ]
+                        }
                     }
                 })
             } catch (error) {

@@ -123,7 +123,6 @@ const typeDefs = gql`
     timeZone:                     String
 
     # DSP SETTINGS
-    leaderBoardLimits:            JSON
     ficoLimits:                   JSON
     seatbeltLimits:               JSON
     speedingLimits:               JSON
@@ -419,16 +418,19 @@ const typeDefs = gql`
     # DRIVER MUTATIONS
     driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver
     driverSignIn(email: String!, password: String!): Driver
+    driverUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Driver
 
     # DSP MUTATIONS
-    ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, leaderBoardLimits: JSON!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!): Dsp
-    ownerUpdateDsp(name: String, shortcode: String, timeZone: String, leaderBoardLimits: JSON, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
+    ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!): Dsp
+    ownerUpdateDsp(name: String, shortcode: String, timeZone: String, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
     ownerDeleteDsp(dspId: String!): Dsp
 
-    managerUpdateDsp(leaderBoardLimits: JSON, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
+    managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int): Dsp
 
     # WEEKLY REPORT MUTATIONS
     ownerCreateWeeklyReport(driverId: String!, date: String!, feedback: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveryNotRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!): WeeklyReport
+
+    managerCreateWeeklyReport(driverId: String!, date: String!, feedback: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveryNotRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!): WeeklyReport
 
     # ADDITIONAL MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner

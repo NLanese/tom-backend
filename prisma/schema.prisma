@@ -132,7 +132,6 @@ model Dsp {
   timeZone  String
 
   // DSP SETTINGS
-  leaderBoardLimits            Json
   ficoLimits                   Json
   seatbeltLimits               Json
   speedingLimits               Json
