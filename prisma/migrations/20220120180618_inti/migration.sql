@@ -93,7 +93,6 @@ CREATE TABLE "Dsp" (
     "name" TEXT NOT NULL,
     "shortcode" TEXT NOT NULL,
     "timeZone" TEXT NOT NULL,
-    "leaderBoardLimits" JSONB NOT NULL,
     "ficoLimits" JSONB NOT NULL,
     "seatbeltLimits" JSONB NOT NULL,
     "speedingLimits" JSONB NOT NULL,
@@ -379,6 +378,9 @@ CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_transporterId_key" ON "Driver"("transporterId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Driver_dspId_key" ON "Driver"("dspId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Dsp_id_key" ON "Dsp"("id");
