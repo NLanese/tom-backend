@@ -6,7 +6,7 @@ export default {
         ownerCreateWeeklyReport: async (_, {
             driverId,
             date,
-            feedback,
+            feedbackMessage,
             feedbackStatus,
             acknowledgedAt,
             rank,
@@ -37,7 +37,7 @@ export default {
                             }
                         },
                         date: date,
-                        feedback: feedback,
+                        feedbackMessage: feedbackMessage,
                         feedbackStatus: feedbackStatus,
                         acknowledgedAt: acknowledgedAt,
                         rank: rank,

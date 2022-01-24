@@ -44,7 +44,7 @@ model Owner {
   // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken                  String @unique // Used for Driver/Admin signing up on the app
+  signUpToken                  String  @unique // Used for Driver/Admin signing up on the app
 
   // RELATIONSHIPS
   drivers          Driver[]
@@ -119,7 +119,7 @@ model Driver {
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   vehicle          Vehicle?
-  dspId            String?            
+  dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
 }
@@ -145,6 +145,8 @@ model Dsp {
   photoOnDeliveryLimits        Json
   topCardLimits                Int
   smallCardLimits              Int
+  feedbackNotifications        Json
+  autoSend                     Json
 
   // DSP INFORMATION
   paid            Boolean @default(false) // Keeps track if the Dsp has paid 
@@ -158,14 +160,14 @@ model Dsp {
 }
 
 model WeeklyReport {
-  id             String   @id @unique @default(uuid())
-  createdAt      DateTime @default(now())
-  date           String   @unique
-  hadAccident    Boolean  @default(false)
-  feedback       String?
-  feedbackStatus String?
-  acknowledged   Boolean  @default(false)
-  acknowledgedAt String?
+  id              String   @id @unique @default(uuid())
+  createdAt       DateTime @default(now())
+  date            String   @unique
+  hadAccident     Boolean  @default(false)
+  feedbackMessage String?
+  feedbackStatus  String?
+  acknowledged    Boolean  @default(false)
+  acknowledgedAt  String?
 
   // DATA FROM SCORECARD TOOL
   rank                     Int

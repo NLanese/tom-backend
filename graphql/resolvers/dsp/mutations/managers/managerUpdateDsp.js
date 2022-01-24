@@ -16,7 +16,9 @@ export default {
             deliveryNotRecievedLimits,
             photoOnDeliveryLimits,
             topCardLimits,
-            smallCardLimits
+            smallCardLimits,
+            feedbackNotifications,
+            autoSend
         }, context) => {
             const manager = await checkAdminAuth(context)
 
@@ -51,7 +53,9 @@ export default {
                         deliveryNotRecievedLimits: deliveryNotRecievedLimits,
                         photoOnDeliveryLimits: photoOnDeliveryLimits,
                         topCardLimits: topCardLimits,
-                        smallCardLimits: smallCardLimits
+                        smallCardLimits: smallCardLimits,
+                        feedbackNotifications: feedbackNotifications,
+                        autoSend: autoSend
                     }
                 })
             } catch (error) {
