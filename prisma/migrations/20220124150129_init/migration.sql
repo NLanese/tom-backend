@@ -119,7 +119,7 @@ CREATE TABLE "WeeklyReport" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "date" TEXT NOT NULL,
     "hadAccident" BOOLEAN NOT NULL DEFAULT false,
-    "feedback" TEXT,
+    "feedbackMessage" TEXT,
     "feedbackStatus" TEXT,
     "acknowledged" BOOLEAN NOT NULL DEFAULT false,
     "acknowledgedAt" TEXT,
