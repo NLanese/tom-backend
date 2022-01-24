@@ -186,6 +186,9 @@ model WeeklyReport {
   callCompliance           String // cc_opps
   scanCompliance           String
   attendedDeliveryAccuracy Int
+  dnr                      Int
+  podOpps                  Int
+  ccOpps                   Int
 
   // ADDITIONAL INFORMATION
   netradyne                Json?
