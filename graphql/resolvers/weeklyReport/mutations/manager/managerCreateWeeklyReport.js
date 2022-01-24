@@ -24,7 +24,10 @@ export default {
             photoOnDelivery,
             callCompliance,
             scanCompliance,
-            attendedDeliveryAccuracy
+            attendedDeliveryAccuracy,
+            dnr,
+            podOpps,
+            ccOpps
         }, context) => {
             const manager = await checkAdminAuth(context)
 
@@ -55,7 +58,10 @@ export default {
                         photoOnDelivery: photoOnDelivery,
                         callCompliance: callCompliance,
                         scanCompliance: scanCompliance,
-                        attendedDeliveryAccuracy: attendedDeliveryAccuracy
+                        attendedDeliveryAccuracy: attendedDeliveryAccuracy,
+                        dnr: dnr,
+                        podOpps: podOpps,
+                        ccOpps: ccOpps
                     }
                 })
             } catch (error) {

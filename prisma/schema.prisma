@@ -181,9 +181,9 @@ model WeeklyReport {
   followingDistanceRate    String
   signalViolationsRate     String
   deliveryCompletionRate   String
-  deliveredNotRecieved     String // dnr
-  photoOnDelivery          String // pod_opps
-  callCompliance           String // cc_opps
+  deliveredNotRecieved     String
+  photoOnDelivery          String 
+  callCompliance           String 
   scanCompliance           String
   attendedDeliveryAccuracy Int
   dnr                      Int
