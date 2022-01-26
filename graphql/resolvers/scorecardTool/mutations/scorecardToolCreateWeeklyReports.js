@@ -1,14 +1,14 @@
-import db from "../../../../../utils/generatePrisma.js"
-import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
+import db from "../../../../utils/generatePrisma.js";
+import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
+import checkManagerAuth from "../../../../utils/checkAuthorization/check-admin-auth.js";
 
 export default {
     Mutation: {
-        ownerCreateWeeklyReport: async (_, {
-            driverId,
+        scorecardToolCreateWeeklyReports: async (_, {
+            role,
+            transporterId,
             date,
-            feedbackMessage,
             feedbackStatus,
-            acknowledgedAt,
             rank,
             tier,
             delivered,
@@ -29,20 +29,33 @@ export default {
             podOpps,
             ccOpps
         }, context) => {
-            const owner = await checkOwnerAuth(context)
+            let owner;
+            let manager;
+
+            if (role === 'OWNER') {
+                owner = await checkOwnerAuth(context)
+            }
+
+            if (role === 'MANAGER') {
+                manager = await checkManagerAuth(context)
+            }
+
+            const foundDriver = await db.driver.findUnique({
+                where: {
+                    transporterId
+                }
+            })
 
             try {
                 return await db.weeklyReport.create({
                     data: {
                         driver: {
                             connect: {
-                                id: driverId
+                                id: foundDriver.id
                             }
                         },
                         date: date,
-                        feedbackMessage: feedbackMessage,
                         feedbackStatus: feedbackStatus,
-                        acknowledgedAt: acknowledgedAt,
                         rank: rank,
                         tier: tier,
                         delivered: delivered,
@@ -54,19 +67,21 @@ export default {
                         followingDistanceRate: followingDistanceRate,
                         signalViolationsRate: signalViolationsRate,
                         deliveryCompletionRate: deliveryCompletionRate,
-                        deliveredNotRecieved: deliveredAndRecieved,
+                        deliveredAndRecieved: deliveredAndRecieved,
                         photoOnDelivery: photoOnDelivery,
                         callCompliance: callCompliance,
                         scanCompliance: scanCompliance,
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps, ccOpps
+                        ccOpps: ccOpps
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
+            
         }
     }
 }
