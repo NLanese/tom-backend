@@ -376,6 +376,9 @@ const typeDefs = gql`
     getDriver: Driver
     getDriversFromDsp: [Driver]
 
+    # DYNAMIC QUERIES
+    dynamicGetDriversFromDsp(role: String!): [Driver]
+
     # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
 
     # SUPER USER QUERIES
