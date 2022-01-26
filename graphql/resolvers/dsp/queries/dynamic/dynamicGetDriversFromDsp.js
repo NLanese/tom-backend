@@ -1,6 +1,6 @@
-import db from "../../../../utils/generatePrisma.js";
-import checkAdminAuth from "../../../../utils/checkAuthorization/check-admin-auth.js";
-import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
+import db from "../../../../../utils/generatePrisma.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
     Query: {
@@ -32,6 +32,11 @@ export default {
                             dspId: foundOwner.dsp.id
                         },
                         include: {
+                            owner: true,
+                            admin: true,
+                            dsp: true,
+                            messages: true,
+                            notifiedMessages: true,
                             weeklyReport: {
                                 orderBy: [
                                     {
@@ -62,6 +67,11 @@ export default {
                             dspId: foundManager.dsp.id
                         },
                         include: {
+                            owner: true,
+                            admin: true,
+                            dsp: true,
+                            messages: true,
+                            notifiedMessages: true,
                             weeklyReport: {
                                 orderBy: [
                                     {

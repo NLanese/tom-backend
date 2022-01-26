@@ -9,7 +9,7 @@ import ownerUpdateDsp from './mutations/owner/ownerUpdateDsp.js';
 import managerUpdateDsp from './mutations/managers/managerUpdateDsp.js';
 
 // DYNAMIC QUERIES
-import dynamicGetDriversFromDsp from './queries/dynamicGetDriversFromDsp.js';
+import dynamicGetDriversFromDsp from './queries/dynamic/dynamicGetDriversFromDsp.js';
 
 export default {
     Query: {
