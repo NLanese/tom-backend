@@ -166,6 +166,7 @@ model WeeklyReport {
   hadAccident     Boolean  @default(false)
   feedbackMessage String?
   feedbackStatus  String?
+  feedbackMessageSent     Boolean  @default(false)
   acknowledged    Boolean  @default(false)
   acknowledgedAt  String?
 

@@ -33,7 +33,7 @@ export default {
                         },
                         include: {
                             owner: true,
-                            admin: true,
+                            admins: true,
                             dsp: true,
                             messages: true,
                             notifiedMessages: true,
@@ -68,7 +68,7 @@ export default {
                         },
                         include: {
                             owner: true,
-                            admin: true,
+                            admins: true,
                             dsp: true,
                             messages: true,
                             notifiedMessages: true,

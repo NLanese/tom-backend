@@ -154,7 +154,8 @@ const typeDefs = gql`
     createdAt:                    Date
     date:                         String
     hadAccident:                  Boolean
-    feedbackMessage:                     String
+    feedbackMessage:              String
+    feedbackMessageSent:          Boolean
     feedbackStatus:               String
     acknowledged:                 Boolean
     acknowledgedAt:               String
@@ -378,6 +379,7 @@ const typeDefs = gql`
 
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
+    dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
 
     # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
 
