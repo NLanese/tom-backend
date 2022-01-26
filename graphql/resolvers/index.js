@@ -17,6 +17,7 @@ import managerResolvers from './manager/managerResolvers.js';
 import driverResolvers from './driver/driverResolvers.js';
 import dspResolvers from './dsp/dspResolvers.js';
 import weeklyReportResolvers from './weeklyReport/weeklyReportResolvers.js';
+import scorecardResolvers from './scorecardTool/scorecardResolvers.js';
 // import chatroomResolvers from './chatrooms/chatroomResolvers.js';
 // import messagesResolvers from './messages/messagesResolvers.js';
 
@@ -40,7 +41,8 @@ export default {
         // ...chatroomResolvers.Query,
         // ...messagesResolvers.Query,
 
-        ...accidentsResolvers.Query
+        ...scorecardResolvers.Query,
+        ...additionalResolvers.Query
     },
     Mutation: {
         ...adminResolvers.Mutation,
@@ -63,6 +65,7 @@ export default {
         // ...chatroomResolvers.Mutation,
         // ...messagesResolvers.Mutation,
 
+        ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation
     },
     JSON: GraphQLJSON,

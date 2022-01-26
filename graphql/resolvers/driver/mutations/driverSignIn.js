@@ -23,6 +23,12 @@ export default {
             const foundUser = await db.driver.findUnique({
                 where: {
                     email
+                },
+                include: {
+                    owner: true,
+                    admins: true,
+                    dsp: true,
+                    weeklyReport: true
                 }
             })
     

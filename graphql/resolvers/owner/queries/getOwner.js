@@ -12,7 +12,11 @@ export default {
                         id: owner.id
                     },
                     include: {
-                        drivers: true,
+                        drivers: {
+                            include: {
+                                weeklyReport: true
+                            }
+                        },
                         admins: true,
                         dsp: true,
                         messages: true,

@@ -106,6 +106,8 @@ CREATE TABLE "Dsp" (
     "photoOnDeliveryLimits" JSONB NOT NULL,
     "topCardLimits" INTEGER NOT NULL,
     "smallCardLimits" INTEGER NOT NULL,
+    "feedbackNotifications" JSONB NOT NULL,
+    "autoSend" JSONB NOT NULL,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStanding" TEXT NOT NULL DEFAULT E'Free',
     "ownerId" TEXT NOT NULL,
@@ -134,11 +136,14 @@ CREATE TABLE "WeeklyReport" (
     "followingDistanceRate" TEXT NOT NULL,
     "signalViolationsRate" TEXT NOT NULL,
     "deliveryCompletionRate" TEXT NOT NULL,
-    "deliveredNotRecieved" TEXT NOT NULL,
+    "deliveredAndRecieved" TEXT NOT NULL,
     "photoOnDelivery" TEXT NOT NULL,
     "callCompliance" TEXT NOT NULL,
     "scanCompliance" TEXT NOT NULL,
     "attendedDeliveryAccuracy" INTEGER NOT NULL,
+    "dnr" INTEGER NOT NULL,
+    "podOpps" INTEGER NOT NULL,
+    "ccOpps" INTEGER NOT NULL,
     "netradyne" JSONB,
     "deliveryAssociate" JSONB,
     "defects" JSONB,
@@ -393,9 +398,6 @@ CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "WeeklyReport_date_key" ON "WeeklyReport"("date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");

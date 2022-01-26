@@ -7,6 +7,7 @@ var url = 'https://pdftables.com/api?key=770oukvvx1wl&format=xlsx-single';
 const pdfToExcel = (pdfFile) => {
     var req = request.post({encoding: null, url: url}, async function (err, resp, body) {
         if (!err && resp.statusCode == 200) {
+            // console.log(pdfFile.path)
             fs.writeFile(`${pdfFile.path}.xlsx`, body, function(err) {
                 if (err) {
                     console.log('error writing file');
