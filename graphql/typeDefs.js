@@ -378,6 +378,7 @@ const typeDefs = gql`
 
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
+    dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
 
     # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
 

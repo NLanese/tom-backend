@@ -6,9 +6,12 @@ import ownerCreateWeeklyReport from "./mutations/owner/ownerCreateWeeklyReport.j
 // MANAGER MUTATIONS
 import managerCreateWeeklyReport from "./mutations/manager/managerCreateWeeklyReport.js";
 
+// DYNAMIC MUTATIONS
+import dynamicGetWeeklyReportsByDate from "./queries/dynamic/dynamicGetWeeklyReportsByDate.js";
+
 export default {
     Query: {
-
+        ...dynamicGetWeeklyReportsByDate.Query,
     },
     Mutation: {
         // OWNER MUTATIONS
