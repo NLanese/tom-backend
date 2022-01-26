@@ -154,7 +154,8 @@ const typeDefs = gql`
     createdAt:                    Date
     date:                         String
     hadAccident:                  Boolean
-    feedbackMessage:                     String
+    feedbackMessage:              String
+    feedbackMessageSent:          Boolean
     feedbackStatus:               String
     acknowledged:                 Boolean
     acknowledgedAt:               String
