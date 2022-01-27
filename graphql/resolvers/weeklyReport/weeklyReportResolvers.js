@@ -6,6 +6,9 @@ import ownerCreateWeeklyReport from "./mutations/owner/ownerCreateWeeklyReport.j
 // MANAGER MUTATIONS
 import managerCreateWeeklyReport from "./mutations/manager/managerCreateWeeklyReport.js";
 
+// DRIVER MUTATIONS
+import driverAcknowledgeFeedbackMessage from "./mutations/driver/driverAcknowledgeFeedbackMessage.js";
+
 // DYNAMIC MUTATIONS
 import dynamicGetWeeklyReportsByDate from "./queries/dynamic/dynamicGetWeeklyReportsByDate.js";
 
@@ -18,7 +21,10 @@ export default {
         ...ownerCreateWeeklyReport.Mutation,
 
         // MANAGER MUTATIONS
-        ...managerCreateWeeklyReport.Muitation
+        ...managerCreateWeeklyReport.Muitation,
+
+        // DRIVER MUTATIONS
+        ...driverAcknowledgeFeedbackMessage.Mutation
     },
     JSON: GraphQLJSON
 }
