@@ -8,6 +8,8 @@ export default {
             role,
             date
         }, context) => {
+
+            console.log(date)
             let owner;
             let manager;
 
