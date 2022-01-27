@@ -76,7 +76,7 @@ const typeDefs = gql`
     owner:                        Owner
     drivers:                      [Driver]
     messages:                     [Messages]
-    NotifiedMessages:             [NotifiedMessages]
+    notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
   }
 
@@ -110,7 +110,7 @@ const typeDefs = gql`
     admins:                       [Admin]
     vehicle:                      Vehicle
     messages:                     [Messages]
-    NotifiedMessages:             [NotifiedMessages]
+    notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
   }
