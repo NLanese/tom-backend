@@ -145,8 +145,8 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    admin:                        [Admin]
-    driver:                       [Driver]
+    admins:                       [Admin]
+    drivers:                      [Driver]
   }
 
   type WeeklyReport {
@@ -376,6 +376,9 @@ const typeDefs = gql`
     # DRIVER QUERIES
     getDriver: Driver
     getDriversFromDsp: [Driver]
+
+    # DSP QUERIES
+    driverGetDriversFromDsp: Dsp
 
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
