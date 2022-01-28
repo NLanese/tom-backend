@@ -453,6 +453,7 @@ const typeDefs = gql`
 
     # ADDITIONAL MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
+    dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
 
     # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
 
