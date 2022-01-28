@@ -11,9 +11,16 @@ import managerUpdateDsp from './mutations/managers/managerUpdateDsp.js';
 // DYNAMIC QUERIES
 import dynamicGetDriversFromDsp from './queries/dynamic/dynamicGetDriversFromDsp.js';
 
+// DRIVER QUERIES
+import driverGetDriversFromDsp from './queries/driver/driverGetDriversFromDsp.js';
+
 export default {
     Query: {
+        // DYNAMIC QUERIES
         ...dynamicGetDriversFromDsp.Query,
+
+        // DRIVERS QUERIES
+        ...driverGetDriversFromDsp.Query
     },
     Mutation: {
         // OWNER MUTATIONS
