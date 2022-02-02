@@ -159,6 +159,47 @@ CREATE TABLE "WeeklyReport" (
 );
 
 -- CreateTable
+CREATE TABLE "WeeklySchedule" (
+    "id" VARCHAR(10) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "weekStartDate" TEXT NOT NULL,
+    "weekEndDate" TEXT NOT NULL,
+    "mondayDate" TEXT NOT NULL,
+    "mondayDayType" TEXT NOT NULL,
+    "mondayStartTime" TEXT NOT NULL,
+    "mondayEndTime" TEXT NOT NULL,
+    "tuesdayDate" TEXT NOT NULL,
+    "tuesdayDayType" TEXT NOT NULL,
+    "tuesdayStartTime" TEXT NOT NULL,
+    "tuesdayEndTime" TEXT NOT NULL,
+    "wednesdayDate" TEXT NOT NULL,
+    "wednesdayDayType" TEXT NOT NULL,
+    "wednesdayStartTime" TEXT NOT NULL,
+    "wednesdayEndTime" TEXT NOT NULL,
+    "thursdayDate" TEXT NOT NULL,
+    "thursdayDayType" TEXT NOT NULL,
+    "thursdayStartTime" TEXT NOT NULL,
+    "thursdayEndTime" TEXT NOT NULL,
+    "fridayDate" TEXT NOT NULL,
+    "fridayDayType" TEXT NOT NULL,
+    "fridayStartTime" TEXT NOT NULL,
+    "fridayEndTime" TEXT NOT NULL,
+    "saturdayDate" TEXT NOT NULL,
+    "saturdayDayType" TEXT NOT NULL,
+    "saturdayStartTime" TEXT NOT NULL,
+    "saturdayEndTime" TEXT NOT NULL,
+    "sundayDate" TEXT NOT NULL,
+    "sundayDayType" TEXT NOT NULL,
+    "sundayStartTime" TEXT NOT NULL,
+    "sundayEndTime" TEXT NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    "managerId" TEXT NOT NULL,
+    "driverId" TEXT NOT NULL,
+
+    CONSTRAINT "WeeklySchedule_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Messages" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -401,6 +442,9 @@ CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "WeeklySchedule_id_key" ON "WeeklySchedule"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
 
 -- CreateIndex
@@ -458,6 +502,15 @@ ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFE
 ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_managerId_fkey" FOREIGN KEY ("managerId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -482,19 +535,19 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "HitPerson" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Collision" ADD CONSTRAINT "Collision_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Collision" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryReport" ADD CONSTRAINT "InjuryReport_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryReport" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_injuryAccidentId_fkey" FOREIGN KEY ("injuryAccidentId") REFERENCES "InjuryAccident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
