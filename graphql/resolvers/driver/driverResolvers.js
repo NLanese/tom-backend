@@ -1,5 +1,8 @@
 import GraphQLJSON from "graphql-type-json";
 
+// DYNAMIC MUTATIONS
+import dynamicUpdateDriver from "./mutations/dynamic/updateDriver.js"
+
 // DRIVER MUTATIONS
 import driverSignUp from "./mutations/driverSignUp.js";
 import driverSignIn from "./mutations/driverSignIn.js";
@@ -16,6 +19,9 @@ export default {
         ...getDriversFromDsp.Query
     },
     Mutation: {
+        // DYNAMIC MUTATIONS
+        ...dynamicUpdateDriver.Mutation,
+
         // DRIVER MUTATIONS
         ...driverSignUp.Mutation,
         ...driverSignIn.Mutation,
