@@ -195,6 +195,46 @@ const typeDefs = gql`
     driver:                       Driver
   }
 
+  type WeeklySchedule {
+    id:                           ID
+    createdAt:                    Date
+    weekStartDate:                String
+    weekEndDate:                  String
+    mondayDate:                   String
+    mondayDayType:                String
+    mondayStartTime:              String
+    mondayEndTime:                String
+    tuesdayDate:                  String
+    tuesdayDayType:               String
+    tuesdayStartTime:             String
+    tuesdayEndTime:               String
+    wednesdayDate:                String
+    wednesdayDayType:             String
+    wednesdayStartTime:           String
+    wednesdayEndTime:             String
+    thursdayDate:                 String
+    thursdayDayType:              String
+    thursdayStartTime:            String
+    thursdayEndTime:              String
+    fridayDate:                   String
+    fridayDayType:                String
+    fridayStartTime:              String
+    fridayEndTime:                String
+    saturdayDate:                 String
+    saturdayDayType:              String
+    saturdayStartTime:            String
+    saturdayEndTime:              String
+    sundayDate:                   String
+    sundayDayType:                String
+    sundayStartTime:              String
+    sundayEndTime:                String
+
+    # RELATIONSHIPS
+    owner:                        Owner
+    manager:                      Admin
+    driver:                       Driver
+  }
+
   type Messages {
     id:        ID
     createdAt: Date
