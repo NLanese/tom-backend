@@ -14,7 +14,14 @@ export default {
                     include: {
                         owner: true,
                         drivers: true,
-                        dsp: true
+                        dsp: true,
+                        chatrooms: {
+                            include: {
+                                owner: true,
+                                managers: true,
+                                drivers: true
+                            }
+                        }
                     }
                 })
             } catch (error) {
