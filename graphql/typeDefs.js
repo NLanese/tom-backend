@@ -235,6 +235,17 @@ const typeDefs = gql`
     driver:                       Driver
   }
 
+  type Chatroom {
+    id:                           ID
+		createdAt:                    Date
+  	guests:                       [JSON]
+
+    # RELATIONSHIPS
+    owner:                        Owner
+    managers:                     [Admin]
+    drivers:                      [Driver]
+  }
+
   type Messages {
     id:        ID
     createdAt: Date
@@ -289,7 +300,6 @@ const typeDefs = gql`
     propertyAccident:       [PropertyAccident]
     injuryReport:           [InjuryReport]
   }
-
 
   type HitPerson {
     id:                     ID
@@ -480,6 +490,10 @@ const typeDefs = gql`
     ownerDeleteDsp(dspId: String!): Dsp
 
     managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
+
+    # CHATROOM MUTATIONS
+    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!): Chatroom
+    # dynamicCreateDriverManagementChatroom(role: String!, guests: [String!]): Chatroom
 
     # WEEKLY REPORT MUTATIONS
     driverAcknowledgeFeedbackMessage(reportId: String!): [WeeklyReport]

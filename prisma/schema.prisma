@@ -53,6 +53,7 @@ model Owner {
   notifiedMessages NotifiedMessages[]
   dsp              Dsp?
   weeklySchedule   WeeklySchedule[]
+  chatrooms        Chatroom[]
 }
 
 model Admin {
@@ -87,10 +88,11 @@ model Admin {
   dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklySchedule   WeeklySchedule[]
+  chatrooms        Chatroom[]
 }
 
 model Driver {
-  id          String   @id @unique @default(uuid())
+  id          String   @id @unique @default(uuid()) @db.VarChar(10)
   createdAt   DateTime @default(now())
   role        Role     @default(USER)
   token       String?
@@ -125,6 +127,7 @@ model Driver {
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
   weeklySchedule   WeeklySchedule[]
+  chatrooms        Chatroom[]
 }
 
 model Dsp {
@@ -250,6 +253,20 @@ model WeeklySchedule {
   manager   Admin @relation(fields: [managerId], references: [id])
   driverId  String
   driver    Driver @relation(fields: [driverId], references: [id])
+}
+
+model Chatroom {
+  id              String   @id @unique @default(uuid()) @db.VarChar(10)
+  createdAt       DateTime @default(now())
+  guests          Json[]
+
+  // RELATIONSHIPS
+  ownerId         String?
+  driverId        String?
+  managerId       String?
+  owner           Owner?   @relation(fields: [ownerId], references: [id])
+  driver          Driver[]  @relation(fields: [driverId], references: [id])
+  manager         Admin[]   @relation(fields: [managerId], references: [id])
 }
 
 model Messages {
