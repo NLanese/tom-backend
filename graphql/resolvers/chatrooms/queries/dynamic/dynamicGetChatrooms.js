@@ -21,7 +21,7 @@ export default {
                         include: {
                             owner: true,
                             managers: true,
-                            drivers: true
+                            drivers: true,
                         }
                     })
                 } catch (error) {
