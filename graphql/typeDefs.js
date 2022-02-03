@@ -47,6 +47,7 @@ const typeDefs = gql`
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
+    chatrooms:                    [Chatroom]
   }
 
   type Admin {
@@ -78,6 +79,7 @@ const typeDefs = gql`
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
+    chatrooms:                    [Chatroom]
   }
 
   type Driver {
@@ -113,6 +115,7 @@ const typeDefs = gql`
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
+    chatrooms:                    [Chatroom]
   }
 
   type Dsp {
@@ -239,6 +242,7 @@ const typeDefs = gql`
     id:                           ID
 		createdAt:                    Date
   	guests:                       [JSON]
+    chatroomOwner:                JSON
 
     # RELATIONSHIPS
     owner:                        Owner
@@ -429,6 +433,10 @@ const typeDefs = gql`
 
     # DSP QUERIES
     driverGetDriversFromDsp: Dsp
+
+    # CHATROOM QUERIES
+    dynamicGetChatrooms(role: String!): [Chatroom]
+    dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
 
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]

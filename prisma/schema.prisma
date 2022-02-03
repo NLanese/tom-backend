@@ -92,7 +92,7 @@ model Admin {
 }
 
 model Driver {
-  id          String   @id @unique @default(uuid()) @db.VarChar(10)
+  id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
   role        Role     @default(USER)
   token       String?
@@ -256,17 +256,16 @@ model WeeklySchedule {
 }
 
 model Chatroom {
-  id              String   @id @unique @default(uuid()) @db.VarChar(10)
+  id              String   @id @unique @default(uuid())
   createdAt       DateTime @default(now())
   guests          Json[]
+  chatroomOwner   Json
 
   // RELATIONSHIPS
   ownerId         String?
-  driverId        String?
-  managerId       String?
   owner           Owner?   @relation(fields: [ownerId], references: [id])
-  driver          Driver[]  @relation(fields: [driverId], references: [id])
-  manager         Admin[]   @relation(fields: [managerId], references: [id])
+  drivers         Driver[]
+  managers        Admin[]   
 }
 
 model Messages {

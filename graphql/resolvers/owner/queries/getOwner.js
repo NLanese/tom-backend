@@ -20,7 +20,14 @@ export default {
                         admins: true,
                         dsp: true,
                         messages: true,
-                        notifiedMessages: true
+                        notifiedMessages: true,
+                        chatrooms: {
+                            include: {
+                                owner: true,
+                                managers: true,
+                                drivers: true
+                            }
+                        }
                     }
                 })
             } catch (error) {
