@@ -64,7 +64,7 @@ CREATE TABLE "Admin" (
 
 -- CreateTable
 CREATE TABLE "Driver" (
-    "id" TEXT NOT NULL,
+    "id" VARCHAR(10) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "token" TEXT,
@@ -197,6 +197,18 @@ CREATE TABLE "WeeklySchedule" (
     "driverId" TEXT NOT NULL,
 
     CONSTRAINT "WeeklySchedule_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Chatroom" (
+    "id" VARCHAR(10) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "guests" JSONB[],
+    "ownerId" TEXT,
+    "driverId" TEXT,
+    "managerId" TEXT,
+
+    CONSTRAINT "Chatroom_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -363,7 +375,19 @@ CREATE TABLE "Image" (
 -- CreateTable
 CREATE TABLE "_AdminToDriver" (
     "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "B" VARCHAR(10) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_AdminToChatroom" (
+    "A" TEXT NOT NULL,
+    "B" VARCHAR(10) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_ChatroomToDriver" (
+    "A" VARCHAR(10) NOT NULL,
+    "B" VARCHAR(10) NOT NULL
 );
 
 -- CreateTable
@@ -445,6 +469,9 @@ CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 CREATE UNIQUE INDEX "WeeklySchedule_id_key" ON "WeeklySchedule"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Chatroom_id_key" ON "Chatroom"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Vehicle_driverId_key" ON "Vehicle"("driverId");
 
 -- CreateIndex
@@ -452,6 +479,18 @@ CREATE UNIQUE INDEX "_AdminToDriver_AB_unique" ON "_AdminToDriver"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_AdminToDriver_B_index" ON "_AdminToDriver"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_AdminToChatroom_AB_unique" ON "_AdminToChatroom"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_AdminToChatroom_B_index" ON "_AdminToChatroom"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ChatroomToDriver_AB_unique" ON "_ChatroomToDriver"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ChatroomToDriver_B_index" ON "_ChatroomToDriver"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AccidentToHitPerson_AB_unique" ON "_AccidentToHitPerson"("A", "B");
@@ -511,6 +550,15 @@ ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_managerId_fkey" FORE
 ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Chatroom" ADD CONSTRAINT "Chatroom_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Chatroom" ADD FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Chatroom" ADD FOREIGN KEY ("managerId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -563,6 +611,18 @@ ALTER TABLE "_AdminToDriver" ADD FOREIGN KEY ("A") REFERENCES "Admin"("id") ON D
 
 -- AddForeignKey
 ALTER TABLE "_AdminToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AdminToChatroom" ADD FOREIGN KEY ("A") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_AdminToChatroom" ADD FOREIGN KEY ("B") REFERENCES "Chatroom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("A") REFERENCES "Chatroom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AccidentToHitPerson" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
