@@ -2,7 +2,7 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
 
-
+// OWNER ONLY SO FAR
 export default {
     Mutation: {
         dynamicCreateDriverManagementChatroom: async (_, {
@@ -24,7 +24,7 @@ export default {
             })
 
             if (!foundDriver) throw new Error("Driver does not exist")
-            guests.push(foundDriver)
+            await guests.push(foundDriver)
 
             if (owner) {
                 const foundOwner = await db.owner.findUnique({
@@ -36,7 +36,13 @@ export default {
                     }
                 })
 
-                foundOwner.admins.forEach((manager) => {
+                const justOwnerRecord = await db.owner.findUnique({
+                    where: {
+                        id: owner.id
+                    }
+                })
+
+                await foundOwner.admins.forEach((manager) => {
                     guests.push(manager)
                 })
 
@@ -44,6 +50,7 @@ export default {
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: [ ...guests ],
+                            chatroomOwner: justOwnerRecord,
                             owner: {
                                 connect: {
                                     id: owner.id
@@ -52,9 +59,49 @@ export default {
                         }
                     })
 
-                    return await newChatroom
+                    await guests.forEach( async (guest, index) => {
+                        if (guest.role === "USER") {
+                            await db.chatroom.update({
+                                where: {
+                                    id: newChatroom.id
+                                },
+                                data: {
+                                    drivers: {
+                                        connect: {
+                                            id: guest.id
+                                        }
+                                    }
+                                }
+                            })
+                        }
+
+                        if (guest.role === "MANAGER") {
+                            await db.chatroom.update({
+                                where: {
+                                    id: newChatroom.id
+                                },
+                                data: {
+                                    managers: {
+                                        connect: {
+                                            id: guest.id
+                                        }
+                                    }
+                                }
+                            }) 
+                        }
+                    })
+
+                    return await db.chatroom.findUnique({
+                        where: {
+                            id: newChatroom.id
+                        },
+                        include: {
+                            owner: true,
+                            managers: true,
+                            drivers: true
+                        }
+                    })
                 } catch (error) {
-                    console.log(error)
                     throw new Error(error)
                 }
             }
