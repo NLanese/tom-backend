@@ -19,6 +19,7 @@ import dspResolvers from './dsp/dspResolvers.js';
 import weeklyReportResolvers from './weeklyReport/weeklyReportResolvers.js';
 import scorecardResolvers from './scorecardTool/scorecardResolvers.js';
 import chatroomResolvers from './chatrooms/chatroomResolvers.js';
+import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
 // import messagesResolvers from './messages/messagesResolvers.js';
 
 // ADDITIONAL RESOLVERS
@@ -38,6 +39,7 @@ export default {
         ...driverResolvers.Query,
         ...dspResolvers.Query,
         ...weeklyReportResolvers.Query,
+        ...shiftPlannerResolvers.Query,
         ...chatroomResolvers.Query,
         // ...messagesResolvers.Query,
 
@@ -62,6 +64,7 @@ export default {
         ...driverResolvers.Mutation,
         ...dspResolvers.Mutation,
         ...weeklyReportResolvers.Mutation,
+        ...shiftPlannerResolvers.Mutation,
         ...chatroomResolvers.Mutation,
         // ...messagesResolvers.Mutation,
 

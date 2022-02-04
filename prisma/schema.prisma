@@ -128,6 +128,7 @@ model Driver {
   weeklyReport     WeeklyReport[]
   weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
+  shiftPlanners    ShiftPlanner[]
 }
 
 model Dsp {
@@ -163,6 +164,23 @@ model Dsp {
   drivers Driver[]
   ownerId String   @unique
   owner   Owner    @relation(fields: [ownerId], references: [id])
+}
+
+model ShiftPlanner {
+  id              String   @id @unique @default(uuid())
+  createdAt       DateTime @default(now())
+  date            String
+
+  // SHIFT PLANNER DATA
+  phoneId         String
+  deviceId        String
+  vehicleId       String
+  cxNumber        String
+  message         String
+
+  // RELATIONSHIPS
+  driverId         String?
+  driver           Driver?   @relation(fields: [driverId], references: [id])
 }
 
 model WeeklyReport {
