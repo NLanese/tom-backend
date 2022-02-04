@@ -2,8 +2,6 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
 
-
-// TEST MANAGER FUNCTIONALITY
 export default {
     Mutation: {
         dynamicCreateDriverManagementChatroom: async (_, {
