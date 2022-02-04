@@ -116,6 +116,21 @@ CREATE TABLE "Dsp" (
 );
 
 -- CreateTable
+CREATE TABLE "ShiftPlanner" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "date" TEXT NOT NULL,
+    "phoneId" TEXT NOT NULL,
+    "deviceId" TEXT NOT NULL,
+    "vehicleId" TEXT NOT NULL,
+    "cxNumber" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "driverId" TEXT,
+
+    CONSTRAINT "ShiftPlanner_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "WeeklyReport" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -462,6 +477,9 @@ CREATE UNIQUE INDEX "Dsp_shortcode_key" ON "Dsp"("shortcode");
 CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ShiftPlanner_id_key" ON "ShiftPlanner"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 
 -- CreateIndex
@@ -535,6 +553,9 @@ ALTER TABLE "Driver" ADD CONSTRAINT "Driver_dspId_fkey" FOREIGN KEY ("dspId") RE
 
 -- AddForeignKey
 ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ShiftPlanner" ADD CONSTRAINT "ShiftPlanner_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

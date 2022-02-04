@@ -116,6 +116,7 @@ const typeDefs = gql`
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
+    shiftPlanners:                [ShiftPlanner]
   }
 
   type Dsp {
@@ -150,6 +151,22 @@ const typeDefs = gql`
     owner:                        Owner
     admins:                       [Admin]
     drivers:                      [Driver]
+  }
+
+  type ShiftPlanner {
+    id:                           ID
+    createdAt:                    Date
+    date:                         String
+
+    # SHIFT PLANNER DATA
+    phoneId:                      String
+    deviceId:                     String
+    vehicleId:                    String
+    cxNumber:                     String
+    message:                      String
+
+    # RELATIONSHIPS
+    driver:                       Driver
   }
 
   type WeeklyReport {
@@ -376,7 +393,6 @@ const typeDefs = gql`
     accident:                 [Accident]
   }
 
-
   type InjuryReport{
     id:                     ID
     immediate_attention:    Boolean
@@ -396,7 +412,6 @@ const typeDefs = gql`
     accidentId:             Int
     accident:               [Accident]
   }
-
 
 
   type Image{
@@ -437,6 +452,9 @@ const typeDefs = gql`
     # CHATROOM QUERIES
     dynamicGetChatrooms(role: String!): [Chatroom]
     dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
+
+    # SHIFT PLANNER QUERIES
+    driverGetShiftPlaner: Driver
 
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
@@ -512,6 +530,9 @@ const typeDefs = gql`
     # SCORECARD TOOL MUTATIONS
     scorecardToolCreateDriverAccounts(email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!): Driver
     scorecardToolCreateWeeklyReports(role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
+
+    # SHIFT PLANNER MUTATIONS
+    dynamicCreateShiftPlannerReport(role: String!, driverId: String!, date: String!, phoneId: String!, deviceId: String!, vehicleId: String!, cxNumber: String!, message: String!): ShiftPlanner
 
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
