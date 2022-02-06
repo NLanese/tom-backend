@@ -278,9 +278,16 @@ model WeeklySchedule {
 model Chatroom {
   id              String   @id @unique @default(uuid())
   createdAt       DateTime @default(now())
+
+  // CHATROOM INFORMATION
   chatroomName    String
   guests          Json[]
   chatroomOwner   Json
+
+  // KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
+  driverJoinOnSignUp     Boolean @default(false)
+  managerJoinOnSignUp    Boolean @default(true) // Keeps track on wether manager should be auto added to the chatroom apon signup
+
 
   // RELATIONSHIPS
   ownerId         String?

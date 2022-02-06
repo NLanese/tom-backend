@@ -137,6 +137,7 @@ export default {
                         guests: [ ...guestArray ],
                         chatroomOwner: justOwnerRecord,
                         chatroomName: `${newDsp.name} chatroom`,
+                        driverJoinOnSignUp: true,
                         owner: {
                             connect: {
                                 id: foundOwner.id

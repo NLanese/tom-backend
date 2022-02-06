@@ -223,6 +223,8 @@ CREATE TABLE "Chatroom" (
     "chatroomName" TEXT NOT NULL,
     "guests" JSONB[],
     "chatroomOwner" JSONB NOT NULL,
+    "driverJoinOnSignUp" BOOLEAN NOT NULL DEFAULT false,
+    "managerJoinOnSignUp" BOOLEAN NOT NULL DEFAULT true,
     "ownerId" TEXT,
 
     CONSTRAINT "Chatroom_pkey" PRIMARY KEY ("id")

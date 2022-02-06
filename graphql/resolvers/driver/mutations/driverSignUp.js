@@ -175,7 +175,7 @@ export default {
                 })
 
                 await owner.chatrooms.forEach( async (chatroom) => {
-                    if (chatroom.chatroomName === `${owner.dsp.name} chatroom`) {
+                    if (chatroom.driverJoinOnSignUp === true) {
                         const foundChatroom = await db.chatroom.findUnique({
                             where: {
                                 id: chatroom.id

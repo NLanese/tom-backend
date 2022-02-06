@@ -260,9 +260,15 @@ const typeDefs = gql`
   type Chatroom {
     id:                           ID
 		createdAt:                    Date
+
+    # CHATROOM INFORMATION
     chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
+
+    # KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
+    driverJoinOnSignUp:           Boolean
+    managerJoinOnSignUp:          Boolean
 
     # RELATIONSHIPS
     owner:                        Owner

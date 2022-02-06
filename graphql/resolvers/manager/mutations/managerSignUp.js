@@ -131,28 +131,30 @@ export default {
 
                 if (owner.chatrooms) {
                     owner.chatrooms.forEach( async (chatroom) => {
-                        let guestArray = []
-                        
-                        chatroom.guests.forEach( async (guest) => {
-                            guestArray.push(guest)
+                        if (chatroom.managerJoinOnSignUp === true) {
+                            let guestArray = []
                             
-                        })
-
-                        guestArray.push(newManager)
-
-                        await db.chatroom.update({
-                            where: {
-                                id: chatroom.id
-                            },
-                            data: {
-                                managers: {
-                                    connect: {
-                                        id: newManager.id
-                                    }
+                            chatroom.guests.forEach( async (guest) => {
+                                guestArray.push(guest)
+                                
+                            })
+    
+                            guestArray.push(newManager)
+    
+                            await db.chatroom.update({
+                                where: {
+                                    id: chatroom.id
                                 },
-                                guests: [ ...guestArray ]
-                            }
-                        })
+                                data: {
+                                    managers: {
+                                        connect: {
+                                            id: newManager.id
+                                        }
+                                    },
+                                    guests: [ ...guestArray ]
+                                }
+                            })
+                        }
                     })
                 }
 
@@ -167,6 +169,7 @@ export default {
                     token: token
                 }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
