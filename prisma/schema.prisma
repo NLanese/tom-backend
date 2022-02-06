@@ -231,7 +231,7 @@ model WeeklyReport {
 }
 
 model WeeklySchedule {
-  id              String   @id @unique @default(uuid()) @db.VarChar(10)
+  id              String   @id @unique @default(uuid())
   createdAt       DateTime @default(now())
   weekStartDate   String
   weekEndDate     String 

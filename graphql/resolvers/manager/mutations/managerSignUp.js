@@ -55,7 +55,8 @@ export default {
                 },
                 include: {
                     drivers: true,
-                    dsp: true
+                    dsp: true,
+                    chatrooms: true
                 }
             })
 
@@ -127,6 +128,33 @@ export default {
                         })
                     }
                 })
+
+                if (owner.chatrooms) {
+                    owner.chatrooms.forEach( async (chatroom) => {
+                        let guestArray = []
+                        
+                        chatroom.guests.forEach( async (guest) => {
+                            guestArray.push(guest)
+                            
+                        })
+
+                        guestArray.push(newManager)
+
+                        await db.chatroom.update({
+                            where: {
+                                id: chatroom.id
+                            },
+                            data: {
+                                managers: {
+                                    connect: {
+                                        id: newManager.id
+                                    }
+                                },
+                                guests: [ ...guestArray ]
+                            }
+                        })
+                    })
+                }
 
                 const token = await generateAdminToken(newManager.id)
 

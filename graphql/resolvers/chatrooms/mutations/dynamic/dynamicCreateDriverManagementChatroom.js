@@ -42,6 +42,8 @@ export default {
                     }
                 })
 
+                await guests.push(justOwnerRecord)
+
                 await foundOwner.admins.forEach((manager) => {
                     guests.push(manager)
                 })
@@ -130,11 +132,10 @@ export default {
                 const justOwnerRecord = await db.owner.findUnique({
                     where: {
                         id: foundManager.ownerId
-                    },
-                    include: {
-                        admins: true
                     }
                 })
+
+                await guests.push(justOwnerRecord)
 
                 try {
                     const newChatroom = await db.chatroom.create({
