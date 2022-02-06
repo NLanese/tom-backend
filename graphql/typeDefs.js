@@ -63,6 +63,7 @@ const typeDefs = gql`
     profilePick:                  JSON
 
     # ACCOUNT INFORMATION
+    muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 

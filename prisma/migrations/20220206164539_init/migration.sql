@@ -51,6 +51,7 @@ CREATE TABLE "Admin" (
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profilePick" JSONB,
+    "muted" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,

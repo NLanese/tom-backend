@@ -50,6 +50,7 @@ export default {
 
             try {
                 let guestArray = []
+                let managementArray = []
 
                 await guestArray.push(justOwnerRecord)
 
@@ -174,6 +175,38 @@ export default {
                             }
                         })
                     }
+                })
+
+                await foundOwner.admins.forEach( async (admin) => {
+                    await managementArray.push(admin)
+                })
+
+                const managementChatroom = await db.chatroom.create({
+                    data: {
+                        guests: [ ...managementArray, justOwnerRecord ],
+                        chatroomOwner: justOwnerRecord,
+                        chatroomName: `${newDsp.name} management chatroom`,
+                        owner: {
+                            connect: {
+                                id: foundOwner.id
+                            }
+                        }
+                    }
+                })
+
+                await managementArray.forEach( async (manager) => {
+                    await db.chatroom.update({
+                        where: {
+                            id: managementChatroom.id
+                        },
+                        data: {
+                            managers: {
+                                connect: {
+                                    id: manager.id
+                                }
+                            }
+                        }
+                    })
                 })
 
                 return newDsp

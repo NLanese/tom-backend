@@ -69,6 +69,7 @@ model Admin {
   profilePick Json?
 
   // ACCOUNT INFORMATION
+  muted   Boolean @default(false) // Used to disable char features for Driver
   locked  Boolean @default(false) // Used to lock the Admins Account if needed
   deleted Boolean @default(false) // Keeps track if the Admins Account has been deleted
 
@@ -105,7 +106,7 @@ model Driver {
 
   // ACCOUNT INFORMATION
   transporterId String? @unique
-  muted         Boolean @default(false)
+  muted         Boolean @default(false) // Used to disable char features for Driver
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
