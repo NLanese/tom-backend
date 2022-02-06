@@ -6,7 +6,8 @@ export default {
     Mutation: {
         dynamicCreateDriverManagementChatroom: async (_, {
             role,
-            driverId
+            driverId,
+            chatroomName
         }, context) => {
             let owner;
             let manager;
@@ -42,6 +43,8 @@ export default {
                     }
                 })
 
+                await guests.push(justOwnerRecord)
+
                 await foundOwner.admins.forEach((manager) => {
                     guests.push(manager)
                 })
@@ -51,6 +54,7 @@ export default {
                         data: {
                             guests: [ ...guests ],
                             chatroomOwner: justOwnerRecord,
+                            chatroomName: chatroomName,
                             owner: {
                                 connect: {
                                     id: owner.id
@@ -60,7 +64,7 @@ export default {
                     })
 
                     await guests.forEach( async (guest) => {
-                        if (guest.role === "USER") {
+                        if (guest.role === "DRIVER") {
                             await db.chatroom.update({
                                 where: {
                                     id: newChatroom.id
@@ -130,17 +134,17 @@ export default {
                 const justOwnerRecord = await db.owner.findUnique({
                     where: {
                         id: foundManager.ownerId
-                    },
-                    include: {
-                        admins: true
                     }
                 })
+
+                await guests.push(justOwnerRecord)
 
                 try {
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: [ ...guests ],
                             chatroomOwner: justOwnerRecord,
+                            chatroomName: chatroomName,
                             owner: {
                                 connect: {
                                     id: foundOwner.id
@@ -150,7 +154,7 @@ export default {
                     })
 
                     await guests.forEach( async (guest) => {
-                        if (guest.role === "USER") {
+                        if (guest.role === "DRIVER") {
                             await db.chatroom.update({
                                 where: {
                                     id: newChatroom.id

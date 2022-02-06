@@ -63,6 +63,7 @@ const typeDefs = gql`
     profilePick:                  JSON
 
     # ACCOUNT INFORMATION
+    muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -96,6 +97,7 @@ const typeDefs = gql`
 
     # ACCOUNT INFORMATION
     transporterId:                String
+    muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -258,8 +260,15 @@ const typeDefs = gql`
   type Chatroom {
     id:                           ID
 		createdAt:                    Date
+
+    # CHATROOM INFORMATION
+    chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
+
+    # KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
+    driverJoinOnSignUp:           Boolean
+    managerJoinOnSignUp:          Boolean
 
     # RELATIONSHIPS
     owner:                        Owner
@@ -518,7 +527,7 @@ const typeDefs = gql`
     managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
 
     # CHATROOM MUTATIONS
-    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!): Chatroom
+    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
     # dynamicCreateDriverManagementChatroom(role: String!, guests: [String!]): Chatroom
 
     # WEEKLY REPORT MUTATIONS

@@ -42,7 +42,18 @@ export default {
             name = await name.toUpperCase()
             shortcode = await shortcode.toUpperCase()
 
+            const justOwnerRecord = await db.owner.findUnique({
+                where: {
+                    id: owner.id
+                }
+            })
+
             try {
+                let guestArray = []
+                let managementArray = []
+
+                await guestArray.push(justOwnerRecord)
+
                 const newDsp = await db.dsp.create({
                     data: {
                         owner: {
@@ -71,7 +82,9 @@ export default {
                     }
                 })
 
-                foundOwner.admins.forEach( async (admin) => {
+                await foundOwner.admins.forEach( async (admin) => {
+                    await guestArray.push(admin)
+
                     const foundAdmin = await db.admin.findUnique({
                         where: {
                             id: admin.id
@@ -94,7 +107,9 @@ export default {
                     }
                 })
 
-                foundOwner.drivers.forEach( async (driver) => {
+                await foundOwner.drivers.forEach( async (driver) => {
+                    await guestArray.push(driver)
+
                     const foundDriver = await db.driver.findUnique({
                         where: {
                             id: driver.id
@@ -117,8 +132,87 @@ export default {
                     }
                 })
 
+                const dspChatroom = await db.chatroom.create({
+                    data: {
+                        guests: [ ...guestArray ],
+                        chatroomOwner: justOwnerRecord,
+                        chatroomName: `${newDsp.name} chatroom`,
+                        driverJoinOnSignUp: true,
+                        owner: {
+                            connect: {
+                                id: foundOwner.id
+                            }
+                        }
+                    }
+                })
+
+                await guestArray.forEach( async (guest) => {
+                    if (guest.role === "MANAGER") {
+                        await db.chatroom.update({
+                            where: {
+                                id: dspChatroom.id
+                            },
+                            data: {
+                                managers: {
+                                    connect: {
+                                        id: guest.id
+                                    }
+                                }
+                            }
+                        })
+                    }
+
+                    if (guest.role === "DRIVER") {
+                        await db.chatroom.update({
+                            where: {
+                                id: dspChatroom.id
+                            },
+                            data: {
+                                drivers: {
+                                    connect: {
+                                        id: guest.id
+                                    }
+                                }
+                            }
+                        })
+                    }
+                })
+
+                await foundOwner.admins.forEach( async (admin) => {
+                    await managementArray.push(admin)
+                })
+
+                const managementChatroom = await db.chatroom.create({
+                    data: {
+                        guests: [ ...managementArray, justOwnerRecord ],
+                        chatroomOwner: justOwnerRecord,
+                        chatroomName: `${newDsp.name} management chatroom`,
+                        owner: {
+                            connect: {
+                                id: foundOwner.id
+                            }
+                        }
+                    }
+                })
+
+                await managementArray.forEach( async (manager) => {
+                    await db.chatroom.update({
+                        where: {
+                            id: managementChatroom.id
+                        },
+                        data: {
+                            managers: {
+                                connect: {
+                                    id: manager.id
+                                }
+                            }
+                        }
+                    })
+                })
+
                 return newDsp
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
