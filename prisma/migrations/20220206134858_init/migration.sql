@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'MANAGER', 'OWNER', 'SUPERADMIN');
+CREATE TYPE "Role" AS ENUM ('DRIVER', 'MANAGER', 'OWNER', 'SUPERADMIN');
 
 -- CreateTable
 CREATE TABLE "SuperUser" (
@@ -66,7 +66,7 @@ CREATE TABLE "Admin" (
 CREATE TABLE "Driver" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "role" "Role" NOT NULL DEFAULT E'USER',
+    "role" "Role" NOT NULL DEFAULT E'DRIVER',
     "token" TEXT,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
@@ -75,6 +75,7 @@ CREATE TABLE "Driver" (
     "password" TEXT NOT NULL,
     "profilePick" JSONB,
     "transporterId" TEXT,
+    "muted" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
@@ -218,6 +219,7 @@ CREATE TABLE "WeeklySchedule" (
 CREATE TABLE "Chatroom" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "chatroomName" TEXT NOT NULL,
     "guests" JSONB[],
     "chatroomOwner" JSONB NOT NULL,
     "ownerId" TEXT,

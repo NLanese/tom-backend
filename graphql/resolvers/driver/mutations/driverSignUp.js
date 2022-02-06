@@ -174,6 +174,32 @@ export default {
                     })
                 })
 
+                await owner.chatrooms.forEach( async (chatroom) => {
+                    if (chatroom.chatroomName === `${owner.dsp.name} chatroom`) {
+                        const foundChatroom = await db.chatroom.findUnique({
+                            where: {
+                                id: chatroom.id
+                            }
+                        })
+
+                        const guestDspArray = await foundChatroom.guests
+
+                        await db.chatroom.update({
+                            where: {
+                                id: chatroom.id
+                            },
+                            data: {
+                                drivers: {
+                                    connect: {
+                                        id: newDriver.id
+                                    }
+                                },
+                                guests: [ ...guestDspArray, newDriver]
+                            }
+                        })
+                    }
+                })
+
                 const token = await generateDriverToken(newDriver.id)
 
                 req.session = {
@@ -185,6 +211,7 @@ export default {
                     token: token
                 }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

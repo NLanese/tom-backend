@@ -64,7 +64,7 @@ export default {
                     })
 
                     await guests.forEach( async (guest) => {
-                        if (guest.role === "USER") {
+                        if (guest.role === "DRIVER") {
                             await db.chatroom.update({
                                 where: {
                                     id: newChatroom.id
@@ -154,7 +154,7 @@ export default {
                     })
 
                     await guests.forEach( async (guest) => {
-                        if (guest.role === "USER") {
+                        if (guest.role === "DRIVER") {
                             await db.chatroom.update({
                                 where: {
                                     id: newChatroom.id

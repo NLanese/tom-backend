@@ -94,7 +94,7 @@ model Admin {
 model Driver {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
-  role        Role     @default(USER)
+  role        Role     @default(DRIVER)
   token       String?
   firstname   String
   lastname    String
@@ -105,6 +105,7 @@ model Driver {
 
   // ACCOUNT INFORMATION
   transporterId String? @unique
+  muted         Boolean @default(false)
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
 
@@ -460,7 +461,7 @@ model Image {
 }
 
 enum Role {
-  USER
+  DRIVER
   MANAGER
   OWNER
   SUPERADMIN

@@ -96,6 +96,7 @@ const typeDefs = gql`
 
     # ACCOUNT INFORMATION
     transporterId:                String
+    muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 
