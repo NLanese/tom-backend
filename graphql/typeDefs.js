@@ -258,6 +258,7 @@ const typeDefs = gql`
   type Chatroom {
     id:                           ID
 		createdAt:                    Date
+    chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
 
@@ -518,7 +519,7 @@ const typeDefs = gql`
     managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
 
     # CHATROOM MUTATIONS
-    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!): Chatroom
+    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
     # dynamicCreateDriverManagementChatroom(role: String!, guests: [String!]): Chatroom
 
     # WEEKLY REPORT MUTATIONS

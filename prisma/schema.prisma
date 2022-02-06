@@ -276,6 +276,7 @@ model WeeklySchedule {
 model Chatroom {
   id              String   @id @unique @default(uuid())
   createdAt       DateTime @default(now())
+  chatroomName    String
   guests          Json[]
   chatroomOwner   Json
 

@@ -6,7 +6,8 @@ export default {
     Mutation: {
         dynamicCreateDriverManagementChatroom: async (_, {
             role,
-            driverId
+            driverId,
+            chatroomName
         }, context) => {
             let owner;
             let manager;
@@ -53,6 +54,7 @@ export default {
                         data: {
                             guests: [ ...guests ],
                             chatroomOwner: justOwnerRecord,
+                            chatroomName: chatroomName,
                             owner: {
                                 connect: {
                                     id: owner.id
@@ -142,6 +144,7 @@ export default {
                         data: {
                             guests: [ ...guests ],
                             chatroomOwner: justOwnerRecord,
+                            chatroomName: chatroomName,
                             owner: {
                                 connect: {
                                     id: foundOwner.id

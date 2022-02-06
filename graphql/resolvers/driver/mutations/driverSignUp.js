@@ -137,6 +137,7 @@ export default {
                     data: {
                         guests: [ newDriver, justOwnerRecord, ...guestArray ],
                         chatroomOwner: justOwnerRecord,
+                        chatroomName: `${newDriver.firstname} ${newDriver.lastname} management chatroom`,
                         owner: {
                             connect: {
                                 id: owner.id
