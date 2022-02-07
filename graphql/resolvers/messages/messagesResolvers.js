@@ -3,17 +3,19 @@ import GraphQLJSON from "graphql-type-json";
 // DYNAMIC MUTATIONS
 import dynamicSendMessage from "./mutations/dynamic/dynamicSendMessage.js";
 
-// DYNAMIC QUERIES
-import dynamicGetChatroomById from "./queries/dynamic/dynamicGetChatroomById.js";
+// DRIVER MUTATIONS
+import driverSendMessage from "./mutations/driver/driverSendMessage.js";
 
 export default {
     Query: {
-        // DYNAMIC QUERIES
-        ...dynamicGetChatroomById.Query,
+
     },
     Mutation: {
         // DYNAMIC MUTATIONS
         ...dynamicSendMessage.Mutation,
+
+        // DRIVER MUTATIONS
+        ...driverSendMessage.Mutation
 
     },
     JSON: GraphQLJSON

@@ -440,16 +440,19 @@ const typeDefs = gql`
     getDriversFromDsp: [Driver]
 
     # DSP QUERIES
+    dynamicGetDriversFromDsp(role: String!): [Driver]
+
     driverGetDriversFromDsp: Dsp
 
     # CHATROOM QUERIES
     dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
 
+    driverGetChatroomById(chatroomId: String!): Chatroom
+
     # SHIFT PLANNER QUERIES
     driverGetShiftPlaner: Driver
 
     # DYNAMIC QUERIES
-    dynamicGetDriversFromDsp(role: String!): [Driver]
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
 
     # USED FOR TESTING QUERIES    
@@ -516,6 +519,8 @@ const typeDefs = gql`
 
     # MESSAGES MUTATIONS
     dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Messages
+
+    driverSendMessage(chatroomId: String!, content: String!): Messages
 
     # WEEKLY REPORT MUTATIONS
     driverAcknowledgeFeedbackMessage(reportId: String!): [WeeklyReport]

@@ -2,7 +2,6 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
 
-// OWNER ONLY SO FAR
 export default {
     Query: {
         dynamicGetChatroomById: async (_, {
@@ -16,7 +15,7 @@ export default {
             if (role === 'OWNER') owner = await checkOwnerAuth(context)
             if (role === 'MANAGER') manager = await checkManagerAuth(context)
 
-            if (owner) {
+            if (owner || manager) {
                 try {
                     return await db.chatroom.findUnique({
                         where: {
@@ -25,13 +24,16 @@ export default {
                         include: {
                             owner: true,
                             managers: true,
-                            drivers: true
+                            drivers: true,
+                            messages: true 
                         }
                     })
                 } catch (error) {
                     throw new Error(error)
                 }
             }
+
+            throw new Error('Role not authorized')
         }
     }
 }
