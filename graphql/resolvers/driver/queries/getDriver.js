@@ -15,7 +15,11 @@ export default {
                         owner: true,
                         admins: true,
                         dsp: true,
-                        chatrooms: true,
+                        chatrooms: {
+                            include: {
+                                messages: true
+                            }
+                        },
                         weeklyReport: {
                             orderBy: [
                                 {

@@ -2,6 +2,9 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
 
+// STILL NEED TO TEST WITH ALL THE NEW UPDATE 
+// HOWEVER I DONT THINK THIS IS NEEDED ANYMORE BECAUSE
+// THE ROOM GETS CREATED ON DRIVER SIGN UP
 export default {
     Mutation: {
         dynamicCreateDriverManagementChatroom: async (_, {

@@ -15,11 +15,13 @@ export default {
                         owner: true,
                         drivers: true,
                         dsp: true,
+                        messages: true,
                         chatrooms: {
                             include: {
                                 owner: true,
                                 managers: true,
-                                drivers: true
+                                drivers: true,
+                                messages: true
                             }
                         }
                     }

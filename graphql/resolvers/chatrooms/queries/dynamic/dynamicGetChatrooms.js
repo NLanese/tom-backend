@@ -2,7 +2,7 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
 
-// OWNER ONLY SO FAR
+// USED FOR TESTING PURPOSES
 export default {
     Query: {
         dynamicGetChatrooms: async (_, {

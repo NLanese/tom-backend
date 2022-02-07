@@ -8,7 +8,7 @@ import propertyAccidentResolvers from './propertyAccident.js';
 import hitPersonResolvers from './hitPerson.js';
 import injuryReportResolvers from './injuryReport.js';
 import superUserResolvers from './superUser.js';
-import messagesResolvers from './messages.js';
+// import messagesResolvers from './messages.js';
 import notifiedMessagesResolvers from './notifiedMessages.js';
 
 // NEW RESOLVERS
@@ -20,7 +20,7 @@ import weeklyReportResolvers from './weeklyReport/weeklyReportResolvers.js';
 import scorecardResolvers from './scorecardTool/scorecardResolvers.js';
 import chatroomResolvers from './chatrooms/chatroomResolvers.js';
 import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
-// import messagesResolvers from './messages/messagesResolvers.js';
+import messagesResolvers from './messages/messagesResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -31,7 +31,7 @@ export default {
         ...usersResolvers.Query,
         ...accidentsResolvers.Query,
         ...superUserResolvers.Query,
-        ...messagesResolvers.Query,
+        // ...messagesResolvers.Query,
         ...notifiedMessagesResolvers.Query,
 
         ...ownerReslovers.Query,
@@ -41,7 +41,7 @@ export default {
         ...weeklyReportResolvers.Query,
         ...shiftPlannerResolvers.Query,
         ...chatroomResolvers.Query,
-        // ...messagesResolvers.Query,
+        ...messagesResolvers.Query,
 
         ...scorecardResolvers.Query,
         ...additionalResolvers.Query
@@ -56,7 +56,7 @@ export default {
         ...hitPersonResolvers.Mutation,
         ...injuryReportResolvers.Mutation,
         ...superUserResolvers.Mutation,
-        ...messagesResolvers.Mutation,
+        // ...messagesResolvers.Mutation,
         ...notifiedMessagesResolvers.Mutation,
 
         ...ownerReslovers.Mutation,
@@ -66,7 +66,7 @@ export default {
         ...weeklyReportResolvers.Mutation,
         ...shiftPlannerResolvers.Mutation,
         ...chatroomResolvers.Mutation,
-        // ...messagesResolvers.Mutation,
+        ...messagesResolvers.Mutation,
 
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation
