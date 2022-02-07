@@ -9,6 +9,7 @@ import driverGetChatroomById from "./queries/driver/driverGetChatroomById.js";
 
 // DYNAMIC MUTATIONS
 import dynamicCreateDriverManagementChatroom from "./mutations/dynamic/dynamicCreateDriverManagementChatroom.js";
+import dynamicCreateChatroom from "./mutations/dynamic/dynamicCreateChatroom.js";
 
 export default {
     Query: {
@@ -22,6 +23,7 @@ export default {
     Mutation: {
         // DYNAMIC MUTATIONS
         ...dynamicCreateDriverManagementChatroom.Mutation,
+        ...dynamicCreateChatroom.Mutation,
     },
     JSON: GraphQLJSON
 }
