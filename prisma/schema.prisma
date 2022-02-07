@@ -283,6 +283,7 @@ model Messages {
   // Message Information
   content   String
   from      Json
+  visable   Boolean @default(true)
 
   // RELATIONSHIPS
   chatroomId String

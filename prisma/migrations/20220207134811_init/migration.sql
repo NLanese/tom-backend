@@ -215,6 +215,7 @@ CREATE TABLE "Messages" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
     "from" JSONB NOT NULL,
+    "visable" BOOLEAN NOT NULL DEFAULT true,
     "chatroomId" TEXT NOT NULL,
     "ownerId" TEXT,
     "managerId" TEXT,

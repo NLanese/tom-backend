@@ -263,6 +263,7 @@ const typeDefs = gql`
     # MESSAGE INFORMATION
     content: String
     from: JSON
+    visable: Boolean
 
     # RELATIONSHIPS
     chatroom: Chatroom
@@ -517,6 +518,8 @@ const typeDefs = gql`
 
     # CHATROOM MUTATIONS
     dynamicCreateChatroom(role: String!, guests: [JSON]!, chatroomName: String!): Chatroom
+
+    driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
     # MESSAGES MUTATIONS
     dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Messages
