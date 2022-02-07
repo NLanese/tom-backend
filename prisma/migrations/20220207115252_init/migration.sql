@@ -181,34 +181,13 @@ CREATE TABLE "WeeklySchedule" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "weekStartDate" TEXT NOT NULL,
     "weekEndDate" TEXT NOT NULL,
-    "mondayDate" TEXT NOT NULL,
-    "mondayDayType" TEXT NOT NULL,
-    "mondayStartTime" TEXT NOT NULL,
-    "mondayEndTime" TEXT NOT NULL,
-    "tuesdayDate" TEXT NOT NULL,
-    "tuesdayDayType" TEXT NOT NULL,
-    "tuesdayStartTime" TEXT NOT NULL,
-    "tuesdayEndTime" TEXT NOT NULL,
-    "wednesdayDate" TEXT NOT NULL,
-    "wednesdayDayType" TEXT NOT NULL,
-    "wednesdayStartTime" TEXT NOT NULL,
-    "wednesdayEndTime" TEXT NOT NULL,
-    "thursdayDate" TEXT NOT NULL,
-    "thursdayDayType" TEXT NOT NULL,
-    "thursdayStartTime" TEXT NOT NULL,
-    "thursdayEndTime" TEXT NOT NULL,
-    "fridayDate" TEXT NOT NULL,
-    "fridayDayType" TEXT NOT NULL,
-    "fridayStartTime" TEXT NOT NULL,
-    "fridayEndTime" TEXT NOT NULL,
-    "saturdayDate" TEXT NOT NULL,
-    "saturdayDayType" TEXT NOT NULL,
-    "saturdayStartTime" TEXT NOT NULL,
-    "saturdayEndTime" TEXT NOT NULL,
-    "sundayDate" TEXT NOT NULL,
-    "sundayDayType" TEXT NOT NULL,
-    "sundayStartTime" TEXT NOT NULL,
-    "sundayEndTime" TEXT NOT NULL,
+    "monday" JSONB NOT NULL,
+    "tuesday" JSONB NOT NULL,
+    "wednesday" JSONB NOT NULL,
+    "thursday" JSONB NOT NULL,
+    "friday" JSONB NOT NULL,
+    "saturday" JSONB NOT NULL,
+    "sunday" JSONB NOT NULL,
     "ownerId" TEXT NOT NULL,
     "managerId" TEXT NOT NULL,
     "driverId" TEXT NOT NULL,
@@ -235,10 +214,11 @@ CREATE TABLE "Messages" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
-    "from" TEXT NOT NULL,
+    "from" JSONB NOT NULL,
+    "chatroomId" TEXT NOT NULL,
     "ownerId" TEXT,
+    "managerId" TEXT,
     "driverId" TEXT,
-    "adminId" TEXT,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
@@ -578,13 +558,16 @@ ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_driverId_fkey" FOREI
 ALTER TABLE "Chatroom" ADD CONSTRAINT "Chatroom_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_chatroomId_fkey" FOREIGN KEY ("chatroomId") REFERENCES "Chatroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_managerId_fkey" FOREIGN KEY ("managerId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;

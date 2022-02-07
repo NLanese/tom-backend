@@ -222,34 +222,13 @@ const typeDefs = gql`
     createdAt:                    Date
     weekStartDate:                String
     weekEndDate:                  String
-    mondayDate:                   String
-    mondayDayType:                String
-    mondayStartTime:              String
-    mondayEndTime:                String
-    tuesdayDate:                  String
-    tuesdayDayType:               String
-    tuesdayStartTime:             String
-    tuesdayEndTime:               String
-    wednesdayDate:                String
-    wednesdayDayType:             String
-    wednesdayStartTime:           String
-    wednesdayEndTime:             String
-    thursdayDate:                 String
-    thursdayDayType:              String
-    thursdayStartTime:            String
-    thursdayEndTime:              String
-    fridayDate:                   String
-    fridayDayType:                String
-    fridayStartTime:              String
-    fridayEndTime:                String
-    saturdayDate:                 String
-    saturdayDayType:              String
-    saturdayStartTime:            String
-    saturdayEndTime:              String
-    sundayDate:                   String
-    sundayDayType:                String
-    sundayStartTime:              String
-    sundayEndTime:                String
+    monday:                       JSON
+    tuesday:                      JSON
+    wednesday:                    JSON
+    thursday:                     JSON
+    friday:                       JSON
+    saturday:                     JSON
+    sunday:                       JSON
 
     # RELATIONSHIPS
     owner:                        Owner
@@ -274,15 +253,20 @@ const typeDefs = gql`
     owner:                        Owner
     managers:                     [Admin]
     drivers:                      [Driver]
+    messages:                     [Messages]
   }
 
   type Messages {
     id:        ID
     createdAt: Date
+
+    # MESSAGE INFORMATION
     content: String
-    from: String
+    from: JSON
 
     # RELATIONSHIPS
+    chatroom: Chatroom
+    owner:  Owner
 		driver: Driver
     admin:  Admin
   }
@@ -459,7 +443,6 @@ const typeDefs = gql`
     driverGetDriversFromDsp: Dsp
 
     # CHATROOM QUERIES
-    dynamicGetChatrooms(role: String!): [Chatroom]
     dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
 
     # SHIFT PLANNER QUERIES
@@ -468,6 +451,9 @@ const typeDefs = gql`
     # DYNAMIC QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
+
+    # USED FOR TESTING QUERIES    
+    dynamicGetChatrooms(role: String!): [Chatroom]
 
     # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
 
@@ -527,8 +513,9 @@ const typeDefs = gql`
     managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
 
     # CHATROOM MUTATIONS
-    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
-    # dynamicCreateDriverManagementChatroom(role: String!, guests: [String!]): Chatroom
+
+    # MESSAGES MUTATIONS
+    dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Messages
 
     # WEEKLY REPORT MUTATIONS
     driverAcknowledgeFeedbackMessage(reportId: String!): [WeeklyReport]
@@ -547,6 +534,9 @@ const typeDefs = gql`
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
     dynamicUpdateDriver(role: String!, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+
+    # USED FOR TESTING MUTATIONS
+    dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
 
     # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
 

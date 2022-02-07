@@ -237,34 +237,13 @@ model WeeklySchedule {
   createdAt       DateTime @default(now())
   weekStartDate   String
   weekEndDate     String 
-  mondayDate      String
-  mondayDayType   String
-  mondayStartTime String
-  mondayEndTime   String
-  tuesdayDate      String
-  tuesdayDayType   String
-  tuesdayStartTime String
-  tuesdayEndTime   String   
-  wednesdayDate      String
-  wednesdayDayType   String
-  wednesdayStartTime String
-  wednesdayEndTime   String 
-  thursdayDate      String
-  thursdayDayType   String
-  thursdayStartTime String
-  thursdayEndTime   String 
-  fridayDate      String
-  fridayDayType   String
-  fridayStartTime String
-  fridayEndTime   String 
-  saturdayDate      String
-  saturdayDayType   String
-  saturdayStartTime String
-  saturdayEndTime   String
-  sundayDate      String
-  sundayDayType   String
-  sundayStartTime String
-  sundayEndTime   String
+  monday          Json
+  tuesday         Json  
+  wednesday       Json
+  thursday        Json
+  friday          Json 
+  saturday        Json
+  sunday          Json
 
   // RELATIONSHIPS
   ownerId   String
@@ -293,20 +272,27 @@ model Chatroom {
   ownerId         String?
   owner           Owner?   @relation(fields: [ownerId], references: [id])
   drivers         Driver[]
-  managers        Admin[]   
+  managers        Admin[]  
+  messages        Messages[] 
 }
 
 model Messages {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+
+  // Message Information
   content   String
-  from      String
+  from      Json
+
+  // RELATIONSHIPS
+  chatroomId String
+  chatroom  Chatroom @relation(fields: [chatroomId], references: [id])
   ownerId   String?
-  driverId  String?
-  adminId   String?
   owner     Owner?   @relation(fields: [ownerId], references: [id])
+  managerId String?
+  manager   Admin?   @relation(fields: [managerId], references: [id])
+  driverId  String?
   driver    Driver?  @relation(fields: [driverId], references: [id])
-  admin     Admin?   @relation(fields: [adminId], references: [id])
 }
 
 model NotifiedMessages {
