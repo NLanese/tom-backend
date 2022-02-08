@@ -25,8 +25,17 @@ const pdfToExcel = (pdfFile) => {
 }
 
 const parseExcel = async (filePath) => {
-    const workSheetsFromFile = await xlsx.parse(`./${filePath.path}.xlsx`);
-    return workSheetsFromFile[0].data
+    let workSheetsFromFile;
+
+    if (filePath.path.search(".xlsx") === -1) {
+        workSheetsFromFile = await xlsx.parse(`./${filePath.path}.xlsx`);
+        return workSheetsFromFile[0].data
+    }
+    
+    if (filePath.path.search(".xlsx") !== -1) {
+        workSheetsFromFile = await xlsx.parse(`./${filePath.path}`);
+        return workSheetsFromFile[0].data
+    }
 }
 
 export {

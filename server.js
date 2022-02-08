@@ -88,6 +88,11 @@ const startApolloServer = async () => {
         }, 10000)
     })
 
+    app.post('/excelparse', uploadStorage.single("file"), async (req, res) => {
+        let parseData = await parseExcel(req.file)
+        await res.send(parseData)
+    })
+
     await server.start()
     await server.applyMiddleware({
         app,
