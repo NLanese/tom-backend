@@ -1,11 +1,11 @@
 import db from "../../generatePrisma.js";
 
 // Want to change to checking the accident driver adminId and comparing
-// it to the Admins Id. However, this works for now
+// it to the Managers Id. However, this works for now
 const handleAdminAccidentOwnership = async (adminId, accidentId) => {
     let check = false
 
-    const admin = await db.admin.findUnique({
+    const manager = await db.manager.findUnique({
         where: {
             id: adminId
         },
@@ -14,8 +14,8 @@ const handleAdminAccidentOwnership = async (adminId, accidentId) => {
         }
     })
     
-    if (!admin || !admin.drivers) {
-        throw new Error("Error: there is no record of this admin!")
+    if (!manager || !manager.drivers) {
+        throw new Error("Error: there is no record of this manager!")
     }
 
     const accident = await db.accident.findUnique({
@@ -28,7 +28,7 @@ const handleAdminAccidentOwnership = async (adminId, accidentId) => {
         throw new Error("Error: there is no record of this accident")
     }
     
-    admin.drivers.forEach((driver) => {
+    manager.drivers.forEach((driver) => {
         if (driver.id === accident.driverId) {
             check = true
         }

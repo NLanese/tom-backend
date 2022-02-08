@@ -2,7 +2,7 @@ import db from "../../../../utils/generatePrisma.js";
 import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from 'apollo-server-errors';
 import { validateRegisterInput } from "../../../../utils/validators.js";
-import generateAdminToken from "../../../../utils/generateToken/generateAdminToken.js"
+import generateManagerToken from "../../../../utils/generateToken/generateManagerToken.js"
 
 /* SIGNS UP THE MANAGER AND RELATES THEM TO THE OWNER */
 export default {
@@ -27,7 +27,7 @@ export default {
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
 
-            const foundManager = await db.admin.findUnique({
+            const foundManager = await db.manager.findUnique({
                 where: {
                     email
                 },
@@ -68,7 +68,7 @@ export default {
                 let newManager
 
                 if (owner.dsp) {
-                    newManager = await db.admin.create({
+                    newManager = await db.manager.create({
                         data: {
                             owner: {
                                 connect: {
@@ -90,7 +90,7 @@ export default {
                 }
 
                 if (!owner.dsp) {
-                    newManager = await db.admin.create({
+                    newManager = await db.manager.create({
                         data: {
                             owner: {
                                 connect: {
@@ -114,7 +114,7 @@ export default {
                     })
 
                     if (foundDriver) {
-                        await db.admin.update({
+                        await db.manager.update({
                             where: {
                                 id: newManager.id
                             },
@@ -158,7 +158,7 @@ export default {
                     })
                 }
 
-                const token = await generateAdminToken(newManager.id)
+                const token = await generateManagerToken(newManager.id)
 
                 req.session = {
                     token: `Bearer ${token}`

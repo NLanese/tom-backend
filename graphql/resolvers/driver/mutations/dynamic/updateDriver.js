@@ -1,6 +1,6 @@
 import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 import hashPassword from "../../../../../utils/passwordHashing.js";
 
 export default {
@@ -35,26 +35,7 @@ export default {
 
             if (!foundDriver) throw new Error("Driver does not exist")
 
-            if (owner) {
-                try {
-                    return await db.driver.update({
-                        where: {
-                            id: driverId
-                        },
-                        data: {
-                            email: email,
-                            firstname: firstname,
-                            lastname: lastname,
-                            phoneNumber: phoneNumber,
-                            password: password
-                        }
-                    })
-                } catch (error) {
-                    throw new Error(error)
-                }
-            }
-
-            if (manager) {
+            if (owner || manager) {
                 try {
                     return await db.driver.update({
                         where: {

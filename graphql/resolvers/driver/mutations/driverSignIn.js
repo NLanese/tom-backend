@@ -26,7 +26,7 @@ export default {
                 },
                 include: {
                     owner: true,
-                    admins: true,
+                    managers: true,
                     dsp: true,
                     weeklyReport: true
                 }

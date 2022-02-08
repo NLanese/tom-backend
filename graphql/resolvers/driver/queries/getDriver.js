@@ -13,7 +13,7 @@ export default {
                     },
                     include: {
                         owner: true,
-                        admins: true,
+                        managers: true,
                         dsp: true,
                         shiftPlanners: true,
                         chatrooms: {

@@ -1,5 +1,5 @@
 import db from "../../../../../utils/generatePrisma.js";
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
@@ -57,7 +57,7 @@ export default {
             if (manager) {
                 let returnData = []
 
-                const foundManager = await db.admin.findUnique({
+                const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
                     },

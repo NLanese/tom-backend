@@ -32,7 +32,7 @@ export default {
                 }
             })
 
-            const foundManager = await db.admin.findUnique({
+            const foundManager = await db.manager.findUnique({
                 where: {
                     email
                 }

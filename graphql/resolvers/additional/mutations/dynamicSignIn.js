@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { UserInputError } from 'apollo-server-errors';
 import { validateLoginInput } from "../../../../utils/validators.js";
 import generateOwnerToken from "../../../../utils/generateToken/generateOwnerToken.js"
-import generateAdminToken from "../../../../utils/generateToken/generateAdminToken.js";
+import generateManagerToken from "../../../../utils/generateToken/generateManagerToken.js";
 
 export default {
     Mutation: {
@@ -24,14 +24,14 @@ export default {
                 },
                 include: {
                     drivers: true,
-                    admins: true,
+                    managers: true,
                     dsp: true,
                     messages: true,
                     notifiedMessages: true
                 }
             })
 
-            const foundManager = await db.admin.findUnique({
+            const foundManager = await db.manager.findUnique({
                 where: {
                     email
                 },
@@ -87,7 +87,7 @@ export default {
                     })
                 }
 
-                const token = await generateAdminToken(foundManager.id)
+                const token = await generateManagerToken(foundManager.id)
 
                 req.session = {
                     token: `Bearer ${token}`

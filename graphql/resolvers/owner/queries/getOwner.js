@@ -17,7 +17,7 @@ export default {
                                 weeklyReport: true
                             }
                         },
-                        admins: true,
+                        managers: true,
                         dsp: true,
                         messages: true,
                         notifiedMessages: true,
