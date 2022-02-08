@@ -284,6 +284,7 @@ model Messages {
   content   String
   from      Json
   visable   Boolean @default(true)
+  reported  Boolean @default(false)
 
   // RELATIONSHIPS
   chatroomId String
