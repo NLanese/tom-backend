@@ -1,6 +1,7 @@
 import GraphQLJSON from "graphql-type-json";
 
 // DYNAMIC MUTATIONS
+import dynamicCreateShiftPlannerFrontEndTool from "./mutations/frontendTool/dynamicCreateShiftPlannerFrontEndTool.js";
 import dynamicCreateShiftPlannerReport from "./mutations/dynamic/dynamicCreateShiftPlannerReport.js";
 
 // DRIVER QUERIES
@@ -15,6 +16,7 @@ export default {
     },
     Mutation: {
         // DYNAMIC MUTATIONS
+        ...dynamicCreateShiftPlannerFrontEndTool.Mutation,
         ...dynamicCreateShiftPlannerReport.Mutation
     },
     JSON: GraphQLJSON

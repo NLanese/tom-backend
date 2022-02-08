@@ -7,19 +7,15 @@ export default {
             const driver = await checkDriverAuth(context)
 
             try {
-                return await db.driver.findUnique({
+                return await db.shiftPlanner.findMany({
                     where: {
-                        id: driver.id
+                        driverId: driver.id
                     },
-                    include: {
-                        shiftPlanners: {
-                            orderBy: [
-                                {
-                                    date: "desc"
-                                }
-                            ]
+                    orderBy: [
+                        {
+                            date: "desc"
                         }
-                    }
+                    ]
                 })
             } catch (error) {
                 throw new Error(error)
