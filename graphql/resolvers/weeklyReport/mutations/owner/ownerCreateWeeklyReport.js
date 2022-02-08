@@ -54,7 +54,7 @@ export default {
                         followingDistanceRate: followingDistanceRate,
                         signalViolationsRate: signalViolationsRate,
                         deliveryCompletionRate: deliveryCompletionRate,
-                        deliveredNotRecieved: deliveredAndRecieved,
+                        deliveredAndRecieved: deliveredAndRecieved,
                         photoOnDelivery: photoOnDelivery,
                         callCompliance: callCompliance,
                         scanCompliance: scanCompliance,

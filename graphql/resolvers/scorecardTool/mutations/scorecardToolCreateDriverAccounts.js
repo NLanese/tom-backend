@@ -210,7 +210,7 @@ export default {
                         }
                     })
 
-                    return newDriver
+                    return await newDriver
                 } catch (error) {
                     throw new Error(error)
                 }
@@ -385,7 +385,7 @@ export default {
 
                     // console.log('hit after adding drive to the other chatrooms')
 
-                    return newDriver
+                    return await newDriver
                 } catch (error) {
                     throw new Error(error)
                 }
@@ -393,7 +393,7 @@ export default {
 
             if (foundDriver) {
                 try {
-                    return foundDriver
+                    return await foundDriver
                 } catch (error) {
                     throw new Error(error)
                 }
