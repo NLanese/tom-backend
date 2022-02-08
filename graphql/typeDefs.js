@@ -451,7 +451,7 @@ const typeDefs = gql`
     driverGetChatroomById(chatroomId: String!): Chatroom
 
     # SHIFT PLANNER QUERIES
-    driverGetShiftPlaner: Driver
+    driverGetShiftPlaner: [ShiftPlanner]
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
@@ -536,6 +536,9 @@ const typeDefs = gql`
     scorecardToolCreateDriverAccounts(email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!): Driver
     scorecardToolCreateWeeklyReports(role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
 
+    # SHIFT PLANNER TOOL MUTATIONS
+    dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, date: String!, phoneId: String!, deviceId: String!, vehicleId: String!, cxNumber: String!, message: String!): ShiftPlanner
+    
     # SHIFT PLANNER MUTATIONS
     dynamicCreateShiftPlannerReport(role: String!, driverId: String!, date: String!, phoneId: String!, deviceId: String!, vehicleId: String!, cxNumber: String!, message: String!): ShiftPlanner
 

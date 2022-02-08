@@ -15,6 +15,7 @@ export default {
                         owner: true,
                         admins: true,
                         dsp: true,
+                        shiftPlanners: true,
                         chatrooms: {
                             include: {
                                 messages: true
