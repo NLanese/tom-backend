@@ -5,7 +5,7 @@ import checkDriverAuth from "../../../../../utils/checkAuthorization/check-drive
 
 export default {
     Mutation: {
-        dynamicAddManagerToChatroom: async (_, {
+        dynamicRemoveManagerFromChatroom: async (_, {
             role,
             chatroomId,
             guestId
@@ -35,35 +35,45 @@ export default {
             if (!foundManager) throw new Error('Manager does not exist')
 
             let guests = foundChatroom.guests
-            await guests.push(foundManager)
+
+            await guests.forEach( async (guest, index) => {
+                if (guest.id === guestId) {
+                    guests.splice(index, 1)
+
+                    await db.manager.update({
+                        where: {
+                            id: guest.id
+                        },
+                        data: {
+                            chatrooms: {
+                                disconnect: {
+                                    id: chatroomId
+                                }
+                            }
+                        }
+                    })
+                }
+            })
 
             if (owner || manager || driver) {
-                await db.manager.update({
-                    where: {
-                        id: foundManager.id
-                    },
-                    data: {
-                        chatrooms: {
-                            connect: {
-                                id: chatroomId
+                try {
+                    return await db.chatroom.update({
+                        where: {
+                            id: chatroomId
+                        },
+                        data: {
+                            guests: guests,
+                            drivers: {
+                                disconnect: {
+                                    id: guestId
+                                }
                             }
                         }
-                    }
-                })
-
-                return await db.chatroom.update({
-                    where: {
-                        id: chatroomId
-                    },
-                    data: {
-                        guests: guests,
-                        managers: {
-                            connect: {
-                                id: foundManager.id
-                            }
-                        }
-                    }
-                })
+                    })
+                    
+                } catch (error) {
+                    throw new Error(error)
+                }
             }
         }
     }

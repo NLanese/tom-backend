@@ -13,6 +13,7 @@ import dynamicCreateChatroom from "./mutations/dynamic/dynamicCreateChatroom.js"
 import dynamicAddDriverToChatroom from "./mutations/dynamic/dynamicAddDriverToChatroom.js";
 import dynamicRemoveDriverFromChatroom from "./mutations/dynamic/dynamicRemoveDriverFromChatroom.js";
 import dynamicAddManagerToChatroom from "./mutations/dynamic/dynamicAddManagerToChatroom.js";
+import dynamicRemoveManagerFromChatroom from "./mutations/dynamic/dynamicRemoveManagerFromChatroom.js";
 
 // DRIVER MUTATIONS
 import driverCreateChatroom from "./mutations/driver/driverCreateChatroom.js";
@@ -33,6 +34,7 @@ export default {
         ...dynamicAddDriverToChatroom.Mutation,
         ...dynamicRemoveDriverFromChatroom.Mutation,
         ...dynamicAddManagerToChatroom.Mutation,
+        ...dynamicRemoveManagerFromChatroom.Mutation,
 
         // DRIVER MUTATIONS
         ...driverCreateChatroom.Mutation,

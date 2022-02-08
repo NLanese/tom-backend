@@ -17,7 +17,7 @@ export default {
             // DYNAMIC AUTHORIZATION CHECK
             if (role === 'OWNER') owner = await checkOwnerAuth(context)
             if (role === 'MANAGER') manager = await checkManagerAuth(context)
-            if (role === 'DRIVER') manager = await checkDriverAuth(context)
+            if (role === 'DRIVER') driver = await checkDriverAuth(context)
 
             const foundChatroom = await db.chatroom.findUnique({
                 where: {
