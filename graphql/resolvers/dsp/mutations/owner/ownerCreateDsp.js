@@ -31,7 +31,7 @@ export default {
                 },
                 include: {
                     drivers: true,
-                    admins: true
+                    managers: true
                 }
             })
 
@@ -82,12 +82,12 @@ export default {
                     }
                 })
 
-                await foundOwner.admins.forEach( async (admin) => {
-                    await guestArray.push(admin)
+                await foundOwner.managers.forEach( async (manager) => {
+                    await guestArray.push(manager)
 
-                    const foundAdmin = await db.admin.findUnique({
+                    const foundAdmin = await db.manager.findUnique({
                         where: {
-                            id: admin.id
+                            id: manager.id
                         }
                     })
 
@@ -97,9 +97,9 @@ export default {
                                 id: newDsp.id
                             },
                             data: {
-                                admins: {
+                                managers: {
                                     connect: {
-                                        id: admin.id
+                                        id: manager.id
                                     }
                                 }
                             }
@@ -178,8 +178,8 @@ export default {
                     }
                 })
 
-                await foundOwner.admins.forEach( async (admin) => {
-                    await managementArray.push(admin)
+                await foundOwner.managers.forEach( async (manager) => {
+                    await managementArray.push(manager)
                 })
 
                 const managementChatroom = await db.chatroom.create({

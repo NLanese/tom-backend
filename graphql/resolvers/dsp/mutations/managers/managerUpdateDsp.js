@@ -1,5 +1,5 @@
 import db from "../../../../../utils/generatePrisma.js";
-import checkAdminAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 
 export default {
     Mutation: {
@@ -20,9 +20,9 @@ export default {
             feedbackNotifications,
             autoSend
         }, context) => {
-            const manager = await checkAdminAuth(context)
+            const manager = await checkManagerAuth(context)
 
-            const foundManager = await db.admin.findUnique({
+            const foundManager = await db.manager.findUnique({
                 where: {
                     id: manager.id
                 },

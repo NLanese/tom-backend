@@ -28,7 +28,7 @@ const handleAdminInjuryAccidentOwnership = async (adminId, injuryAccidentId) => 
         return true
     }
 
-    throw new Error("Error: You are not the admin of the Injury Accident's Driver")
+    throw new Error("Error: You are not the manager of the Injury Accident's Driver")
 }
 
 

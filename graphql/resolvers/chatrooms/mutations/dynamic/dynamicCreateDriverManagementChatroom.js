@@ -1,6 +1,6 @@
 import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 
 // STILL NEED TO TEST WITH ALL THE NEW UPDATE 
 // HOWEVER I DONT THINK THIS IS NEEDED ANYMORE BECAUSE
@@ -36,7 +36,7 @@ export default {
                         id: owner.id
                     },
                     include: {
-                        admins: true
+                        managers: true
                     }
                 })
 
@@ -48,7 +48,7 @@ export default {
 
                 await guests.push(justOwnerRecord)
 
-                await foundOwner.admins.forEach((manager) => {
+                await foundOwner.managers.forEach((manager) => {
                     guests.push(manager)
                 })
 
@@ -115,7 +115,7 @@ export default {
 
             // MANAGER MUTATION
             if (manager) {
-                const foundManager = await db.admin.findUnique({
+                const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
                     } 
@@ -126,11 +126,11 @@ export default {
                         id: foundManager.ownerId
                     },
                     include: {
-                        admins: true
+                        managers: true
                     }
                 })
 
-                await foundOwner.admins.forEach((manager) => {
+                await foundOwner.managers.forEach((manager) => {
                     guests.push(manager)
                 })
 

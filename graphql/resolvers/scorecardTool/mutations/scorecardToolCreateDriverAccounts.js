@@ -1,6 +1,6 @@
 import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
-import checkManagerAuth from "../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 import hashPassword from "../../../../utils/passwordHashing.js";
 
 // BUGS TO FIX
@@ -43,7 +43,7 @@ export default {
             
 
             if (manager && !foundDriver) {
-                const foundManager = await db.admin.findUnique({
+                const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
                     },
@@ -57,7 +57,7 @@ export default {
                         id: foundManager.owner.id
                     },
                     include: {
-                        admins: true,
+                        managers: true,
                         dsp: true,
                         chatrooms: true
                     }
@@ -114,12 +114,12 @@ export default {
                         })
                     }
 
-                    foundOwner.admins.forEach( async (admin) => {
-                        await guestArray.push(admin)
+                    foundOwner.managers.forEach( async (manager) => {
+                        await guestArray.push(manager)
 
-                        const foundAdmin = await db.admin.findUnique({
+                        const foundAdmin = await db.manager.findUnique({
                             where: {
-                                id: admin.id
+                                id: manager.id
                             }
                         })
 
@@ -129,9 +129,9 @@ export default {
                                     id: newDriver.id
                                 },
                                 data: {
-                                    admins: {
+                                    managers: {
                                         connect: {
-                                            id: admin.id 
+                                            id: manager.id 
                                         }
                                     },
                                 }
@@ -222,7 +222,7 @@ export default {
                         id: owner.id
                     },
                     include: {
-                        admins: true,
+                        managers: true,
                         dsp: true,
                         chatrooms: true
                     }
@@ -279,12 +279,12 @@ export default {
                         })
                     }
 
-                    foundOwner.admins.forEach( async (admin) => {
-                        await guestArray.push(admin)
+                    foundOwner.managers.forEach( async (manager) => {
+                        await guestArray.push(manager)
 
-                        const foundAdmin = await db.admin.findUnique({
+                        const foundAdmin = await db.manager.findUnique({
                             where: {
-                                id: admin.id
+                                id: manager.id
                             }
                         })
 
@@ -294,9 +294,9 @@ export default {
                                     id: newDriver.id
                                 },
                                 data: {
-                                    admins: {
+                                    managers: {
                                         connect: {
-                                            id: admin.id 
+                                            id: manager.id 
                                         }
                                     },
                                 }

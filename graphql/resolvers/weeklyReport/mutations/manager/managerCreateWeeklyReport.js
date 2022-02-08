@@ -1,5 +1,5 @@
 import db from "../../../../../utils/generatePrisma.js"
-import checkAdminAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js"
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js"
 
 export default {
     Mutation: {
@@ -29,7 +29,7 @@ export default {
             podOpps,
             ccOpps
         }, context) => {
-            const manager = await checkAdminAuth(context)
+            const manager = await checkManagerAuth(context)
 
             try {
                 return await db.weeklyReport.create({

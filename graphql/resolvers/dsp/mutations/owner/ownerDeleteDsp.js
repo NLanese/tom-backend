@@ -1,6 +1,7 @@
 import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
 
+// USED FOR TESTING
 export default {
     Mutation: {
         ownerDeleteDsp: async (_, {

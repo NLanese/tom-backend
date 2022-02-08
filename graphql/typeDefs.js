@@ -43,14 +43,14 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     drivers:                      [Driver]
-    admins:                       [Admin]
+    managers:                     [Manager]
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
     chatrooms:                    [Chatroom]
   }
 
-  type Admin {
+  type Manager {
     id:                           ID
     createdAt:                    Date
     role:                         String
@@ -111,7 +111,7 @@ const typeDefs = gql`
     # RELATIONSHIPS
     owner:                        Owner
     accidents:                    [Accident]
-    admins:                       [Admin]
+    managers:                       [Manager]
     vehicle:                      Vehicle
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
@@ -151,7 +151,7 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    admins:                       [Admin]
+    managers:                       [Manager]
     drivers:                      [Driver]
   }
 
@@ -232,7 +232,7 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    manager:                      Admin
+    manager:                      Manager
     driver:                       Driver
   }
 
@@ -251,7 +251,7 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    managers:                     [Admin]
+    managers:                     [Manager]
     drivers:                      [Driver]
     messages:                     [Messages]
   }
@@ -269,7 +269,7 @@ const typeDefs = gql`
     chatroom: Chatroom
     owner:  Owner
 		driver: Driver
-    admin:  Admin
+    manager:  Manager
   }
 
   type NotifiedMessages {
@@ -282,7 +282,7 @@ const typeDefs = gql`
     driverId:   Int
     adminId:    Int 
     driver:     Driver
-    admin:      Admin
+    manager:      Manager
   }
 
   type Vehicle {
@@ -327,8 +327,6 @@ const typeDefs = gql`
     injury:                 String
 
     deleted:                Boolean
-
-    accident_pictures:      [Image]
   }
 
 
@@ -357,8 +355,6 @@ const typeDefs = gql`
     rushed_prior:           Boolean
 
     deleted:                Boolean
-        
-    accident_pictures:      [Image]
 
     accidentId:             Int
     accident:               [Accident]
@@ -380,8 +376,6 @@ const typeDefs = gql`
     rushed_prior:             Boolean
 
     deleted:                  Boolean
-
-    accident_pictures:        [Image]
 
     accidentId:               Int
     accident:                 [Accident]
@@ -408,23 +402,6 @@ const typeDefs = gql`
   }
 
 
-  type Image{
-    id:                     ID
-    fieldname:              String
-    path:                   String
-    mimetype:               String
-    size:                   Int
-    originalname:           String
-    encoding:               String
-    destination:            String
-    filename:               String
-
-    injuryAccident:         [InjuryAccident]
-    hitPerson:              [HitPerson]
-    propertyAccident:       [PropertyAccident]       
-  }
-
-
     # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
@@ -433,7 +410,7 @@ const typeDefs = gql`
     ownerGetEmployedDrivers: [Driver]
 
     # MANAGER QUERIES
-    getManager: Admin
+    getManager: Manager
     managerGetEmployedDrivers: [Driver]
 
     # DRIVER QUERIES
@@ -459,39 +436,6 @@ const typeDefs = gql`
     # USED FOR TESTING QUERIES    
     dynamicGetChatrooms(role: String!): [Chatroom]
 
-    # ---------------------------------------------- OLD QUERIERS ----------------------------------------  
-
-    # SUPER USER QUERIES
-    sGetAllAdmins: [Admin]
-    sGetAdminById(adminId: Int!): Admin
-    sGetUserById(driverId: Int!): Driver
-    sGetAccidentById(accidentId: Int!): Accident
-
-    # ADMIN QUERIES
-    getAdmin: Admin
-    adminGetEmployees: [Driver]
-    adminGetFiredEmployees: [Driver]
-    adminGetAccidentById(accidentId: Int): Accident
-    adminGetUserAccidentsById(driverId: Int): Driver
-    # adminGetMessages: [AdminMessages]
-
-    # DRIVER QUERIES OLD
-    getDriverById(driverId: Int): Driver
-    getDriversForDspForSafetyAndCompliance: [Driver] 
-    getDriversForDspForTeam: [Driver]
-    getDriversForScorecardQuality: [Driver]
-
-    # ACCIDENT QUERIES
-    getAccidents: [Accident]
-    getAccidentById(accidentId: Int!): Accident
-
-    # MESSAGES QUERIES
-    getMessages: [Messages]
-    adminGetMessagesWithDriver(driverId: Int!): [Messages]
-    getMessageWithAdmin: [Messages]
-
-    # NOTIFIED MESSAGES QUERIES
-    getNotifiedMessages: [NotifiedMessages]
   }
   
   type Mutation {
@@ -501,8 +445,8 @@ const typeDefs = gql`
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
 
     # MANAGER MUTATIONS
-    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Admin
-    managerSignIn(email: String!, password: String!): Admin
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Manager
+    managerSignIn(email: String!, password: String!): Manager
 
     # DRIVER MUTATIONS
     driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver
@@ -550,120 +494,9 @@ const typeDefs = gql`
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
 
-    # ---------------------------------------------- OLD MUTATIONS ----------------------------------------  
-
-    # SUPER USER MUTATIONS
-    sSignupSuper(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): SuperUser!
-    sSigninSuper(email: String!, password: String!): SuperUser!
-    sSuspendAdmin(adminId: Int!): Admin
-    sDeleteAdmin(adminId: Int!): Admin
-    sUpdateAdmin(adminId: Int!, email: String, firstname: String, lastname: String, password: String, paid: Boolean, accountStatus: String, deleted: Boolean, phoneNumber: String): Admin
-
-    # ADMIN MUTATIONS
-    signupAdmin(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, dsp_name: String!, dsp_shortcode: String!): Admin!
-    signinAdmin(email: String!, password: String!): Admin!
-    updateAdmin(email: String, firstname: String, lastname: String, password: String, phoneNumber: String, dsp_name: String, dsp_shortcode: String): Admin!
-    adminCreateDriverAccounts(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, adminEmail: String!, rank: Int!, employeeId: String!, tier: String!, delivered: Int!, key_focus_area: String!, fico: String!, seatbelt_and_speeding: String!, distractions_rate: String!, following_distance_rate: String!, signal_violations_rate: String!, delivery_completion_rate: String!, delivered_and_recieved: Int!, photo_on_delivery: String!, call_compliance: String!, scan_compliance: String!, attended_delivery_accuracy: Int!, dnr: Int!, pod_opps: Int!, cc_opps: Int!, speeding_event_rate: String!, seatbelt_off_rate: String!): Driver
-    adminCreateAccident(driverId: Int!, name: String!, using_safety: Boolean!, safety_failed: Boolean!, number_package_carried: Int!, safety_equipment_used: String!): Accident
-    adminUpdateEmployeeByID(driverId: Int, employeeId: String, adminEmail: String, adminFirstname: String, adminLastname: String, fico: String, netradyne: Int, delivery_associate: Int, defects: Int, customer_delivery_feedback: Int, delivered_and_recieved: Int, delivery_completion_rate: String, photo_on_delivery: String, call_compliance: String, scan_compliance: String, has_many_accidents: Int, belongs_to_team: Boolean, attendence: JSON, productivity: JSON, phoneNumber: String, rank: Int, tier: String, delivered: Int, key_focus_area: String, distractions_rate: String, following_distance_rate: String, signal_violations_rate: String, attended_delivery_accuracy: Int, dnr: Int, pod_opps: Int, cc_opps: Int, speeding_event_rate: String, seatbelt_off_rate: String): Driver
-    adminUpdateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String): Accident
-    adminUpdateCollision(collisionId: Int, accidentId: Int, location: String): Collision
-    adminUpdateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
-    adminUpdatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
-    adminUpdateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
-    adminUpdateInjuryAccident(injuryAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
-    adminSuspendUser(driverId: Int): Driver
-
-    # MESSAGE MUTATIOINS
-    sendMessageToAdmin(content: String!): Messages
-    adminSendMessageToDriver(driverId: Int!, content: String!): Messages
-
-    # NOTIFIED MESSAGES MUTATIONS
-    readNotifiedMessage(notifiedMessageId: Int!): NotifiedMessages
-    notifiedToFalse: Driver
-
-    # DRIVER MUTATIONS OLD
-    signupDriver(signupInput: SignupInput!): Driver!
-    signinDriver(email: String!, password: String!): Driver!
-    updateDriver(updateDriver: UpdateDriver): Driver!
-    deleteDriver(driverId: Int!): Driver!
-
-    # ACCIDENT MUTATIONS
-    createAccident(name: String! using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String, location: String!): Accident
-    updateAccident(name: String, accidentId: Int, using_safety: Boolean, safety_failed: Boolean, number_package_carried: Int, safety_equipment_used: String, location: String): Accident
-    deleteAccident(accidentId: Int): Accident
-
-    # COLLISION MUTATIONS
-    createCollision(accidentId: Int!, location: String!): Collision
-    updateCollision(collisionId: Int, location: String): Collision
-    deleteCollision(collisionId: Int): Collision
-
-    # INJURY ACCIDENT MUTATIONS
-    createInjuryAccident(accidentId: Int!, self_injured: Boolean!, vehicle_number: String!, amazon_logo: Boolean!, exact_address: String!, action_before_accident: JSON!, police_report: JSON!, weather: String!, wet_ground: Boolean!, slippery_ground: Boolean!, extra_info: String!, rushed_prior: Boolean!): InjuryAccident
-    updateInjuryAccident(injuryAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): InjuryAccident
-    deleteInjuryAccident(injuryAccidentId: Int): InjuryAccident
-
-    # PROPERTY ACCIDENT MUTATIONS
-    createPropertyAccident(accidentId: Int!, self_injured: Boolean!, vehicle_number: String!, amazon_logo: Boolean!, exact_address: String!, action_before_accident: JSON!, police_report: JSON!, weather: String!, wet_ground: Boolean!, slippery_ground: Boolean!, extra_info: String!, rushed_prior: Boolean!): PropertyAccident
-    updatePropertyAccident(propertyAccidentId: Int, self_injured: Boolean, vehicle_number: String, amazon_logo: Boolean, exact_address: String, action_before_accident: JSON, police_report: JSON, weather: String, wet_ground: Boolean, slippery_ground: Boolean, extra_info: String, rushed_prior: Boolean ): PropertyAccident
-    deletePropertyAccident(propertyAccidentId: Int): PropertyAccident
-
-    # HIT PERSON MUTATIONS 
-    createHitPerson(accidentId: Int!, medical_attention: Boolean!, vehicle_or_pedestrian: String!, previous_damage: String!, contact_infomation: JSON!, injury: String!): HitPerson
-    updateHitPerson(hitPersonId: Int, medical_attention: Boolean, vehicle_or_pedestrian: String, previous_damage: String, contact_infomation: JSON, injury: String): HitPerson
-    deleteHitPerson(hitPersonId: Int): HitPerson
-
-    # INJURY REPORT MUTATIONS
-    createInjuryReport(accidentId: Int!, immediate_attention: Boolean!, late: JSON!, self_injured: Boolean!, injury_type: JSON!, other_injured: Boolean!, before_injury: String!, packages: JSON!, safety_equipment: JSON!, unsafe_conditions: JSON!, pain_level: Int!, additional_information: String!): InjuryReport
-    updateInjuryReport(injuryReportId: Int, immediate_attention: Boolean, late: JSON, self_injured: Boolean, injury_type: JSON, other_injured: Boolean, before_injury: String, packages: JSON, safety_equipment: JSON, unsafe_conditions: JSON, pain_level: Int, addtional_information: String): InjuryReport
-    deleteInjuryReport(injuryReportId: Int): InjuryReport
   }
 
   #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
-
-  input SignupInput {
-		email: String!
-    phoneNumber: String!
-		firstname: String!
-		lastname: String!
-		password: String!
-    adminEmail: String!
-	}
-
-	input UpdateDriver {
-		email: String
-		firstname: String
-		lastname: String
-		password: String
-    phoneNumber: String
-    fico: String
-    netradyne: Int
-    delivery_associate: Int
-    defects: Int
-    seatbelt_and_speeding: String
-    customer_delivery_feedback: Int
-    delivered_and_recieved: Int
-    delivery_completion_rate: Int
-    photo_on_delivery: Int
-    call_compliance: Int
-    scan_compliance: Int
-    has_many_accidents: Int
-    belongs_to_team: Boolean
-    attendance: JSON
-    productivity: JSON
-    rank: Int
-    employeeId: String
-    teir: String
-    delivered: Int
-    key_focus_area: String
-    distractions_rate: String
-    following_distance_rate: String
-    signal_violations_rate: String
-    attended_delivery_accuracy: Int
-    dnr: Int
-    pod_opps: Int
-    cc_opps: Int
-	}
 `;
 
 export default typeDefs;

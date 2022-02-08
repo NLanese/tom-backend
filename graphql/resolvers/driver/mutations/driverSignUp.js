@@ -48,7 +48,7 @@ export default {
                     signUpToken: signUpToken
                 },
                 include: {
-                    admins: true,
+                    managers: true,
                     dsp: true,
                     chatrooms: true
                 }
@@ -107,12 +107,12 @@ export default {
                     })
                 }
 
-                await owner.admins.forEach( async (admin) => {
-                    await guestArray.push(admin)
+                await owner.managers.forEach( async (manager) => {
+                    await guestArray.push(manager)
 
-                    const foundAdmin = await db.admin.findUnique({
+                    const foundAdmin = await db.manager.findUnique({
                         where: {
-                            id: admin.id
+                            id: manager.id
                         }
                     })
 
@@ -122,9 +122,9 @@ export default {
                                 id: newDriver.id
                             },
                             data: {
-                                admins: {
+                                managers: {
                                     connect: {
-                                        id: admin.id 
+                                        id: manager.id 
                                     }
                                 },
                             }

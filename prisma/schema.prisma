@@ -36,7 +36,7 @@ model Owner {
 
   // ACCOUNT INFORMATION
   locked  Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Admin account has been deleted
+  deleted Boolean @default(false) // Keeps track if the Manager account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
@@ -44,11 +44,11 @@ model Owner {
   // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken                  String  @unique // Used for Driver/Admin signing up on the app
+  signUpToken                  String  @unique // Used for Driver/Manager signing up on the app
 
   // RELATIONSHIPS
   drivers          Driver[]
-  admins           Admin[]
+  managers           Manager[]
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   dsp              Dsp?
@@ -56,7 +56,7 @@ model Owner {
   chatrooms        Chatroom[]
 }
 
-model Admin {
+model Manager {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
   role        Role     @default(MANAGER)
@@ -70,8 +70,8 @@ model Admin {
 
   // ACCOUNT INFORMATION
   muted   Boolean @default(false) // Used to disable char features for Driver
-  locked  Boolean @default(false) // Used to lock the Admins Account if needed
-  deleted Boolean @default(false) // Keeps track if the Admins Account has been deleted
+  locked  Boolean @default(false) // Used to lock the Managers Account if needed
+  deleted Boolean @default(false) // Keeps track if the Managers Account has been deleted
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
@@ -120,7 +120,7 @@ model Driver {
   // RELATIONSHIPS
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
-  admins           Admin[]
+  managers           Manager[]
   accidents        Accident[]
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
@@ -162,7 +162,7 @@ model Dsp {
   accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
 
   // RELATIONSHIPS
-  admins  Admin[]
+  managers  Manager[]
   drivers Driver[]
   ownerId String   @unique
   owner   Owner    @relation(fields: [ownerId], references: [id])
@@ -249,7 +249,7 @@ model WeeklySchedule {
   ownerId   String
   owner     Owner @relation(fields: [ownerId], references: [id])
   managerId String
-  manager   Admin @relation(fields: [managerId], references: [id])
+  manager   Manager @relation(fields: [managerId], references: [id])
   driverId  String
   driver    Driver @relation(fields: [driverId], references: [id])
 }
@@ -272,7 +272,7 @@ model Chatroom {
   ownerId         String?
   owner           Owner?   @relation(fields: [ownerId], references: [id])
   drivers         Driver[]
-  managers        Admin[]  
+  managers        Manager[]  
   messages        Messages[] 
 }
 
@@ -291,7 +291,7 @@ model Messages {
   ownerId   String?
   owner     Owner?   @relation(fields: [ownerId], references: [id])
   managerId String?
-  manager   Admin?   @relation(fields: [managerId], references: [id])
+  manager   Manager?   @relation(fields: [managerId], references: [id])
   driverId  String?
   driver    Driver?  @relation(fields: [driverId], references: [id])
 }
@@ -308,7 +308,7 @@ model NotifiedMessages {
   ownerId   String?
   owner     Owner?   @relation(fields: [ownerId], references: [id])
   driver    Driver?  @relation(fields: [driverId], references: [id])
-  admin     Admin?   @relation(fields: [adminId], references: [id])
+  manager     Manager?   @relation(fields: [adminId], references: [id])
 }
 
 model Vehicle {
@@ -357,8 +357,6 @@ model HitPerson {
   injury                String
 
   deleted Boolean @default(false)
-
-  accident_pictures Image[]
 }
 
 model Collision {
@@ -386,8 +384,6 @@ model InjuryAccident {
 
   deleted Boolean @default(false)
 
-  accident_pictures Image[]
-
   accidentId Int
   accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
@@ -407,8 +403,6 @@ model PropertyAccident {
   rushed_prior           Boolean
 
   deleted Boolean @default(false)
-
-  accident_pictures Image[]
 
   accidentId Int
   accident   Accident[] @relation(fields: [accidentId], references: [id])
@@ -434,26 +428,7 @@ model InjuryReport {
   accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
-model Image {
-  id           Int    @id @default(autoincrement())
-  fieldname    String
-  path         String
-  mimetype     String
-  size         Int
-  originalname String
-  encoding     String
-  destination  String
-  filename     String
 
-  injuryAccidentId Int
-  injuryAccident   InjuryAccident @relation(fields: [injuryAccidentId], references: [id])
-
-  hitPersonId Int
-  hitPerson   HitPerson @relation(fields: [hitPersonId], references: [id])
-
-  propertyAccidentId Int
-  propertyAccident   PropertyAccident @relation(fields: [propertyAccidentId], references: [id])
-}
 
 enum Role {
   DRIVER

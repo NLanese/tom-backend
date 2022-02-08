@@ -1,6 +1,6 @@
 import db from "../../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js"
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 
 export default {
     Mutation: {
@@ -91,7 +91,7 @@ export default {
 
             if (manager) {
                 try {
-                    const justManagerRecord = await db.admin.findUnique({
+                    const justManagerRecord = await db.manager.findUnique({
                         where: {
                             id: manager.id
                         }

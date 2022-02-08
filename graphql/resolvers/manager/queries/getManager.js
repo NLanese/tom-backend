@@ -1,15 +1,15 @@
 import db from "../../../../utils/generatePrisma.js";
-import checkAdminAuth from "../../../../utils/checkAuthorization/check-admin-auth.js";
+import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 
 export default {
     Query: {
         getManager: async (_, {}, context) => {
-            const admin = await checkAdminAuth(context)
+            const manager = await checkManagerAuth(context)
 
             try {
-                return await db.admin.findUnique({
+                return await db.manager.findUnique({
                     where: {
-                        id: admin.id
+                        id: manager.id
                     },
                     include: {
                         owner: true,

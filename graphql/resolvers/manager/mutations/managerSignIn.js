@@ -1,7 +1,7 @@
 import db from "../../../../utils/generatePrisma.js";
 import { validateLoginInput } from "../../../../utils/validators.js";
 import { UserInputError } from 'apollo-server-errors';
-import generateAdminToken from "../../../../utils/generateToken/generateAdminToken.js";
+import generateManagerToken from "../../../../utils/generateToken/generateManagerToken.js";
 import bcrypt from "bcryptjs";
 
 
@@ -21,7 +21,7 @@ export default {
     
             email = await email.toUpperCase()
     
-            const foundUser = await db.admin.findUnique({
+            const foundUser = await db.manager.findUnique({
                 where: {
                     email
                 }
@@ -43,7 +43,7 @@ export default {
                 })
             }
     
-            const token = await generateAdminToken(foundUser.id)
+            const token = await generateManagerToken(foundUser.id)
     
             req.session = {
                 token: `Bearer ${token}`
