@@ -466,6 +466,7 @@ const typeDefs = gql`
     dynamicRemoveDriverFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicAddManagerToChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicRemoveManagerFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
+    dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
