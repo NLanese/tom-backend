@@ -5,7 +5,7 @@ import checkDriverAuth from "../../../../../utils/checkAuthorization/check-drive
 
 export default {
     Mutation: {
-        dynamicAddManagerToChatroom: async (_, {
+        dynamicAddOwnerToChatroom: async (_, {
             role,
             chatroomId,
             guestId
@@ -25,22 +25,22 @@ export default {
                 }
             })
 
-            const foundManager = await db.manager.findUnique({
+            const foundOwner = await db.owner.findUnique({
                 where: {
                     id: guestId
                 }
             })
 
             if (!foundChatroom) throw new Error('Chatroom does not exist')
-            if (!foundManager) throw new Error('Manager does not exist')
+            if (!foundOwner) throw new Error('Owner does not exist')
 
             let guests = foundChatroom.guests
-            await guests.push(foundManager)
+            await guests.push(foundOwner)
 
             if (owner || manager || driver) {
-                await db.manager.update({
+                await db.owner.update({
                     where: {
-                        id: foundManager.id
+                        id: foundOwner.id
                     },
                     data: {
                         chatrooms: {
@@ -57,9 +57,9 @@ export default {
                     },
                     data: {
                         guests: guests,
-                        managers: {
+                        owner: {
                             connect: {
-                                id: foundManager.id
+                                id: foundOwner.id
                             }
                         }
                     }
