@@ -110,13 +110,13 @@ export default {
                 await owner.managers.forEach( async (manager) => {
                     await guestArray.push(manager)
 
-                    const foundAdmin = await db.manager.findUnique({
+                    const foundManager = await db.manager.findUnique({
                         where: {
                             id: manager.id
                         }
                     })
 
-                    if (foundAdmin) {
+                    if (foundManager) {
                         await db.driver.update({
                             where: {
                                 id: newDriver.id
