@@ -44,7 +44,7 @@ model Owner {
   // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken                  String  @unique // Used for Driver/Manager signing up on the app
+  signUpToken                  String?  @unique // Used for Driver/Manager signing up on the app
 
   // RELATIONSHIPS
   drivers          Driver[]
@@ -280,11 +280,12 @@ model Messages {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  // Message Information
+  // MESSAGE INFORMATION
   content   String
   from      Json
   visable   Boolean @default(true)
   reported  Boolean @default(false)
+  reportedBy Json?
 
   // RELATIONSHIPS
   chatroomId String
@@ -428,8 +429,6 @@ model InjuryReport {
   accidentId Int
   accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
-
-
 
 enum Role {
   DRIVER

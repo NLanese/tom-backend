@@ -85,13 +85,13 @@ export default {
                 await foundOwner.managers.forEach( async (manager) => {
                     await guestArray.push(manager)
 
-                    const foundAdmin = await db.manager.findUnique({
+                    const foundManager = await db.manager.findUnique({
                         where: {
                             id: manager.id
                         }
                     })
 
-                    if (foundAdmin) {
+                    if (foundManager) {
                         await db.dsp.update({
                             where: {
                                 id: newDsp.id
@@ -212,6 +212,7 @@ export default {
 
                 return newDsp
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

@@ -264,6 +264,8 @@ const typeDefs = gql`
     content: String
     from: JSON
     visable: Boolean
+    reported: Boolean
+    reportedBy: JSON
 
     # RELATIONSHIPS
     chatroom: Chatroom
@@ -473,6 +475,7 @@ const typeDefs = gql`
 
     # MESSAGES MUTATIONS
     dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Messages
+    dynamicReportMessage(role: String! messageId: Int!): Messages
 
     driverSendMessage(chatroomId: String!, content: String!): Messages
 
