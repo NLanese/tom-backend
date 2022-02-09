@@ -34,7 +34,7 @@ CREATE TABLE "Owner" (
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
-    "signUpToken" TEXT NOT NULL,
+    "signUpToken" TEXT,
 
     CONSTRAINT "Owner_pkey" PRIMARY KEY ("id")
 );
