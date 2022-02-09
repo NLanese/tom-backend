@@ -15,6 +15,7 @@ import dynamicRemoveDriverFromChatroom from "./mutations/dynamic/dynamicRemoveDr
 import dynamicAddManagerToChatroom from "./mutations/dynamic/dynamicAddManagerToChatroom.js";
 import dynamicRemoveManagerFromChatroom from "./mutations/dynamic/dynamicRemoveManagerFromChatroom.js";
 import dynamicMuteAndUnmute from "./mutations/dynamic/dynamicMuteAndUnmute.js";
+import dynamicLeaveChatroom from "./mutations/dynamic/dynamicLeaveChatroom.js";
 
 // DRIVER MUTATIONS
 import driverCreateChatroom from "./mutations/driver/driverCreateChatroom.js";
@@ -29,14 +30,17 @@ export default {
         ...driverGetChatroomById.Query
     },
     Mutation: {
-        // DYNAMIC MUTATIONS
+        // DYNAMIC MUTATIONS (OWNER / MANAGER)
         ...dynamicCreateDriverManagementChatroom.Mutation,
         ...dynamicCreateChatroom.Mutation,
+        ...dynamicMuteAndUnmute.Mutation,
+
+        // DYNAMIC MUTATIONS (OWNER / MANAGER / DRIVER)
         ...dynamicAddDriverToChatroom.Mutation,
         ...dynamicRemoveDriverFromChatroom.Mutation,
         ...dynamicAddManagerToChatroom.Mutation,
         ...dynamicRemoveManagerFromChatroom.Mutation,
-        ...dynamicMuteAndUnmute.Mutation,
+        ...dynamicLeaveChatroom.Mutation,
 
         // DRIVER MUTATIONS
         ...driverCreateChatroom.Mutation,
