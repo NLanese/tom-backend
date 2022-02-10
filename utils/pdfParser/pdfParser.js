@@ -7,7 +7,6 @@ var url = 'https://pdftables.com/api?key=770oukvvx1wl&format=xlsx-single';
 const pdfToExcel = (pdfFile) => {
     var req = request.post({encoding: null, url: url}, async function (err, resp, body) {
         if (!err && resp.statusCode == 200) {
-            // console.log(pdfFile.path)
             fs.writeFile(`${pdfFile.path}.xlsx`, body, function(err) {
                 if (err) {
                     console.log('error writing file');
@@ -24,16 +23,16 @@ const pdfToExcel = (pdfFile) => {
     form.append('file', fs.createReadStream(`./${pdfFile.path}`));
 }
 
-const parseExcel = async (filePath) => {
+const parseExcel = async (file) => {
     let workSheetsFromFile;
 
-    if (filePath.path.search(".xlsx") === -1) {
-        workSheetsFromFile = await xlsx.parse(`./${filePath.path}.xlsx`);
+    if (file.path.search(".xlsx") === -1) {
+        workSheetsFromFile = await xlsx.parse(`./${file.path}.xlsx`);
         return workSheetsFromFile[0].data
     }
     
-    if (filePath.path.search(".xlsx") !== -1) {
-        workSheetsFromFile = await xlsx.parse(`./${filePath.path}`);
+    if (file.path.search(".xlsx") !== -1) {
+        workSheetsFromFile = await xlsx.parse(`./${file.path}`);
         return workSheetsFromFile[0].data
     }
 }
