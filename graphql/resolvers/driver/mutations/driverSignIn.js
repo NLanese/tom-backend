@@ -28,7 +28,10 @@ export default {
                     owner: true,
                     managers: true,
                     dsp: true,
-                    weeklyReport: true
+                    weeklyReport: true,
+                    chatrooms: true,
+                    shiftPlanners: true,
+                    notifiedMessages: true,
                 }
             })
     

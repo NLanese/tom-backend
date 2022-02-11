@@ -27,7 +27,8 @@ export default {
                     managers: true,
                     dsp: true,
                     messages: true,
-                    notifiedMessages: true
+                    notifiedMessages: true,
+                    chatrooms: true
                 }
             })
 
@@ -40,7 +41,8 @@ export default {
                     drivers: true,
                     dsp: true,
                     messages: true,
-                    notifiedMessages: true
+                    notifiedMessages: true,
+                    chatrooms: true
                 }
             })
 
