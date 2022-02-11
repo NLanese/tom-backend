@@ -475,7 +475,8 @@ const typeDefs = gql`
 
     # MESSAGES MUTATIONS
     dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Messages
-    dynamicReportMessage(role: String! messageId: Int!): Messages
+    dynamicReportMessage(role: String!, messageId: Int!): Messages
+    dynamicRemoveMessage(role: String!, messageId: Int!): Messages
 
     driverSendMessage(chatroomId: String!, content: String!): Messages
 
