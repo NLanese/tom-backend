@@ -2,6 +2,7 @@ import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 import hashPassword from "../../../../utils/passwordHashing.js";
+import bcrypt from 'bcryptjs';
 
 // BUGS TO FIX
 // DOESNT HAVE ALL THE DRIVERS JOIN THE BREAKROOM CHAT
@@ -39,7 +40,10 @@ export default {
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
-            password = await hashPassword(password)
+
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, salt);
+            password = hash;
             
 
             if (manager && !foundDriver) {
