@@ -35,6 +35,18 @@ export default {
 
             if (!foundDriver) throw new Error("Driver does not exist")
 
+            if (email) {
+                const emailCheck = await db.driver.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
+    
+                if (emailCheck) {
+                    throw new Error("Email is already in use")
+                }
+            }
+
             if (owner || manager) {
                 try {
                     return await db.driver.update({
