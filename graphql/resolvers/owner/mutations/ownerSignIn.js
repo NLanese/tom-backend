@@ -46,7 +46,7 @@ export default {
             }
     
             try {
-                return {
+                return await {
                     ...foundUser,
                     token: token
                 }

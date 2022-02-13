@@ -13,10 +13,28 @@ export default {
             const owner = await checkOwnerAuth(context)
 
             if (!owner) {
-                errors.general = 'Driver not found';
-                throw new UserInputError('Driver not found', {
+                errors.general = 'Owner not found';
+                throw new UserInputError('Owner not found', {
                     errors
                 });
+            }
+
+            if (email) {
+                const foundOwner = await db.owner.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
+    
+                const foundManager = await db.manager.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
+    
+                if (foundOwner || foundManager) {
+                    throw new Error("Email is already in use")
+                }
             }
 
             if (typeof password !== "undefined") {

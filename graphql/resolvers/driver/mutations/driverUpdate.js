@@ -54,7 +54,7 @@ export default {
                     }
                 });
     
-                return newUser;
+                return await newUser;
     
             } catch (error) {
                 throw new Error(error);

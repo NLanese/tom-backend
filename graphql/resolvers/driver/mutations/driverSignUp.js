@@ -34,9 +34,9 @@ export default {
             })
 
             if (driver) {
-                throw new UserInputError('email is taken', {
+                throw new UserInputError('Email is already in use', {
                     errors: {
-                        email: 'Email is already taken',
+                        email: 'Email is already in use',
                     },
                 });
             }
@@ -206,7 +206,7 @@ export default {
                     token: `Bearer ${token}`
                 }
 
-                return {
+                return await {
                     ...newDriver,
                     token: token
                 }

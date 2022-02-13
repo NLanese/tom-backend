@@ -70,7 +70,7 @@ export default {
                 }
 
                 try {
-                    return {
+                    return await {
                         ...foundOwner,
                         token: token
                     }
@@ -96,7 +96,7 @@ export default {
                 }
 
                 try {
-                    return {
+                    return await {
                         ...foundManager,
                         token: token
                     }
