@@ -358,7 +358,7 @@ model PropertyAccident {
   address                String
   intended_address       String
   object_hit             String
-  specific_pics          Json
+  specific_pictures      Json
   safety_equipment       Json
   contact_information    Json
   extra_info             String
@@ -366,7 +366,23 @@ model PropertyAccident {
 
   
   // RELATIONSHIPS
-  accidentId Int
+  accidentId String
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
+}
+
+model Collision {
+  id         String        @id @unique @default(uuid())
+  address    String
+  car_make   String
+  car_model  String
+  license_plate String
+  specific_pictures Json
+  contact_info  Json
+  extra_info    String
+  previous_damage String
+
+  // RELATIONSHIPS
+  accidentId String
   accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
@@ -383,14 +399,7 @@ model HitPerson {
   deleted Boolean @default(false)
 }
 
-model Collision {
-  id         Int        @id @default(autoincrement())
-  accidentId Int
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
-  location   String
 
-  deleted Boolean @default(false)
-}
 
 model InjuryAccident {
   id                     Int     @id @default(autoincrement())
