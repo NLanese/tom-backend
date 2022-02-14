@@ -33,6 +33,10 @@ export default {
 
             if (!foundChatroom) throw new Error('Chatroom does not exist')
             if (!foundManager) throw new Error('Manager does not exist')
+            
+            if (foundChatroom.chatroomOwner.id !== owner.id || foundChatroom.chatroomOwner.id !== manager.id || !foundChatroom.chatroomOwner.id !== driver.id) {
+                throw new Error('You are not the chatroom owner')
+            }
 
             let guests = foundChatroom.guests
             await guests.push(foundManager)
