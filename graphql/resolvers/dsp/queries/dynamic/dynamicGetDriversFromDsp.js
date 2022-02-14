@@ -26,6 +26,10 @@ export default {
                     }
                 })
 
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
+
                 try {
                     return await db.driver.findMany({
                         where: {
@@ -60,6 +64,10 @@ export default {
                         dsp: true
                     }
                 })
+
+                if (!foundManager) {
+                    throw new Error('Manager does not exist')
+                }
 
                 try {
                     return await db.driver.findMany({
