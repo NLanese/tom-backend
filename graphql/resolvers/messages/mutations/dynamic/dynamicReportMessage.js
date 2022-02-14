@@ -41,6 +41,20 @@ export default {
                 })
             }
 
+            if (!reportedBy) {
+                throw new Error('User reporting the message does not exist')
+            }
+
+            const foundMessage = await db.messages.findUnique({
+                where: {
+                    id: messageId
+                }
+            })
+
+            if (!foundMessage) {
+                throw new Error('Message does not exist')
+            }
+
             if (owner || manager || driver) {
                 try {
                     return await db.messages.update({
