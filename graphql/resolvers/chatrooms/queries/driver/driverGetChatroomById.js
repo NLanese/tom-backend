@@ -8,6 +8,16 @@ export default {
         }, context) => {
             const driver = await checkDriverAuth(context)
 
+            const chatroomCheck = await db.chatroom.findUnique({
+                where: {
+                    id: chatroomId
+                }
+            })
+
+            if (!chatroomCheck) {
+                throw new Error('Chatrom does not exist')
+            }
+
             try {
                 return await db.chatroom.findUnique({
                     where: {
