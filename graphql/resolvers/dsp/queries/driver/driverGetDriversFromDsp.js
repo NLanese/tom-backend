@@ -15,6 +15,10 @@ export default {
                 }
             })
 
+            if (!foundDriver) {
+                throw new Error('Driver does not exist')
+            }
+
             try {
                 return await db.dsp.findUnique({
                     where: {
