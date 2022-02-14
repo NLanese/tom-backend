@@ -346,10 +346,9 @@ model Accident {
   // RELATIONSHIPS
   driverId         String
   driver           Driver   @relation(fields: [driverId], references: [id])
-  hitPerson        HitPerson[]
   collisionAccident CollisionAccident[]
-  injuryAccident   InjuryAccident[]
   propertyAccident PropertyAccident[]
+  injuryAccident   InjuryAccident[]
 }
 
 model PropertyAccident {
@@ -367,6 +366,7 @@ model PropertyAccident {
   // RELATIONSHIPS
   accidentId String
   accident   Accident[] @relation(fields: [accidentId], references: [id])
+  hitPersonAccident HitPerson[]
 }
 
 model CollisionAccident {
@@ -383,6 +383,7 @@ model CollisionAccident {
   // RELATIONSHIPS
   accidentId String
   accident   Accident[] @relation(fields: [accidentId], references: [id])
+  hitPersonAccident HitPerson[]
 }
 
 model InjuryAccident {
@@ -401,16 +402,21 @@ model InjuryAccident {
 }
 
 model HitPerson {
-  id                    Int        @id @default(autoincrement())
-  accidentId            Int
-  accident              Accident[] @relation(fields: [accidentId], references: [id])
-  medical_attention     Boolean
-  vehicle_or_pedestrian String
-  previous_damage       String
-  contact_infomation    Json
-  injury                String
+  id                    String        @id @unique @default(uuid())
+  medical_attention      String
+  immediate_attention    String
+  injury                 String
+  contact_info           Json
+  specific_pictures      Json
+  pain_level             Int
+  extra_info             String
 
-  deleted Boolean @default(false)
+  // RELATIONSHIPS
+  propertyAccidentId    String?
+  propertyAccident      PropertyAccident[] @relation(fields: [propertyAccidentId], references: [id])
+  collisionAccidentId    String?
+  collisionAccident      CollisionAccident[] @relation(fields: [propertyAccidentId], references: [id])
+
 }
 
 enum Role {
