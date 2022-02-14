@@ -48,6 +48,10 @@ export default {
                 }
             })
 
+            if (!justOwnerRecord) {
+                throw new Error('Owner does not exist')
+            }
+
             try {
                 let guestArray = []
                 let managementArray = []
@@ -81,6 +85,10 @@ export default {
                         autoSend: autoSend
                     }
                 })
+
+                if (!newDsp) {
+                    throw new Error('Error creating Dsp')
+                }
 
                 await foundOwner.managers.forEach( async (manager) => {
                     await guestArray.push(manager)
@@ -210,9 +218,8 @@ export default {
                     })
                 })
 
-                return newDsp
+                return await newDsp
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }
