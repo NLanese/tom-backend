@@ -15,6 +15,10 @@ export default {
                         id: driver.id
                     }
                 })
+
+                if (!justDriverRecord) {
+                    throw new Error('Driver does not exist')
+                }
     
                 await guests.push(justDriverRecord)
 
@@ -31,6 +35,10 @@ export default {
                         }
                     }
                 })
+
+                if (!newChatroom) {
+                    throw new Error('Error creating chatroom')
+                }
 
                 await guests.forEach( async (guest) => {
                     if (guest.id !== driver.id) {

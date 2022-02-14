@@ -23,6 +23,10 @@ export default {
                             id: owner.id
                         }
                     })
+
+                    if (!justOwnerRecord) {
+                        throw new Error('Owner does not exist')
+                    }
     
                     await guests.push(justOwnerRecord)
     
@@ -39,6 +43,10 @@ export default {
                             }
                         }
                     })
+
+                    if (!newChatroom) {
+                        throw new Error('Error creating chatroom')
+                    }
     
                     await guests.forEach( async (guest) => {
                         if (guest.id !== owner.id) {
@@ -97,6 +105,10 @@ export default {
                         }
                     })
 
+                    if (!justManagerRecord) {
+                        throw new Error('Manager does not exist')
+                    }
+
                     await guests.push(justManagerRecord)
     
                     const newChatroom = await db.chatroom.create({
@@ -112,6 +124,10 @@ export default {
                             }
                         }
                     })
+
+                    if (!newChatroom) {
+                        throw new Error('Error creating chatroom')
+                    }
 
                     await guests.forEach( async (guest) => {
                         if (guest.id !== manager.id) {
