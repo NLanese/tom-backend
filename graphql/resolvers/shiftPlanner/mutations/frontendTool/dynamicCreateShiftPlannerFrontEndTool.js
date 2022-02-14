@@ -72,7 +72,7 @@ export default {
                 }
             }
 
-            throw new Error("Role not found")
+            throw new Error("Something went wrong. Please try again")
         }
     }
 }
