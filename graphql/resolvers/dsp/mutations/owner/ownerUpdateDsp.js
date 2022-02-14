@@ -41,6 +41,16 @@ export default {
             name = await name.toUpperCase()
             shortcode = await shortcode.toUpperCase()
 
+            const foundDsp = await db.dsp.findUnique({
+                where: {
+                    id: foundOwner.dsp.id
+                }
+            })
+
+            if (!foundDsp) {
+                throw new Error('DSP does not exist')
+            }
+
             try {
                 return await db.dsp.update({
                     where: {

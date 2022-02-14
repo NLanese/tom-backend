@@ -35,6 +35,16 @@ export default {
                 throw new Error('Manager does not exist')
             }
 
+            const dspCheck = await db.dsp.findUnique({
+                where: {
+                    id: foundManager.dsp.id
+                }
+            })
+
+            if (!dspCheck) {
+                throw new Error('DSP does not exist')
+            }
+
             try {
                 return await db.dsp.update({
                     where: {
