@@ -353,6 +353,23 @@ model Accident {
   injuryReport     InjuryReport[]
 }
 
+model PropertyAccident {
+  id                     String     @id @unique @default(uuid())
+  address                String
+  intended_address       String
+  object_hit             String
+  specific_pics          Json
+  safety_equipment       Json
+  contact_information    Json
+  extra_info             String
+  previous_damage        String
+
+  
+  // RELATIONSHIPS
+  accidentId Int
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
+}
+
 model HitPerson {
   id                    Int        @id @default(autoincrement())
   accidentId            Int
@@ -376,26 +393,6 @@ model Collision {
 }
 
 model InjuryAccident {
-  id                     Int     @id @default(autoincrement())
-  self_injured           Boolean
-  vehicle_number         String
-  amazon_logo            Boolean
-  exact_address          String
-  action_before_accident Json
-  police_report          Json
-  weather                String
-  wet_ground             Boolean
-  slippery_ground        Boolean
-  extra_info             String
-  rushed_prior           Boolean
-
-  deleted Boolean @default(false)
-
-  accidentId Int
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
-}
-
-model PropertyAccident {
   id                     Int     @id @default(autoincrement())
   self_injured           Boolean
   vehicle_number         String
