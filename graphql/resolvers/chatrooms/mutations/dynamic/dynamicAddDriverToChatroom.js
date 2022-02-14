@@ -69,6 +69,8 @@ export default {
                     throw new Error(error)
                 }
             }
+
+            throw new Error('Role not authorized')
         }
     }
 }

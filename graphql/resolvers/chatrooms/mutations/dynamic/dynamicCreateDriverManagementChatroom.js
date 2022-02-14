@@ -40,11 +40,19 @@ export default {
                     }
                 })
 
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
+
                 const justOwnerRecord = await db.owner.findUnique({
                     where: {
                         id: owner.id
                     }
                 })
+
+                if (!justOwnerRecord) {
+                    throw new Error('Owner does not exist')
+                }
 
                 await guests.push(justOwnerRecord)
 
@@ -65,6 +73,10 @@ export default {
                             }
                         }
                     })
+
+                    if (!newChatroom) {
+                        throw new Error('Error creating chatroom')
+                    }
 
                     await guests.forEach( async (guest) => {
                         if (guest.role === "DRIVER") {
@@ -121,6 +133,10 @@ export default {
                     } 
                 })
 
+                if (!foundManager) {
+                    throw new Error('Manager does not exist')
+                }
+
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: foundManager.ownerId
@@ -129,6 +145,10 @@ export default {
                         managers: true
                     }
                 })
+
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
 
                 await foundOwner.managers.forEach((manager) => {
                     guests.push(manager)
@@ -155,6 +175,10 @@ export default {
                             }
                         }
                     })
+
+                    if (!chatroom) {
+                        throw new Error("Error creating chatroom")
+                    }
 
                     await guests.forEach( async (guest) => {
                         if (guest.role === "DRIVER") {
@@ -203,7 +227,7 @@ export default {
                 }
             }
 
-            throw new Error("Role not found")
+            throw new Error("Role not authorized")
         }
     }
 }
