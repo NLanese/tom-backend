@@ -14,6 +14,20 @@ export default {
                     id: driver.id
                 }
             })
+
+            if (!foundDriver) {
+                throw new Error('Driver does not exist')
+            }
+
+            const foundChatroom = await db.chatroom.findUnique({
+                where: {
+                    id: chatroomId
+                }
+            })
+
+            if (!foundChatroom) {
+                throw new Error('Chatroom does not exist')
+            }
             
             try {
                 return await db.messages.create({

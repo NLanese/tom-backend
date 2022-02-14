@@ -23,6 +23,10 @@ export default {
                     }
                 })
 
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
+
                 try {
                     return await db.messages.create({
                         data: {
@@ -51,6 +55,10 @@ export default {
                         id: manager.id
                     }
                 })
+
+                if (!foundManager) {
+                    throw new Error('Manager does not exist')
+                }
 
                 try {
                     return await db.messages.create({
