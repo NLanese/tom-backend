@@ -1,6 +1,7 @@
 import request from 'request'
 import fs from 'fs'
 import xlsx from 'node-xlsx';
+import path from 'path'
 
 var url = 'https://pdftables.com/api?key=770oukvvx1wl&format=xlsx-single';
 
@@ -27,12 +28,17 @@ const parseExcel = async (file) => {
     let workSheetsFromFile;
 
     if (file.path.search(".xlsx") === -1) {
+        const filePath = await path.resolve(`./${file.path}.xlsx`)
         workSheetsFromFile = await xlsx.parse(`./${file.path}.xlsx`);
+        await fs.unlinkSync(`./${file.path}`)
+        await fs.unlinkSync(filePath)
         return workSheetsFromFile[0].data
     }
     
     if (file.path.search(".xlsx") !== -1) {
+        const filePath = await path.resolve(`./${file.path}`)
         workSheetsFromFile = await xlsx.parse(`./${file.path}`);
+        await fs.unlinkSync(filePath)
         return workSheetsFromFile[0].data
     }
 }

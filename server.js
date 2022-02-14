@@ -83,13 +83,13 @@ const startApolloServer = async () => {
         await pdfToExcel(file)
 
         setTimeout(async () => {
-            let parseData = await parseExcel(req.file)
+            const parseData = await parseExcel(req.file)
             await res.send(parseData)
         }, 5000)
     })
 
     app.post('/excelparse', uploadStorage.single("file"), async (req, res) => {
-        let parseData = await parseExcel(req.file)
+        const parseData = await parseExcel(req.file)
         await res.send(parseData)
     })
 
