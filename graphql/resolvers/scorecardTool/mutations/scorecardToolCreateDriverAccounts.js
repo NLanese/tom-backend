@@ -56,6 +56,10 @@ export default {
                     }
                 })
 
+                if (!foundManager) {
+                    throw new Error('Manager does not exist')
+                }
+
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: foundManager.owner.id
@@ -67,6 +71,10 @@ export default {
                     }
                 })
 
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
+
                 try {
                     let newDriver
                     let guestArray = []
@@ -77,6 +85,10 @@ export default {
                         }
                     })
 
+                    if (!justOwnerRecord) {
+                        throw new Error('Owner does not exist')
+                    }
+ 
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -118,6 +130,10 @@ export default {
                         })
                     }
 
+                    if (!newDriver) {
+                        throw new Error('Error creating new driver')
+                    }
+
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -156,6 +172,10 @@ export default {
                             }
                         }
                     })
+
+                    if (!newChatroom) {
+                        throw new Error('Error creating chatroom')
+                    }
 
                     // Updates the newChatroom record to handle Driver Relationship
                     await db.chatroom.update({
@@ -232,6 +252,10 @@ export default {
                     }
                 })
 
+                if (!foundOwner) {
+                    throw new Error('Owner does not exist')
+                }
+
                 try {
                     let newDriver
                     let guestArray = []
@@ -241,6 +265,10 @@ export default {
                             id: foundOwner.id
                         }
                     })
+
+                    if (!justOwnerRecord) {
+                        throw new Error('Owner does not exist')
+                    }
 
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
@@ -283,6 +311,10 @@ export default {
                         })
                     }
 
+                    if (!newDriver) {
+                        throw new Error('Error creating driver')
+                    }
+
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -308,8 +340,6 @@ export default {
                         }
                     })
 
-                    // console.log('hit before chatroom additions')
-
                     // Create driver/management chatroom
                     const newChatroom = await db.chatroom.create({
                         data: {
@@ -324,7 +354,9 @@ export default {
                         }
                     })
 
-                    // console.log('hit after newChatroom Creation')
+                    if (!newChatroom) {
+                        throw new Error('Error creating chatroom')
+                    }
 
                     // Updates the newChatroom record to handle Driver Relationship
                     await db.chatroom.update({
@@ -339,8 +371,6 @@ export default {
                             }
                         }
                     })
-
-                    // console.log('hit after update newChatroom to add driver relation')
 
                     // Relates the rest of the Managers to newChatroom
                     await guestArray.forEach( async (guest) => {
@@ -357,8 +387,6 @@ export default {
                             }
                         })
                     })
-
-                    // console.log('hit after relating the rest of the managers to newChatroom')
 
                     // Joins all other chatrooms driver is suppose to join
                     await foundOwner.chatrooms.forEach( async (chatroom) => {
@@ -386,8 +414,6 @@ export default {
                             })
                         }
                     })
-
-                    // console.log('hit after adding drive to the other chatrooms')
 
                     return await newDriver
                 } catch (error) {
