@@ -120,7 +120,7 @@ model Driver {
   // RELATIONSHIPS
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
-  managers           Manager[]
+  managers         Manager[]
   accidents        Accident[]
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
@@ -322,25 +322,30 @@ model Vehicle {
 }
 
 model Accident {
-  id                     Int      @id @default(autoincrement())
+  id                     String   @id @unique @default(uuid())
   createdAt              DateTime @default(now())
-  driverId               String
-  driver                 Driver   @relation(fields: [driverId], references: [id])
-  name                   String
-  using_safety           Boolean?
-  safety_failed          Boolean?
-  number_package_carried Int?
-  safety_equipment_used  String?
+  date                   String
+  time                   String
+  location               String
 
-  police_report_information Json?
-  police_report_photos      Json?
-  vehicle_number            String?
-  amazon_logo               Boolean?
-
-  location String
+  amazon_logo            Boolean
+  vehicleId              String
+  number_packages_carried Int
+  police_report_information Json
+  general_pictures          Json
+  weather                   Json
+  rushed_prior           Boolean
+  distracted             Boolean
+  extra_info             String
+  actions_before_accidents Json
+  unsafe_conditions        Json
+  
   deleted  Boolean @default(false)
   filled   Boolean @default(false)
 
+  // RELATIONSHIPS
+  driverId         String
+  driver           Driver   @relation(fields: [driverId], references: [id])
   hitPerson        HitPerson[]
   collision        Collision[]
   injuryAccident   InjuryAccident[]
