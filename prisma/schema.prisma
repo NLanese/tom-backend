@@ -347,10 +347,9 @@ model Accident {
   driverId         String
   driver           Driver   @relation(fields: [driverId], references: [id])
   hitPerson        HitPerson[]
-  collision        Collision[]
+  collisionAccident CollisionAccident[]
   injuryAccident   InjuryAccident[]
   propertyAccident PropertyAccident[]
-  injuryReport     InjuryReport[]
 }
 
 model PropertyAccident {
@@ -370,7 +369,7 @@ model PropertyAccident {
   accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
-model Collision {
+model CollisionAccident {
   id         String        @id @unique @default(uuid())
   address    String
   car_make   String
@@ -380,6 +379,21 @@ model Collision {
   contact_info  Json
   extra_info    String
   previous_damage String
+
+  // RELATIONSHIPS
+  accidentId String
+  accident   Accident[] @relation(fields: [accidentId], references: [id])
+}
+
+model InjuryAccident {
+  id                     String     @id @unique @default(uuid())
+  medical_attention      String
+  immediate_attention    String
+  injury                 String
+  contact_info           Json
+  specific_pictures      Json
+  pain_level             Int
+  extra_info             String
 
   // RELATIONSHIPS
   accidentId String
@@ -397,48 +411,6 @@ model HitPerson {
   injury                String
 
   deleted Boolean @default(false)
-}
-
-
-
-model InjuryAccident {
-  id                     Int     @id @default(autoincrement())
-  self_injured           Boolean
-  vehicle_number         String
-  amazon_logo            Boolean
-  exact_address          String
-  action_before_accident Json
-  police_report          Json
-  weather                String
-  wet_ground             Boolean
-  slippery_ground        Boolean
-  extra_info             String
-  rushed_prior           Boolean
-
-  deleted Boolean @default(false)
-
-  accidentId Int
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
-}
-
-model InjuryReport {
-  id                     Int     @id @default(autoincrement())
-  immediate_attention    Boolean
-  late                   Json
-  self_injured           Boolean
-  injury_type            Json
-  other_injured          Boolean
-  before_injury          String
-  packages               Json
-  safety_equipment       Json
-  unsafe_conditions      Json
-  pain_level             Int
-  additional_information String
-
-  deleted Boolean @default(false)
-
-  accidentId Int
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
 }
 
 enum Role {
