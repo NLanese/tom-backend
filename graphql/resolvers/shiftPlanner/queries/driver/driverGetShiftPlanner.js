@@ -11,11 +11,6 @@ export default {
                     where: {
                         driverId: driver.id
                     },
-                    orderBy: [
-                        {
-                            date: "desc"
-                        }
-                    ]
                 })
             } catch (error) {
                 throw new Error(error)
