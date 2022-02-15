@@ -26,11 +26,11 @@ export default {
 
             // ERROR HANDLING
             if (!foundChatroom) throw new Error('Chatroom does not exist')
-            if (foundChatroom.chatroomOwner.id === owner.id   ||
-                foundChatroom.chatroomOwner.id === manager.id ||
-                foundChatroom.chatroomOwner.id === driver.id) {
-                    throw new Error("Cannot leave chatroom... You are the chatroom owner")
-            }
+            // if (foundChatroom.chatroomOwner.id === owner.id   ||
+            //     foundChatroom.chatroomOwner.id === manager.id ||
+            //     foundChatroom.chatroomOwner.id === driver.id) {
+            //         throw new Error("Cannot leave chatroom... You are the chatroom owner")
+            // }
 
             let guests = foundChatroom.guests
 
