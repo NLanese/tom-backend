@@ -52,7 +52,11 @@ export default {
                         id: newMessage.id
                     },
                     include: {
-                        chatroom: true
+                        chatroom: {
+                            include: {
+                                messages: true
+                            }
+                        }
                     }
                 })
             } catch (error) {
