@@ -12,7 +12,21 @@ export default {
             deviceId,
             vehicleId,
             cxNumber,
-            message
+            message,
+            sundayDate,
+            sundayHours,
+            mondayDate,
+            mondayHours,
+            tuesdayDate,
+            tuesdayHours,
+            wednesdayDate,
+            wednesdayHours,
+            thursdayDate,
+            thursdayHours,
+            fridayDate,
+            fridayHours,
+            saturdayDate,
+            saturdayHours
         }, context) => {
             let owner;
             let manager;
@@ -43,7 +57,21 @@ export default {
                             deviceId: deviceId,
                             vehicleId: vehicleId,
                             cxNumber: cxNumber,
-                            message: message
+                            message: message,
+                            sundayDate: sundayDate,
+                            sundayHours: sundayHours,
+                            mondayDate: mondayDate,
+                            mondayHours: mondayHours,
+                            tuesdayDate: tuesdayDate,
+                            tuesdayHours: tuesdayHours,
+                            wednesdayDate: wednesdayDate,
+                            wednesdayHours: wednesdayHours,
+                            thursdayDate: thursdayDate,
+                            thursdayHours: thursdayHours,
+                            fridayDate: fridayDate,
+                            fridayHours: fridayHours,
+                            saturdayDate: saturdayDate,
+                            saturdayHours: saturdayHours
                         }
                     })
                 } catch (error) {

@@ -12,7 +12,21 @@ export default {
             deviceId,
             vehicleId,
             cxNumber,
-            message
+            message,
+            sundayDate,
+            sundayHours,
+            mondayDate,
+            mondayHours,
+            tuesdayDate,
+            tuesdayHours,
+            wednesdayDate,
+            wednesdayHours,
+            thursdayDate,
+            thursdayHours,
+            fridayDate,
+            fridayHours,
+            saturdayDate,
+            saturdayHours
         }, context) => {
             let owner;
             let manager;
