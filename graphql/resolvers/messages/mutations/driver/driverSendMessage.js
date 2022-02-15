@@ -30,7 +30,7 @@ export default {
             }
             
             try {
-                return await db.messages.create({
+                const newMessage = await db.messages.create({
                     data: {
                         driver: {
                             connect: {
@@ -44,6 +44,15 @@ export default {
                         },
                         content: content,
                         from: foundDriver
+                    }
+                })
+
+                return db.messages.findUnique({
+                    where: {
+                        id: newMessage.id
+                    },
+                    include: {
+                        chatroom: true
                     }
                 })
             } catch (error) {

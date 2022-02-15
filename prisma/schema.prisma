@@ -171,14 +171,29 @@ model Dsp {
 model ShiftPlanner {
   id              String   @id @unique @default(uuid())
   createdAt       DateTime @default(now())
-  date            String
+
+  sundayDate      String
+  sundayHours     String
+  mondayDate      String
+  mondayHours     String
+  tuesdayDate     String
+  tuesdayHours    String
+  wednesdayDate   String
+  wednesdayHours  String
+  thursdayDate    String
+  thuesdayHours   String
+  fridayDate      String
+  fridayHours     String
+  saturdayDate    String
+  saturdayHours   String
+
 
   // SHIFT PLANNER DATA
-  phoneId         String
-  deviceId        String
-  vehicleId       String
-  cxNumber        String
-  message         String
+  phoneId         String?
+  deviceId        String?
+  vehicleId       String?
+  cxNumber        String?
+  message         String?
 
   // RELATIONSHIPS
   driverId         String?
@@ -415,7 +430,7 @@ model HitPerson {
   propertyAccidentId    String?
   propertyAccident      PropertyAccident[] @relation(fields: [propertyAccidentId], references: [id])
   collisionAccidentId    String?
-  collisionAccident      CollisionAccident[] @relation(fields: [propertyAccidentId], references: [id])
+  collisionAccident      CollisionAccident[] @relation(fields: [collisionAccidentId], references: [id])
 
 }
 
