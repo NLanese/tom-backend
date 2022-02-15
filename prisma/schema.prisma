@@ -44,11 +44,11 @@ model Owner {
   // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
-  signUpToken                  String?  @unique // Used for Driver/Manager signing up on the app
+  signUpToken                  String? @unique // Used for Driver/Manager signing up on the app
 
   // RELATIONSHIPS
   drivers          Driver[]
-  managers           Manager[]
+  managers         Manager[]
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   dsp              Dsp?
@@ -162,54 +162,53 @@ model Dsp {
   accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
 
   // RELATIONSHIPS
-  managers  Manager[]
-  drivers Driver[]
-  ownerId String   @unique
-  owner   Owner    @relation(fields: [ownerId], references: [id])
+  managers Manager[]
+  drivers  Driver[]
+  ownerId  String    @unique
+  owner    Owner     @relation(fields: [ownerId], references: [id])
 }
 
 model ShiftPlanner {
-  id              String   @id @unique @default(uuid())
-  createdAt       DateTime @default(now())
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
 
-  sundayDate      String
-  sundayHours     String
-  mondayDate      String
-  mondayHours     String
-  tuesdayDate     String
-  tuesdayHours    String
-  wednesdayDate   String
-  wednesdayHours  String
-  thursdayDate    String
-  thuesdayHours   String
-  fridayDate      String
-  fridayHours     String
-  saturdayDate    String
-  saturdayHours   String
-
+  sundayDate     String
+  sundayHours    String
+  mondayDate     String
+  mondayHours    String
+  tuesdayDate    String
+  tuesdayHours   String
+  wednesdayDate  String
+  wednesdayHours String
+  thursdayDate   String
+  thursdayHours  String
+  fridayDate     String
+  fridayHours    String
+  saturdayDate   String
+  saturdayHours  String
 
   // SHIFT PLANNER DATA
-  phoneId         String?
-  deviceId        String?
-  vehicleId       String?
-  cxNumber        String?
-  message         String?
+  phoneId   String?
+  deviceId  String?
+  vehicleId String?
+  cxNumber  String?
+  message   String?
 
   // RELATIONSHIPS
-  driverId         String?
-  driver           Driver?   @relation(fields: [driverId], references: [id])
+  driverId String?
+  driver   Driver? @relation(fields: [driverId], references: [id])
 }
 
 model WeeklyReport {
-  id              String   @id @unique @default(uuid())
-  createdAt       DateTime @default(now())
-  date            String   
-  hadAccident     Boolean  @default(false)
-  feedbackMessage String?
-  feedbackStatus  String?
-  feedbackMessageSent     Boolean  @default(false)
-  acknowledged    Boolean  @default(false)
-  acknowledgedAt  String?
+  id                  String   @id @unique @default(uuid())
+  createdAt           DateTime @default(now())
+  date                String
+  hadAccident         Boolean  @default(false)
+  feedbackMessage     String?
+  feedbackStatus      String?
+  feedbackMessageSent Boolean  @default(false)
+  acknowledged        Boolean  @default(false)
+  acknowledgedAt      String?
 
   // DATA FROM SCORECARD TOOL
   rank                     Int
@@ -224,8 +223,8 @@ model WeeklyReport {
   signalViolationsRate     String
   deliveryCompletionRate   String
   deliveredAndRecieved     String
-  photoOnDelivery          String 
-  callCompliance           String 
+  photoOnDelivery          String
+  callCompliance           String
   scanCompliance           String
   attendedDeliveryAccuracy Int
   dnr                      Int
@@ -248,47 +247,47 @@ model WeeklyReport {
 }
 
 model WeeklySchedule {
-  id              String   @id @unique @default(uuid())
-  createdAt       DateTime @default(now())
-  weekStartDate   String
-  weekEndDate     String 
-  monday          Json
-  tuesday         Json  
-  wednesday       Json
-  thursday        Json
-  friday          Json 
-  saturday        Json
-  sunday          Json
+  id            String   @id @unique @default(uuid())
+  createdAt     DateTime @default(now())
+  weekStartDate String
+  weekEndDate   String
+  monday        Json
+  tuesday       Json
+  wednesday     Json
+  thursday      Json
+  friday        Json
+  saturday      Json
+  sunday        Json
 
   // RELATIONSHIPS
   ownerId   String
-  owner     Owner @relation(fields: [ownerId], references: [id])
+  owner     Owner   @relation(fields: [ownerId], references: [id])
   managerId String
   manager   Manager @relation(fields: [managerId], references: [id])
   driverId  String
-  driver    Driver @relation(fields: [driverId], references: [id])
+  driver    Driver  @relation(fields: [driverId], references: [id])
 }
 
 model Chatroom {
-  id              String   @id @unique @default(uuid())
-  createdAt       DateTime @default(now())
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
 
   // CHATROOM INFORMATION
-  chatroomName    String
-  guests          Json[]
-  chatroomOwner   Json
+  chatroomName  String
+  guests        Json[]
+  chatroomOwner Json
 
   // KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
-  driverJoinOnSignUp     Boolean @default(false)
-  managerJoinOnSignUp    Boolean @default(true) // Keeps track on wether manager should be auto added to the chatroom apon signup
+  driverJoinOnSignUp  Boolean @default(false)
+  managerJoinOnSignUp Boolean @default(true) // Keeps track on wether manager should be auto added to the chatroom apon signup
 
 
   // RELATIONSHIPS
-  ownerId         String?
-  owner           Owner?   @relation(fields: [ownerId], references: [id])
-  drivers         Driver[]
-  managers        Manager[]  
-  messages        Messages[] 
+  ownerId  String?
+  owner    Owner?     @relation(fields: [ownerId], references: [id])
+  drivers  Driver[]
+  managers Manager[]
+  messages Messages[]
 }
 
 model Messages {
@@ -296,21 +295,21 @@ model Messages {
   createdAt DateTime @default(now())
 
   // MESSAGE INFORMATION
-  content   String
-  from      Json
-  visable   Boolean @default(true)
-  reported  Boolean @default(false)
+  content    String
+  from       Json
+  visable    Boolean @default(true)
+  reported   Boolean @default(false)
   reportedBy Json?
 
   // RELATIONSHIPS
   chatroomId String
-  chatroom  Chatroom @relation(fields: [chatroomId], references: [id])
-  ownerId   String?
-  owner     Owner?   @relation(fields: [ownerId], references: [id])
-  managerId String?
-  manager   Manager?   @relation(fields: [managerId], references: [id])
-  driverId  String?
-  driver    Driver?  @relation(fields: [driverId], references: [id])
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+  ownerId    String?
+  owner      Owner?   @relation(fields: [ownerId], references: [id])
+  managerId  String?
+  manager    Manager? @relation(fields: [managerId], references: [id])
+  driverId   String?
+  driver     Driver?  @relation(fields: [driverId], references: [id])
 }
 
 model NotifiedMessages {
@@ -325,7 +324,7 @@ model NotifiedMessages {
   ownerId   String?
   owner     Owner?   @relation(fields: [ownerId], references: [id])
   driver    Driver?  @relation(fields: [driverId], references: [id])
-  manager     Manager?   @relation(fields: [adminId], references: [id])
+  manager   Manager? @relation(fields: [adminId], references: [id])
 }
 
 model Vehicle {
@@ -337,79 +336,79 @@ model Vehicle {
 }
 
 model Accident {
-  id                     String   @id @unique @default(uuid())
-  createdAt              DateTime @default(now())
-  date                   String
-  time                   String
-  location               String
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  date      String
+  time      String
+  location  String
 
-  amazon_logo            Boolean
-  vehicleId              String
-  number_packages_carried Int
+  amazon_logo               Boolean
+  vehicleId                 String
+  number_packages_carried   Int
   police_report_information Json
   general_pictures          Json
   weather                   Json
-  rushed_prior           Boolean
-  distracted             Boolean
-  extra_info             String
-  actions_before_accidents Json
-  unsafe_conditions        Json
-  
-  deleted  Boolean @default(false)
-  filled   Boolean @default(false)
+  rushed_prior              Boolean
+  distracted                Boolean
+  extra_info                String
+  actions_before_accidents  Json
+  unsafe_conditions         Json
+
+  deleted Boolean @default(false)
+  filled  Boolean @default(false)
 
   // RELATIONSHIPS
-  driverId         String
-  driver           Driver   @relation(fields: [driverId], references: [id])
+  driverId          String
+  driver            Driver              @relation(fields: [driverId], references: [id])
   collisionAccident CollisionAccident[]
-  propertyAccident PropertyAccident[]
-  injuryAccident   InjuryAccident[]
+  propertyAccident  PropertyAccident[]
+  injuryAccident    InjuryAccident[]
 }
 
 model PropertyAccident {
-  id                     String     @id @unique @default(uuid())
-  address                String
-  intended_address       String
-  object_hit             String
-  specific_pictures      Json
-  safety_equipment       Json
-  contact_information    Json
-  extra_info             String
-  previous_damage        String
+  id                  String @id @unique @default(uuid())
+  address             String
+  intended_address    String
+  object_hit          String
+  specific_pictures   Json
+  safety_equipment    Json
+  contact_information Json
+  extra_info          String
+  previous_damage     String
 
-  
+
   // RELATIONSHIPS
-  accidentId String
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
+  accidentId        String
+  accident          Accident[]  @relation(fields: [accidentId], references: [id])
   hitPersonAccident HitPerson[]
 }
 
 model CollisionAccident {
-  id         String        @id @unique @default(uuid())
-  address    String
-  car_make   String
-  car_model  String
-  license_plate String
+  id                String @id @unique @default(uuid())
+  address           String
+  car_make          String
+  car_model         String
+  license_plate     String
   specific_pictures Json
-  contact_info  Json
-  extra_info    String
-  previous_damage String
+  contact_info      Json
+  extra_info        String
+  previous_damage   String
 
   // RELATIONSHIPS
-  accidentId String
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
+  accidentId        String
+  accident          Accident[]  @relation(fields: [accidentId], references: [id])
   hitPersonAccident HitPerson[]
 }
 
 model InjuryAccident {
-  id                     String     @id @unique @default(uuid())
-  medical_attention      String
-  immediate_attention    String
-  injury                 String
-  contact_info           Json
-  specific_pictures      Json
-  pain_level             Int
-  extra_info             String
+  id                  String @id @unique @default(uuid())
+  medical_attention   String
+  immediate_attention String
+  injury              String
+  contact_info        Json
+  specific_pictures   Json
+  pain_level          Int
+  extra_info          String
 
   // RELATIONSHIPS
   accidentId String
@@ -417,20 +416,20 @@ model InjuryAccident {
 }
 
 model HitPerson {
-  id                    String        @id @unique @default(uuid())
-  medical_attention      String
-  immediate_attention    String
-  injury                 String
-  contact_info           Json
-  specific_pictures      Json
-  pain_level             Int
-  extra_info             String
+  id                  String @id @unique @default(uuid())
+  medical_attention   String
+  immediate_attention String
+  injury              String
+  contact_info        Json
+  specific_pictures   Json
+  pain_level          Int
+  extra_info          String
 
   // RELATIONSHIPS
-  propertyAccidentId    String?
-  propertyAccident      PropertyAccident[] @relation(fields: [propertyAccidentId], references: [id])
-  collisionAccidentId    String?
-  collisionAccident      CollisionAccident[] @relation(fields: [collisionAccidentId], references: [id])
+  propertyAccidentId  String?
+  propertyAccident    PropertyAccident[]  @relation(fields: [propertyAccidentId], references: [id])
+  collisionAccidentId String?
+  collisionAccident   CollisionAccident[] @relation(fields: [collisionAccidentId], references: [id])
 
 }
 
