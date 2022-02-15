@@ -28,13 +28,13 @@ export default {
                                 }
                             ]
                         },
-                        shiftPlanners: {
+                        shiftPlanners: true /* {
                             orderBy: [
                                 {
                                     date: "desc"
                                 }
                             ]
-                        },
+                        }, */
                     }
                 })
             } catch (error) {
