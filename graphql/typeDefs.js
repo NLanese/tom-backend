@@ -159,6 +159,7 @@ const typeDefs = gql`
     id:                           ID
     createdAt:                    Date
 
+    # SHIFT PLANNER REQUIRED DATA
     sundayDate:      String
     sundayHours:     String
     mondayDate:      String
@@ -173,8 +174,10 @@ const typeDefs = gql`
     fridayHours:     String
     saturdayDate:    String
     saturdayHours:   String
+    weekStartDate:   String
+    weekEndDate:     String
 
-    # SHIFT PLANNER DATA
+    # SHIFT PLANNER UNREQUIRED DATA
     phoneId:                      String
     deviceId:                     String
     vehicleId:                    String
@@ -311,114 +314,76 @@ const typeDefs = gql`
   type Accident {
     id:                     ID
     createdAt:              Date
-    driver:                 Driver
     name:                   String
-    using_safety:           Boolean
-    safety_failed:          Boolean
-    number_package_carried: Int
-    safety_equipment_used:  String
-    police_report_information: JSON
-    police_report_photos:      JSON
-    vehicle_number:            String
-    amazon_logo:               Boolean
-
+    date:                   String
+    time:                   String
     location:               String
-    deleted:                Boolean
 
-    hitPerson:              [HitPerson]
-    collision:              [Collision]
+    # ACCIDENT DATA
+    amazon_logo:            Boolean
+    vehicleId:              String
+    number_packages_carried: Int
+    police_report_information: JSON
+    general_pictures:          JSON
+    weather:                String
+    rushed_prior:           Boolean
+    distracted:             Boolean
+    extra_info:                String
+    actions_before_accidents:  JSON
+    unsafe_conditions:         JSON
+
+    deleted:                 Boolean
+    filled:                  Boolean
+
+    # RELATIONSHIPS
+    driver:                 Driver
+    collisionAccident:      [CollisionAccident]
     injuryAccident:         [InjuryAccident]
     propertyAccident:       [PropertyAccident]
-    injuryReport:           [InjuryReport]
   }
 
-  type HitPerson {
+
+  type CollisionAccident {
     id:                     ID
-    accidentId:             Int
-    accident:               [Accident]
-    medical_attention:      Boolean
-    vehicle_or_pedestrian:  String
-    previous_damage:        String
-    contact_information:    JSON
-    injury:                 String
+    specific_pictures:        JSON
+    contact_info:           JSON
+    extra_info:             String
 
-    deleted:                Boolean
+    # RELATIONSHIPS
+    driver:                Driver
+    accident:              [Accident]
+    injuryAccident:        [InjuryAccident]
   }
-
-
-  type Collision {
-    id:                     ID
-    accidentId:             Int
-    accident:               [Accident]
-    location:               String
-
-    deleted:                Boolean
-  }
-
 
   type InjuryAccident{
     id:                     ID
-    self_injured:           Boolean
-    vehicle_number:         String
-    amazon_logo:            Boolean
-    exact_address:          String
-    action_before_accident: JSON
-    police_report:          JSON
-    weather:                String
-    wet_ground:             Boolean
-    slippery_ground:        Boolean
+    medical_attention:      String
+    immediate_attention:    String
+    injury:                 String
+    contact_info:           JSON
+    specific_pictures:      JSON
+    pain_level:             Int
     extra_info:             String
-    rushed_prior:           Boolean
 
-    deleted:                Boolean
-
-    accidentId:             Int
     accident:               [Accident]
+    propertyAccident:       [PropertyAccident]
+    collisionAccident:      [CollisionAccident]
   }
-
 
   type PropertyAccident{
     id:                       ID
-    self_injured:             Boolean
-    vehicle_number:           String
-    amazon_logo:              Boolean
-    exact_address:            String
-    action_before_accident:   JSON
-    police_report:            JSON
-    weather:                  String
-    wet_ground:               Boolean
-    slippery_ground:          Boolean
+    address:                  String
+    object_hit:               String
+    specific_pictures:        JSON
+    safety_equipment:         JSON
+    contact_information:      JSON
     extra_info:               String
-    rushed_prior:             Boolean
 
-    deleted:                  Boolean
-
-    accidentId:               Int
     accident:                 [Accident]
+    injuryAccident:           [InjuryAccident]
   }
 
-  type InjuryReport{
-    id:                     ID
-    immediate_attention:    Boolean
-    late:                   JSON
-    self_injured:           Boolean
-    injury_type:            JSON
-    other_injured:          Boolean
-    before_injury:          String
-    packages:               JSON
-    safety_equipment:       JSON
-    unsafe_conditions:      JSON
-    pain_level:             Int
-    addtional_information:  String
-
-    deleted:                Boolean
-
-    accidentId:             Int
-    accident:               [Accident]
-  }
-
-
-    # ---------------------------------------- END SCHEMAS ----------------------------------------
+  # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
     # OWNER QUERIES
@@ -505,10 +470,10 @@ const typeDefs = gql`
     scorecardToolCreateWeeklyReports(role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
 
     # SHIFT PLANNER TOOL MUTATIONS
-    dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!): ShiftPlanner
+    dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
     
     # SHIFT PLANNER MUTATIONS
-    dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!): ShiftPlanner
+    dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
 
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
