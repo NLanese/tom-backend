@@ -29,7 +29,11 @@ export default {
                     managers: true,
                     dsp: true,
                     weeklyReport: true,
-                    chatrooms: true,
+                    chatrooms: {
+                        include: {
+                            messages: true
+                        }
+                    },
                     shiftPlanners: true,
                     notifiedMessages: true,
                 }
