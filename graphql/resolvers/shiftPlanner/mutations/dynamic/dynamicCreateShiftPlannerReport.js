@@ -7,7 +7,6 @@ export default {
         dynamicCreateShiftPlannerReport: async (_, {
             role,
             driverId,
-            date,
             phoneId,
             deviceId,
             vehicleId,
@@ -26,7 +25,9 @@ export default {
             fridayDate,
             fridayHours,
             saturdayDate,
-            saturdayHours
+            saturdayHours,
+            weekStartDay,
+            weekEndDay
         }, context) => {
             let owner;
             let manager;
@@ -52,12 +53,27 @@ export default {
                                     id: driverId
                                 }
                             },
-                            date: date,
                             phoneId: phoneId,
                             deviceId: deviceId,
                             vehicleId: vehicleId,
                             cxNumber: cxNumber,
-                            message: message
+                            message: message,
+                            sundayDate: sundayDate,
+                            sundayHours: sundayHours,
+                            mondayDate: mondayDate,
+                            mondayHours: mondayHours,
+                            tuesdayDate: tuesdayDate,
+                            tuesdayHours: tuesdayHours,
+                            wednesdayDate: wednesdayDate,
+                            wednesdayHours: wednesdayHours,
+                            thursdayDate: thursdayDate,
+                            thursdayHours: thursdayHours,
+                            fridayDate: fridayDate,
+                            fridayHours: fridayHours,
+                            saturdayDate: saturdayDate,
+                            saturdayHours: saturdayHours,
+                            weekStartDay: weekStartDay,
+                            weekEndDay: weekEndDay
                         }
                     })
                 } catch (error) {
@@ -78,7 +94,23 @@ export default {
                             deviceId: deviceId,
                             vehicleId: vehicleId,
                             cxNumber: cxNumber,
-                            message: message
+                            message: message,
+                            sundayDate: sundayDate,
+                            sundayHours: sundayHours,
+                            mondayDate: mondayDate,
+                            mondayHours: mondayHours,
+                            tuesdayDate: tuesdayDate,
+                            tuesdayHours: tuesdayHours,
+                            wednesdayDate: wednesdayDate,
+                            wednesdayHours: wednesdayHours,
+                            thursdayDate: thursdayDate,
+                            thursdayHours: thursdayHours,
+                            fridayDate: fridayDate,
+                            fridayHours: fridayHours,
+                            saturdayDate: saturdayDate,
+                            saturdayHours: saturdayHours,
+                            weekStartDay: weekStartDay,
+                            weekEndDay: weekEndDay
                         }
                     })
                 } catch (error) {

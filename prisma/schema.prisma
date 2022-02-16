@@ -172,6 +172,7 @@ model ShiftPlanner {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
 
+  // SHIFT PLANNER REQUIRED DATA
   sundayDate     String
   sundayHours    String
   mondayDate     String
@@ -186,8 +187,10 @@ model ShiftPlanner {
   fridayHours    String
   saturdayDate   String
   saturdayHours  String
+  weekStartDate  String
+  weekEndDate    String
 
-  // SHIFT PLANNER DATA
+  // SHIFT PLANNER UNREQUIRED DATA
   phoneId   String?
   deviceId  String?
   vehicleId String?
@@ -338,21 +341,23 @@ model Vehicle {
 model Accident {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
+  name      String
   date      String
   time      String
   location  String
 
-  amazon_logo               Boolean
-  vehicleId                 String
-  number_packages_carried   Int
-  police_report_information Json
-  general_pictures          Json
-  weather                   Json
-  rushed_prior              Boolean
-  distracted                Boolean
-  extra_info                String
-  actions_before_accidents  Json
-  unsafe_conditions         Json
+  // ACCIDENT DATA
+  amazon_logo               Boolean?
+  vehicleId                 String?
+  number_packages_carried   Int?
+  police_report_information Json?
+  general_pictures          Json?
+  weather                   String?
+  rushed_prior              Boolean?
+  distracted                Boolean?
+  extra_info                String?
+  actions_before_accidents  Json?
+  unsafe_conditions         Json?
 
   deleted Boolean @default(false)
   filled  Boolean @default(false)
@@ -368,36 +373,28 @@ model Accident {
 model PropertyAccident {
   id                  String @id @unique @default(uuid())
   address             String
-  intended_address    String
   object_hit          String
   specific_pictures   Json
   safety_equipment    Json
   contact_information Json
   extra_info          String
-  previous_damage     String
-
 
   // RELATIONSHIPS
   accidentId        String
   accident          Accident[]  @relation(fields: [accidentId], references: [id])
-  hitPersonAccident HitPerson[]
+  injuryAccident    InjuryAccident[]
 }
 
 model CollisionAccident {
   id                String @id @unique @default(uuid())
-  address           String
-  car_make          String
-  car_model         String
-  license_plate     String
   specific_pictures Json
   contact_info      Json
   extra_info        String
-  previous_damage   String
 
   // RELATIONSHIPS
   accidentId        String
   accident          Accident[]  @relation(fields: [accidentId], references: [id])
-  hitPersonAccident HitPerson[]
+  injuryAccident    InjuryAccident[]
 }
 
 model InjuryAccident {
@@ -413,24 +410,10 @@ model InjuryAccident {
   // RELATIONSHIPS
   accidentId String
   accident   Accident[] @relation(fields: [accidentId], references: [id])
-}
-
-model HitPerson {
-  id                  String @id @unique @default(uuid())
-  medical_attention   String
-  immediate_attention String
-  injury              String
-  contact_info        Json
-  specific_pictures   Json
-  pain_level          Int
-  extra_info          String
-
-  // RELATIONSHIPS
   propertyAccidentId  String?
   propertyAccident    PropertyAccident[]  @relation(fields: [propertyAccidentId], references: [id])
   collisionAccidentId String?
   collisionAccident   CollisionAccident[] @relation(fields: [collisionAccidentId], references: [id])
-
 }
 
 enum Role {

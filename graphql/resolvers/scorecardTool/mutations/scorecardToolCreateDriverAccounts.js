@@ -1,7 +1,6 @@
 import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
-import hashPassword from "../../../../utils/passwordHashing.js";
 import bcrypt from 'bcryptjs';
 
 // BUGS TO FIX
