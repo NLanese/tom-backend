@@ -28,7 +28,11 @@ export default {
                     dsp: true,
                     messages: true,
                     notifiedMessages: true,
-                    chatrooms: true
+                    chatrooms: {
+                        include: {
+                            messages: true
+                        }
+                    }
                 }
             })
 
@@ -42,7 +46,11 @@ export default {
                     dsp: true,
                     messages: true,
                     notifiedMessages: true,
-                    chatrooms: true
+                    chatrooms: {
+                        include: {
+                            messages: true
+                        }
+                    }
                 }
             })
 
