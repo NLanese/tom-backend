@@ -28,6 +28,7 @@ export default {
                                 }
                             ]
                         },
+                        accidents: true,
                         shiftPlanners: true /* {
                             orderBy: [
                                 {

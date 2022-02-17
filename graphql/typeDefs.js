@@ -151,7 +151,7 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     owner:                        Owner
-    managers:                       [Manager]
+    managers:                     [Manager]
     drivers:                      [Driver]
   }
 
@@ -434,6 +434,9 @@ const typeDefs = gql`
     driverSignIn(email: String!, password: String!): Driver
     driverUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Driver
 
+    # DRIVER ACCIDENT MUTATIONS
+    driverCreateAccident(name: String!, date: String!, time: String!, location: String!): Accident
+
     # DSP MUTATIONS
     ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!, feedbackNotifications: JSON!, autoSend: JSON!): Dsp
     ownerUpdateDsp(name: String, shortcode: String, timeZone: String, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
@@ -482,9 +485,7 @@ const typeDefs = gql`
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
-
   }
-
   #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
 `;
 

@@ -135,6 +135,8 @@ CREATE TABLE "ShiftPlanner" (
     "fridayHours" TEXT NOT NULL,
     "saturdayDate" TEXT NOT NULL,
     "saturdayHours" TEXT NOT NULL,
+    "weekStartDate" TEXT NOT NULL,
+    "weekEndDate" TEXT NOT NULL,
     "phoneId" TEXT,
     "deviceId" TEXT,
     "vehicleId" TEXT,
@@ -268,20 +270,21 @@ CREATE TABLE "Vehicle" (
 CREATE TABLE "Accident" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
     "date" TEXT NOT NULL,
     "time" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    "amazon_logo" BOOLEAN NOT NULL,
-    "vehicleId" TEXT NOT NULL,
-    "number_packages_carried" INTEGER NOT NULL,
-    "police_report_information" JSONB NOT NULL,
-    "general_pictures" JSONB NOT NULL,
-    "weather" JSONB NOT NULL,
-    "rushed_prior" BOOLEAN NOT NULL,
-    "distracted" BOOLEAN NOT NULL,
-    "extra_info" TEXT NOT NULL,
-    "actions_before_accidents" JSONB NOT NULL,
-    "unsafe_conditions" JSONB NOT NULL,
+    "amazon_logo" BOOLEAN,
+    "vehicleId" TEXT,
+    "number_packages_carried" INTEGER,
+    "police_report_information" JSONB,
+    "general_pictures" JSONB,
+    "weather" TEXT,
+    "rushed_prior" BOOLEAN,
+    "distracted" BOOLEAN,
+    "extra_info" TEXT,
+    "actions_before_accidents" JSONB,
+    "unsafe_conditions" JSONB,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "filled" BOOLEAN NOT NULL DEFAULT false,
     "driverId" TEXT NOT NULL,
@@ -293,13 +296,11 @@ CREATE TABLE "Accident" (
 CREATE TABLE "PropertyAccident" (
     "id" TEXT NOT NULL,
     "address" TEXT NOT NULL,
-    "intended_address" TEXT NOT NULL,
     "object_hit" TEXT NOT NULL,
     "specific_pictures" JSONB NOT NULL,
     "safety_equipment" JSONB NOT NULL,
     "contact_information" JSONB NOT NULL,
     "extra_info" TEXT NOT NULL,
-    "previous_damage" TEXT NOT NULL,
     "accidentId" TEXT NOT NULL,
 
     CONSTRAINT "PropertyAccident_pkey" PRIMARY KEY ("id")
@@ -308,14 +309,9 @@ CREATE TABLE "PropertyAccident" (
 -- CreateTable
 CREATE TABLE "CollisionAccident" (
     "id" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "car_make" TEXT NOT NULL,
-    "car_model" TEXT NOT NULL,
-    "license_plate" TEXT NOT NULL,
     "specific_pictures" JSONB NOT NULL,
     "contact_info" JSONB NOT NULL,
     "extra_info" TEXT NOT NULL,
-    "previous_damage" TEXT NOT NULL,
     "accidentId" TEXT NOT NULL,
 
     CONSTRAINT "CollisionAccident_pkey" PRIMARY KEY ("id")
@@ -332,24 +328,10 @@ CREATE TABLE "InjuryAccident" (
     "pain_level" INTEGER NOT NULL,
     "extra_info" TEXT NOT NULL,
     "accidentId" TEXT NOT NULL,
-
-    CONSTRAINT "InjuryAccident_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "HitPerson" (
-    "id" TEXT NOT NULL,
-    "medical_attention" TEXT NOT NULL,
-    "immediate_attention" TEXT NOT NULL,
-    "injury" TEXT NOT NULL,
-    "contact_info" JSONB NOT NULL,
-    "specific_pictures" JSONB NOT NULL,
-    "pain_level" INTEGER NOT NULL,
-    "extra_info" TEXT NOT NULL,
     "propertyAccidentId" TEXT,
     "collisionAccidentId" TEXT,
 
-    CONSTRAINT "HitPerson_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "InjuryAccident_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -389,13 +371,13 @@ CREATE TABLE "_AccidentToInjuryAccident" (
 );
 
 -- CreateTable
-CREATE TABLE "_HitPersonToPropertyAccident" (
+CREATE TABLE "_InjuryAccidentToPropertyAccident" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_CollisionAccidentToHitPerson" (
+CREATE TABLE "_CollisionAccidentToInjuryAccident" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -470,9 +452,6 @@ CREATE UNIQUE INDEX "CollisionAccident_id_key" ON "CollisionAccident"("id");
 CREATE UNIQUE INDEX "InjuryAccident_id_key" ON "InjuryAccident"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "HitPerson_id_key" ON "HitPerson"("id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_DriverToManager_AB_unique" ON "_DriverToManager"("A", "B");
 
 -- CreateIndex
@@ -509,16 +488,16 @@ CREATE UNIQUE INDEX "_AccidentToInjuryAccident_AB_unique" ON "_AccidentToInjuryA
 CREATE INDEX "_AccidentToInjuryAccident_B_index" ON "_AccidentToInjuryAccident"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_HitPersonToPropertyAccident_AB_unique" ON "_HitPersonToPropertyAccident"("A", "B");
+CREATE UNIQUE INDEX "_InjuryAccidentToPropertyAccident_AB_unique" ON "_InjuryAccidentToPropertyAccident"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_HitPersonToPropertyAccident_B_index" ON "_HitPersonToPropertyAccident"("B");
+CREATE INDEX "_InjuryAccidentToPropertyAccident_B_index" ON "_InjuryAccidentToPropertyAccident"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_CollisionAccidentToHitPerson_AB_unique" ON "_CollisionAccidentToHitPerson"("A", "B");
+CREATE UNIQUE INDEX "_CollisionAccidentToInjuryAccident_AB_unique" ON "_CollisionAccidentToInjuryAccident"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_CollisionAccidentToHitPerson_B_index" ON "_CollisionAccidentToHitPerson"("B");
+CREATE INDEX "_CollisionAccidentToInjuryAccident_B_index" ON "_CollisionAccidentToInjuryAccident"("B");
 
 -- AddForeignKey
 ALTER TABLE "Manager" ADD CONSTRAINT "Manager_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -590,10 +569,10 @@ ALTER TABLE "CollisionAccident" ADD CONSTRAINT "CollisionAccident_accidentId_fke
 ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_propertyAccidentId_fkey" FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_propertyAccidentId_fkey" FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HitPerson" ADD CONSTRAINT "HitPerson_collisionAccidentId_fkey" FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_collisionAccidentId_fkey" FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_DriverToManager" ADD FOREIGN KEY ("A") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -632,13 +611,13 @@ ALTER TABLE "_AccidentToInjuryAccident" ADD FOREIGN KEY ("A") REFERENCES "Accide
 ALTER TABLE "_AccidentToInjuryAccident" ADD FOREIGN KEY ("B") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_HitPersonToPropertyAccident" ADD FOREIGN KEY ("A") REFERENCES "HitPerson"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_InjuryAccidentToPropertyAccident" ADD FOREIGN KEY ("A") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_HitPersonToPropertyAccident" ADD FOREIGN KEY ("B") REFERENCES "PropertyAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_InjuryAccidentToPropertyAccident" ADD FOREIGN KEY ("B") REFERENCES "PropertyAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_CollisionAccidentToHitPerson" ADD FOREIGN KEY ("A") REFERENCES "CollisionAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CollisionAccidentToInjuryAccident" ADD FOREIGN KEY ("A") REFERENCES "CollisionAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_CollisionAccidentToHitPerson" ADD FOREIGN KEY ("B") REFERENCES "HitPerson"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CollisionAccidentToInjuryAccident" ADD FOREIGN KEY ("B") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
