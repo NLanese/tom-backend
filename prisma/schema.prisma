@@ -376,7 +376,7 @@ model PropertyAccident {
   object_hit          String
   specific_pictures   Json
   safety_equipment    Json
-  contact_information Json
+  contact_info        Json
   extra_info          String
 
   // RELATIONSHIPS
