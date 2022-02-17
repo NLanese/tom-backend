@@ -25,7 +25,11 @@ export default {
                 include: {
                     drivers: true,
                     managers: true,
-                    dsp: true,
+                    dsp: {
+                        include: {
+                            owner: true
+                        }
+                    },
                     messages: true,
                     notifiedMessages: true,
                     chatrooms: {
@@ -41,9 +45,12 @@ export default {
                     email
                 },
                 include: {
-                    owner: true,
                     drivers: true,
-                    dsp: true,
+                    dsp: {
+                        include: {
+                            owner: true
+                        }
+                    },
                     messages: true,
                     notifiedMessages: true,
                     chatrooms: {
