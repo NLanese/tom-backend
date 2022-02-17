@@ -28,7 +28,21 @@ export default {
                                 }
                             ]
                         },
-                        accidents: true,
+                        accidents: {
+                            include: {
+                                collisionAccident: {
+                                    include: {
+                                        injuryAccident: true
+                                    }
+                                },
+                                propertyAccident: {
+                                    include: {
+                                        injuryAccident: true
+                                    }
+                                },
+                                injuryAccident: true
+                            }
+                        },
                         shiftPlanners: true /* {
                             orderBy: [
                                 {

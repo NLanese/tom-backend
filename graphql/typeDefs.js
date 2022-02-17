@@ -436,6 +436,7 @@ const typeDefs = gql`
 
     # DRIVER ACCIDENT MUTATIONS
     driverCreateAccident(name: String!, date: String!, time: String!, location: String!): Accident
+    driverCreateCollisionAccident(accidentId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String!): CollisionAccident
 
     driverUpdateAccident(accidentId: String!, name: String, date: String, time: String, location: String, amazon_logo: Boolean, vehicleId: String, number_packages_carried: Int, police_report_information: JSON, general_pictures: JSON, weather: String, rushed_prior: Boolean, distracted: Boolean, extra_info: String, actions_before_accidents: JSON, unsafe_coditions: JSON): Accident
 
