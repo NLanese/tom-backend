@@ -10,6 +10,7 @@ import scorecardResolvers from './scorecardTool/scorecardResolvers.js';
 import chatroomResolvers from './chatrooms/chatroomResolvers.js';
 import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
 import messagesResolvers from './messages/messagesResolvers.js';
+import accidentResolvers from './accidents/accidentResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -24,6 +25,7 @@ export default {
         ...shiftPlannerResolvers.Query,
         ...chatroomResolvers.Query,
         ...messagesResolvers.Query,
+        ...accidentResolvers.Query,
 
         ...scorecardResolvers.Query,
         ...additionalResolvers.Query
@@ -37,6 +39,7 @@ export default {
         ...shiftPlannerResolvers.Mutation,
         ...chatroomResolvers.Mutation,
         ...messagesResolvers.Mutation,
+        ...accidentResolvers.Mutation,
 
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation
