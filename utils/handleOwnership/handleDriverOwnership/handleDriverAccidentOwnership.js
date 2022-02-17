@@ -15,7 +15,7 @@ const handleDriverAccidentOwnership = async (driverId, accidentId) => {
         return
     }
 
-    throw new Error('Not yout accident')
+    throw new Error('Not your accident')
 }
 
 export default handleDriverAccidentOwnership
