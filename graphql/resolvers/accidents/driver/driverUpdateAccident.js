@@ -1,5 +1,6 @@
 import db from "../../../../utils/generatePrisma.js"
 import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-auth.js"
+import handleDriverAccidentOwnership from "../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js"
 
 export default {
     Mutation: {
@@ -33,6 +34,8 @@ export default {
                 throw new Error("Accident does not exist")
             }
 
+            await handleDriverAccidentOwnership(driver.id, accidentId)
+
             try {
                 return await db.accident.update({
                     where: {
@@ -53,7 +56,7 @@ export default {
                         distracted: distracted,
                         extra_info: extra_info,
                         actions_before_accidents: actions_before_accidents,
-                        unsafe_coditions: unsafe_coditions
+                        unsafe_conditions: unsafe_coditions
                     }
                 })
             } catch (error) {
