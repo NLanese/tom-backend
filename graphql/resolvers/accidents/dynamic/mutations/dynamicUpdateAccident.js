@@ -7,6 +7,7 @@ export default {
         dynamicUpdateAccident: async (_, {
             role,
             accidentId,
+            filed,
             name,
             date,
             time,
@@ -46,6 +47,7 @@ export default {
                         id: accidentId
                     },
                     data: {
+                        filed: filed,
                         name: name,
                         date: date,
                         time: time,

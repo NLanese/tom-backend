@@ -19,7 +19,10 @@ import dynamicCreateAccident from "./dynamic/mutations/dynamicCreateAccident.js"
 import dynamicCreateCollisionAccident from "./dynamic/mutations/dynamicCreateCollisionAccident.js";
 import dynamicCreatePropertyAccident from "./dynamic/mutations/dynamicCreatePropertyAccident.js";
 
+import dynamicUpdateAccident from "./dynamic/mutations/dynamicUpdateAccident.js";
 import dynamicUpdateCollisionAccident from "./dynamic/mutations/dynamicUpdateCollisionAccident.js";
+import dynamicUpdatePropertyAccident from "./dynamic/mutations/dynamicUpdatePropertyAccident.js";
+
 
 // DYNAMIC QUERIES
 
@@ -45,7 +48,9 @@ export default {
         ...dynamicCreateCollisionAccident.Mutation,
         ...dynamicCreatePropertyAccident.Mutation,
 
-        ...dynamicUpdateCollisionAccident.Mutation
+        ...dynamicUpdateAccident.Mutation,
+        ...dynamicUpdateCollisionAccident.Mutation,
+        ...dynamicUpdatePropertyAccident.Mutation
     },
     JSON: GraphQLJSON
 }
