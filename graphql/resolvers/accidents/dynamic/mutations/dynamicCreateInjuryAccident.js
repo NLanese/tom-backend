@@ -148,6 +148,8 @@ export default {
                     throw new Error(error)
                 }
             }
+
+            throw new Error("Please provide an accident ID")
         }
     }
 }
