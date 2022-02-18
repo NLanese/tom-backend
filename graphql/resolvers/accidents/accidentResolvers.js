@@ -18,6 +18,7 @@ import driverGetAccidents from "./driver/queries/driverGetAccidents.js";
 import dynamicCreateAccident from "./dynamic/mutations/dynamicCreateAccident.js";
 import dynamicCreateCollisionAccident from "./dynamic/mutations/dynamicCreateCollisionAccident.js";
 import dynamicCreatePropertyAccident from "./dynamic/mutations/dynamicCreatePropertyAccident.js";
+import dynamicCreateInjuryAccident from "./dynamic/mutations/dynamicCreateInjuryAccident.js";
 
 import dynamicUpdateAccident from "./dynamic/mutations/dynamicUpdateAccident.js";
 import dynamicUpdateCollisionAccident from "./dynamic/mutations/dynamicUpdateCollisionAccident.js";
@@ -47,6 +48,7 @@ export default {
         ...dynamicCreateAccident.Mutation,
         ...dynamicCreateCollisionAccident.Mutation,
         ...dynamicCreatePropertyAccident.Mutation,
+        ...dynamicCreateInjuryAccident.Mutation,
 
         ...dynamicUpdateAccident.Mutation,
         ...dynamicUpdateCollisionAccident.Mutation,
