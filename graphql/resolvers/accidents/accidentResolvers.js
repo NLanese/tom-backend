@@ -4,10 +4,10 @@ import GraphQLJSON from "graphql-type-json";
 import driverCreateAccident from "./driver/driverCreateAccident.js";
 import driverCreateCollisionAccident from "./driver/driverCreateCollisionAccident.js";
 import driverCreatePropertyAccident from "./driver/driverCreatePropertyAccident.js";
-import driverCreateInjuryAccident from "./driver/driverCreateInjuryAccident.js";
+import driverCreateInjuryAccident from "./driver/mutations/driverCreateInjuryAccident.js";
 
 import driverUpdateAccident from "./driver/driverUpdateAccident.js"
-import driverUpdateCollisionAccident from "./driver/driverUpdateCollisionAccident.js";
+import driverUpdateCollisionAccident from "./driver/mutations/driverUpdateCollisionAccident.js";
 import driverUpdatePropertyAccident from "./driver/driverUpdatePropertyAccident.js";
 import driverUpdateInjuryAccident from "./driver/driverUpdateInjuryAccident.js";
 
