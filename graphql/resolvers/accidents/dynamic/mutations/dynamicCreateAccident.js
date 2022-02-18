@@ -1,6 +1,7 @@
 import db from "../../../../../utils/generatePrisma.js";
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
+import handleDriverOwnership from "../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
 
 export default {
     Mutation: {
@@ -38,6 +39,14 @@ export default {
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
+            }
+
+            if (manager) {
+                await handleDriverOwnership(role, manager.id, driverId)
+            }
+
+            if (owner) {
+                await handleDriverOwnership(role, owner.id, driverId)
             }
 
             try {
