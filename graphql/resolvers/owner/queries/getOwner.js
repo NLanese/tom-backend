@@ -14,7 +14,8 @@ export default {
                     include: {
                         drivers: {
                             include: {
-                                weeklyReport: true
+                                weeklyReport: true,
+                                accidents: true
                             }
                         },
                         managers: true,

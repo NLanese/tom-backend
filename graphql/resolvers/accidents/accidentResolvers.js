@@ -11,9 +11,13 @@ import driverUpdateCollisionAccident from "./driver/driverUpdateCollisionAcciden
 import driverUpdatePropertyAccident from "./driver/driverUpdatePropertyAccident.js";
 import driverUpdateInjuryAccident from "./driver/driverUpdateInjuryAccident.js";
 
-
 // DRIVER QUERIES
 import driverGetAccidents from "./driver/queries/driverGetAccidents.js";
+
+// DYNAMIC MUTATIONS
+import dynamicCreateAccident from "./dynamic/mutations/dynamicCreateAccident.js";
+
+// DYNAMIC QUERIES
 
 export default {
     Query: {
@@ -30,7 +34,10 @@ export default {
         ...driverUpdateAccident.Mutation,
         ...driverUpdateCollisionAccident.Mutation,
         ...driverUpdatePropertyAccident.Mutation,
-        ...driverUpdateInjuryAccident.Mutation
+        ...driverUpdateInjuryAccident.Mutation,
+
+        // DYNAMIC MUTATIONS
+        ...dynamicCreateAccident.Mutation
     },
     JSON: GraphQLJSON
 }
