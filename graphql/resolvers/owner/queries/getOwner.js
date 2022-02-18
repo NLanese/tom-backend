@@ -15,7 +15,21 @@ export default {
                         drivers: {
                             include: {
                                 weeklyReport: true,
-                                accidents: true
+                                accidents: {
+                                    include: {
+                                        propertyAccident: {
+                                            include: {
+                                                injuryAccident: true
+                                            }
+                                        },
+                                        collisionAccident: {
+                                            include: {
+                                                injuryAccident: true
+                                            }
+                                        },
+                                        injuryAccident: true
+                                    }
+                                }
                             }
                         },
                         managers: true,

@@ -2,27 +2,17 @@ import db from "../../../../../utils/generatePrisma.js";
 import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
 import handleDriverOwnership from "../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
+import handleDriverAccidentOwnership from "../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
 
 export default {
     Mutation: {
-        dynamicCreateAccident: async (_, {
+        dynamicCreateCollisionAccident: async (_, {
             role,
+            accidentId,
             driverId,
-            name,
-            date,
-            time,
-            location,
-            amazon_logo,
-            vehicleId,
-            number_packages_carried,
-            police_report_information,
-            general_pictures,
-            weather,
-            rushed_prior,
-            distracted,
-            extra_info,
-            actions_before_accidents,
-            unsafe_conditions
+            specific_pictures,
+            contact_info,
+            extra_info
         }, context) => {
             let owner;
             let manager;
@@ -41,6 +31,18 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
+            const foundAccident = await db.accident.findUnique({
+                where: {
+                    id: accidentId
+                }
+            })
+
+            if (!foundAccident) {
+                throw new Error("Accident does not exist")
+            }
+
+            await handleDriverAccidentOwnership(driverId, accidentId)
+
             if (manager) {
                 await handleDriverOwnership(role, manager.id, driverId)
             }
@@ -50,34 +52,22 @@ export default {
             }
 
             try {
-                return await db.accident.create({
+                return await db.collisionAccident.create({
                     data: {
-                        name: name,
-                        date: date,
-                        time: time,
-                        location: location,
-                        amazon_logo: amazon_logo,
-                        vehicleId: vehicleId,
-                        number_packages_carried: number_packages_carried,
-                        police_report_information: police_report_information,
-                        general_pictures: general_pictures,
-                        weather: weather,
-                        rushed_prior: rushed_prior,
-                        distracted: distracted,
+                        specific_pictures: specific_pictures,
+                        contact_info: contact_info,
                         extra_info: extra_info,
-                        actions_before_accidents: actions_before_accidents,
-                        unsafe_conditions: unsafe_conditions,
-                        driver: {
+                        accident: {
                             connect: {
-                                id: driverId
+                                id: accidentId
                             }
-                        } 
+                        },
+                        accidentId: accidentId                        
                     }
                 })
             } catch (error) {
                 throw new Error(error)
             }
-              
         }
     }
 }
