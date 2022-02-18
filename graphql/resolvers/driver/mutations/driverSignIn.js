@@ -36,6 +36,21 @@ export default {
                     },
                     shiftPlanners: true,
                     notifiedMessages: true,
+                    accidents: {
+                        include: {
+                            propertyAccident: {
+                                include: {
+                                    injuryAccident: true
+                                }
+                            },
+                            collisionAccident: {
+                                include: {
+                                    injuryAccident: true
+                                }
+                            },
+                            injuryAccident: true
+                        }
+                    }
                 }
             })
     
