@@ -9,6 +9,7 @@ import driverCreateInjuryAccident from "./driver/driverCreateInjuryAccident.js";
 import driverUpdateAccident from "./driver/driverUpdateAccident.js"
 import driverUpdateCollisionAccident from "./driver/driverUpdateCollisionAccident.js";
 import driverUpdatePropertyAccident from "./driver/driverUpdatePropertyAccident.js";
+import driverUpdateInjuryAccident from "./driver/driverUpdateInjuryAccident.js";
 
 export default {
     Query: {
@@ -23,7 +24,8 @@ export default {
 
         ...driverUpdateAccident.Mutation,
         ...driverUpdateCollisionAccident.Mutation,
-        ...driverUpdatePropertyAccident.Mutation
+        ...driverUpdatePropertyAccident.Mutation,
+        ...driverUpdateInjuryAccident.Mutation
     },
     JSON: GraphQLJSON
 }
