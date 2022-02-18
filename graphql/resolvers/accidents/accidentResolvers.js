@@ -11,9 +11,14 @@ import driverUpdateCollisionAccident from "./driver/driverUpdateCollisionAcciden
 import driverUpdatePropertyAccident from "./driver/driverUpdatePropertyAccident.js";
 import driverUpdateInjuryAccident from "./driver/driverUpdateInjuryAccident.js";
 
+
+// DRIVER QUERIES
+import driverGetAccidents from "./driver/queries/driverGetAccidents.js";
+
 export default {
     Query: {
-    
+        // DRIVER QUERIES
+        ...driverGetAccidents.Query
     },
     Mutation: {
         // DRIVER MUTATIONS

@@ -398,6 +398,9 @@ const typeDefs = gql`
     getDriver: Driver
     getDriversFromDsp: [Driver]
 
+    # DRIVER ACCIDENT QUERIES
+    driverGetAccidents: [Accident]
+
     # DSP QUERIES
     dynamicGetDriversFromDsp(role: String!): [Driver]
 
