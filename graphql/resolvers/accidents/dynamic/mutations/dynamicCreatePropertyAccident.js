@@ -12,8 +12,8 @@ export default {
             driverId,
             address,
             object_hit,
-            specific_pictures,
             safety_equipment,
+            specific_pictures,
             contact_info,
             extra_info
         }, context) => {
@@ -52,6 +52,27 @@ export default {
 
             if (owner) {
                 await handleDriverOwnership(role, owner.id, driverId)
+            }
+
+            try {
+                return await db.propertyAccident.create({
+                    data: {
+                        address: address,
+                        object_hit: object_hit,
+                        safety_equipment: safety_equipment,
+                        specific_pictures: specific_pictures,
+                        contact_info: contact_info,
+                        extra_info: extra_info,
+                        accident: {
+                            connect: {
+                                id: accidentId
+                            }
+                        },
+                        accidentId: accidentId                        
+                    }
+                })
+            } catch (error) {
+                throw new Error(error)
             }
         }
     }
