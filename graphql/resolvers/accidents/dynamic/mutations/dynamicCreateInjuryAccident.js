@@ -1,11 +1,15 @@
 import db from "../../../../../utils/generatePrisma.js";
-import checkDriverAuth from "../../../../../utils/checkAuthorization/check-driver-auth.js"
+import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
+import handleDriverOwnership from "../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
 import handleDriverAccidentOwnership from "../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
 
 export default {
     Mutation: {
-        driverCreateInjuryAccident: async (_, {
+        dynamicCreateInjuryAccident: async (_, {
+            role,
             accidentId,
+            driverId,
             collisionAccidentId,
             propertyAccidentId,
             medical_attention,
@@ -16,21 +20,44 @@ export default {
             pain_level,
             extra_info
         }, context) => {
-            const driver = await checkDriverAuth(context)
+            let owner;
+            let manager;
 
-            const foundAccident = await db.accident.findUnique({
+            // DYNAMIC AUTHORIZATION CHECK
+            if (role === 'OWNER') owner = await checkOwnerAuth(context)
+            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+
+            const foundDriver = await db.driver.findUnique({
                 where: {
-                    id: accidentId
+                    id: driverId
                 }
             })
 
-            if (!foundAccident) {
-                throw new Error("Accident does not exist")
+            if (!foundDriver) {
+                throw new Error('Driver does not exist')
             }
 
-            await handleDriverAccidentOwnership(driver.id, accidentId)
+            await handleDriverAccidentOwnership(driverId, accidentId)
+
+            if (manager) {
+                await handleDriverOwnership(role, manager.id, driverId)
+            }
+
+            if (owner) {
+                await handleDriverOwnership(role, owner.id, driverId)
+            }
 
             if (collisionAccidentId === undefined && propertyAccidentId === undefined) {
+                const foundAccident = await db.accident.findUnique({
+                    where: {
+                        id: accidentId
+                    }
+                })
+    
+                if (!foundAccident) {
+                    throw new Error("Accident does not exist")
+                }
+                
                 try {
                     return await db.injuryAccident.create({
                         data: {
@@ -55,6 +82,16 @@ export default {
             }
 
             if (propertyAccidentId !== undefined) {
+                const foundPropertyAccident = await db.propertyAccident.findUnique({
+                    where: {
+                        id: propertyAccidentId
+                    }
+                })
+
+                if (!foundPropertyAccident) {
+                    throw new Error('Accident does not exist')
+                }
+
                 try {
                     return await db.injuryAccident.create({
                         data: {
@@ -79,6 +116,16 @@ export default {
             }
 
             if (collisionAccidentId !== undefined) {
+                const foundCollisionAccident = await db.collisionAccident.findUnique({
+                    where: {
+                        id: collisionAccidentId
+                    }
+                })
+
+                if (!foundCollisionAccident) {
+                    throw new Error("Accident does not exist")
+                }
+
                 try {
                     return await db.injuryAccident.create({
                         data: {

@@ -8,6 +8,7 @@ export default {
             role,
             accidentId,
             filed,
+            deleted,
             name,
             date,
             time,
@@ -48,6 +49,7 @@ export default {
                     },
                     data: {
                         filed: filed,
+                        deleted: deleted,
                         name: name,
                         date: date,
                         time: time,
