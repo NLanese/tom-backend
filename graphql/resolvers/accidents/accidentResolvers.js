@@ -1,15 +1,15 @@
 import GraphQLJSON from "graphql-type-json";
 
 // DRIVER MUTATIONS
-import driverCreateAccident from "./driver/driverCreateAccident.js";
-import driverCreateCollisionAccident from "./driver/driverCreateCollisionAccident.js";
-import driverCreatePropertyAccident from "./driver/driverCreatePropertyAccident.js";
+import driverCreateAccident from "./driver/mutations/driverCreateAccident.js";
+import driverCreateCollisionAccident from "./driver/mutations/driverCreateCollisionAccident.js";
+import driverCreatePropertyAccident from "./driver/mutations/driverCreatePropertyAccident.js";
 import driverCreateInjuryAccident from "./driver/mutations/driverCreateInjuryAccident.js";
 
-import driverUpdateAccident from "./driver/driverUpdateAccident.js"
+import driverUpdateAccident from "./driver/mutations/driverUpdateAccident.js"
 import driverUpdateCollisionAccident from "./driver/mutations/driverUpdateCollisionAccident.js";
-import driverUpdatePropertyAccident from "./driver/driverUpdatePropertyAccident.js";
-import driverUpdateInjuryAccident from "./driver/driverUpdateInjuryAccident.js";
+import driverUpdatePropertyAccident from "./driver/mutations/driverUpdatePropertyAccident.js";
+import driverUpdateInjuryAccident from "./driver/mutations/driverUpdateInjuryAccident.js";
 
 // DRIVER QUERIES
 import driverGetAccidents from "./driver/queries/driverGetAccidents.js";
@@ -18,6 +18,8 @@ import driverGetAccidents from "./driver/queries/driverGetAccidents.js";
 import dynamicCreateAccident from "./dynamic/mutations/dynamicCreateAccident.js";
 import dynamicCreateCollisionAccident from "./dynamic/mutations/dynamicCreateCollisionAccident.js";
 import dynamicCreatePropertyAccident from "./dynamic/mutations/dynamicCreatePropertyAccident.js";
+
+import dynamicUpdateCollisionAccident from "./dynamic/mutations/dynamicUpdateCollisionAccident.js";
 
 // DYNAMIC QUERIES
 
@@ -41,7 +43,9 @@ export default {
         // DYNAMIC MUTATIONS
         ...dynamicCreateAccident.Mutation,
         ...dynamicCreateCollisionAccident.Mutation,
-        ...dynamicCreatePropertyAccident.Mutation
+        ...dynamicCreatePropertyAccident.Mutation,
+
+        ...dynamicUpdateCollisionAccident.Mutation
     },
     JSON: GraphQLJSON
 }
