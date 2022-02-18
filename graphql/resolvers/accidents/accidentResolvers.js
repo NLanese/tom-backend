@@ -4,6 +4,7 @@ import GraphQLJSON from "graphql-type-json";
 import driverCreateAccident from "./driver/driverCreateAccident.js";
 import driverCreateCollisionAccident from "./driver/driverCreateCollisionAccident.js";
 import driverCreatePropertyAccident from "./driver/driverCreatePropertyAccident.js";
+import driverCreateInjuryAccident from "./driver/driverCreateInjuryAccident.js";
 
 import driverUpdateAccident from "./driver/driverUpdateAccident.js"
 import driverUpdateCollisionAccident from "./driver/driverUpdateCollisionAccident.js";
@@ -18,6 +19,7 @@ export default {
         ...driverCreateAccident.Mutation,
         ...driverCreateCollisionAccident.Mutation,
         ...driverCreatePropertyAccident.Mutation,
+        ...driverCreateInjuryAccident.Mutation,
 
         ...driverUpdateAccident.Mutation,
         ...driverUpdateCollisionAccident.Mutation,
