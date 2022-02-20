@@ -15,16 +15,6 @@ export default {
             if (role === 'OWNER') owner = await checkOwnerAuth(context)
             if (role === 'MANAGER') manager = await checkManagerAuth(context)
 
-            const chatroomCheck = await db.chatroom.findUnique({
-                where: {
-                    id: chatroomId
-                }
-            })
-
-            if (!chatroomCheck) {
-                throw new Error('Chatroom does not exist')
-            }
-
             if (owner) {
                 try {
                     return await db.chatroom.findMany({
