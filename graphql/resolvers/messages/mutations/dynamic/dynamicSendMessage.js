@@ -28,7 +28,7 @@ export default {
                 }
 
                 try {
-                    return await db.messages.create({
+                    const newMessage = await db.messages.create({
                         data: {
                             owner: {
                                 connect: {
@@ -43,6 +43,16 @@ export default {
                             content: content,
                             from: foundOwner
                         }
+                    })
+
+                    return await db.chatroom.findUnique({
+                        where: {
+                            id: newMessage.chatroomId
+                        },
+                        include: {
+                            messages: true
+                        }
+                        
                     })
                 } catch (error) {
                     throw new Error(error)
