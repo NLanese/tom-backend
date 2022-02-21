@@ -22,6 +22,7 @@ export default {
                             owner: true,
                             managers: true,
                             drivers: true,
+                            messages: true
                         }
                     })
                 } catch (error) {
