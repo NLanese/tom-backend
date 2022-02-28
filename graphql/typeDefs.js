@@ -421,6 +421,7 @@ const typeDefs = gql`
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
+    dynamicGetManagers(role: String!): [Manager]
 
     # USED FOR TESTING QUERIES    
     dynamicGetChatrooms(role: String!): [Chatroom]
