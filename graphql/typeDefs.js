@@ -397,6 +397,7 @@ const typeDefs = gql`
     # DRIVER QUERIES
     getDriver: Driver
     getDriversFromDsp: [Driver]
+    driverGetManagers: [Manager]
 
     # DRIVER ACCIDENT QUERIES
     driverGetAccidents: [Accident]
