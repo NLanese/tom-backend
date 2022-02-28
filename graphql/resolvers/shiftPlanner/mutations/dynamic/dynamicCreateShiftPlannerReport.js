@@ -26,8 +26,8 @@ export default {
             fridayHours,
             saturdayDate,
             saturdayHours,
-            weekStartDay,
-            weekEndDay
+            weekStartDate,
+            weekEndDate
         }, context) => {
             let owner;
             let manager;
@@ -72,8 +72,8 @@ export default {
                             fridayHours: fridayHours,
                             saturdayDate: saturdayDate,
                             saturdayHours: saturdayHours,
-                            weekStartDay: weekStartDay,
-                            weekEndDay: weekEndDay
+                            weekStartDate: weekStartDate,
+                            weekEndDate: weekEndDate
                         }
                     })
                 } catch (error) {
@@ -109,8 +109,8 @@ export default {
                             fridayHours: fridayHours,
                             saturdayDate: saturdayDate,
                             saturdayHours: saturdayHours,
-                            weekStartDay: weekStartDay,
-                            weekEndDay: weekEndDay
+                            weekStartDate: weekStartDate,
+                            weekEndDate: weekEndDate
                         }
                     })
                 } catch (error) {
