@@ -7,6 +7,7 @@ import dynamicUpdateDriver from "./mutations/dynamic/updateDriver.js"
 import driverSignUp from "./mutations/driverSignUp.js";
 import driverSignIn from "./mutations/driverSignIn.js";
 import driverUpdate from "./mutations/driverUpdate.js";
+import driverResetPassword from "./mutations/driverResetPassword.js";
 
 // DRIVER QUERIES
 import getDriver from "./queries/getDriver.js";
@@ -27,7 +28,8 @@ export default {
         // DRIVER MUTATIONS
         ...driverSignUp.Mutation,
         ...driverSignIn.Mutation,
-        ...driverUpdate.Mutation
+        ...driverUpdate.Mutation,
+        ...driverResetPassword.Mutation
     },
     JSON: GraphQLJSON
 }

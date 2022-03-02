@@ -418,7 +418,7 @@ model InjuryAccident {
   id                  String @id @unique @default(uuid())
   medical_attention   String
   immediate_attention String
-  injury              String
+  injury              Json
   contact_info        Json
   specific_pictures   Json
   pain_level          Int
