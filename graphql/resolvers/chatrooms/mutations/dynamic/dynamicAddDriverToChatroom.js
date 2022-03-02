@@ -5,7 +5,6 @@ import checkDriverAuth from "../../../../../utils/checkAuthorization/check-drive
 import handleOwnerDriverOwnership from "../../../../../utils/handleOwnership/handleOwnerOwnership/handleOwnerDriverOwnership.js";
 import handleManagerDriverOwnership from "../../../../../utils/handleOwnership/handleManagerOwnership/handleManagerDriverOwnership.js";
 
-// ADD DRIVER AUTHORIZATION
 export default {
     Mutation: {
         dynamicAddDriverToChatroom: async (_, {

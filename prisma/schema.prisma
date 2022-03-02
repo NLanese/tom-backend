@@ -168,13 +168,19 @@ model Dsp {
   owner    Owner     @relation(fields: [ownerId], references: [id])
 }
 
+// model VTO {
+//  Related to driver
+//  Date
+//  Want VTO  
+//}
+
 model ShiftPlanner {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
 
   // SHIFT PLANNER REQUIRED DATA
-  sundayDate     String
-  sundayHours    String
+  sundayDate     String // 11/1/21
+  sundayHours    String // Hours working
   mondayDate     String
   mondayHours    String
   tuesdayDate    String
@@ -187,14 +193,25 @@ model ShiftPlanner {
   fridayHours    String
   saturdayDate   String
   saturdayHours  String
-  weekStartDate  String
-  weekEndDate    String
+  weekStartDate  String // Sunday
+  weekEndDate    String // Saturday
+
+  // sweeper schema
+  // sweeperHelping
+  // sweepersHours
+  // VTO Volentary Time Off
+  // Metrics Attendence/VTO Days
+
+  // attendence
+
+  // Monthly Report Generator
+
 
   // SHIFT PLANNER UNREQUIRED DATA
   phoneId   String?
   deviceId  String?
   vehicleId String?
-  cxNumber  String?
+  cxNumber  String? // If 'null' Driver is a sweeper
   message   String?
 
   // RELATIONSHIPS
@@ -205,7 +222,7 @@ model ShiftPlanner {
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())
   createdAt           DateTime @default(now())
-  date                String
+  date                String // 11-1-21 11-8-21
   hadAccident         Boolean  @default(false)
   feedbackMessage     String?
   feedbackStatus      String?
