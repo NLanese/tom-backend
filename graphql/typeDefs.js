@@ -425,7 +425,6 @@ const typeDefs = gql`
 
     # USED FOR TESTING QUERIES    
     dynamicGetChatrooms(role: String!): [Chatroom]
-
   }
   
   type Mutation {
@@ -480,6 +479,7 @@ const typeDefs = gql`
     dynamicRemoveManagerFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
+    dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!): Chatroom
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
