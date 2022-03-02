@@ -10,7 +10,7 @@ const sendForgotPasswordEmail = async (driverId) => {
 
     const driver = await db.driver.findUnique({
         where: {
-            id: Number(driverId)
+            id: driverId
         }
     })
 
@@ -33,13 +33,13 @@ const sendForgotPasswordEmail = async (driverId) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            driver: `${process.env.EMAIL_ADDRESS}`,
+            user: `${process.env.EMAIL_ADDRESS}`,
             pass: `${process.env.EMAIL_PASSWORD}`
         }
     })
     const mailOptions = {
         from: 'Tom-App Support',
-        to: `${userEmail}`,
+        to: `${driver.email}`,
         subject: "Reset Your Password",
         text: `The code to reset your password is: ${token}. It will expire in 5 minutes`
     }

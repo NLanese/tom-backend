@@ -33,14 +33,18 @@ export default {
             if (!foundChatroom) throw new Error('Chatroom does not exist')
 
             if (owner || manager || driver) {
-                return await db.chatroom.update({
-                    where: {
-                        id: chatroomId
-                    },
-                    data: {
-                        chatroomName: name
-                    }
-                })
+                try {
+                    return await db.chatroom.update({
+                        where: {
+                            id: chatroomId
+                        },
+                        data: {
+                            chatroomName: name
+                        }
+                    })
+                } catch (error) {
+                    throw new Error(error)
+                }
             }
 
             throw new Error('Role not authorized')
