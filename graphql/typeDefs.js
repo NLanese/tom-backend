@@ -519,7 +519,7 @@ const typeDefs = gql`
     dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
 
     # SHIFT PLANNER DATES MUTATIONS
-    dynamicUpdateShiftPlannerDates(shiftPlannerDatesId: String! role: String!, dates: [String!]): [ShiftPlannerDates]
+    dynamicUpdateShiftPlannerDates(shiftPlannerDatesId: String! role: String!, dates: [String!]): ShiftPlannerDates
 
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
