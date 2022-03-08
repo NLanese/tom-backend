@@ -79,7 +79,7 @@ CREATE TABLE "Driver" (
     "muted" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
-    "attendence" TEXT NOT NULL,
+    "attendence" TEXT,
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,

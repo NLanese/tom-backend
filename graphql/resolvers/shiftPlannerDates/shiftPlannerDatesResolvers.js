@@ -8,9 +8,12 @@ import GraphQLJSON from "graphql-type-json";
 import dynamicCreateShiftPlannerDates from "./mutations/dynamic/createShiftPlannerDates.js";
 import dynamicUpdateShiftPlannerDates from "./mutations/dynamic/updateShiftPlannerDates.js";
 
+// DYNAMIC QUERIES
+import dynamicGetDriversForShiftPlannerByDate from "./queries/dynamic/dynamicGetDriversForShiftPlannerByDate.js";
+
 export default {
     Query: {
-
+        ...dynamicGetDriversForShiftPlannerByDate.Query
     },
     Mutation: {
         // DYNAMIC MUTATIONS

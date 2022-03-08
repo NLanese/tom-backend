@@ -3,15 +3,14 @@ import checkManagerAuth from "../../../../../utils/checkAuthorization/check-mana
 import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
-    Mutation: {
-        dynamicUpdateShiftPlannerDates: async (_, {
+    Query: {
+        dynamicGetDriversForShiftPlannerByDate: async (_, {
             role,
-            dates
+            date
         }, context) => {
             let owner;
             let manager;
-            let dspRecord;
-            let datesArray;
+            let drivers;
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(context)
@@ -31,51 +30,56 @@ export default {
                             include: {
                                 shiftPlannerDates: true
                             }
+                        },
+                        drivers: {
+                            include: {
+                                shiftPlanners: true
+                            }
                         }
                     }
                 })
 
-                dspRecord = foundOwner.dsp
+                drivers = await foundOwner.drivers
             }
 
             if (manager) {
                 const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
+                    }
+                })
+
+                const foundOwner = await db.owner.findUnique({
+                    where: {
+                        id: foundManager.ownerId
                     },
                     include: {
                         dsp: {
                             include: {
                                 shiftPlannerDates: true
                             }
+                        },
+                        drivers: {
+                            include: {
+                                shiftPlanners: true
+                            }
                         }
-                    } 
+                    }
                 })
 
-                dspRecord = foundManager.dsp
+                drivers = await foundOwner.drivers
             }
 
-            const foundShiftPlannerDates = await db.shiftPlannerDates.findUnique({
-                where: {
-                    id: dspRecord.shiftPlannerDates.id
-                }
-            })
+            let returnObjArr;
+            
+            drivers.forEach((driver) => {
+                let returnObj
 
-            datesArray = await foundShiftPlannerDates.dates
 
-            await dates.forEach((date) => {    
-                if (datesArray.includes(date) === false) {
-                    datesArray.push(date)
-                }
-            })
-
-            return await db.shiftPlannerDates.update({
-                where: {
-                    id: dspRecord.shiftPlannerDates.id
-                },
-                data: {
-                    dates: datesArray
-                }
+                driver.shiftPlanners.forEach((shift) => {
+                    console.log('hit')
+                    console.log(shift)
+                })
             })
         }
     }
