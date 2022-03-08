@@ -12,6 +12,7 @@ export default {
             let owner;
             let manager;
             let dspRecord;
+            let datesArray;
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(context)
@@ -55,7 +56,28 @@ export default {
                 dspRecord = foundManager.dsp
             }
 
-            await console.log(dspRecord)
+            const foundShiftPlannerDates = await db.shiftPlannerDates.findUnique({
+                where: {
+                    id: dspRecord.shiftPlannerDates.id
+                }
+            })
+
+            datesArray = await foundShiftPlannerDates.dates
+
+            await dates.forEach((date) => {    
+                if (datesArray.includes(date) === false) {
+                    datesArray.push(date)
+                }
+            })
+
+            return await db.shiftPlannerDates.update({
+                where: {
+                    id: dspRecord.shiftPlannerDates.id
+                },
+                data: {
+                    dates: datesArray
+                }
+            })
         }
     }
 }
