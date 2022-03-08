@@ -11,6 +11,7 @@ import chatroomResolvers from './chatrooms/chatroomResolvers.js';
 import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
 import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
+import shiftPlannerDatesResolvers from './shiftPlannerDates/shiftPlannerDatesResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -26,6 +27,7 @@ export default {
         ...chatroomResolvers.Query,
         ...messagesResolvers.Query,
         ...accidentResolvers.Query,
+        ...shiftPlannerDatesResolvers.Query,
 
         ...scorecardResolvers.Query,
         ...additionalResolvers.Query
@@ -40,6 +42,7 @@ export default {
         ...chatroomResolvers.Mutation,
         ...messagesResolvers.Mutation,
         ...accidentResolvers.Mutation,
+        ...shiftPlannerDatesResolvers.Mutation,
 
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation

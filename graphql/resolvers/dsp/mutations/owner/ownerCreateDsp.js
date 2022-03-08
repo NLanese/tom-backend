@@ -218,6 +218,16 @@ export default {
                     })
                 })
 
+                await db.shiftPlannerDates.create({
+                    data: {
+                        dsp: {
+                            connect: {
+                                id: newDsp.id
+                            }
+                        }
+                    }
+                })
+
                 return await newDsp
             } catch (error) {
                 throw new Error(error)

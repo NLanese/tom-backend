@@ -14,7 +14,11 @@ export default {
                     include: {
                         owner: true,
                         drivers: true,
-                        dsp: true,
+                        dsp: {
+                            include: {
+                                shiftPlannerDates: true
+                            }
+                        },
                         messages: true,
                         chatrooms: {
                             include: {

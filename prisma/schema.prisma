@@ -109,6 +109,7 @@ model Driver {
   muted         Boolean @default(false) // Used to disable char features for Driver
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
+  attendence    String
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
@@ -166,6 +167,7 @@ model Dsp {
   drivers  Driver[]
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
+  shiftPlannerDates ShiftPlannerDates?
 }
 
 // model VTO {
@@ -173,6 +175,15 @@ model Dsp {
 //  Date
 //  Want VTO  
 //}
+
+model ShiftPlannerDates {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  dates     String[]
+
+  dspId            String
+  dsp              Dsp               @relation(fields: [dspId], references: [id])
+}
 
 model ShiftPlanner {
   id        String   @id @unique @default(uuid())
@@ -218,6 +229,8 @@ model ShiftPlanner {
   driverId String?
   driver   Driver? @relation(fields: [driverId], references: [id])
 }
+
+
 
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())

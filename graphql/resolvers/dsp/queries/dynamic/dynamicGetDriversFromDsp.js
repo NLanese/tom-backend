@@ -17,18 +17,16 @@ export default {
             }
 
             if (owner) {
-                const foundOwner = await db.owner.findUnique({
-                    where: {
-                        id: owner.id
-                    },
-                    include: {
-                        dsp: true
-                    }
-                })
+                let owner;
+            let manager;
 
-                if (!foundOwner) {
-                    throw new Error('Owner does not exist')
-                }
+            if (role === 'OWNER') {
+                owner = await checkOwnerAuth(context)
+            }
+
+            if (role === 'MANAGER') {
+                manager = await checkManagerAuth(context)
+            }
 
                 try {
                     return await db.driver.findMany({

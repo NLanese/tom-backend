@@ -79,6 +79,7 @@ CREATE TABLE "Driver" (
     "muted" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "attendence" TEXT NOT NULL,
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
@@ -115,6 +116,16 @@ CREATE TABLE "Dsp" (
     "ownerId" TEXT NOT NULL,
 
     CONSTRAINT "Dsp_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ShiftPlannerDates" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "dates" TEXT[],
+    "dspId" TEXT NOT NULL,
+
+    CONSTRAINT "ShiftPlannerDates_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -322,7 +333,7 @@ CREATE TABLE "InjuryAccident" (
     "id" TEXT NOT NULL,
     "medical_attention" TEXT NOT NULL,
     "immediate_attention" TEXT NOT NULL,
-    "injury" TEXT NOT NULL,
+    "injury" JSONB NOT NULL,
     "contact_info" JSONB NOT NULL,
     "specific_pictures" JSONB NOT NULL,
     "pain_level" INTEGER NOT NULL,
@@ -425,6 +436,12 @@ CREATE UNIQUE INDEX "Dsp_shortcode_key" ON "Dsp"("shortcode");
 CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ShiftPlannerDates_id_key" ON "ShiftPlannerDates"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ShiftPlannerDates_dspId_key" ON "ShiftPlannerDates"("dspId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "ShiftPlanner_id_key" ON "ShiftPlanner"("id");
 
 -- CreateIndex
@@ -513,6 +530,9 @@ ALTER TABLE "Driver" ADD CONSTRAINT "Driver_dspId_fkey" FOREIGN KEY ("dspId") RE
 
 -- AddForeignKey
 ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ShiftPlannerDates" ADD CONSTRAINT "ShiftPlannerDates_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ShiftPlanner" ADD CONSTRAINT "ShiftPlanner_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
