@@ -109,7 +109,7 @@ model Driver {
   muted         Boolean @default(false) // Used to disable char features for Driver
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
-  attendence    String
+  attendence    String?
 
   // NOTIFACTION SYSTEM
   notified Boolean @default(false)
@@ -190,22 +190,22 @@ model ShiftPlanner {
   createdAt DateTime @default(now())
 
   // SHIFT PLANNER REQUIRED DATA
-  sundayDate     String // 11/1/21
-  sundayHours    String // Hours working
-  mondayDate     String
-  mondayHours    String
-  tuesdayDate    String
-  tuesdayHours   String
-  wednesdayDate  String
-  wednesdayHours String
-  thursdayDate   String
-  thursdayHours  String
-  fridayDate     String
-  fridayHours    String
-  saturdayDate   String
-  saturdayHours  String
-  weekStartDate  String // Sunday
-  weekEndDate    String // Saturday
+  sundayDate     String? // 11/1/21
+  sundayHours    String? // Hours working
+  mondayDate     String?
+  mondayHours    String?
+  tuesdayDate    String?
+  tuesdayHours   String?
+  wednesdayDate  String?
+  wednesdayHours String?
+  thursdayDate   String?
+  thursdayHours  String?
+  fridayDate     String?
+  fridayHours    String?
+  saturdayDate   String?
+  saturdayHours  String?
+  weekStartDate  String? // Sunday
+  weekEndDate    String? // Saturday
 
   // sweeper schema
   // sweeperHelping
