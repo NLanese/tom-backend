@@ -153,6 +153,16 @@ const typeDefs = gql`
     owner:                        Owner
     managers:                     [Manager]
     drivers:                      [Driver]
+    shiftPlannerDates:           ShiftPlannerDates
+  }
+
+  type ShiftPlannerDates {
+    id:                           ID
+    createdAt:                    Date
+    dates:                        [String]
+
+    # RELATIONSHIPS
+    dsp:                          Dsp
   }
 
   type ShiftPlanner {
@@ -425,6 +435,7 @@ const typeDefs = gql`
 
     # USED FOR TESTING QUERIES    
     dynamicGetChatrooms(role: String!): [Chatroom]
+    dynamicGetDsp(role: String!): Dsp 
   }
   
   type Mutation {
@@ -507,6 +518,9 @@ const typeDefs = gql`
     # SHIFT PLANNER MUTATIONS
     dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
 
+    # SHIFT PLANNER DATES MUTATIONS
+    dynamicUpdateShiftPlannerDates(shiftPlannerDatesId: String! role: String!, dates: [String!]): [ShiftPlannerDates]
+
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
@@ -514,6 +528,7 @@ const typeDefs = gql`
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
+    dynamicCreateShiftPlannerDates(role: String!, dates: [String!]): [ShiftPlannerDates]
   }
   #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
 `;

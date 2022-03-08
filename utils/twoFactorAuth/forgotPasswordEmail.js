@@ -3,19 +3,22 @@ import db from "../../utils/generatePrisma.js"
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
-const sendForgotPasswordEmail = async (driverId) => {
+const sendForgotPasswordEmail = async (email) => {
     // Sets up constants
     dotenv.config()
     const token = crypto.randomBytes(8).toString('hex')
 
+    email = email.toUpperCase()
+
     const driver = await db.driver.findUnique({
         where: {
-            id: driverId
+            email: email
         }
     })
 
     if (!driver) {
-        throw new Error("Error: Driver does not exist")
+        return
+        // throw new Error("Error: Driver does not exist")
     }
 
     // Sets Driver's Password Token and Expiration Timer

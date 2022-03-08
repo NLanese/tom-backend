@@ -33,7 +33,11 @@ export default {
                             }
                         },
                         managers: true,
-                        dsp: true,
+                        dsp: {
+                            include: {
+                                shiftPlannerDates: true
+                            }
+                        },
                         messages: true,
                         notifiedMessages: true,
                         chatrooms: {
