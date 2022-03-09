@@ -8,6 +8,7 @@ export default {
             role,
             date
         }, context) => {
+            try {
             let owner;
             let manager;
             let drivers;
@@ -33,7 +34,11 @@ export default {
                         },
                         drivers: {
                             include: {
-                                shiftPlanners: true
+                                shiftPlanners: {
+                                    include: {
+                                        driver: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -61,7 +66,11 @@ export default {
                         },
                         drivers: {
                             include: {
-                                shiftPlanners: true
+                                shiftPlanners: {
+                                    include: {
+                                        driver: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -70,17 +79,20 @@ export default {
                 drivers = await foundOwner.drivers
             }
 
-            let returnObjArr;
+            let returnObjArr = []
             
             drivers.forEach((driver) => {
-                let returnObj
-
-
                 driver.shiftPlanners.forEach((shift) => {
-                    console.log('hit')
-                    console.log(shift)
+                    if (shift.weekStartDate === date) {
+                        returnObjArr.push(shift)
+                    }
                 })
             })
+
+            return await returnObjArr
+        } catch (error) {
+            throw new Error(error)
         }
+    }
     }
 }
