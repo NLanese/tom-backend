@@ -430,7 +430,7 @@ const typeDefs = gql`
     driverGetShiftPlaner: [ShiftPlanner]
 
     # SHIFT PLANNER DATES MUTATIONS
-    dynamicGetDriversForShiftPlannerByDate(role: String!, date: String!): [Driver]
+    dynamicGetDriversForShiftPlannerByDate(role: String!, date: String!): [ShiftPlanner]
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
