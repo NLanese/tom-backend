@@ -31,6 +31,8 @@ export default {
         }, context) => {
             let owner;
             let manager;
+            let newDateArr = [];
+            let dateExist = false;
 
             // DYNAMIC AUTHORIZATION CHECK
             if (role === 'OWNER') owner = await checkOwnerAuth(context)
@@ -46,6 +48,43 @@ export default {
 
             if (owner) {
                 try {
+                    const foundOwner = await db.owner.findUnique({
+                        where: {
+                            id: owner.id
+                        },
+                        include: {
+                            dsp: {
+                                include: {
+                                    shiftPlannerDates: true
+                                }
+                            }
+                        }
+                    })
+
+                    await foundOwner.dsp.shiftPlannerDates.dates.forEach((date) => {
+                        if (date === weekStartDate) {
+                            dateExist = true
+                        }
+                    })
+
+                    if (dateExist === false) {
+                        newDateArr = await foundOwner.dsp.shiftPlannerDates.dates
+                        await newDateArr.push(weekStartDate)
+                        
+                        await db.shiftPlannerDates.update({
+                            where: {
+                                id: foundOwner.dsp.shiftPlannerDates.id
+                            },
+                            data: {
+                                dates: newDateArr
+                            }
+                        })
+                    }
+
+                    if (dateExist === true) {
+                        throw new Error('Date already exist')
+                    }
+
                     return await db.shiftPlanner.create({
                         data: {
                             driver: {
@@ -77,10 +116,12 @@ export default {
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
 
+            // NEED TO FIX MANAGER
             if (manager) {
                 try {
                     return await db.shiftPlanner.create({
