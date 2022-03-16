@@ -358,6 +358,7 @@ const typeDefs = gql`
     specific_pictures:        JSON
     contact_info:           JSON
     extra_info:             String
+    collision_report:
 
     # RELATIONSHIPS
     driver:                Driver
@@ -372,25 +373,26 @@ const typeDefs = gql`
     injury:                 JSON
     contact_info:           JSON
     specific_pictures:      JSON
-    pain_level:             Int
+    pain_level:             String
     extra_info:             String
 
     accident:               [Accident]
-    propertyAccident:       [PropertyAccident]
+    accidentId:             Int
     collisionAccident:      [CollisionAccident]
+    collisionAccidentId:    Int
   }
 
   type PropertyAccident{
     id:                       ID
-    address:                  String
-    object_hit:               String
+    contact_info:             JSON
+    damage_report:            JSON
+    defective_equip:          JSON
+    safety_equip:             JSON
     specific_pictures:        JSON
-    safety_equipment:         JSON
-    contact_information:      JSON
     extra_info:               String
 
+    accidentId:               Int
     accident:                 [Accident]
-    injuryAccident:           [InjuryAccident]
   }
 
   # ---------------------------------------- END SCHEMAS ----------------------------------------

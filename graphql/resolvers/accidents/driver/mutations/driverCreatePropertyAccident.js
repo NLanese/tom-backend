@@ -6,12 +6,13 @@ export default {
     Mutation: {
         driverCreatePropertyAccident: async (_, {
             accidentId,
-            address,
-            object_hit,
-            specific_pictures,
-            safety_equipment,
             contact_info,
-            extra_info
+            damage_report,
+            defective_equip,
+            safety_equip,
+            extra_info,
+            specific_pictures,
+            types_of_damage
         }, context) => {
             const driver = await checkDriverAuth(context)
 
@@ -30,12 +31,14 @@ export default {
             try {
                 return await db.propertyAccident.create({
                     data: {
-                        address: address,
-                        object_hit: object_hit,
-                        specific_pictures: specific_pictures,
-                        safety_equipment: safety_equipment,
+                        accidentId,
                         contact_info: contact_info,
+                        damage_report: damage_report,
+                        defective_equip: defective_equip,
+                        safety_equip: safety_equip,
                         extra_info: extra_info,
+                        specific_pictures: specific_pictures,
+                        types_of_damage: types_of_damage,
                         accident: {
                             connect: {
                                 id: accidentId
@@ -45,6 +48,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

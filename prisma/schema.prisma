@@ -402,13 +402,13 @@ model Accident {
 
 model PropertyAccident {
   id                  String @id @unique @default(uuid())
-  address             String
-  object_hit          String
-  specific_pictures   Json
-  safety_equipment    Json
   contact_info        Json
-  extra_info          String
-
+  damage_report       Json
+  defective_equip     Json
+  safety_equip        Json
+  specific_pictures   Json
+  extra_info          String?
+  
   // RELATIONSHIPS
   accidentId        String
   accident          Accident[]  @relation(fields: [accidentId], references: [id])
@@ -419,7 +419,8 @@ model CollisionAccident {
   id                String @id @unique @default(uuid())
   specific_pictures Json
   contact_info      Json
-  extra_info        String
+  extra_info        String?
+  collision_report  Json
 
   // RELATIONSHIPS
   accidentId        String
@@ -429,13 +430,12 @@ model CollisionAccident {
 
 model InjuryAccident {
   id                  String @id @unique @default(uuid())
-  medical_attention   String
-  immediate_attention String
-  injury              Json
   contact_info        Json
+  extra_info          String?
+  injured_areas       Json
+  injury_report       Json
+  pain_level          String
   specific_pictures   Json
-  pain_level          Int
-  extra_info          String
 
   // RELATIONSHIPS
   accidentId String
