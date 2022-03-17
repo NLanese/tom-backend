@@ -408,7 +408,7 @@ model PropertyAccident {
   safety_equip        Json
   specific_pictures   Json
   extra_info          String?
-  
+
   // RELATIONSHIPS
   accidentId        String
   accident          Accident[]  @relation(fields: [accidentId], references: [id])
