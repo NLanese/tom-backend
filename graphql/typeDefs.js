@@ -354,15 +354,16 @@ const typeDefs = gql`
 
 
   type CollisionAccident {
-    id:                     ID
-    specific_pictures:        JSON
-    contact_info:           JSON
-    extra_info:             String
+    id:                         ID
+    specific_pictures:          JSON
+    contact_info:               JSON
+    collision_report:           JSON
+    extra_info:                 String
 
-    # RELATIONSHIPS
-    driver:                Driver
     accident:              [Accident]
+    accidentId:            Int
     injuryAccident:        [InjuryAccident]
+    injuryId:              String
   }
 
   type InjuryAccident{
@@ -372,12 +373,13 @@ const typeDefs = gql`
     injury:                 JSON
     contact_info:           JSON
     specific_pictures:      JSON
-    pain_level:             Int
+    pain_level:             String
     extra_info:             String
 
     accident:               [Accident]
-    propertyAccident:       [PropertyAccident]
+    accidentId:             String
     collisionAccident:      [CollisionAccident]
+    collisionId:            String
   }
 
   type PropertyAccident{
