@@ -395,7 +395,7 @@ model Accident {
   // RELATIONSHIPS
   driverId          String
   driver            Driver              @relation(fields: [driverId], references: [id])
-  collisionAccident CollisionAccident[]
+  collisionAccidents CollisionAccident[]
   propertyAccident  PropertyAccident[]
   injuryAccident    InjuryAccident[]
 }
@@ -424,7 +424,7 @@ model CollisionAccident {
 
   // RELATIONSHIPS
   accidentId        String
-  accident          Accident[]  @relation(fields: [accidentId], references: [id])
+  accident          Accident  @relation(fields: [accidentId], references: [id])
   injuryAccident    InjuryAccident[]
 }
 

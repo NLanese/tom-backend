@@ -360,10 +360,9 @@ const typeDefs = gql`
     collision_report:           JSON
     extra_info:                 String
 
-    accident:              [Accident]
+    accident:              Accident
     accidentId:            Int
     injuryAccident:        [InjuryAccident]
-    injuryId:              String
   }
 
   type InjuryAccident{
