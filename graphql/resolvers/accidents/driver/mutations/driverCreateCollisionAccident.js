@@ -38,8 +38,7 @@ export default {
                             connect: {
                                 id: accidentId
                             }
-                        },
-                        accidentId: accidentId                        
+                        }            
                     }
                 }).then( (resolved) => {
                     console.log(resolved)

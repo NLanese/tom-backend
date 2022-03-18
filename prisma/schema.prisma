@@ -396,8 +396,8 @@ model Accident {
   driverId          String
   driver            Driver              @relation(fields: [driverId], references: [id])
   collisionAccidents CollisionAccident[]
-  propertyAccident  PropertyAccident[]
-  injuryAccident    InjuryAccident[]
+  propertyAccidents  PropertyAccident[]
+  injuryAccidents    InjuryAccident[]
 }
 
 model PropertyAccident {
@@ -411,8 +411,7 @@ model PropertyAccident {
 
   // RELATIONSHIPS
   accidentId        String
-  accident          Accident[]  @relation(fields: [accidentId], references: [id])
-  injuryAccident    InjuryAccident[]
+  accident          Accident  @relation(fields: [accidentId], references: [id])
 }
 
 model CollisionAccident {
@@ -425,7 +424,7 @@ model CollisionAccident {
   // RELATIONSHIPS
   accidentId        String
   accident          Accident  @relation(fields: [accidentId], references: [id])
-  injuryAccident    InjuryAccident[]
+  injuryAccidents    InjuryAccident[]
 }
 
 model InjuryAccident {
@@ -439,11 +438,9 @@ model InjuryAccident {
 
   // RELATIONSHIPS
   accidentId String
-  accident   Accident[] @relation(fields: [accidentId], references: [id])
-  propertyAccidentId  String?
-  propertyAccident    PropertyAccident[]  @relation(fields: [propertyAccidentId], references: [id])
+  accident   Accident @relation(fields: [accidentId], references: [id])
   collisionAccidentId String?
-  collisionAccident   CollisionAccident[] @relation(fields: [collisionAccidentId], references: [id])
+  collisionAccident   CollisionAccident? @relation(fields: [collisionAccidentId], references: [id])
 }
 
 enum Role {

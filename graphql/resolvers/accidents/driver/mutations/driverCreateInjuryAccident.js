@@ -43,7 +43,6 @@ export default {
                                     id: accidentId
                                 }
                             },
-                            accidentId: accidentId   
                         }
                     })
                 } catch (error) {
@@ -68,7 +67,6 @@ export default {
                                     id: accidentId
                                 }
                             },
-                            accidentId: accidentId,    
                             collisionAccident: {
                                 connect: {
                                     id: collisionAccidentId
