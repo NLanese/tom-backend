@@ -17,16 +17,8 @@ export default {
                                 weeklyReport: true,
                                 accidents: {
                                     include: {
-                                        propertyAccident: {
-                                            include: {
-                                                injuryAccident: true
-                                            }
-                                        },
-                                        collisionAccident: {
-                                            include: {
-                                                injuryAccident: true
-                                            }
-                                        },
+                                        propertyAccident: true,
+                                        collisionAccident: true,
                                         injuryAccident: true
                                     }
                                 }

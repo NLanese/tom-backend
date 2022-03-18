@@ -30,16 +30,8 @@ export default {
                         },
                         accidents: {
                             include: {
-                                collisionAccident: {
-                                    include: {
-                                        injuryAccident: true
-                                    }
-                                },
-                                propertyAccident: {
-                                    include: {
-                                        injuryAccident: true
-                                    }
-                                },
+                                collisionAccident: true,
+                                propertyAccident: true,
                                 injuryAccident: true
                             }
                         },
