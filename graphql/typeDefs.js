@@ -384,8 +384,8 @@ const typeDefs = gql`
     id:                       ID
     contact_info:             JSON
     damage_report:            JSON
-    defective_equip:          JSON
-    safety_equip:             JSON
+    defective_equip:          [String]
+    safety_equip:             [String]
     specific_pictures:        JSON
     extra_info:               String
     types_of_damage:          JSON

@@ -29,6 +29,7 @@ export default {
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
             try {
+                console.log("about to try.....\n---------")
                 return await db.propertyAccident.create({
                     data: {
                         contact_info: contact_info,
