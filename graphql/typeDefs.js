@@ -346,10 +346,10 @@ const typeDefs = gql`
     filled:                  Boolean
 
     # RELATIONSHIPS
-    driver:                 Driver
-    collisionAccident:      [CollisionAccident]
-    injuryAccident:         [InjuryAccident]
-    propertyAccident:       [PropertyAccident]
+    driver:                  Driver
+    collisionAccidents:      [CollisionAccident]
+    injuryAccident:          [InjuryAccident]
+    propertyAccident:        [PropertyAccident]
   }
 
 
