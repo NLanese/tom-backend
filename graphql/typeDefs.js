@@ -373,7 +373,7 @@ const typeDefs = gql`
     injury_report:          JSON   
     pain_level:             String
     specific_pictures:      JSON
-    
+
     accident:               Accident
     accidentId:             String
     collisionAccident:      CollisionAccident
@@ -388,6 +388,7 @@ const typeDefs = gql`
     safety_equip:             JSON
     specific_pictures:        JSON
     extra_info:               String
+    types_of_damage:          JSON
 
     accident:                 Accident
     accidentId:               String
@@ -463,13 +464,13 @@ const typeDefs = gql`
     #### DRIVER ACCIDENT CREATORS ####
     driverCreateAccident(name: String!, date: String!, time: String!, location: String!): Accident
     driverCreateCollisionAccident(accidentId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String, collision_report: JSON!): CollisionAccident
-    driverCreatePropertyAccident(accidentId: String!, address: String!, object_hit: String!, specific_pictures: JSON!, safety_equipment: JSON!, contact_info: JSON!, extra_info: String!): PropertyAccident
+    driverCreatePropertyAccident(accidentId: String!, contact_info: JSON!, damage_report: JSON!, defective_equip: JSON, safety_equip: JSON, specific_pictures: JSON, extra_info: JSON, types_of_damage: JSON!): PropertyAccident
     driverCreateInjuryAccident(accidentId: String!, collisionAccidentId: String, contact_info: JSON!, extra_info: String, injured_areas: JSON!, injury_report: JSON!, pain_level: String, specific_pictures: JSON): InjuryAccident
 
     #### DRIVER ACCIDENT MUTATORS ####
     driverUpdateAccident(accidentId: String!, name: String, date: String, time: String, location: String, amazon_logo: Boolean, vehicleId: String, number_packages_carried: Int, police_report_information: JSON, general_pictures: JSON, weather: String, rushed_prior: Boolean, distracted: Boolean, extra_info: String, actions_before_accidents: JSON, unsafe_coditions: JSON): Accident
     driverUpdateCollisionAccident(collisionAccidentId: String!, specific_pictures: JSON, contact_info: JSON!, extra_info: String): CollisionAccident
-    driverUpdatePropertyAccident(propertyAccidentId: String!, address: String, object_hit: String, specific_pictures: JSON, safety_equipment: JSON, contact_info: JSON, extra_info: String): PropertyAccident
+    driverUpdatePropertyAccident(propertyAccidentId: String!, address: String, object_hit: String, specific_pictures: JSON, safety_equip: JSON, contact_info: JSON, extra_info: String): PropertyAccident
     driverUpdateInjuryAccident(injuryAccidentId: String!, medical_attention: String, immediate_attention: String, injury: JSON, contact_info: JSON, specific_pictures: JSON, pain_level: Int, extra_info: String): InjuryAccident
     ##################################
 

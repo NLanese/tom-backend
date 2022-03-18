@@ -31,7 +31,6 @@ export default {
             try {
                 return await db.propertyAccident.create({
                     data: {
-                        accidentId,
                         contact_info: contact_info,
                         damage_report: damage_report,
                         defective_equip: defective_equip,
@@ -44,7 +43,6 @@ export default {
                                 id: accidentId
                             }
                         },
-                        accidentId: accidentId  
                     }
                 })
             } catch (error) {

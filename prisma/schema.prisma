@@ -408,6 +408,7 @@ model PropertyAccident {
   safety_equip        Json
   specific_pictures   Json
   extra_info          String?
+  types_of_damage     Json
 
   // RELATIONSHIPS
   accidentId        String
