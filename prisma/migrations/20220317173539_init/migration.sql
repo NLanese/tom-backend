@@ -306,12 +306,12 @@ CREATE TABLE "Accident" (
 -- CreateTable
 CREATE TABLE "PropertyAccident" (
     "id" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "object_hit" TEXT NOT NULL,
-    "specific_pictures" JSONB NOT NULL,
-    "safety_equipment" JSONB NOT NULL,
     "contact_info" JSONB NOT NULL,
-    "extra_info" TEXT NOT NULL,
+    "damage_report" JSONB NOT NULL,
+    "defective_equip" JSONB NOT NULL,
+    "safety_equip" JSONB NOT NULL,
+    "specific_pictures" JSONB NOT NULL,
+    "extra_info" TEXT,
     "accidentId" TEXT NOT NULL,
 
     CONSTRAINT "PropertyAccident_pkey" PRIMARY KEY ("id")
@@ -322,7 +322,8 @@ CREATE TABLE "CollisionAccident" (
     "id" TEXT NOT NULL,
     "specific_pictures" JSONB NOT NULL,
     "contact_info" JSONB NOT NULL,
-    "extra_info" TEXT NOT NULL,
+    "extra_info" TEXT,
+    "collision_report" JSONB NOT NULL,
     "accidentId" TEXT NOT NULL,
 
     CONSTRAINT "CollisionAccident_pkey" PRIMARY KEY ("id")
@@ -331,13 +332,12 @@ CREATE TABLE "CollisionAccident" (
 -- CreateTable
 CREATE TABLE "InjuryAccident" (
     "id" TEXT NOT NULL,
-    "medical_attention" TEXT NOT NULL,
-    "immediate_attention" TEXT NOT NULL,
-    "injury" JSONB NOT NULL,
     "contact_info" JSONB NOT NULL,
+    "extra_info" TEXT,
+    "injured_areas" JSONB NOT NULL,
+    "injury_report" JSONB NOT NULL,
+    "pain_level" TEXT NOT NULL,
     "specific_pictures" JSONB NOT NULL,
-    "pain_level" INTEGER NOT NULL,
-    "extra_info" TEXT NOT NULL,
     "accidentId" TEXT NOT NULL,
     "propertyAccidentId" TEXT,
     "collisionAccidentId" TEXT,
@@ -580,19 +580,19 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CollisionAccident" ADD CONSTRAINT "CollisionAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CollisionAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_propertyAccidentId_fkey" FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_collisionAccidentId_fkey" FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_DriverToManager" ADD FOREIGN KEY ("A") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;

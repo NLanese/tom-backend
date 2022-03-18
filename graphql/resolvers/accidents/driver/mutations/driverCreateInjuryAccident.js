@@ -7,14 +7,12 @@ export default {
         driverCreateInjuryAccident: async (_, {
             accidentId,
             collisionAccidentId,
-            propertyAccidentId,
-            medical_attention,
-            immediate_attention,
-            injury,
             contact_info,
-            specific_pictures,
+            extra_info,
+            injured_areas, 
+            injury_report,
             pain_level,
-            extra_info
+            specific_pictures
         }, context) => {
             const driver = await checkDriverAuth(context)
 
@@ -30,13 +28,12 @@ export default {
 
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
-            if (collisionAccidentId === undefined && propertyAccidentId === undefined) {
+            if (collisionAccidentId === undefined) {
                 try {
                     return await db.injuryAccident.create({
                         data: {
-                            medical_attention: medical_attention,
-                            immediate_attention: immediate_attention,
-                            injury: injury,
+                            injured_areas: injured_areas,
+                            injury_report: injury_report,
                             contact_info: contact_info,
                             specific_pictures: specific_pictures,
                             pain_level: pain_level,
@@ -46,58 +43,39 @@ export default {
                                     id: accidentId
                                 }
                             },
-                            accidentId: accidentId   
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
 
-            if (propertyAccidentId !== undefined) {
-                try {
-                    return await db.injuryAccident.create({
-                        data: {
-                            medical_attention: medical_attention,
-                            immediate_attention: immediate_attention,
-                            injury: injury,
-                            contact_info: contact_info,
-                            specific_pictures: specific_pictures,
-                            pain_level: pain_level,
-                            extra_info: extra_info,
-                            propertyAccident: {
-                                connect: {
-                                    id: propertyAccidentId
-                                }
-                            },
-                            accidentId: accidentId   
-                        }
-                    })
-                } catch (error) {
-                    throw new Error(error)
-                }
-            }
 
             if (collisionAccidentId !== undefined) {
                 try {
                     return await db.injuryAccident.create({
                         data: {
-                            medical_attention: medical_attention,
-                            immediate_attention: immediate_attention,
-                            injury: injury,
+                            injured_areas: injured_areas,
+                            injury_report: injury_report,
                             contact_info: contact_info,
                             specific_pictures: specific_pictures,
                             pain_level: pain_level,
                             extra_info: extra_info,
+                            accident: {
+                                connect: {
+                                    id: accidentId
+                                }
+                            },
                             collisionAccident: {
                                 connect: {
                                     id: collisionAccidentId
                                 }
                             },
-                            accidentId: accidentId   
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }

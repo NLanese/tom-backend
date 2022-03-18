@@ -8,6 +8,7 @@ export default {
             accidentId,
             specific_pictures,
             contact_info,
+            collision_report,
             extra_info
         }, context) => {
             const driver = await checkDriverAuth(context)
@@ -24,21 +25,27 @@ export default {
 
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
+            console.log("right before create collision mutation")
             try {
+               
                 return await db.collisionAccident.create({
                     data: {
                         specific_pictures: specific_pictures,
                         contact_info: contact_info,
+                        collision_report: collision_report,
                         extra_info: extra_info,
                         accident: {
                             connect: {
                                 id: accidentId
                             }
-                        },
-                        accidentId: accidentId                        
+                        }            
                     }
+                }).then( (resolved) => {
+                    console.log(resolved)
+                    return resolved
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
 
