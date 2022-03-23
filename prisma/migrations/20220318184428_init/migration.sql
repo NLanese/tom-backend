@@ -308,10 +308,11 @@ CREATE TABLE "PropertyAccident" (
     "id" TEXT NOT NULL,
     "contact_info" JSONB NOT NULL,
     "damage_report" JSONB NOT NULL,
-    "defective_equip" JSONB NOT NULL,
-    "safety_equip" JSONB NOT NULL,
+    "defective_equip" TEXT[],
+    "safety_equip" TEXT[],
     "specific_pictures" JSONB NOT NULL,
     "extra_info" TEXT,
+    "types_of_damage" JSONB NOT NULL,
     "accidentId" TEXT NOT NULL,
 
     CONSTRAINT "PropertyAccident_pkey" PRIMARY KEY ("id")
@@ -339,7 +340,6 @@ CREATE TABLE "InjuryAccident" (
     "pain_level" TEXT NOT NULL,
     "specific_pictures" JSONB NOT NULL,
     "accidentId" TEXT NOT NULL,
-    "propertyAccidentId" TEXT,
     "collisionAccidentId" TEXT,
 
     CONSTRAINT "InjuryAccident_pkey" PRIMARY KEY ("id")
@@ -359,36 +359,6 @@ CREATE TABLE "_ChatroomToManager" (
 
 -- CreateTable
 CREATE TABLE "_ChatroomToDriver" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_AccidentToCollisionAccident" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_AccidentToPropertyAccident" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_AccidentToInjuryAccident" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_InjuryAccidentToPropertyAccident" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_CollisionAccidentToInjuryAccident" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -486,36 +456,6 @@ CREATE UNIQUE INDEX "_ChatroomToDriver_AB_unique" ON "_ChatroomToDriver"("A", "B
 -- CreateIndex
 CREATE INDEX "_ChatroomToDriver_B_index" ON "_ChatroomToDriver"("B");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_AccidentToCollisionAccident_AB_unique" ON "_AccidentToCollisionAccident"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_AccidentToCollisionAccident_B_index" ON "_AccidentToCollisionAccident"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_AccidentToPropertyAccident_AB_unique" ON "_AccidentToPropertyAccident"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_AccidentToPropertyAccident_B_index" ON "_AccidentToPropertyAccident"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_AccidentToInjuryAccident_AB_unique" ON "_AccidentToInjuryAccident"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_AccidentToInjuryAccident_B_index" ON "_AccidentToInjuryAccident"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_InjuryAccidentToPropertyAccident_AB_unique" ON "_InjuryAccidentToPropertyAccident"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_InjuryAccidentToPropertyAccident_B_index" ON "_InjuryAccidentToPropertyAccident"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_CollisionAccidentToInjuryAccident_AB_unique" ON "_CollisionAccidentToInjuryAccident"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_CollisionAccidentToInjuryAccident_B_index" ON "_CollisionAccidentToInjuryAccident"("B");
-
 -- AddForeignKey
 ALTER TABLE "Manager" ADD CONSTRAINT "Manager_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -580,19 +520,16 @@ ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_driverId_fkey" FOREIGN KEY ("drive
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PropertyAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CollisionAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CollisionAccident" ADD CONSTRAINT "CollisionAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("propertyAccidentId") REFERENCES "PropertyAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "InjuryAccident" ADD FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_collisionAccidentId_fkey" FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_DriverToManager" ADD FOREIGN KEY ("A") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -611,33 +548,3 @@ ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("A") REFERENCES "Chatroom"("id"
 
 -- AddForeignKey
 ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToCollisionAccident" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToCollisionAccident" ADD FOREIGN KEY ("B") REFERENCES "CollisionAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToPropertyAccident" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToPropertyAccident" ADD FOREIGN KEY ("B") REFERENCES "PropertyAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToInjuryAccident" ADD FOREIGN KEY ("A") REFERENCES "Accident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_AccidentToInjuryAccident" ADD FOREIGN KEY ("B") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_InjuryAccidentToPropertyAccident" ADD FOREIGN KEY ("A") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_InjuryAccidentToPropertyAccident" ADD FOREIGN KEY ("B") REFERENCES "PropertyAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CollisionAccidentToInjuryAccident" ADD FOREIGN KEY ("A") REFERENCES "CollisionAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CollisionAccidentToInjuryAccident" ADD FOREIGN KEY ("B") REFERENCES "InjuryAccident"("id") ON DELETE CASCADE ON UPDATE CASCADE;

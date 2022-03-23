@@ -404,8 +404,9 @@ model PropertyAccident {
   id                  String @id @unique @default(uuid())
   contact_info        Json
   damage_report       Json
-  defective_equip     Json
-  safety_equip        Json
+  defective_equip     String[]
+  safety_equip        String[]
+  package_report      Json?
   specific_pictures   Json
   extra_info          String?
   types_of_damage     Json
