@@ -5,6 +5,7 @@ import driverCreateAccident from "./driver/mutations/driverCreateAccident.js";
 import driverCreateCollisionAccident from "./driver/mutations/driverCreateCollisionAccident.js";
 import driverCreatePropertyAccident from "./driver/mutations/driverCreatePropertyAccident.js";
 import driverCreateInjuryAccident from "./driver/mutations/driverCreateInjuryAccident.js";
+import driverCreateSelfInjuryAccident from "./driver/mutations/driverCreateSelfInjuryAccident.js";
 
 import driverUpdateAccident from "./driver/mutations/driverUpdateAccident.js"
 import driverUpdateCollisionAccident from "./driver/mutations/driverUpdateCollisionAccident.js";
@@ -44,6 +45,7 @@ export default {
         ...driverCreateCollisionAccident.Mutation,
         ...driverCreatePropertyAccident.Mutation,
         ...driverCreateInjuryAccident.Mutation,
+        ...driverCreateSelfInjuryAccident.Mutation,
 
         ...driverUpdateAccident.Mutation,
         ...driverUpdateCollisionAccident.Mutation,

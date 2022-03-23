@@ -23,7 +23,20 @@ export default {
                     email
                 },
                 include: {
-                    drivers: true,
+                    drivers: {
+                        include: {
+                            accidents: {
+                                include: {
+                                    injuryAccidents: true,
+                                    propertyAccidents: true,
+                                    collisionAccidents: true,
+                                    selfInjuryAccidents: true
+                                }
+                            },
+                            weeklyReport: true,
+                            weeklySchedule: true
+                        }
+                    },
                     managers: true,
                     dsp: {
                         include: {
