@@ -30,9 +30,14 @@ export default {
                         },
                         accidents: {
                             include: {
-                                collisionAccident: true,
+                                collisionAccident: {
+                                    include: {
+                                        injuryAccident: true
+                                    }
+                                },
                                 propertyAccident: true,
-                                injuryAccident: true
+                                injuryAccident: true,
+                                selfInjuryAccidents
                             }
                         },
                         shiftPlanners: true /* {
