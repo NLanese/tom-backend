@@ -406,6 +406,7 @@ model PropertyAccident {
   damage_report       Json
   defective_equip     String[]
   safety_equip        String[]
+  package_report      Json?
   specific_pictures   Json
   extra_info          String?
   types_of_damage     Json

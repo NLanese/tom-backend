@@ -12,6 +12,7 @@ export default {
             safety_equip,
             extra_info,
             specific_pictures,
+            package_report,
             types_of_damage
         }, context) => {
             const driver = await checkDriverAuth(context)
@@ -38,6 +39,7 @@ export default {
                         safety_equip: safety_equip,
                         extra_info: extra_info,
                         specific_pictures: specific_pictures,
+                        package_report: package_report,
                         types_of_damage: types_of_damage,
                         accident: {
                             connect: {
