@@ -255,8 +255,6 @@ model WeeklyReport {
   deliveryCompletionRate   String
   deliveredAndRecieved     String
   photoOnDelivery          String
-  callCompliance           String
-  scanCompliance           String
   attendedDeliveryAccuracy Int
   dnr                      Int
   podOpps                  Int

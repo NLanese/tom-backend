@@ -11,7 +11,7 @@ export default {
             password
         }, { req }) => {
             const { errors, valid } = validateLoginInput(email, password)
-    
+            console.log('hit 1')
             if (!valid) {
                 throw new UserInputError('Errors', {
                     errors
@@ -19,7 +19,7 @@ export default {
             }
     
             email = await email.toUpperCase()
-    
+            console.log('hit 2')
             const foundUser = await db.driver.findUnique({
                 where: {
                     email
@@ -38,7 +38,7 @@ export default {
                     notifiedMessages: true,
                 }
             })
-    
+            console.log('hit 3')
             if (!foundUser) {
                 errors.general = 'Account not found';
                 throw new UserInputError('Incorrect Email', {
@@ -54,7 +54,7 @@ export default {
                     errors
                 })
             }
-
+            console.log('hit 4')
             const token = await generateDriverToken(foundUser.id)
 
             req.session = {
@@ -67,6 +67,7 @@ export default {
                     token: token
                 }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

@@ -103,8 +103,6 @@ CREATE TABLE "Dsp" (
     "followLimits" JSONB NOT NULL,
     "signalLimits" JSONB NOT NULL,
     "deliveryCompletionRateLimits" JSONB NOT NULL,
-    "scanComplianceLimits" JSONB NOT NULL,
-    "callComplianceLimits" JSONB NOT NULL,
     "deliveryNotRecievedLimits" JSONB NOT NULL,
     "photoOnDeliveryLimits" JSONB NOT NULL,
     "topCardLimits" INTEGER NOT NULL,
@@ -310,6 +308,7 @@ CREATE TABLE "PropertyAccident" (
     "damage_report" JSONB NOT NULL,
     "defective_equip" TEXT[],
     "safety_equip" TEXT[],
+    "package_report" JSONB,
     "specific_pictures" JSONB NOT NULL,
     "extra_info" TEXT,
     "types_of_damage" JSONB NOT NULL,
@@ -343,6 +342,19 @@ CREATE TABLE "InjuryAccident" (
     "collisionAccidentId" TEXT,
 
     CONSTRAINT "InjuryAccident_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SelfInjuryAccident" (
+    "id" TEXT NOT NULL,
+    "animal_report" JSONB,
+    "injuries" JSONB NOT NULL,
+    "injury_report" JSONB NOT NULL,
+    "extra_info" TEXT,
+    "specific_pictures" JSONB NOT NULL,
+    "accidentId" TEXT NOT NULL,
+
+    CONSTRAINT "SelfInjuryAccident_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -439,6 +451,9 @@ CREATE UNIQUE INDEX "CollisionAccident_id_key" ON "CollisionAccident"("id");
 CREATE UNIQUE INDEX "InjuryAccident_id_key" ON "InjuryAccident"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SelfInjuryAccident_id_key" ON "SelfInjuryAccident"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_DriverToManager_AB_unique" ON "_DriverToManager"("A", "B");
 
 -- CreateIndex
@@ -530,6 +545,9 @@ ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_accidentId_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "InjuryAccident" ADD CONSTRAINT "InjuryAccident_collisionAccidentId_fkey" FOREIGN KEY ("collisionAccidentId") REFERENCES "CollisionAccident"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SelfInjuryAccident" ADD CONSTRAINT "SelfInjuryAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_DriverToManager" ADD FOREIGN KEY ("A") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
