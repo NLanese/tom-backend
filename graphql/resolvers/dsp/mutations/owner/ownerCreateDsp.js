@@ -14,8 +14,6 @@ export default {
             followLimits,
             signalLimits,
             deliveryCompletionRateLimits,
-            scanComplianceLimits,
-            callComplianceLimits,
             deliveryNotRecievedLimits,
             photoOnDeliveryLimits,
             topCardLimits,
@@ -75,8 +73,6 @@ export default {
                         followLimits: followLimits,
                         signalLimits: signalLimits,
                         deliveryCompletionRateLimits: deliveryCompletionRateLimits,
-                        scanComplianceLimits: scanComplianceLimits,
-                        callComplianceLimits: callComplianceLimits,
                         deliveryNotRecievedLimits: deliveryNotRecievedLimits,
                         photoOnDeliveryLimits: photoOnDeliveryLimits,
                         topCardLimits: topCardLimits,
@@ -230,6 +226,7 @@ export default {
 
                 return await newDsp
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
