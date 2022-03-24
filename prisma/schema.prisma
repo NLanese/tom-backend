@@ -149,8 +149,6 @@ model Dsp {
   followLimits                 Json
   signalLimits                 Json
   deliveryCompletionRateLimits Json
-  scanComplianceLimits         Json
-  callComplianceLimits         Json
   deliveryNotRecievedLimits    Json
   photoOnDeliveryLimits        Json
   topCardLimits                Int

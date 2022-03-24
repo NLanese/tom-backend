@@ -13,16 +13,14 @@ export default {
                     },
                     include: {
                         propertyAccident: {
-                            include: {
-                                injuryAccident: true
-                            }
                         },
                         collisionAccident: {
                             include: {
                                 injuryAccident: true
                             }
                         },
-                        injuryAccident: true
+                        injuryAccident: true,
+                        selfInjuryAccidents
                     }
                 })
             } catch (error) {
