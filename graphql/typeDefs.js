@@ -356,7 +356,7 @@ const typeDefs = gql`
     extra_info:                 String
 
     accident:              Accident
-    accidentId:            Int
+    accidentId:            String
     injuryAccident:        [InjuryAccident]
   }
 

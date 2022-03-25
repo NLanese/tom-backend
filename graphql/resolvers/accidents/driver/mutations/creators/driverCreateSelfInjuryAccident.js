@@ -5,7 +5,6 @@ import handleDriverAccidentOwnership from "../../../../../../utils/handleOwnersh
 export default {
     Mutation: {
         driverCreateSelfInjuryAccident: async (_, {
-            id,
             animal_report,
             injuries, 
             injury_report,
@@ -14,6 +13,12 @@ export default {
             accidentId
         }, context) => {
             const driver = await checkDriverAuth(context)
+
+            console.log(animal_report)
+            console.log(injuries)
+            console.log(extra_info)
+            console.log(specific_pictures)
+            console.log(accidentId)
 
             const foundAccident = await db.accident.findUnique({
                 where: {
@@ -28,14 +33,13 @@ export default {
             await handleDriverAccidentOwnership(driver.id, accidentId)
             
             try {
-                return await db.injuryAccident.create({
+                return await db.selfInjuryAccident.create({
                     data: {
-                        injured_areas: injured_areas,
+                        animal_report: animal_report,
+                        injuries: injuries, 
                         injury_report: injury_report,
-                        contact_info: contact_info,
-                        specific_pictures: specific_pictures,
-                        pain_level: pain_level,
                         extra_info: extra_info,
+                        specific_pictures: specific_pictures,
                         accident: {
                             connect: {
                                 id: accidentId

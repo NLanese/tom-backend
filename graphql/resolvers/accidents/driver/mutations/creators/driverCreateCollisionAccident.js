@@ -12,6 +12,8 @@ export default {
             extra_info
         }, context) => {
             const driver = await checkDriverAuth(context)
+
+            console.log(accidentId)
             
             const foundAccident = await db.accident.findUnique({
                 where: {
