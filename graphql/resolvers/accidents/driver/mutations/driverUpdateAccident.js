@@ -10,17 +10,12 @@ export default {
             date,
             time,
             location,
-            amazon_logo,
-            vehicleId,
-            number_packages_carried,
-            police_report_information,
-            general_pictures,
-            weather,
-            rushed_prior,
-            distracted,
-            extra_info,
-            actions_before_accidents,
-            unsafe_coditions
+            accident_report,
+            has_logo,
+            police_report,
+            before_accident_report,
+            selfDamage,
+            weather_and_distractions
         }, context) => {
             const driver = await checkDriverAuth(context)
 
@@ -46,17 +41,12 @@ export default {
                         date: date,
                         time: time,
                         location: location,
-                        amazon_logo: amazon_logo,
-                        vehicleId: vehicleId,
-                        number_packages_carried: number_packages_carried,
-                        police_report_information: police_report_information,
-                        general_pictures: general_pictures,
-                        weather: weather,
-                        rushed_prior: rushed_prior,
-                        distracted: distracted,
-                        extra_info: extra_info,
-                        actions_before_accidents: actions_before_accidents,
-                        unsafe_conditions: unsafe_coditions
+                        accident_report: accident_report,
+                        has_logo: has_logo,
+                        police_report: police_report,
+                        before_accident_report: before_accident_report,
+                        selfDamage: selfDamage,
+                        weather_and_distractions: weather_and_distractions
                     }
                 })
             } catch (error) {

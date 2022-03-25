@@ -58,8 +58,6 @@ export default {
                         followLimits: followLimits,
                         signalLimits: signalLimits,
                         deliveryCompletionRateLimits: deliveryCompletionRateLimits,
-                        scanComplianceLimits: scanComplianceLimits,
-                        callComplianceLimits: callComplianceLimits,
                         deliveryNotRecievedLimits: deliveryNotRecievedLimits,
                         photoOnDeliveryLimits: photoOnDeliveryLimits,
                         topCardLimits: topCardLimits,
