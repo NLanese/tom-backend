@@ -37,7 +37,7 @@ export default {
                                 },
                                 propertyAccident: true,
                                 injuryAccident: true,
-                                selfInjuryAccidents
+                                selfInjuryAccidents: true
                             }
                         },
                         shiftPlanners: true /* {

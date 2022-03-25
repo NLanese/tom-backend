@@ -205,15 +205,7 @@ model ShiftPlanner {
   weekStartDate  String? // Sunday
   weekEndDate    String? // Saturday
 
-  // sweeper schema
-  // sweeperHelping
-  // sweepersHours
-  // VTO Volentary Time Off
-  // Metrics Attendence/VTO Days
 
-  // attendence
-
-  // Monthly Report Generator
 
 
   // SHIFT PLANNER UNREQUIRED DATA
@@ -227,8 +219,6 @@ model ShiftPlanner {
   driverId String?
   driver   Driver? @relation(fields: [driverId], references: [id])
 }
-
-
 
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())
@@ -373,17 +363,12 @@ model Accident {
   location  String
 
   // ACCIDENT DATA
-  amazon_logo               Boolean?
-  vehicleId                 String?
-  number_packages_carried   Int?
-  police_report_information Json?
-  general_pictures          Json?
-  weather                   String?
-  rushed_prior              Boolean?
-  distracted                Boolean?
-  extra_info                String?
-  actions_before_accidents  Json?
-  unsafe_conditions         Json?
+  accident_report            Json?
+  has_logo                   String?
+  police_report              Json?
+  before_accident_report     Json?
+  selfDamage                 Json?
+  weather_and_distractions   Json?
 
   deleted Boolean @default(false)
   filled  Boolean @default(false)

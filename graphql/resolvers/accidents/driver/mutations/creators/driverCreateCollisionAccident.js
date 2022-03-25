@@ -1,6 +1,6 @@
-import db from "../../../../../utils/generatePrisma.js";
-import checkDriverAuth from "../../../../../utils/checkAuthorization/check-driver-auth.js"
-import handleDriverAccidentOwnership from "../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
+import db from "../../../../../../utils/generatePrisma.js";
+import checkDriverAuth from "../../../../../../utils/checkAuthorization/check-driver-auth.js"
+import handleDriverAccidentOwnership from "../../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
 
 export default {
     Mutation: {
@@ -12,6 +12,8 @@ export default {
             extra_info
         }, context) => {
             const driver = await checkDriverAuth(context)
+
+            console.log(accidentId)
             
             const foundAccident = await db.accident.findUnique({
                 where: {
@@ -34,9 +36,10 @@ export default {
                         contact_info: contact_info,
                         collision_report: collision_report,
                         extra_info: extra_info,
+                        // accidentId: foundAccident.id,
                         accident: {
                             connect: {
-                                id: accidentId
+                                id: foundAccident.id
                             }
                         }            
                     }
