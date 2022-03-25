@@ -20,10 +20,11 @@ export default {
                             }
                         },
                         injuryAccident: true,
-                        selfInjuryAccidents
+                        selfInjuryAccidents: true
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

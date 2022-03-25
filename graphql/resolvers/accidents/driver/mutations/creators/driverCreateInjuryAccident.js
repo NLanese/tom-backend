@@ -1,6 +1,6 @@
-import db from "../../../../../utils/generatePrisma.js";
-import checkDriverAuth from "../../../../../utils/checkAuthorization/check-driver-auth.js"
-import handleDriverAccidentOwnership from "../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
+import db from "../../../../../../utils/generatePrisma.js";
+import checkDriverAuth from "../../../../../../utils/checkAuthorization/check-driver-auth.js"
+import handleDriverAccidentOwnership from "../../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
 
 export default {
     Mutation: {
@@ -38,9 +38,10 @@ export default {
                             specific_pictures: specific_pictures,
                             pain_level: pain_level,
                             extra_info: extra_info,
+                            accidentId: foundAccident.id,
                             accident: {
                                 connect: {
-                                    id: accidentId
+                                    id: foundAccident.id
                                 }
                             },
                         }
