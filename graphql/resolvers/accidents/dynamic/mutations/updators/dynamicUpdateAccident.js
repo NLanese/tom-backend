@@ -1,6 +1,6 @@
-import db from "../../../../../utils/generatePrisma.js";
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
-import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
+import db from "../../../../../../utils/generatePrisma.js";
+import checkManagerAuth from "../../../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
     Mutation: {

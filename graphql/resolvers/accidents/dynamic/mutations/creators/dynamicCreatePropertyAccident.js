@@ -1,19 +1,19 @@
-import db from "../../../../../utils/generatePrisma.js";
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
-import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
-import handleDriverOwnership from "../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
-import handleDriverPropertyAccidentOwnership from "../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverPropertyAccidentOwnership.js"
+import db from "../../../../../../utils/generatePrisma.js";
+import checkManagerAuth from "../../../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../../../utils/checkAuthorization/check-owner-auth.js";
+import handleDriverOwnership from "../../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
+import handleDriverAccidentOwnership from "../../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverAccidentOwnership.js";
 
 export default {
     Mutation: {
-        dynamicUpdatePropertyAccident: async (_, {
+        dynamicCreatePropertyAccident: async (_, {
             role,
-            propertyAccidentId,
+            accidentId,
             driverId,
             address,
             object_hit,
-            specific_pictures,
             safety_equipment,
+            specific_pictures,
             contact_info,
             extra_info
         }, context) => {
@@ -34,17 +34,17 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
-            const foundPropertyAccident = await db.propertyAccident.findUnique({
+            const foundAccident = await db.accident.findUnique({
                 where: {
-                    id: propertyAccidentId
+                    id: accidentId
                 }
             })
 
-            if (!foundPropertyAccident) {
-                throw new Error("Property Accident does not exist")
+            if (!foundAccident) {
+                throw new Error("Accident does not exist")
             }
 
-            await handleDriverPropertyAccidentOwnership(driverId, propertyAccidentId)
+            await handleDriverAccidentOwnership(driverId, accidentId)
 
             if (manager) {
                 await handleDriverOwnership(role, manager.id, driverId)
@@ -55,17 +55,20 @@ export default {
             }
 
             try {
-                return await db.propertyAccident.update({
-                    where: {
-                        id: propertyAccidentId
-                    },
+                return await db.propertyAccident.create({
                     data: {
                         address: address,
                         object_hit: object_hit,
-                        specific_pictures: specific_pictures,
                         safety_equipment: safety_equipment,
+                        specific_pictures: specific_pictures,
                         contact_info: contact_info,
-                        extra_info: extra_info
+                        extra_info: extra_info,
+                        accident: {
+                            connect: {
+                                id: accidentId
+                            }
+                        },
+                        accidentId: accidentId                        
                     }
                 })
             } catch (error) {

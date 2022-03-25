@@ -12,17 +12,14 @@ export default {
                         driverId: driver.id
                     },
                     include: {
-                        propertyAccident: {
-                            include: {
-                                injuryAccident: true
-                            }
-                        },
+                        propertyAccident: true,
                         collisionAccident: {
                             include: {
                                 injuryAccident: true
                             }
                         },
-                        injuryAccident: true
+                        injuryAccident: true,
+                        selfInjuryAccident: true
                     }
                 })
             } catch (error) {

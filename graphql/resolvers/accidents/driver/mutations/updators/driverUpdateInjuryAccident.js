@@ -1,6 +1,6 @@
-import db from "../../../../../utils/generatePrisma.js"
-import checkDriverAuth from "../../../../../utils/checkAuthorization/check-driver-auth.js"
-import handleDriverInjuryAccidentOwnership from '../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverInjuryAccidentOwnership.js'
+import db from "../../../../../../utils/generatePrisma.js"
+import checkDriverAuth from "../../../../../../utils/checkAuthorization/check-driver-auth.js"
+import handleDriverInjuryAccidentOwnership from '../../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverInjuryAccidentOwnership.js'
 
 export default {
     Mutation: {

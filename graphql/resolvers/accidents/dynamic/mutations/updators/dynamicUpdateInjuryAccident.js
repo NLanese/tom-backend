@@ -1,8 +1,8 @@
-import db from "../../../../../utils/generatePrisma.js";
-import checkManagerAuth from "../../../../../utils/checkAuthorization/check-manager-auth.js";
-import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-auth.js";
-import handleDriverOwnership from "../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
-import handleDriverInjuryAccidentOwnership from '../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverInjuryAccidentOwnership.js'
+import db from "../../../../../../utils/generatePrisma.js";
+import checkManagerAuth from "../../../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../../../utils/checkAuthorization/check-owner-auth.js";
+import handleDriverOwnership from "../../../../../../utils/handleOwnership/handleDynamicOwnership/handleDriverOwnership.js";
+import handleDriverInjuryAccidentOwnership from '../../../../../../utils/handleOwnership/handleDriverOwnership/handleDriverInjuryAccidentOwnership.js'
 
 export default {
     Mutation: {
