@@ -340,11 +340,10 @@ const typeDefs = gql`
 
     # RELATIONSHIPS
     driver:                   Driver
-    collisionAccidents:       [CollisionAccident]
-    injuryAccidents:          [InjuryAccident]
-    propertyAccidents:        [PropertyAccident]
-    selfInjuryAccidents:      [SelfInjuryAccident]
-
+    collisionAccidents:       [CollisionAccident] 
+    injuryAccidents:          [InjuryAccident] 
+    propertyAccidents:        [PropertyAccident] 
+    selfInjuryAccidents:      [SelfInjuryAccident] 
   }
 
 

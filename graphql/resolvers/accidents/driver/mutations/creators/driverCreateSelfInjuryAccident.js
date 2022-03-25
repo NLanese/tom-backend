@@ -40,9 +40,10 @@ export default {
                         injury_report: injury_report,
                         extra_info: extra_info,
                         specific_pictures: specific_pictures,
+                        // accidentId: foundAccident.id,
                         accident: {
                             connect: {
-                                id: accidentId
+                                id: foundAccident.id
                             }
                         },
                     }

@@ -36,9 +36,10 @@ export default {
                         contact_info: contact_info,
                         collision_report: collision_report,
                         extra_info: extra_info,
+                        // accidentId: foundAccident.id,
                         accident: {
                             connect: {
-                                id: accidentId
+                                id: foundAccident.id
                             }
                         }            
                     }

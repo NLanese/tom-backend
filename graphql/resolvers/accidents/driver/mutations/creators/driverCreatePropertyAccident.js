@@ -17,6 +17,8 @@ export default {
         }, context) => {
             const driver = await checkDriverAuth(context)
 
+            console.log(accidentId)
+
             const foundAccident = await db.accident.findUnique({
                 where: {
                     id: accidentId
@@ -41,9 +43,10 @@ export default {
                         specific_pictures: specific_pictures,
                         package_report: package_report,
                         types_of_damage: types_of_damage,
+                        // accidentId: foundAccident.id,
                         accident: {
                             connect: {
-                                id: accidentId
+                                id: foundAccident.id
                             }
                         },
                     }

@@ -38,9 +38,10 @@ export default {
                             specific_pictures: specific_pictures,
                             pain_level: pain_level,
                             extra_info: extra_info,
+                            accidentId: foundAccident.id,
                             accident: {
                                 connect: {
-                                    id: accidentId
+                                    id: foundAccident.id
                                 }
                             },
                         }
