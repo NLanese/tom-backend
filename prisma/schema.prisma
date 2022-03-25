@@ -365,12 +365,12 @@ model Accident {
   location  String
 
   // ACCIDENT DATA
-  accident_report            Json
-  has_logo                   String
-  police_report              Json
-  before_accident_report     Json
-  selfDamage                 Json
-  weather_and_distractions   Json
+  accident_report            Json?
+  has_logo                   String?
+  police_report              Json?
+  before_accident_report     Json?
+  selfDamage                 Json?
+  weather_and_distractions   Json?
 
   deleted Boolean @default(false)
   filled  Boolean @default(false)
