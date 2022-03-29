@@ -66,6 +66,7 @@ export default {
 
             try {
                 let newManager
+                const token = await generateManagerToken(newManager.id)
 
                 if (owner.dsp) {
                     newManager = await db.manager.create({
@@ -158,16 +159,28 @@ export default {
                     })
                 }
 
-                const token = await generateManagerToken(newManager.id)
-
                 req.session = {
                     token: `Bearer ${token}`
                 }
 
-                return await {
-                    ...newManager,
-                    token: token
-                }
+                return await db.manager.update({
+                    where: {
+                        id: newManager.id
+                    },
+                    data: {
+                        email: email,
+                        password: password,
+                        firstname: firstname,
+                        lastname: lastname,
+                        phoneNumber: phoneNumber,
+                        token: token
+                    }
+                })
+
+                // return await {
+                //     ...newManager,
+                //     token: token
+                // }
             } catch (error) {
                 throw new Error(error)
             }

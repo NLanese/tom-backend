@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const checkOwnerAuth = (context) => {
-	const authHeader = context.req.headers.authorization
-
-	if (authHeader) {
-		const token = authHeader;
+	// const authHeader = context.req.headers.authorization
+	const token = context
+	console.log(token)
+	// if (authHeader) {
+	// 	const token = authHeader;
 
 		if (token) {
 			try {
@@ -19,9 +20,9 @@ const checkOwnerAuth = (context) => {
 			}
 		}
 		throw new Error('Error: Invalid Header, check header contents')
-	}
+	// }
 
-	throw new Error('Error: No Auth header found');
+	// throw new Error('Error: No Auth header found');
 };
 
 export default checkOwnerAuth;

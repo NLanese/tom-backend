@@ -61,16 +61,31 @@ export default {
                     }
                 })
 
-                const token = await generateOwnerToken(newOwner.id)
+                const token = await generateManagerToken(newOwner.id)
+                const ownerId = newOwner.id
 
                 req.session = {
                     token: `Bearer ${token}`
                 }
 
-                return await {
-                    ...newOwner,
-                    token: token
-                }
+                // return await {
+                //     ...newOwner,
+                //     token: token
+                // }
+                return await db.owner.update({
+                    where: {
+                        id: ownerId
+                    },
+                    data: {
+                        email: email,
+                        password: password,
+                        firstname: firstname,
+                        lastname: lastname,
+                        phoneNumber: phoneNumber,
+                        signUpToken: signUpToken,
+                        token: token
+                    }
+                })
             } catch (error) {
                 throw new Error(error)
             }
