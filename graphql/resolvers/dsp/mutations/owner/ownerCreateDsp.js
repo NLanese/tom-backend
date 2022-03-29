@@ -19,7 +19,8 @@ export default {
             topCardLimits,
             smallCardLimits,
             feedbackNotifications,
-            autoSend
+            autoSend,
+            allDevices,
         }, context) => {
             const owner = await checkOwnerAuth(context)
 
@@ -79,6 +80,7 @@ export default {
                         smallCardLimits: smallCardLimits,
                         feedbackNotifications: feedbackNotifications,
                         autoSend: autoSend
+                        allDevices: allDevices
                     }
                 })
 

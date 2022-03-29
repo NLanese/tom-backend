@@ -3,13 +3,13 @@ import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-aut
 
 export default {
     Query: {
-        getOwner: async (_, {}, context) => {
-            const owner = await checkOwnerAuth(context)
+        getOwner: async (_, { id }, context) => {
 
             try {
+                console.log("worked")
                 return await db.owner.findUnique({
                     where: {
-                        id: owner.id
+                        id: id
                     },
                     include: {
                         drivers: {
@@ -17,9 +17,9 @@ export default {
                                 weeklyReport: true,
                                 accidents: {
                                     include: {
-                                        propertyAccident: true,
-                                        collisionAccident: true,
-                                        injuryAccident: true
+                                        propertyAccidents: true,
+                                        collisionAccidents: true,
+                                        injuryAccidents: true
                                     }
                                 }
                             }
@@ -43,6 +43,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

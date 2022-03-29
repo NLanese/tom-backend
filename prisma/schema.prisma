@@ -142,19 +142,25 @@ model Dsp {
   timeZone  String
 
   // DSP SETTINGS
-  ficoLimits                   Json
-  seatbeltLimits               Json
-  speedingLimits               Json
-  distractionLimits            Json
-  followLimits                 Json
-  signalLimits                 Json
-  deliveryCompletionRateLimits Json
-  deliveryNotRecievedLimits    Json
-  photoOnDeliveryLimits        Json
-  topCardLimits                Int
-  smallCardLimits              Int
-  feedbackNotifications        Json
-  autoSend                     Json
+    // Limits
+    ficoLimits                   Json
+    seatbeltLimits               Json
+    speedingLimits               Json
+    distractionLimits            Json
+    followLimits                 Json
+    signalLimits                 Json
+    deliveryCompletionRateLimits Json
+    deliveryNotRecievedLimits    Json
+    photoOnDeliveryLimits        Json
+    topCardLimits                Int
+    smallCardLimits              Int
+
+    // Feedback
+    feedbackNotifications        Json
+    autoSend                     Json
+
+    // Devices
+    allDevices                   Json[]
 
   // DSP INFORMATION
   paid            Boolean @default(false) // Keeps track if the Dsp has paid 
