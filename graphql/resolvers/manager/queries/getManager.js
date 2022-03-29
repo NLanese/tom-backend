@@ -3,13 +3,12 @@ import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager
 
 export default {
     Query: {
-        getManager: async (_, {}, context) => {
-            const manager = await checkManagerAuth(context)
+        getManager: async (_, { id }, context) => {
 
             try {
                 return await db.manager.findUnique({
                     where: {
-                        id: manager.id
+                        id: id
                     },
                     include: {
                         owner: true,
@@ -31,6 +30,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

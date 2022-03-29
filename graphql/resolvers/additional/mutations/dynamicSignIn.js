@@ -103,6 +103,7 @@ export default {
                         token: token
                     }
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -129,6 +130,7 @@ export default {
                         token: token
                     }
                 } catch (error) {
+                    console.lopg(error)
                     throw new Error(error)
                 }
 
