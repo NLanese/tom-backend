@@ -4,6 +4,7 @@ import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-
 export default {
     Mutation: {
         ownerUpdateDsp: async (_, {
+            token,
             name,
             shortcode,
             timeZone,
@@ -22,7 +23,11 @@ export default {
             autoSend,
             allDevices
         }, context) => {
-            const owner = await checkOwnerAuth(context)
+
+            console.log("update")
+            console.log(token)
+
+            const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({
                 where: {
@@ -76,6 +81,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

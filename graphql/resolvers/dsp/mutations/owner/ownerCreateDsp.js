@@ -4,6 +4,7 @@ import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-
 export default {
     Mutation: {
         ownerCreateDsp: async (_, {
+            token,
             name,
             shortcode,
             timeZone,
@@ -22,7 +23,11 @@ export default {
             autoSend,
             allDevices,
         }, context) => {
-            const owner = await checkOwnerAuth(context)
+
+            console.log("Create")
+            console.log("token")
+            
+            const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({
                 where: {
@@ -79,7 +84,7 @@ export default {
                         topCardLimits: topCardLimits,
                         smallCardLimits: smallCardLimits,
                         feedbackNotifications: feedbackNotifications,
-                        autoSend: autoSend
+                        autoSend: autoSend,
                         allDevices: allDevices
                     }
                 })
