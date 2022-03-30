@@ -46,11 +46,21 @@ export default {
             }
     
             try {
-                return await {
-                    ...foundUser,
-                    token: token
-                }
+                return await db.owner.update({
+                    where: {
+                        id: foundUser.id
+                    },
+                    data: {
+                        ...foundUser,
+                        token: token
+                    }
+                })
+                // return await {
+                //     ...foundUser,
+                //     token: token
+                // }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

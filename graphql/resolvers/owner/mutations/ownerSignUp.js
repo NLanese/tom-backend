@@ -57,11 +57,11 @@ export default {
                         firstname: firstname,
                         lastname: lastname,
                         phoneNumber: phoneNumber,
-                        signUpToken: signUpToken
+                        signUpToken: signUpToken,
                     }
                 })
 
-                const token = await generateManagerToken(newOwner.id)
+                const token = await generateOwnerToken(newOwner.id)
                 const ownerId = newOwner.id
 
                 req.session = {
@@ -83,6 +83,7 @@ export default {
                         lastname: lastname,
                         phoneNumber: phoneNumber,
                         signUpToken: signUpToken,
+                        profilePick: 'Default',
                         token: token
                     }
                 })

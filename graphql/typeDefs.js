@@ -111,7 +111,7 @@ const typeDefs = gql`
     # RELATIONSHIPS
     owner:                        Owner
     accidents:                    [Accident]
-    managers:                       [Manager]
+    managers:                     [Manager]
     vehicle:                      Vehicle
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
@@ -500,7 +500,7 @@ const typeDefs = gql`
     dynamicUpdateInjuryAccident(role: String!, injuryAccidentId: String!, driverId: String!, medical_attention: String, immediate_attention: String, injury: JSON, contact_info: JSON, specific_pictures: JSON, pain_level: Int, extra_info: String): InjuryAccident
 
     #### DSP MUTATIONS ####
-    ownerCreateDsp(token: String, name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!, feedbackNotifications: JSON!, autoSend: JSON!, allDevices: JSON!): Dsp
+    ownerCreateDsp(token: String, name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!, feedbackNotifications: JSON!, autoSend: JSON!, allDevices: [JSON]): Dsp
     ownerUpdateDsp(token: String, name: String, shortcode: String, timeZone: String, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDevices: JSON): Dsp
     ownerDeleteDsp(dspId: String!): Dsp
     #######################
