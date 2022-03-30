@@ -173,6 +173,7 @@ export default {
                         firstname: firstname,
                         lastname: lastname,
                         phoneNumber: phoneNumber,
+                        profilePick: 'Default',
                         token: token
                     }
                 })

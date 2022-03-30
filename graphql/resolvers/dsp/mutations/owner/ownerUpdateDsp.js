@@ -24,9 +24,6 @@ export default {
             allDevices
         }, context) => {
 
-            console.log("update")
-            console.log(token)
-
             const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({

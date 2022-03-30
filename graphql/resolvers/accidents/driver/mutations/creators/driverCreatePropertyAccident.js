@@ -16,9 +16,7 @@ export default {
             types_of_damage
         }, context) => {
             const driver = await checkDriverAuth(context)
-
-            console.log(accidentId)
-
+            
             const foundAccident = await db.accident.findUnique({
                 where: {
                     id: accidentId
