@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const checkManagerAuth = (context) => {
-	const authHeader = context.req.headers.authorization
+	// const authHeader = context.req.headers.authorization
 
-	if (authHeader) {
-		const token = authHeader;
+	// if (authHeader) {
+	// 	const token = authHeader;
+	let token = context
 
 		if (token) {
 			try {
@@ -19,9 +20,9 @@ const checkManagerAuth = (context) => {
 			}
 		}
 		throw new Error('Error: Invalid Header, check header contents')
-	}
+	// }
 
-	throw new Error('Error: No Auth header found');
+	// throw new Error('Error: No Auth header found');
 };
 
 export default checkManagerAuth;

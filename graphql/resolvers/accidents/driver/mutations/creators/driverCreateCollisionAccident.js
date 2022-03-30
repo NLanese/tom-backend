@@ -27,7 +27,6 @@ export default {
 
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
-            console.log("right before create collision mutation")
             try {
                
                 return await db.collisionAccident.create({
@@ -44,7 +43,6 @@ export default {
                         }            
                     }
                 }).then( (resolved) => {
-                    console.log(resolved)
                     return resolved
                 })
             } catch (error) {

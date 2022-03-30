@@ -19,8 +19,6 @@ export default {
         }, context) => {
             const driver = await checkDriverAuth(context)
 
-            console.log("hit1!!!")
-
             const foundAccident = await db.accident.findUnique({
                 where: {
                     id: accidentId
@@ -32,8 +30,6 @@ export default {
             }
 
             await handleDriverAccidentOwnership(driver.id, accidentId)
-
-            console.log("hit2!!!")
 
             try {
                 return await db.accident.update({
@@ -54,7 +50,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }

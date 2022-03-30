@@ -11,6 +11,7 @@ import bcrypt from 'bcryptjs';
 export default {
     Mutation: {
         scorecardToolCreateDriverAccounts: async (_, {
+            token,
             email,
             firstname,
             lastname,
@@ -22,12 +23,14 @@ export default {
             let owner;
             let manager;
 
+            console.log(token)
+
             if (role === 'OWNER') {
-                owner = await checkOwnerAuth(context)
+                owner = await checkOwnerAuth(token)
             }
 
             if (role === 'MANAGER') {
-                manager = await checkManagerAuth(context)
+                manager = await checkManagerAuth(token)
             }
 
             const foundDriver = await db.driver.findUnique({
@@ -416,7 +419,6 @@ export default {
 
                     return await newDriver
                 } catch (error) {
-                    console.log(error)
                     throw new Error(error)
                 }
             }

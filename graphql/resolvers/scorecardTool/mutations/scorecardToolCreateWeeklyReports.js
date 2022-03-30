@@ -5,6 +5,7 @@ import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager
 export default {
     Mutation: {
         scorecardToolCreateWeeklyReports: async (_, {
+            token,
             role,
             transporterId,
             date,
@@ -34,12 +35,14 @@ export default {
             let owner;
             let manager;
 
+            console.log(token)
+
             if (role === 'OWNER') {
-                owner = await checkOwnerAuth(context)
+                owner = await checkOwnerAuth(token)
             }
 
             if (role === 'MANAGER') {
-                manager = await checkManagerAuth(context)
+                manager = await checkManagerAuth(token)
             }
 
             const foundDriver = await db.driver.findUnique({

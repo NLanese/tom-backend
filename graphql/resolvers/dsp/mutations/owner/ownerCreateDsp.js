@@ -24,8 +24,6 @@ export default {
             allDevices,
         }, context) => {
 
-            console.log("Create")
-            console.log("token")
             
             const owner = await checkOwnerAuth(token)
 
