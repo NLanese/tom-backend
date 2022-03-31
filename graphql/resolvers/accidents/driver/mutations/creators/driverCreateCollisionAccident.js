@@ -46,7 +46,6 @@ export default {
                     return resolved
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
 

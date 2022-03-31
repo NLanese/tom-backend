@@ -7,7 +7,6 @@ dotenv.config();
 const checkOwnerAuth = (context) => {
 	// const authHeader = context.req.headers.authorization
 	const token = context
-	console.log(token)
 	// if (authHeader) {
 	// 	const token = authHeader;
 

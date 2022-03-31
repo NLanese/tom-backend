@@ -23,7 +23,6 @@ export default {
             let owner;
             let manager;
 
-            console.log(token)
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)

@@ -25,8 +25,6 @@ export default {
             deliveryCompletionRate,
             deliveredAndRecieved,
             photoOnDelivery,
-            callCompliance,
-            scanCompliance,
             attendedDeliveryAccuracy,
             dnr,
             podOpps,
@@ -35,7 +33,6 @@ export default {
             let owner;
             let manager;
 
-            console.log(token)
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -80,8 +77,6 @@ export default {
                         deliveryCompletionRate: deliveryCompletionRate,
                         deliveredAndRecieved: deliveredAndRecieved,
                         photoOnDelivery: photoOnDelivery,
-                        callCompliance: callCompliance,
-                        scanCompliance: scanCompliance,
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
@@ -89,6 +84,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
             

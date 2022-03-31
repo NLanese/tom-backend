@@ -11,8 +11,6 @@ export default {
             followLimits,
             signalLimits,
             deliveryCompletionRateLimits,
-            scanComplianceLimits,
-            callComplianceLimits,
             deliveryNotRecievedLimits,
             photoOnDeliveryLimits,
             topCardLimits,
