@@ -15,8 +15,6 @@ const pdfToExcel = (pdfFile) => {
             });
         } else {
             console.log('error retrieving URL');
-            // console.log(err)
-            // console.log(resp.statusCode)
         };
     });
     

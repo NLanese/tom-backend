@@ -24,7 +24,6 @@ export default {
             allDevices,
         }, context) => {
 
-            
             const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({
@@ -229,9 +228,9 @@ export default {
                     }
                 })
 
+                console.log(newDsp)
                 return await newDsp
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }

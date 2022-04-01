@@ -21,7 +21,7 @@ export default {
             smallCardLimits,
             feedbackNotifications,
             autoSend,
-            allDevices
+            allDevices,
         }, context) => {
 
             const owner = await checkOwnerAuth(token)
@@ -78,7 +78,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }
