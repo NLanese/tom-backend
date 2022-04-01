@@ -473,7 +473,7 @@ const typeDefs = gql`
     #################################
 
     #### DYNAMIC ACCIDENT QUERIES ####
-    dynamicGetAccidentById(role: String!, accidentId: String!, driverId: String!): Ac
+    dynamicGetAccidentById(role: String!, accidentId: String!, driverId: String!): Accident
     ##################################
 
     #### DSP QUERIES ####

@@ -1,7 +1,7 @@
-import db from "../../../../utils/generatePrisma";
-import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-auth";
-import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth";
-import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth";
+import db from "../../../../utils/generatePrisma.js";
+import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-auth.js";
+import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
     getShiftByDate: async (_, {
