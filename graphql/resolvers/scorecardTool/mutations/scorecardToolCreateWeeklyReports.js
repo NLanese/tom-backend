@@ -84,7 +84,7 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
+                console.log("\n\n\n\nERROR creating weekly report. Here's why...")
                 throw new Error(error)
             }
             

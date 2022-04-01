@@ -103,6 +103,7 @@ model Driver {
   phoneNumber String
   password    String
   profilePick Json?
+  shifts      Json[]
 
   // ACCOUNT INFORMATION
   transporterId String? @unique
@@ -291,6 +292,12 @@ model WeeklySchedule {
   manager   Manager @relation(fields: [managerId], references: [id])
   driverId  String
   driver    Driver  @relation(fields: [driverId], references: [id])
+}
+
+model Shift {
+  id          String  @id @unique @default(uuid())
+  date        String  @unique
+  allDevices  Json[]
 }
 
 model Chatroom {
