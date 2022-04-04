@@ -228,8 +228,7 @@ export default {
                     }
                 })
 
-                console.log(newDsp)
-                return await newDsp
+                return newDsp
             } catch (error) {
                 throw new Error(error)
             }

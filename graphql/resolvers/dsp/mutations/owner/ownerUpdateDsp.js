@@ -78,6 +78,8 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log("-------------\nError Updating the DSP\n-------------")
+                console.log(error)
                 throw new Error(error)
             }
         }
