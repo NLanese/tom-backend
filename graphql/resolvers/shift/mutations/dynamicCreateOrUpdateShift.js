@@ -11,9 +11,15 @@ export default {
             allDevices,
         }, context) => {
 
-            // Determines if Owner or Manager
+            ///////////////////////////////
+            ///        Ownership        ///
+            ///////////////////////////////
+
             let owner = false
             let manager = false
+            let newShift = false
+
+
             if (role == "OWNER"){
                 owner = checkOwnerAuth(token)
             }
@@ -29,74 +35,122 @@ export default {
                 throw new Error("No owner or manager with the give crudentials found")
             }
 
-            console.log(date)
 
-            const foundShift = db.shift.findUnique({
-                where: {
-                    date: date
+            ///////////////////////////////
+            ///     Update or Create    ///
+            ///////////////////////////////
+            let foundShift = null
+
+            const findShift = async (date) => {
+                return await db.shift.findUnique({
+                    where: {
+                        date: date
+                    }
+                })
+            }
+
+            findShift(date).then( resolved => {
+                const foundShift = resolved
+                return foundShift
+            }).then( (foundShift) => {
+                // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
+                if (foundShift != null){
+                    try{
+                        return db.shift.update({
+                            where: {
+                                id: foundShift.id
+                            },
+                            data: {
+                                allDevices: allDevices,
+                                date: date
+                            }
+                        })
+                        
+                    } catch (error){
+                        console.log("Error UPDATING the SHIFT")
+                        console.log(error)
+                        throw new Error(error)
+                    }
                 }
+
+                 // IF TTHERE IS NOT AN EXISTING SHIFT ON THE GIVEN DATE
+                else {
+                    try{
+                        return db.shift.create({
+                            data: {
+                                allDevices: allDevices,
+                                date: date
+                            }
+                        })
+                        
+                    } catch (error){
+                        console.log("Error CREATING the SHIFT")
+                        console.log(error)
+                        throw new Error(error)
+                    }
+                }
+            }).then( resolved => {
+                newShift = resolved
+                console.log(newShift.allDevices)
             })
 
-            console.log(foundShift.id)
+        
 
-            if (foundShift.id){
-                try{
-                    let newShift = db.shift.update({
-                        where: {
-                            id: foundShift.id
-                        },
-                        data: {
-                            allDevices: allDevices,
-                            date: date
-                        }
-                    })
-                    
-                } catch (error){
-                    console.log("Error UPDATING the SHIFT")
-                    console.log(error)
-                    throw new Error(error)
-                }
+            ///////////////////////////////
+            ///    Update User Shifts   ///
+            ///////////////////////////////
+
+            // Query to find individual driver mmodel associated with the shift information
+            const findDriver = (driverId) => {
+                return db.driver.findUnique({            
+                    where: {                                      
+                        id: driverId         
+                    }                                               
+                })
             }
-            else {
-                try{
-                    await db.shift.create({
-                        data: {
-                            allDevices: allDevices,
-                            date: date
-                        }
-                    })
-                    
-                } catch (error){
-                    console.log("Error CREATING the SHIFT")
-                    console.log(error)
-                    throw new Error(error)
-                }
-            }
-            allDevices.forEach( async (deviceObj) => {
-                for (let i = 0; i < deviceObj.amount; i++){
-                    let thisDriver = db.driver.findUnique({
-                        where: {
-                            id: deviceObj[i].id
-                        }
-                    })
-                    let allDriverShifts = thisDriver.shifts
-                    let newShifts = allDriverShifts.filter( shift => {
-                        if (shift.date != date){
-                            return shift
-                        }
-                    })
-                    newShifts = [...newShifts, {
-                        date: date,
-                        [deviceObj.name]: `${deviceObj.name}${i}`
-                    }]
-                    await db.driver.update({
-                        where: {
-                            id: thisDriver.id
-                        },
-                        data: {
-                            shifts: newShifts
-                        }
-                    })
+        
+            allDevices.forEach( async (deviceObj) => {                 
+                for (let i = 0; i < deviceObj.amount; i++){         
+                    if (deviceObj[i].name != 'No Driver Assigned'){
+                        findDriver(deviceObj[i].id).then( resolved => {
+                            return {shifts: resolved.shifts, deviceObj: deviceObj[i], date: date, i: i}
+                        }).then( resolvedObj => {
+                            let newShifts
+                            if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
+                                // console.log("This should be a single dropdown for a device")
+                                // console.log(resolvedObj.deviceObj)
+                                newShifts = [{
+                                    date: resolvedObj.date,
+                                    [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
+                                }]
+                            }
+                            else {
+                                // console.log("This should be a single dropdown for a device")
+                                // console.log(resolvedObj.deviceObj)
+                                newShifts = resolvedObj.shifts.filter( shift => {
+                                    if (shift.date != resolvedObj.date){
+                                        return shift
+                                    }
+                                })
+                                newShifts = [...newShifts, {
+                                    date: resolvedObj.date,
+                                    [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
+                                }]
+                            }
+                            return {shifts: newShifts, deviceObj: deviceObj[i], date: resolvedObj.date} 
+                        }).then( resolved => {
+                            // console.log("This should be an object with all the return information")
+                            // console.log(resolved)
+                            return db.driver.update({
+                                where: {
+                                    id: resolved.deviceObj.id
+                                },
+                                data: {
+                                    shifts: resolved.newShifts
+                                }
+                            })
+                        })                      
+                    }
                 }
             })
 

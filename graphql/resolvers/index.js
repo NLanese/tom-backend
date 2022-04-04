@@ -12,7 +12,7 @@ import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
 import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
 import shiftPlannerDatesResolvers from './shiftPlannerDates/shiftPlannerDatesResolvers.js';
-import shiftReolvers from './shift/shiftReolvers.js';
+import shiftResolvers from './shift/shiftReolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -29,6 +29,7 @@ export default {
         ...messagesResolvers.Query,
         ...accidentResolvers.Query,
         ...shiftPlannerDatesResolvers.Query,
+        ...shiftResolvers.Query,
 
         ...scorecardResolvers.Query,
         ...additionalResolvers.Query
@@ -44,7 +45,7 @@ export default {
         ...messagesResolvers.Mutation,
         ...accidentResolvers.Mutation,
         ...shiftPlannerDatesResolvers.Mutation,
-        ...shiftReolvers.Mutation,
+        ...shiftResolvers.Mutation,
 
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation
