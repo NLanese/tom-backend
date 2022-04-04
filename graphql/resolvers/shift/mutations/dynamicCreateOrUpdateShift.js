@@ -91,6 +91,7 @@ export default {
                 }
             }).then( resolved => {
                 newShift = resolved
+                console.log(newShift.allDevices)
             })
 
         
@@ -116,16 +117,16 @@ export default {
                         }).then( resolvedObj => {
                             let newShifts
                             if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
-                                console.log("This should be a single dropdown for a device")
-                                console.log(resolvedObj.deviceObj)
+                                // console.log("This should be a single dropdown for a device")
+                                // console.log(resolvedObj.deviceObj)
                                 newShifts = [{
                                     date: resolvedObj.date,
                                     [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
                                 }]
                             }
                             else {
-                                console.log("This should be a single dropdown for a device")
-                                console.log(resolvedObj.deviceObj)
+                                // console.log("This should be a single dropdown for a device")
+                                // console.log(resolvedObj.deviceObj)
                                 newShifts = resolvedObj.shifts.filter( shift => {
                                     if (shift.date != resolvedObj.date){
                                         return shift
@@ -138,8 +139,8 @@ export default {
                             }
                             return {shifts: newShifts, deviceObj: deviceObj[i], date: resolvedObj.date} 
                         }).then( resolved => {
-                            console.log("This should be an object with all the return information")
-                            console.log(resolved)
+                            // console.log("This should be an object with all the return information")
+                            // console.log(resolved)
                             return db.driver.update({
                                 where: {
                                     id: resolved.deviceObj.id
@@ -150,14 +151,6 @@ export default {
                             })
                         })                      
                     }
-
-                                      
-                    
-
-                   
-                    
-                    
-                    
                 }
             })
 

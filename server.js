@@ -99,7 +99,7 @@ const startApolloServer = async () => {
         path: '/graphql',
         cors: false,
         bodyParserConfig: {
-            limit: '100mb'
+            limit: '900mb'
         }
     });
     await app.listen(process.env.PORT, () => console.log(`Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`));

@@ -101,6 +101,7 @@ const typeDefs = gql`
     password:                     String
     phoneNumber:                  String
     profilePick:                  String
+    shifts:                       [JSON]
 
     transporterId:                String
     muted:                        Boolean
