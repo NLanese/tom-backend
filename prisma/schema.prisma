@@ -170,6 +170,7 @@ model Dsp {
   // RELATIONSHIPS
   managers Manager[]
   drivers  Driver[]
+  shifts Shift[]
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   shiftPlannerDates ShiftPlannerDates?
@@ -298,6 +299,8 @@ model Shift {
   id          String  @id @unique @default(uuid())
   date        String  @unique
   allDevices  Json[]
+  dspId       String
+  dsp         Dsp     @relation(fields: [dspId], references: [id])
 }
 
 model Chatroom {

@@ -9,6 +9,7 @@ export default {
             role,
             date,
             allDevices,
+            dspId
         }, context) => {
 
             ///////////////////////////////
@@ -79,7 +80,12 @@ export default {
                         return db.shift.create({
                             data: {
                                 allDevices: allDevices,
-                                date: date
+                                date: date,
+                                connect: {
+                                    dsp: {
+                                        id: dspId
+                                    }
+                                }
                             }
                         })
                         
@@ -91,7 +97,6 @@ export default {
                 }
             }).then( resolved => {
                 newShift = resolved
-                console.log(newShift.allDevices)
             })
 
         
@@ -154,7 +159,17 @@ export default {
                 }
             })
 
-            return newShift
+
+            ///////////////////////////////
+            ///    Returns the Shift    ///
+            ///////////////////////////////
+
+            return findShift(date).then( resolved => {
+                console.log(resolved)
+                return resolved
+            }).then( resolved => {
+                return resolved
+            })
         }
     }
 }

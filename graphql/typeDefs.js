@@ -217,6 +217,8 @@ const typeDefs = gql`
     id:                           ID
     date:                         String
     allDevices:                   [JSON]
+    dspId:                        String
+    dsp:                          Dsp
   }
 
 
