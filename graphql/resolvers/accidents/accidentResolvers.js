@@ -29,6 +29,7 @@ import dynamicUpdateInjuryAccident from "./dynamic/mutations/updators/dynamicUpd
 // DYNAMIC QUERIES
 import dynamicGetAccidentById from "./dynamic/queries/dynamicGetAccidentById.js";
 import dynamicGetAccidentsByDriverId from "./dynamic/queries/dynamicGetAccidentsByDriverId.js";
+import dynamicGetAllAccidents from "./dynamic/queries/dynamicGetAllAccidents.js";
 
 export default {
     Query: {
@@ -37,7 +38,8 @@ export default {
 
         // DYNAMIC QUERIES
         ...dynamicGetAccidentById.Query,
-        ...dynamicGetAccidentsByDriverId.Query
+        ...dynamicGetAccidentsByDriverId.Query,
+        ...dynamicGetAllAccidents.Query
     },
     Mutation: {
         // DRIVER MUTATIONS
