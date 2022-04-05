@@ -12,6 +12,10 @@ export default {
         let owner = false
         let driver = false
         let manager = false
+
+
+        console.log("Hit1")
+
         if (role){
             if (role == "OWNER"){
                 owner = checkOwnerAuth(token)
@@ -23,10 +27,31 @@ export default {
                 driver = checkDriverAuth(context)
             }
         }
-        return await db.shift.findUnique({
+
+        console.log("Hit2")
+
+        const foundShift = db.shift.findUnique({
             where: {
-                date: date
+                data: date
             }
         })
+
+
+        if (foundShift != null){
+            console.log({
+                id: foundShift.id,
+                date: foundShift.date,
+                allDevices: foundShift.allDevices
+            })
+            return {
+                id: foundShift.id,
+                date: foundShift.date,
+                allDevices: foundShift.allDevices
+            }
+            // return foundShift
+        }
+        else{
+            throw new Error("no shift of that date found!")
+        }
     }
 }
