@@ -558,7 +558,7 @@ const typeDefs = gql`
     ###################################
 
     #### DYNAMIC SHIFT MUTATIONS ####
-    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDevices: [JSON]): Shift
+    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDevices: [JSON], dspId: String): Shift
     #################################
 
     #### DSP MUTATIONS ####

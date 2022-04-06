@@ -14,9 +14,7 @@ export default {
             let driver = false
             let manager = false
     
-    
-            console.log("Hit1")
-    
+        
             if (role){
                 if (role == "OWNER"){
                     owner = checkOwnerAuth(token)
@@ -29,31 +27,38 @@ export default {
                 }
             }
     
-            console.log("Hit2")
+            const findShift = async (date) => {
+                console.log("In mutation function")
+                try {
+                    const foundShift = await db.shift.findUnique({
+                        where: {
+                            date: date
+                        }
+                    })
+                } catch (error){
+                    console.log(error)
+                    throw new Error(error)
+                }
+                return foundShift
+            }
     
-            const foundShift = db.shift.findUnique({
-                where: {
-                    data: date
+            const foundShift = findShift(date).then( resolved => {
+                console.log(resolved)
+                if (resolved.id != 'undefined'){
+                    console.log({
+                        id: resolved.id,
+                        date: resolved.date,
+                        allDevices: resolved.allDevices
+                    })
+                    return foundShift
+                }
+                else{
+                    throw new Error("no shift of that date found!")
                 }
             })
     
-    
-            if (foundShift != null){
-                console.log({
-                    id: foundShift.id,
-                    date: foundShift.date,
-                    allDevices: foundShift.allDevices
-                })
-                return {
-                    id: foundShift.id,
-                    date: foundShift.date,
-                    allDevices: foundShift.allDevices
-                }
-                // return foundShift
-            }
-            else{
-                throw new Error("no shift of that date found!")
-            }
+            console.log(foundShift)
+
         }
     }
 }
