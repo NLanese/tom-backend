@@ -23,9 +23,9 @@ export default {
                     driver = checkDriverAuth(context)
                 }
             }
-            return db.shift.findUnique({
+            return db.shift.findMany({
                 where: {
-                    id 
+                    id
                 }
             })
         }

@@ -26,39 +26,29 @@ export default {
                     driver = checkDriverAuth(context)
                 }
             }
-    
-            const findShift = async (date) => {
-                console.log("In mutation function")
-                try {
-                    const foundShift = await db.shift.findUnique({
-                        where: {
-                            date: date
-                        }
-                    })
-                } catch (error){
-                    console.log(error)
-                    throw new Error(error)
-                }
-                return foundShift
-            }
-    
-            const foundShift = findShift(date).then( resolved => {
-                console.log(resolved)
-                if (resolved.id != 'undefined'){
-                    console.log({
-                        id: resolved.id,
-                        date: resolved.date,
-                        allDevices: resolved.allDevices
-                    })
-                    return foundShift
-                }
-                else{
-                    throw new Error("no shift of that date found!")
+
+            const foundShift = await db.shift.findUnique({
+                where: {
+                    date: date
                 }
             })
-    
-            console.log(foundShift)
 
+            if (!foundShift){
+                throw new Error("Shift does not exist, BRO")
+            }
+    
+            try {
+                return await db.shift.findUnique({
+                        where: {
+                            id: foundShift.id
+                        }
+                    })
+                }
+            catch (error){
+                console.log(error)
+                throw new Error(error)
+            }
+            
         }
     }
 }
