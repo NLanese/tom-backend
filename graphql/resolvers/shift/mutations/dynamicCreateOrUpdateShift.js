@@ -56,6 +56,7 @@ export default {
             }).then( (foundShift) => {
                 // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
                 if (foundShift != null){
+                    console.log("Exisitng  Shift")
                     try{
                         return db.shift.update({
                             where: {
@@ -76,13 +77,14 @@ export default {
 
                  // IF TTHERE IS NOT AN EXISTING SHIFT ON THE GIVEN DATE
                 else {
+                    console.log("No existing shift")
                     try{
                         return db.shift.create({
                             data: {
                                 allDevices: allDevices,
                                 date: date,
-                                connect: {
-                                    dsp: {
+                                dsp: {
+                                    connect: {
                                         id: dspId
                                     }
                                 }
