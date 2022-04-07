@@ -124,16 +124,12 @@ export default {
                         }).then( resolvedObj => {
                             let newShifts
                             if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
-                                // console.log("This should be a single dropdown for a device")
-                                // console.log(resolvedObj.deviceObj)
                                 newShifts = [{
                                     date: resolvedObj.date,
                                     [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
                                 }]
                             }
                             else {
-                                // console.log("This should be a single dropdown for a device")
-                                // console.log(resolvedObj.deviceObj)
                                 newShifts = resolvedObj.shifts.filter( shift => {
                                     if (shift.date != resolvedObj.date){
                                         return shift
