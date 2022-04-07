@@ -145,17 +145,21 @@ export default {
                                 }]
                             }
                             return {shifts: newShifts, deviceObj: deviceObj[i], date: resolvedObj.date} 
-                        }).then( resolved => {
+                        }).then( async (resolved) => {
                             // console.log("This should be an object with all the return information")
-                            // console.log(resolved)
-                            return db.driver.update({
+                            console.log(resolved)
+                            const driver = await db.driver.update({
                                 where: {
                                     id: resolved.deviceObj.id
                                 },
                                 data: {
-                                    shifts: resolved.newShifts
+                                    shifts: resolved.shifts
                                 }
                             })
+                            return {mutationObj: resolved, driver: driver}
+                        }).then((Obj) => {
+                            console.log(Obj.mutationObj.shifts)
+                            console.log(Obj)
                         })                      
                     }
                 }
