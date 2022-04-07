@@ -34,7 +34,7 @@ export default {
             })
 
             if (!foundShift){
-                throw new Error("Shift does not exist, BRO")
+                return ({id: "There is no shift on this date"})
             }
     
             try {

@@ -82,7 +82,8 @@ export default {
                         smallCardLimits: smallCardLimits,
                         feedbackNotifications: feedbackNotifications,
                         autoSend: autoSend,
-                        allDevices: allDevices
+                        allDevices: allDevices,
+                        shifts: []
                     }
                 })
 
