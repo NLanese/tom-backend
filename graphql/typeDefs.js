@@ -594,9 +594,10 @@ const typeDefs = gql`
 
     managerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
 
-    # SCORECARD TOOL MUTATIONS
-    scorecardToolCreateDriverAccounts(token: String, email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!): Driver
+    #### SCORECARD TOOL MUTATIONS ####
+    scorecardToolCreateDriverAccounts(token: String, email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String! dspId: String): Driver
     scorecardToolCreateWeeklyReports(token: String, role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
+    ##################################
 
     # SHIFT PLANNER TOOL MUTATIONS
     dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner

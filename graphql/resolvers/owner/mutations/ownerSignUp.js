@@ -64,10 +64,6 @@ export default {
                 const token = await generateOwnerToken(newOwner.id)
                 const ownerId = newOwner.id
 
-                req.session = {
-                    token: `Bearer ${token}`
-                }
-
                 // return await {
                 //     ...newOwner,
                 //     token: token
