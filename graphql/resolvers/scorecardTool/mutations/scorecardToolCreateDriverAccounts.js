@@ -12,6 +12,7 @@ export default {
     Mutation: {
         scorecardToolCreateDriverAccounts: async (_, {
             token,
+            dspId,
             email,
             firstname,
             lastname,
@@ -34,12 +35,31 @@ export default {
             }
 
             console.log("Hit 2")
+            let findDriver = async (tId, dspId) => {
+                return await db.driver.findMany({
+                    where: {
+                        transporterId: transporterId,
+                        dspId: dspId
+                    }
+                })
+            }
 
-            const foundDriver = await db.driver.findUnique({
-                where: {
-                    transporterId
-                }
-            })
+            let foundDriver
+            try {
+                findDriver(transporterId, dspId).then( resolved => {
+                    console.log(resolved)
+                    if (resolved == []){
+                        foundDriver = null
+                    }
+                    else{
+                        foundDriver = resolved[0]
+                    }
+                })
+            } catch (error){
+                console.log(error)
+                throw new Error(error)
+            }
+            
 
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
@@ -51,7 +71,6 @@ export default {
             
             console.log("Hit3")
             console.log(owner)
-            console.log(manager)
             console.log(foundDriver)
 
             if (manager && !foundDriver) {
@@ -107,7 +126,7 @@ export default {
                                 },
                                 dsp: {
                                     connect: {
-                                        id: foundOwner.dsp.id
+                                        id: dspId
                                     }
                                 },
                                 email: email,
@@ -250,7 +269,7 @@ export default {
             
             if (owner && !foundDriver) {
                 console.log("Hit4")
-                conosle.log(owner)
+                console.log(owner)
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: owner.id
