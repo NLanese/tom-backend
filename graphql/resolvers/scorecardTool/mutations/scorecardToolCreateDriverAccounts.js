@@ -23,6 +23,7 @@ export default {
             let owner;
             let manager;
 
+            console.log("hit begin of driver creation")
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -31,6 +32,8 @@ export default {
             if (role === 'MANAGER') {
                 manager = await checkManagerAuth(token)
             }
+
+            console.log("Hit 2")
 
             const foundDriver = await db.driver.findUnique({
                 where: {
@@ -46,6 +49,10 @@ export default {
             const hash = await bcrypt.hash(password, salt);
             password = hash;
             
+            console.log("Hit3")
+            console.log(owner)
+            console.log(manager)
+            console.log(foundDriver)
 
             if (manager && !foundDriver) {
                 const foundManager = await db.manager.findUnique({
@@ -242,6 +249,8 @@ export default {
             }
             
             if (owner && !foundDriver) {
+                console.log("Hit4")
+                conosle.log(owner)
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: owner.id

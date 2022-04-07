@@ -169,8 +169,8 @@ model Dsp {
 
   // RELATIONSHIPS
   managers Manager[]
-  drivers  Driver[]
-  shifts Shift[]
+  drivers  Driver[]     
+  shifts Shift[]     
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   shiftPlannerDates ShiftPlannerDates?
