@@ -83,7 +83,6 @@ export default {
                         feedbackNotifications: feedbackNotifications,
                         autoSend: autoSend,
                         allDevices: allDevices,
-                        shifts: []
                     }
                 })
 
@@ -231,6 +230,7 @@ export default {
 
                 return newDsp
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
