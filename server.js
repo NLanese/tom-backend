@@ -46,9 +46,8 @@ const startApolloServer = async () => {
     ]
 
     app.use(cors({
-        origin:'http://localhost:3000', 
-        credentials:true,            //access-control-allow-credentials:true
-        optionSuccessStatus:200
+        /* credentials: true, */
+        origin: "*"
     }));
     app.use(express.json({ limit: '1000kb' }))
     app.use(express.urlencoded({

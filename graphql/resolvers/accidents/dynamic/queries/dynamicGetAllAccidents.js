@@ -11,6 +11,7 @@ export default {
             let owner;
             let manager;
 
+            
             // DYNAMIC AUTHORIZATION CHECK
             if (role === 'OWNER') owner = await checkOwnerAuth(token)
             if (role === 'MANAGER') manager = await checkManagerAuth(token)
