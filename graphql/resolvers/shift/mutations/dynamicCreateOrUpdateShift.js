@@ -119,24 +119,39 @@ export default {
             allDevices.forEach( async (deviceObj) => {                 
                 for (let i = 0; i < deviceObj.amount; i++){         
                     if (deviceObj[i].name != 'No Driver Assigned'){
+
+                        // Finds the driver who has the same Id as the one assigned the current Device
                         findDriver(deviceObj[i].id).then( resolved => {
                             return {shifts: resolved.shifts, deviceObj: deviceObj[i], date: date, i: i}
                         }).then( resolvedObj => {
+                            // Creates a new empty array to mimic the existing one. This allows us to make changes to an otherwise read-only
                             let newShifts
+
+                            // If there are no shifts with this date
                             if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
+                                // Set the new object
                                 newShifts = [{
                                     date: resolvedObj.date,
-                                    [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
+                                    [resolvedObj.deviceObj.type]:  `${resolvedObj.deviceObj.type}${resolvedObj.i}`
                                 }]
                             }
+
+                            // If there is a shift with this date
                             else {
                                 newShifts = resolvedObj.shifts.filter( shift => {
                                     if (shift.date != resolvedObj.date){
                                         return shift
                                     }
                                 })
+
+                                // Finds the shift that exists, grabs any other devices present
+                                let oldSpecificShift = resolvedObj.shifts.find( shift => {
+                                    shift.date == resolvedObj.date
+                                })
+
+                                // New shift takes the old shifts devices, and adds a new property for the new device
                                 newShifts = [...newShifts, {
-                                    date: resolvedObj.date,
+                                    ...oldSpecificShift,
                                     [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`
                                 }]
                             }

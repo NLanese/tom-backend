@@ -38,7 +38,7 @@ export default {
             let findDriver = async (tId, dspId) => {
                 return await db.driver.findMany({
                     where: {
-                        transporterId: transporterId,
+                        transporterId: tId,
                         dspId: dspId
                     }
                 })
