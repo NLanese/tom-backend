@@ -5,7 +5,7 @@ curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
 apt-get install -y nodejs
 
 #create our working directory if it doesnt exist
-DIR="/home/ubuntu/tom-admin-portal"
+DIR="/home/ubuntu/tom-backend"
 if [ -d "$DIR" ]; then
   echo "${DIR} exists"
 else
