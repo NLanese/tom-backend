@@ -50,6 +50,7 @@ const startApolloServer = async () => {
       /* credentials: true, */
       origin: "*",
     })
+  )
 
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
