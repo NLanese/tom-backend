@@ -24,7 +24,15 @@ export default {
             let owner;
             let manager;
 
-            console.log("hit begin of driver creation")
+            console.log("\nhit begin of driver creation")
+
+///////////////////////////////////
+///                             ///
+///      CHECKS VALIDITY        ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nChecking Validity")
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -34,9 +42,18 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            console.log("Hit 2")
+
+///////////////////////////////////
+///                             ///
+///   ATTEMPT TO FIND DRIVER    ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nFinding or creating driver")
+            console.log(transporterId)
+
             let findDriver = async (tId, dspId) => {
-                return await db.driver.findMany({
+                return await db.driver.findFirst({
                     where: {
                         transporterId: tId,
                         dspId: dspId
@@ -47,19 +64,20 @@ export default {
             let foundDriver
             try {
                 findDriver(transporterId, dspId).then( resolved => {
-                    console.log(resolved)
-                    if (resolved == []){
-                        foundDriver = null
-                    }
-                    else{
-                        foundDriver = resolved[0]
-                    }
+                   foundDriver = resolved
                 })
             } catch (error){
                 console.log(error)
                 throw new Error(error)
             }
             
+///////////////////////////////////
+///                             ///
+///      UPDATE OR CREATE       ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nBeginning Update or Create Process")
 
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
@@ -68,12 +86,11 @@ export default {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
             password = hash;
-            
-            console.log("Hit3")
-            console.log(owner)
-            console.log(foundDriver)
-
+        
+            // If a manager used the scorecard tool instead of an owner
             if (manager && !foundDriver) {
+                console.log("No found driver")
+                // Finds the manager
                 const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
@@ -83,10 +100,12 @@ export default {
                     }
                 })
 
+                // error handling
                 if (!foundManager) {
                     throw new Error('Manager does not exist')
                 }
 
+                // finds the Owner by using the Manager as a relational bridge 
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: foundManager.owner.id
@@ -98,6 +117,7 @@ export default {
                     }
                 })
 
+                // error handling
                 if (!foundOwner) {
                     throw new Error('Owner does not exist')
                 }
@@ -116,6 +136,7 @@ export default {
                         throw new Error('Owner does not exist')
                     }
  
+                    // Checks to make sure a DSP exists first, if so, conncts the driver to it
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -139,6 +160,13 @@ export default {
                         })
                     }
 
+                    ///////////////////////////////////
+                    ///                             ///
+                    ///       CONNECT TO DSP        ///
+                    ///                             ///
+                    ///////////////////////////////////
+
+                    // If there is no DSP
                     if (!foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -157,10 +185,12 @@ export default {
                         })
                     }
 
+                    // If the Driver failed to create
                     if (!newDriver) {
                         throw new Error('Error creating new driver')
                     }
 
+                    // Adds the driver to each of the managers
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -170,6 +200,7 @@ export default {
                             }
                         })
 
+                        // Adds the manager to the driver
                         if (foundManager) {
                             await db.driver.update({
                                 where: {
@@ -186,6 +217,13 @@ export default {
                         }
                     })
 
+
+                    ///////////////////////////////////
+                    ///                             ///
+                    ///    CONNECT TO CHATROOMS     ///
+                    ///                             ///
+                    ///////////////////////////////////
+
                     // Create driver/management chatroom
                     const newChatroom = await db.chatroom.create({
                         data: {
@@ -200,6 +238,7 @@ export default {
                         }
                     })
 
+                    // If there was an error
                     if (!newChatroom) {
                         throw new Error('Error creating chatroom')
                     }
@@ -245,6 +284,7 @@ export default {
     
                             const guestDspArray = await foundChatroom.guests
     
+                            // Adds Drivers to the chat room
                             await db.chatroom.update({
                                 where: {
                                     id: chatroom.id
@@ -267,9 +307,10 @@ export default {
                 }
             }
             
+            // If a Owner used the scorecard tool
             if (owner && !foundDriver) {
-                console.log("Hit4")
-                console.log(owner)
+                console.log("\nNo found driver")
+                // Finds the owner makes a variable
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: owner.id
@@ -281,9 +322,11 @@ export default {
                     }
                 })
 
+                // if error
                 if (!foundOwner) {
-                    throw new Error('Owner does not exist')
+                    throw new Error('\nOwner does not exist')
                 }
+
 
                 try {
                     let newDriver
@@ -296,9 +339,10 @@ export default {
                     })
 
                     if (!justOwnerRecord) {
-                        throw new Error('Owner does not exist')
+                        throw new Error('\nOwner does not exist')
                     }
 
+                    // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -317,7 +361,8 @@ export default {
                                 firstname: firstname,
                                 lastname: lastname,
                                 phoneNumber: phoneNumber,
-                                transporterId: transporterId
+                                transporterId: transporterId,
+                                profilePick: "Default"
                             }
                         })
                     }
@@ -335,15 +380,21 @@ export default {
                                 firstname: firstname,
                                 lastname: lastname,
                                 phoneNumber: phoneNumber,
-                                transporterId: transporterId
+                                transporterId: transporterId,
+                                profilePick: "Default"
                             }
                         })
                     }
 
+                    console.log("\nNEW DRIVER:")
+                    console.log(newDriver)
+
+                    // If error on creatiob
                     if (!newDriver) {
                         throw new Error('Error creating driver')
                     }
 
+                    // Connects to all managers
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -451,6 +502,7 @@ export default {
             }
 
             if (foundDriver) {
+                console.log("\nfound driver")
                 try {
                     return await foundDriver
                 } catch (error) {

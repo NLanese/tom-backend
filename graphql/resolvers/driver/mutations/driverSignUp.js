@@ -85,7 +85,8 @@ export default {
                             password: password,
                             firstname: firstname,
                             lastname: lastname,
-                            phoneNumber: phoneNumber
+                            phoneNumber: phoneNumber,
+                            profilePick: "Default"
                         }
                     })
                 }
@@ -102,7 +103,8 @@ export default {
                             password: password,
                             firstname: firstname,
                             lastname: lastname,
-                            phoneNumber: phoneNumber
+                            phoneNumber: phoneNumber,
+                            profilePick: "Default"
                         }
                     })
                 }

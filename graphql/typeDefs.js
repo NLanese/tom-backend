@@ -162,6 +162,7 @@ const typeDefs = gql`
     drivers:                      [Driver]
     shifts:                       [Shift]
     shiftPlannerDates:            ShiftPlannerDates
+    weeklyReports:                [WeeklyReport]
   }
 
 
@@ -264,6 +265,8 @@ const typeDefs = gql`
     productivity:                 JSON
 
     driver:                       Driver
+    dsp:                          Dsp
+    dspId:                        String
   }
 
 ###########################
@@ -597,7 +600,7 @@ const typeDefs = gql`
 
     #### SCORECARD TOOL MUTATIONS ####
     scorecardToolCreateDriverAccounts(token: String, email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!, dspId: String): Driver
-    scorecardToolCreateWeeklyReports(token: String, role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
+    scorecardToolCreateWeeklyReports(token: String, dspId: String, role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
     ##################################
 
     # SHIFT PLANNER TOOL MUTATIONS

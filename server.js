@@ -83,11 +83,8 @@ const startApolloServer = async () => {
     }));
 
 
-    app.use(express.json({ limit: '1000kb' }))
-    app.use(express.urlencoded({
-        extended: true,
-        limit: '1000kb'
-    }));
+    app.use(express.json({limit: '1000kb'}));
+    app.use(express.urlencoded({limit: '1000kb'}));
 
     // When hitting the backend domain only, you will get a welcome message to show that the backend is working
     app.get('/', (req, res) => {
@@ -143,7 +140,7 @@ const startApolloServer = async () => {
         path: '/graphql',
         cors: false,
         bodyParserConfig: {
-            limit: '700kb'
+            limit: '1000kb'
         }
     });
   });
