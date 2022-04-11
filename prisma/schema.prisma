@@ -174,6 +174,7 @@ model Dsp {
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   shiftPlannerDates ShiftPlannerDates?
+  weeklyReports     WeeklyReport[]
 }
 
 // model VTO {
@@ -271,6 +272,8 @@ model WeeklyReport {
   // RELATIONSHIPS
   driverId String
   driver   Driver @relation(fields: [driverId], references: [id])
+  dspId    String
+  dsp      Dsp @relation(fields: [dspId], references: [id])
 }
 
 model WeeklySchedule {
