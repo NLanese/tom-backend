@@ -3,6 +3,7 @@
 #download node and npm
 curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install -y nodejs
+sudo npm i -g pm2@latest
 
 #create our working directory if it doesnt exist
 DIR="/home/ubuntu/tom-backend"
