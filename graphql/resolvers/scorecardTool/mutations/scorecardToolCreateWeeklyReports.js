@@ -6,6 +6,7 @@ export default {
     Mutation: {
         scorecardToolCreateWeeklyReports: async (_, {
             token,
+            dspId,
             role,
             transporterId,
             date,
@@ -42,9 +43,10 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            const foundDriver = await db.driver.findUnique({
+            const foundDriver = await db.driver.findFirst({
                 where: {
-                    transporterId
+                    transporterId: transporterId,
+                    dspId: dspId
                 }
             })
 
@@ -84,7 +86,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log("\n\n\n\nERROR creating weekly report. Here's why...")
                 console.log(error)
                 throw new Error(error)
             }
