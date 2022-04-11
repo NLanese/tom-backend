@@ -49,26 +49,33 @@ const startApolloServer = async () => {
         /* credentials: true, */
         origin: "*"
     }));
+
+
     app.use(express.json({ limit: '1000kb' }))
     app.use(express.urlencoded({
-        extended: true
+        extended: true,
+        limit: '1000kb'
     }));
 
+    // When hitting the backend domain only, you will get a welcome message to show that the backend is working
     app.get('/', (req, res) => {
         res.send('Welcome to SQL');
     });
 
+    // This would reset a specific driver's password
     app.get('/password/reset/:driverId', async (req, res) => {
         sendForgotPasswordEmail(req.params.driverId)
         res.send(200)
     })
 
+    // This is how image files will be recieved 
     app.get('/images/:key', async (req, res) => {
         const key = req.params.key
         const readStream = await getFileStream(key)
         readStream.pipe(res)
     })
 
+    // This is how image files get saved
     app.post('/images', upload.single('image'), async (req, res) => {
         const file = req.file
         const result = await uploadFile(file)
@@ -78,6 +85,7 @@ const startApolloServer = async () => {
         })
     })
 
+    // This is how the scorecard will be parsed via PDFTables
     app.post('/pdfparse', uploadStorage.single("file"), async (req, res) => {
         const file = req.file
         await pdfToExcel(file)
@@ -88,18 +96,22 @@ const startApolloServer = async () => {
         }, 10000)
     })
 
+    // This is how excel document
     app.post('/excelparse', uploadStorage.single("file"), async (req, res) => {
         const parseData = await parseExcel(req.file)
         await res.send(parseData)
     })
 
+    // starts the server
     await server.start()
+
+    // Applies the following middlewares to the newly spun up server
     await server.applyMiddleware({
         app,
         path: '/graphql',
         cors: false,
         bodyParserConfig: {
-            limit: '100kb'
+            limit: '700kb'
         }
     });
     await app.listen(process.env.PORT, () => console.log(`Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`));
