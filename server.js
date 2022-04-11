@@ -50,99 +50,35 @@ const startApolloServer = async () => {
       /* credentials: true, */
       origin: "*",
     })
-  )
-
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, "uploads/")
-        },
-        filename: (req, file, cb) => {
-          cb(null, Date.now() + "-" + file.originalname)
-        },
-      })
-    const uploadStorage = multer({ storage: storage })
-
-    const unlinkFile = util.promisify(fs.unlink)
-
-    const server = new ApolloServer({
-        typeDefs,
-        resolvers,
-        context: ({ req }) => ({ req })
+  );
+  app.use(express.json({ limit: "1000kb" }));
+  app.use(
+    express.urlencoded({
+      extended: true,
     })
+  );
 
-    const whitelist = [
-        "http://localhost:3000",
-        "http://localhost:5001/graphql",
-        "https://studio.apollographql.com",
-        "http://localhost:8000",
-        "http://localhost:8080"
-    ]
+  app.get("/", (req, res) => {
+    res.send("Welcome to SQL");
+  });
 
-    app.use(cors({
-        /* credentials: true, */
-        origin: "*"
-    }));
+  app.get("/password/reset/:driverId", async (req, res) => {
+    sendForgotPasswordEmail(req.params.driverId);
+    res.send(200);
+  });
 
+  app.get("/images/:key", async (req, res) => {
+    const key = req.params.key;
+    const readStream = await getFileStream(key);
+    readStream.pipe(res);
+  });
 
-    app.use(express.json({limit: '1000kb'}));
-    app.use(express.urlencoded({limit: '1000kb'}));
-
-    // When hitting the backend domain only, you will get a welcome message to show that the backend is working
-    app.get('/', (req, res) => {
-        res.send('Welcome to SQL');
-    });
-
-    // This would reset a specific driver's password
-    app.get('/password/reset/:driverId', async (req, res) => {
-        sendForgotPasswordEmail(req.params.driverId)
-        res.send(200)
-    })
-
-    // This is how image files will be recieved 
-    app.get('/images/:key', async (req, res) => {
-        const key = req.params.key
-        const readStream = await getFileStream(key)
-        readStream.pipe(res)
-    })
-
-    // This is how image files get saved
-    app.post('/images', upload.single('image'), async (req, res) => {
-        const file = req.file
-        const result = await uploadFile(file)
-        await unlinkFile(file.path)
-        res.send({
-            imagePath: `/images/${result.Key}`
-        })
-    })
-
-    // This is how the scorecard will be parsed via PDFTables
-    app.post('/pdfparse', uploadStorage.single("file"), async (req, res) => {
-        const file = req.file
-        await pdfToExcel(file)
-
-        setTimeout(async () => {
-            const parseData = await parseExcel(req.file)
-            await res.send(parseData)
-        }, 10000)
-    })
-
-    // This is how excel document
-    app.post('/excelparse', uploadStorage.single("file"), async (req, res) => {
-        const parseData = await parseExcel(req.file)
-        await res.send(parseData)
-    })
-
-    // starts the server
-    await server.start()
-
-    // Applies the following middlewares to the newly spun up server
-    await server.applyMiddleware({
-        app,
-        path: '/graphql',
-        cors: false,
-        bodyParserConfig: {
-            limit: '1000kb'
-        }
+  app.post("/images", upload.single("image"), async (req, res) => {
+    const file = req.file;
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+    res.send({
+      imagePath: `/images/${result.Key}`,
     });
   });
 
