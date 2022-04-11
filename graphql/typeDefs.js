@@ -525,6 +525,7 @@ const typeDefs = gql`
     driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver
     driverSignIn(email: String!, password: String!): Driver
     driverUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Driver
+    driverForgotPassword(email: String): Driver
     driverResetPassword(password: String!, token: String!): Driver
     ##########################
 
