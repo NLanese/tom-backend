@@ -4,7 +4,6 @@ import scorecardToolCreateWeeklyReports from "./mutations/scorecardToolCreateWee
 
 export default {
     Query: {
-
     },
     Mutation: {
         ...scorecardToolCreateDriverAccounts.Mutation,
