@@ -75,6 +75,7 @@ CREATE TABLE "Driver" (
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profilePick" JSONB,
+    "shifts" JSONB[],
     "transporterId" TEXT,
     "muted" BOOLEAN NOT NULL DEFAULT false,
     "locked" BOOLEAN NOT NULL DEFAULT false,
@@ -194,6 +195,7 @@ CREATE TABLE "WeeklyReport" (
     "attendance" JSONB,
     "productivity" JSONB,
     "driverId" TEXT NOT NULL,
+    "dspId" TEXT NOT NULL,
 
     CONSTRAINT "WeeklyReport_pkey" PRIMARY KEY ("id")
 );
@@ -216,6 +218,16 @@ CREATE TABLE "WeeklySchedule" (
     "driverId" TEXT NOT NULL,
 
     CONSTRAINT "WeeklySchedule_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Shift" (
+    "id" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
+    "allDevices" JSONB[],
+    "dspId" TEXT NOT NULL,
+
+    CONSTRAINT "Shift_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -397,9 +409,6 @@ CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
 CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Driver_transporterId_key" ON "Driver"("transporterId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Dsp_id_key" ON "Dsp"("id");
 
 -- CreateIndex
@@ -425,6 +434,12 @@ CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WeeklySchedule_id_key" ON "WeeklySchedule"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Shift_id_key" ON "Shift"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Shift_date_key" ON "Shift"("date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Chatroom_id_key" ON "Chatroom"("id");
@@ -490,6 +505,9 @@ ALTER TABLE "ShiftPlanner" ADD CONSTRAINT "ShiftPlanner_driverId_fkey" FOREIGN K
 ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -497,6 +515,9 @@ ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_managerId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "WeeklySchedule" ADD CONSTRAINT "WeeklySchedule_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Shift" ADD CONSTRAINT "Shift_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Chatroom" ADD CONSTRAINT "Chatroom_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;

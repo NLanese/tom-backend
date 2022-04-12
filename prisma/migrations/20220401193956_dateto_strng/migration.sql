@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Shift" ALTER COLUMN "date" SET DATA TYPE TEXT;
