@@ -45,13 +45,6 @@ const startApolloServer = async () => {
     "http://localhost:8080",
   ];
 
-
-  app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
   app.use(
     cors({
       /* credentials: true, */
@@ -66,7 +59,6 @@ const startApolloServer = async () => {
   );
 
   app.get("/", (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*')
     res.send("Welcome to SQL");
   });
 
