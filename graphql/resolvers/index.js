@@ -31,7 +31,6 @@ export default {
         ...shiftPlannerDatesResolvers.Query,
         ...shiftResolvers.Query,
 
-        ...scorecardResolvers.Query,
         ...additionalResolvers.Query
     },
     Mutation: {
