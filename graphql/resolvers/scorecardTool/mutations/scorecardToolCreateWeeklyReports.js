@@ -48,12 +48,9 @@ export default {
                     dspId: dspId
                 }
             })
-
-
-            throw new error(foundDriver.id)
             
 
-            if (!foundDriver) {
+            if (!foundDriver.id) {
                 throw new Error('Driver does not exist')
             }
 
