@@ -7,6 +7,7 @@ export default {
         scorecardToolCreateWeeklyReports: async (_, {
             token,
             role,
+            dspId,
             transporterId,
             date,
             feedbackStatus,
