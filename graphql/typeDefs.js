@@ -254,6 +254,7 @@ const typeDefs = gql`
     dnr:                          Int
     podOpps:                      Int
     ccOpps:                       Int
+    transporterId:                String
 
     netradyne:                    JSON
     deliveryAssociate:            JSON
