@@ -52,8 +52,8 @@ export default {
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
-            
-            throw new Error (foundDriver.dspId.name)
+
+            throw new Error (foundDriver.dsp.name)
 
             try {
                 return await db.weeklyReport.create({
