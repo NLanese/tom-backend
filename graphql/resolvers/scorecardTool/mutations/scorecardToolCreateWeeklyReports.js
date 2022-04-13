@@ -91,10 +91,10 @@ export default {
                         ccOpps: ccOpps
                     }
                 })
-                // .then( (resolved) => {
-                //     console.log(resolved)
-                //     return resolved
-                // })
+                .then( (resolved) => {
+                    console.log(resolved)
+                    throw new Error (resolved.driver)
+                })
             } catch (error) {
                 console.log("\n---------------\n Error in WeeklyReportCreation")
                 console.log(error)
