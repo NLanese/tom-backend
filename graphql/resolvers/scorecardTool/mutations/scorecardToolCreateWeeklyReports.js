@@ -56,7 +56,6 @@ export default {
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
-            throw new Error(foundDriver.id)
 
             console.log("\n-----------------------\n Found Driver in scoreCardToolCreateWeeklyReport")
             console.log(foundDriver)
@@ -91,9 +90,11 @@ export default {
                         podOpps: podOpps,
                         ccOpps: ccOpps
                     }
-                }).then( (resolved) => {
-                    console.log(resolved)
                 })
+                // .then( (resolved) => {
+                //     console.log(resolved)
+                //     return resolved
+                // })
             } catch (error) {
                 console.log("\n---------------\n Error in WeeklyReportCreation")
                 console.log(error)
