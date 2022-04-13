@@ -49,7 +49,9 @@ export default {
                 }
             })
             
-            throw new Error(foundDrivers)
+            const foundDriver = foundDrivers.find( driver => {
+                driver.transporterId == transporterId
+            })
 
             let driverId 
 
