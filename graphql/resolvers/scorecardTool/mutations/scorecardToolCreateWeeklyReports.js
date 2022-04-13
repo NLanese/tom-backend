@@ -34,6 +34,7 @@ export default {
             let owner;
             let manager;
 
+
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }
@@ -42,28 +43,25 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            let foundDrivers = await db.driver.findMany({
+            const foundDriver = await db.driver.findFirst({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
                 }
             })
-            
-            const foundDriver = await foundDrivers.find( driver => {
-                driver.transporterId == transporterId
-            })
 
-            let driverId 
-
-            if (!foundDriver.id) {
+            if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
-
-            driverId = foundDriver.id
 
             try {
                 return await db.weeklyReport.create({
                     data: {
+                        driver: {
+                            connect: {
+                                id: foundDriver.id
+                            }
+                        },
                         date: date,
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
@@ -84,16 +82,11 @@ export default {
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps: ccOpps,
-                        driverId: driverId,
-                        driver: {
-                            connect: {
-                                id: driverId
-                            }
-                        },
+                        ccOpps: ccOpps
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
             

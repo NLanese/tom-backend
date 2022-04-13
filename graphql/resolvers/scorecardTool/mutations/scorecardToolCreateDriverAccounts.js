@@ -342,11 +342,7 @@ export default {
                         throw new Error('\nOwner does not exist')
                     }
 
-                    ///////////////////////////////////
-                    ///                             ///
-                    ///       CONNECT TO DSP        ///
-                    ///                             ///
-                    ///////////////////////////////////
+                    // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -393,17 +389,13 @@ export default {
                     console.log("\nNEW DRIVER:")
                     console.log(newDriver)
 
-                    // If error on creation
+                    // If error on creatiob
                     if (!newDriver) {
                         throw new Error('Error creating driver')
                     }
 
-                    ///////////////////////////////////
-                    ///                             ///
-                    ///     CONNECT TO MANAGERS     ///
-                    ///                             ///
-                    ///////////////////////////////////
-                        foundOwner.managers.forEach( async (manager) => {
+                    // Connects to all managers
+                    foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
                         const foundManager = await db.manager.findUnique({
@@ -428,12 +420,7 @@ export default {
                         }
                     })
 
-                    ///////////////////////////////////
-                    ///                             ///
-                    ///    CONNECT TO CHATROOMS     ///
-                    ///                             ///
-                    ///////////////////////////////////
-
+                    // Create driver/management chatroom
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: [ newDriver, justOwnerRecord, ...guestArray ],
@@ -508,8 +495,6 @@ export default {
                         }
                     })
 
-                    console.log("\n------------------\n Completed creating a brand new driver")
-                    console.log(newDriver)
                     return await newDriver
                 } catch (error) {
                     throw new Error(error)
@@ -517,9 +502,8 @@ export default {
             }
 
             if (foundDriver) {
+                console.log("\nfound driver")
                 try {
-                    console.log("\n---------------\nFound an existing driver with the same TransID in this DSP")
-                    console.log(foundDriver)
                     return await foundDriver
                 } catch (error) {
                     throw new Error(error)

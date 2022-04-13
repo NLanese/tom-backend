@@ -254,7 +254,6 @@ const typeDefs = gql`
     dnr:                          Int
     podOpps:                      Int
     ccOpps:                       Int
-    transporterId:                String
 
     netradyne:                    JSON
     deliveryAssociate:            JSON
@@ -266,7 +265,6 @@ const typeDefs = gql`
     productivity:                 JSON
 
     driver:                       Driver
-    driverId:                     String
     dsp:                          Dsp
     dspId:                        String
   }
