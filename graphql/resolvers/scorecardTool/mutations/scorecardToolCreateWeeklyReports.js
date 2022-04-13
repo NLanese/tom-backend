@@ -49,7 +49,7 @@ export default {
                 }
             })
             
-            return foundDrivers
+            throw new Error(foundDrivers)
 
             let driverId 
 
