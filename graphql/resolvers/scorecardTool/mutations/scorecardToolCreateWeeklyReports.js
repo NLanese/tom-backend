@@ -34,8 +34,6 @@ export default {
             let owner;
             let manager;
 
-            console.log("Dude....... print")
-
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }
@@ -43,8 +41,6 @@ export default {
             if (role === 'MANAGER') {
                 manager = await checkManagerAuth(token)
             }
-
-            console.log("hit before finding driver in Create Weekly")
 
             const foundDriver = await db.driver.findFirst({
                 where: {
@@ -56,9 +52,8 @@ export default {
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
-
-            console.log("\n-----------------------\n Found Driver in scoreCardToolCreateWeeklyReport")
-            console.log(foundDriver)
+            
+            throw new Error (foundDriver.dspId.name)
 
             try {
                 return await db.weeklyReport.create({
