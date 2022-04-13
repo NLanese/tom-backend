@@ -50,6 +50,8 @@ export default {
             })
             
 
+            let driverId 
+
             if (!foundDriver.id) {
                 throw new Error('Driver does not exist')
             }
@@ -78,9 +80,10 @@ export default {
                         dnr: dnr,
                         podOpps: podOpps,
                         ccOpps: ccOpps,
+                        driverId: driverId,
                         driver: {
                             connect: {
-                                id: foundDriver.id
+                                id: driverId
                             }
                         },
                     }
