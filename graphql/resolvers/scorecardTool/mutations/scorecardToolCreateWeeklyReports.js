@@ -49,7 +49,7 @@ export default {
                 }
             })
             
-            const foundDriver = foundDrivers.find( driver => {
+            const foundDriver = await foundDrivers.find( driver => {
                 driver.transporterId == transporterId
             })
 
