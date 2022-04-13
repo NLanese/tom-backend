@@ -53,10 +53,8 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
-            throw new Error (foundDriver.dsp.name)
-
             try {
-                return await db.weeklyReport.create({
+                const weeklyReport =  await db.weeklyReport.create({
                     data: {
                         driver: {
                             connect: {
@@ -86,9 +84,14 @@ export default {
                         ccOpps: ccOpps
                     }
                 })
-                // .then( (resolved) => {
-                //     throw new Error (resolved)
-                // })
+                return await db.weeklyReport.findUnique({
+                    where: {
+                        id: weeklyReport.id
+                    },
+                    include: {
+                        driver: true
+                    }
+                })
             } catch (error) {
                 console.log("\n---------------\n Error in WeeklyReportCreation")
                 console.log(error)
