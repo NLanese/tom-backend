@@ -266,6 +266,7 @@ const typeDefs = gql`
     productivity:                 JSON
 
     driver:                       Driver
+    driverId:                     String
     dsp:                          Dsp
     dspId:                        String
   }
