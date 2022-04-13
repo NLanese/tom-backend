@@ -56,6 +56,7 @@ export default {
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
+            throw new Error(foundDriver)
 
             console.log("\n-----------------------\n Found Driver in scoreCardToolCreateWeeklyReport")
             console.log(foundDriver)
