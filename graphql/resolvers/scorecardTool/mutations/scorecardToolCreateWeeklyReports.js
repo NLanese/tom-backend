@@ -91,9 +91,9 @@ export default {
                         ccOpps: ccOpps
                     }
                 })
-                .then( (resolved) => {
-                    throw new Error (resolved)
-                })
+                // .then( (resolved) => {
+                //     throw new Error (resolved)
+                // })
             } catch (error) {
                 console.log("\n---------------\n Error in WeeklyReportCreation")
                 console.log(error)
