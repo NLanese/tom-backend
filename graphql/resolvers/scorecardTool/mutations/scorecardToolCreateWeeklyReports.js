@@ -52,11 +52,11 @@ export default {
 
             let driverId 
 
-            throw new Error(driverId)
-
             if (!foundDriver.id) {
                 throw new Error('Driver does not exist')
             }
+
+            return driverId
 
             try {
                 return await db.weeklyReport.create({
