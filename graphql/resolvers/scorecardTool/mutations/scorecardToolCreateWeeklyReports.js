@@ -57,7 +57,7 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
-            return driverId
+            // return driverId
 
             try {
                 return await db.weeklyReport.create({
