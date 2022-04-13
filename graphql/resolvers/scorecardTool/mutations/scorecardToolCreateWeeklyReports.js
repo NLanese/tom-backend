@@ -42,13 +42,14 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            let foundDriver = await db.driver.findFirst({
+            let foundDrivers = await db.driver.findMany({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
                 }
             })
             
+            return foundDrivers
 
             let driverId 
 
