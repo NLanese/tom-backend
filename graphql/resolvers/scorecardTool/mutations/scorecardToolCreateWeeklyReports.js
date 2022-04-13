@@ -92,8 +92,7 @@ export default {
                     }
                 })
                 .then( (resolved) => {
-                    console.log(resolved)
-                    throw new Error (resolved.driver)
+                    throw new Error (resolved)
                 })
             } catch (error) {
                 console.log("\n---------------\n Error in WeeklyReportCreation")
