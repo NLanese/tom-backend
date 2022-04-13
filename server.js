@@ -43,6 +43,7 @@ const startApolloServer = async () => {
     "https://studio.apollographql.com",
     "http://localhost:8000",
     "http://localhost:8080",
+    "http://3.135.223.59"
   ];
 
 
@@ -58,6 +59,7 @@ const startApolloServer = async () => {
       origin: "*",
     })
   );
+
   app.use(express.json({ limit: "1000kb" }));
   app.use(
     express.urlencoded({
