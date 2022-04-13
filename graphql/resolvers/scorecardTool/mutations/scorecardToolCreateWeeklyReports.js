@@ -42,21 +42,22 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            let foundDriver = await db.driver.findFirst({
+            let foundDrivers = await db.driver.findMany({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
                 }
             })
             
+            return foundDrivers
 
             let driverId 
-
-            throw new Error(driverId)
 
             if (!foundDriver.id) {
                 throw new Error('Driver does not exist')
             }
+
+            // return driverId
 
             try {
                 return await db.weeklyReport.create({
