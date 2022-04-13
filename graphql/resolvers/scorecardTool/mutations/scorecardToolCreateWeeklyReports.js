@@ -50,6 +50,8 @@ export default {
             })
 
 
+            throw new error(foundDriver.id)
+            
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')

@@ -113,7 +113,7 @@ model Driver {
   attendence    String?
 
   // NOTIFACTION SYSTEM
-  notified Boolean @default(false)
+  notified      Boolean @default(false)
 
   // RESET PASSWORD
   resetPasswordToken           String?
@@ -176,12 +176,6 @@ model Dsp {
   shiftPlannerDates ShiftPlannerDates?
   weeklyReports     WeeklyReport[]
 }
-
-// model VTO {
-//  Related to driver
-//  Date
-//  Want VTO  
-//}
 
 model ShiftPlannerDates {
   id        String   @id @unique @default(uuid())
