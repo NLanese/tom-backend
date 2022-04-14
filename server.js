@@ -49,7 +49,7 @@ const startApolloServer = async () => {
 
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
-    req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
 
@@ -60,26 +60,10 @@ const startApolloServer = async () => {
     })
   );
 
-  app.use((req, res, next) => {
-    const allowedOrigins = ['"http://localhost:3000"', 'http://localhost:5001/graphql', 'http://3.135.223.59', '*'];
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    return next();
-  });
-
   app.use(express.json({ limit: "1000kb" }));
   app.use(
     express.urlencoded({
       extended: true,
-    })
-  );
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
     })
   );
 
@@ -93,25 +77,11 @@ const startApolloServer = async () => {
     res.send(200);
   });
 
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
-
   app.get("/images/:key", async (req, res) => {
     const key = req.params.key;
     const readStream = await getFileStream(key);
     readStream.pipe(res);
   });
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
 
   app.post("/images", upload.single("image"), async (req, res) => {
     const file = req.file;
@@ -121,13 +91,6 @@ const startApolloServer = async () => {
       imagePath: `/images/${result.Key}`,
     });
   });
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
 
   app.post("/pdfparse", uploadStorage.single("file"), async (req, res) => {
     const file = req.file;
@@ -139,50 +102,10 @@ const startApolloServer = async () => {
     }, 10000);
   });
 
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
-
   app.post("/excelparse", uploadStorage.single("file"), async (req, res) => {
     const parseData = await parseExcel(req.file);
     await res.send(parseData);
   });
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
-
-  app.get('/', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.send({ "msg": "This has CORS enabled 🎈" })
-  })
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
-
-  app.post('/', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.send({ "msg": "This has CORS enabled 🎈" })
-  })
-
-  app.use(
-    cors({
-      /* credentials: true, */
-      origin: "*",
-    })
-  );
-
-
 
   await server.start();
   await server.applyMiddleware({
@@ -193,8 +116,6 @@ const startApolloServer = async () => {
       limit: "100kb",
     },
   });
-
-
   await app.listen(process.env.PORT, () =>
     console.log(
       `Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`
