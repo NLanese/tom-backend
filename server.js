@@ -107,6 +107,16 @@ const startApolloServer = async () => {
     await res.send(parseData);
   });
 
+  app.get('/', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send({ "msg": "This has CORS enabled 🎈" })
+  })
+
+  app.post('/', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send({ "msg": "This has CORS enabled 🎈" })
+  })
+
   await server.start();
   await server.applyMiddleware({
     app,
@@ -116,6 +126,8 @@ const startApolloServer = async () => {
       limit: "100kb",
     },
   });
+
+
   await app.listen(process.env.PORT, () =>
     console.log(
       `Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`
