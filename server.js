@@ -60,6 +60,15 @@ const startApolloServer = async () => {
     })
   );
 
+  app.use((req, res, next) => {
+    const allowedOrigins = ['"http://localhost:3000"', 'http://localhost:5001/graphql', 'http://3.135.223.59', ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    return next();
+  });
+
   app.use(express.json({ limit: "1000kb" }));
   app.use(
     express.urlencoded({
@@ -172,6 +181,8 @@ const startApolloServer = async () => {
       origin: "*",
     })
   );
+
+
 
   await server.start();
   await server.applyMiddleware({
