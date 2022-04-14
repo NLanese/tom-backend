@@ -67,6 +67,13 @@ const startApolloServer = async () => {
     })
   );
 
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
+
   app.get("/", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
     res.send("Welcome to SQL");
@@ -77,11 +84,25 @@ const startApolloServer = async () => {
     res.send(200);
   });
 
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
+
   app.get("/images/:key", async (req, res) => {
     const key = req.params.key;
     const readStream = await getFileStream(key);
     readStream.pipe(res);
   });
+
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
 
   app.post("/images", upload.single("image"), async (req, res) => {
     const file = req.file;
@@ -91,6 +112,13 @@ const startApolloServer = async () => {
       imagePath: `/images/${result.Key}`,
     });
   });
+
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
 
   app.post("/pdfparse", uploadStorage.single("file"), async (req, res) => {
     const file = req.file;
@@ -102,20 +130,48 @@ const startApolloServer = async () => {
     }, 10000);
   });
 
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
+
   app.post("/excelparse", uploadStorage.single("file"), async (req, res) => {
     const parseData = await parseExcel(req.file);
     await res.send(parseData);
   });
+
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
 
   app.get('/', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.send({ "msg": "This has CORS enabled 🎈" })
   })
 
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
+
   app.post('/', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.send({ "msg": "This has CORS enabled 🎈" })
   })
+
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
 
   await server.start();
   await server.applyMiddleware({
