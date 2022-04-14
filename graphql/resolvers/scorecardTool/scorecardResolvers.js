@@ -7,7 +7,7 @@ export default {
     },
     Mutation: {
         ...scorecardToolCreateDriverAccounts.Mutation,
-        ...scorecardToolCreateWeeklyReports.Mutation
+        // ...scorecardToolCreateWeeklyReports.Mutation
     },
     JSON: GraphQLJSON
 }
