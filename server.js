@@ -21,13 +21,21 @@ const startApolloServer = async () => {
 
 
   app.use(function(req, res, next) {
+
     res.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Origin", "http://3.135.223.59"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Origin", "http://18.191.5.14"); // update to match the domain you will make the request from
+
+    req.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
+    req.header("Access-Control-Allow-Origin", "http://3.135.223.59"); // update to match the domain you will make the request from
+    req.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+    req.header("Access-Control-Allow-Origin", "http://18.191.5.14"); // update to match the domain you will make the request from
+
     res.set('Access-Control-Allow-Origin', 'http://18.191.5.14');
     res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.set('Access-Control-Allow-Origin', 'http://3.135.223.59');
+
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
@@ -133,7 +141,7 @@ const startApolloServer = async () => {
     })
   );
 
-  
+
   await app.listen(process.env.PORT, () =>
     console.log(
       `Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`
