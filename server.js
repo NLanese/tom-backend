@@ -61,7 +61,7 @@ const startApolloServer = async () => {
   );
 
   app.use((req, res, next) => {
-    const allowedOrigins = ['"http://localhost:3000"', 'http://localhost:5001/graphql', 'http://3.135.223.59', ];
+    const allowedOrigins = ['"http://localhost:3000"', 'http://localhost:5001/graphql', 'http://3.135.223.59', '*'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
