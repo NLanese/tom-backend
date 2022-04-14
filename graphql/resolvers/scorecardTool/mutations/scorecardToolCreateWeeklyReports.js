@@ -40,7 +40,7 @@ export default {
                     data: {
                         driver: {
                             connect: {
-                                id: found.id
+                                id: found
                             }
                         },
                         date: date,
@@ -89,9 +89,11 @@ export default {
                 if (!foundDriver.id) {
                     throw new Error('Driver does not exist')
                 }
-                else return foundDriver
+                else return foundDriver.id
             }).then( foundDriver => {
                 return createWeeklyReport(foundDriver)
+            }).then( weeklyReport => {
+                return weeklyReport
             })
 
 
