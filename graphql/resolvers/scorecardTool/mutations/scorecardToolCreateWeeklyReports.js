@@ -5,88 +5,88 @@ import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager
 export default {
     Mutation: {
         scorecardToolCreateWeeklyReports: async (_, {
-            token,
-            dspId,
-            role,
-            transporterId,
-            date,
-            feedbackStatus,
-            feedbackMessage,
-            feedbackMessageSent,
-            rank,
-            tier,
-            delivered,
-            keyFocusArea,
-            fico,
-            seatbeltOffRate,
-            speedingEventRate,
-            distractionsRate,
-            followingDistanceRate,
-            signalViolationsRate,
-            deliveryCompletionRate,
-            deliveredAndRecieved,
-            photoOnDelivery,
-            attendedDeliveryAccuracy,
-            dnr,
-            podOpps,
-            ccOpps
+        //     token,
+        //     dspId,
+        //     role,
+        //     transporterId,
+        //     date,
+        //     feedbackStatus,
+        //     feedbackMessage,
+        //     feedbackMessageSent,
+        //     rank,
+        //     tier,
+        //     delivered,
+        //     keyFocusArea,
+        //     fico,
+        //     seatbeltOffRate,
+        //     speedingEventRate,
+        //     distractionsRate,
+        //     followingDistanceRate,
+        //     signalViolationsRate,
+        //     deliveryCompletionRate,
+        //     deliveredAndRecieved,
+        //     photoOnDelivery,
+        //     attendedDeliveryAccuracy,
+        //     dnr,
+        //     podOpps,
+        //     ccOpps
         }, context) => {
-            let owner;
-            let manager;
+        //     let owner;
+        //     let manager;
 
-            if (role === 'OWNER') {
-                owner = await checkOwnerAuth(token)
-            }
+        //     if (role === 'OWNER') {
+        //         owner = await checkOwnerAuth(token)
+        //     }
 
-            if (role === 'MANAGER') {
-                manager = await checkManagerAuth(token)
-            }
+        //     if (role === 'MANAGER') {
+        //         manager = await checkManagerAuth(token)
+        //     }
 
-            let foundDriver = await db.driver.findFirst({
-                where: {
-                    transporterId: transporterId,
-                    dspId: dspId
-                }
-            })
+        //     let foundDriver = await db.driver.findFirst({
+        //         where: {
+        //             transporterId: transporterId,
+        //             dspId: dspId
+        //         }
+        //     })
             
 
-            let driverId 
+        //     let driverId 
 
-            if (!foundDriver.id) {
-                throw new Error('Driver does not exist')
-            }
+        //     if (!foundDriver.id) {
+        //         throw new Error('Driver does not exist')
+            // }
 
 
             try {
                 return await db.weeklyReport.create({
                     data: {
                         date: date,
-                        feedbackStatus: feedbackStatus,
-                        feedbackMessage: feedbackMessage,
-                        feedbackMessageSent: feedbackMessageSent,
-                        rank: rank,
-                        tier: tier,
-                        delivered: delivered,
-                        keyFocusArea: keyFocusArea,
-                        fico: fico,
-                        seatbeltOffRate: seatbeltOffRate,
-                        speedingEventRate: speedingEventRate,
-                        distractionsRate: distractionsRate,
-                        followingDistanceRate: followingDistanceRate,
-                        signalViolationsRate: signalViolationsRate,
-                        deliveryCompletionRate: deliveryCompletionRate,
-                        deliveredAndRecieved: deliveredAndRecieved,
-                        photoOnDelivery: photoOnDelivery,
-                        attendedDeliveryAccuracy: attendedDeliveryAccuracy,
-                        dnr: dnr,
-                        podOpps: podOpps,
-                        ccOpps: ccOpps,
-                        driverId: driverId,
-                        driver: {
-                            connect: {
-                                id: driverId
-                            }
-                        },
+                        // feedbackStatus: feedbackStatus,
+                        // feedbackMessage: feedbackMessage,
+                        // feedbackMessageSent: feedbackMessageSent,
+                        // rank: rank,
+                        // tier: tier,
+                        // delivered: delivered,
+                        // keyFocusArea: keyFocusArea,
+                        // fico: fico,
+                        // seatbeltOffRate: seatbeltOffRate,
+                        // speedingEventRate: speedingEventRate,
+                        // distractionsRate: distractionsRate,
+                        // followingDistanceRate: followingDistanceRate,
+                        // signalViolationsRate: signalViolationsRate,
+                        // deliveryCompletionRate: deliveryCompletionRate,
+                        // deliveredAndRecieved: deliveredAndRecieved,
+                        // photoOnDelivery: photoOnDelivery,
+                        // attendedDeliveryAccuracy: attendedDeliveryAccuracy,
+                        // dnr: dnr,
+                        // podOpps: podOpps,
+                        // ccOpps: ccOpps,
+                        // driverId: driverId,
+                        // driver: {
+                        //     connect: {
+                        //         id: driverId
+                        //     }
+                        // },
                     }
                 })
             } catch (error) {
