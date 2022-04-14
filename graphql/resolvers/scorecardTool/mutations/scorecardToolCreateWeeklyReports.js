@@ -42,22 +42,25 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            let foundDriver = await db.driver.findFirst({
+            const foundDriver = await db.driver.findFirst({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
                 }
             })
 
-            
-
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 
             try {
-                return await db.weeklyReport.create({
+                const weeklyReport =  await db.weeklyReport.create({
                     data: {
+                        driver: {
+                            connect: {
+                                id: foundDriver.id
+                            }
+                        },
                         date: date,
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
@@ -78,15 +81,20 @@ export default {
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps: ccOpps,
-                        driver: {
-                            connect: {
-                                id: foundDriver.id
-                            }
-                        },
+                        ccOpps: ccOpps
+                    }
+                })
+                return await db.weeklyReport.findUnique({
+                    where: {
+                        id: weeklyReport.id
+                    },
+                    include: {
+                        driver: true
                     }
                 })
             } catch (error) {
+                console.log("\n---------------\n Error in WeeklyReportCreation")
+                console.log(error)
                 throw new Error(error)
             }
             
