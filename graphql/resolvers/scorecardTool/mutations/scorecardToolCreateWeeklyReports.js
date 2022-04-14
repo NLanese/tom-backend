@@ -6,8 +6,8 @@ export default {
     Mutation: {
         scorecardToolCreateWeeklyReports: async (_, {
             token,
-            role,
             dspId,
+            role,
             transporterId,
             date,
             feedbackStatus,
@@ -34,7 +34,6 @@ export default {
             let owner;
             let manager;
 
-
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }
@@ -43,12 +42,14 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            const foundDriver = await db.driver.findFirst({
+            let foundDriver = await db.driver.findFirst({
                 where: {
-                    transporterId,
-                    dspId
+                    transporterId: transporterId,
+                    dspId: dspId
                 }
             })
+
+            
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
@@ -57,11 +58,6 @@ export default {
             try {
                 return await db.weeklyReport.create({
                     data: {
-                        driver: {
-                            connect: {
-                                id: foundDriver.id
-                            }
-                        },
                         date: date,
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
@@ -82,12 +78,15 @@ export default {
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps: ccOpps
+                        ccOpps: ccOpps,
+                        driver: {
+                            connect: {
+                                id: foundDriver.id
+                            }
+                        },
                     }
                 })
             } catch (error) {
-                console.log("\n\n\n\nERROR creating weekly report. Here's why...")
-                console.log(error)
                 throw new Error(error)
             }
 

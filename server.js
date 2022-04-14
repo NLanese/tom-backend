@@ -19,34 +19,6 @@ const startApolloServer = async () => {
     dest: "uploads/",
   });
 
-
-  app.use(function(req, res, next) {
-
-    res.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Origin", "http://3.135.223.59"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Origin", "http://18.191.5.14"); // update to match the domain you will make the request from
-
-    req.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
-    req.header("Access-Control-Allow-Origin", "http://3.135.223.59"); // update to match the domain you will make the request from
-    req.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    req.header("Access-Control-Allow-Origin", "http://18.191.5.14"); // update to match the domain you will make the request from
-
-    res.set('Access-Control-Allow-Origin', 'http://18.191.5.14');
-    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.set('Access-Control-Allow-Origin', 'http://3.135.223.59');
-
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
-  app.use(
-    cors({
-      credentials: true,
-      origin: "*",
-    })
-  );
-
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, "uploads/");
@@ -71,10 +43,22 @@ const startApolloServer = async () => {
     "https://studio.apollographql.com",
     "http://localhost:8000",
     "http://localhost:8080",
-    "http://3.135.223.59",
-    "http://18.191.5.14"
+    "http://3.135.223.59"
   ];
 
+
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "thetomapp.com"); // update to match the domain you will make the request from
+    req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+  app.use(
+    cors({
+      /* credentials: true, */
+      origin: "*",
+    })
+  );
 
   app.use(express.json({ limit: "1000kb" }));
   app.use(
@@ -132,16 +116,6 @@ const startApolloServer = async () => {
       limit: "100kb",
     },
   });
-
-
-  app.use(
-    cors({
-      // credentials: true,
-      origin: "*",
-    })
-  );
-
-
   await app.listen(process.env.PORT, () =>
     console.log(
       `Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`
