@@ -68,7 +68,6 @@ const startApolloServer = async () => {
   );
 
   app.get("/", (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*')
     res.send("Welcome to SQL");
   });
 

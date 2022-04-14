@@ -92,7 +92,34 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
-            
+
+            const findDriver = () => {
+                return await db.driver.findFirst({
+                where: {
+                    transporterId: transporterId,
+                    dspId: dspId
+                }
+                })
+            }
+
+            if (role === 'OWNER') {
+                owner = await checkOwnerAuth(token)
+            }
+
+            if (role === 'MANAGER') {
+                manager = await checkManagerAuth(token)
+            }
+
+            return findDriver().then( foundDriver => {
+                if (!foundDriver.id) {
+                    throw new Error('Driver does not exist')
+                }
+                else return foundDriver
+            }).then( foundDriver => {
+                return createWeeklyReport(foundDriver)
+            }).then( weeklyReport => {
+                return weeklyReport
+            })            
         }
     }
 }
