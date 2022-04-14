@@ -35,31 +35,12 @@ export default {
             let manager;
 
 
-            if (role === 'OWNER') {
-                owner = await checkOwnerAuth(token)
-            }
-
-            if (role === 'MANAGER') {
-                manager = await checkManagerAuth(token)
-            }
-
-            const foundDriver = await db.driver.findFirst({
-                where: {
-                    transporterId,
-                    dspId
-                }
-            })
-
-            if (!foundDriver) {
-                throw new Error('Driver does not exist')
-            }
-
-            try {
+            const createWeeklyReport = (found) => {
                 return await db.weeklyReport.create({
                     data: {
                         driver: {
                             connect: {
-                                id: foundDriver.id
+                                id: found
                             }
                         },
                         date: date,
@@ -85,11 +66,35 @@ export default {
                         ccOpps: ccOpps
                     }
                 })
-            } catch (error) {
-                console.log("\n\n\n\nERROR creating weekly report. Here's why...")
-                console.log(error)
-                throw new Error(error)
             }
+
+            const findDriver = () => {
+                return await db.driver.findFirst({
+                where: {
+                    transporterId: transporterId,
+                    dspId: dspId
+                }
+                })
+            }
+
+            if (role === 'OWNER') {
+                owner = await checkOwnerAuth(token)
+            }
+
+            if (role === 'MANAGER') {
+                manager = await checkManagerAuth(token)
+            }
+
+            return findDriver().then( foundDriver => {
+                if (!foundDriver.id) {
+                    throw new Error('Driver does not exist')
+                }
+                else return foundDriver.id
+            }).then( foundDriver => {
+                return createWeeklyReport(foundDriver)
+            }).then( weeklyReport => {
+                return weeklyReport
+            })
             
         }
     }
