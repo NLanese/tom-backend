@@ -63,7 +63,8 @@ const startApolloServer = async () => {
     "https://studio.apollographql.com",
     "http://localhost:8000",
     "http://localhost:8080",
-    "http://3.135.223.59"
+    "http://3.135.223.59",
+    "http://18.191.5.14"
   ];
 
 
@@ -123,6 +124,16 @@ const startApolloServer = async () => {
       limit: "100kb",
     },
   });
+
+
+  app.use(
+    cors({
+      credentials: true,
+      origin: "*",
+    })
+  );
+
+  
   await app.listen(process.env.PORT, () =>
     console.log(
       `Server running on ${process.env.PORT}... GraphQL/Apollo at studio.apollographql.com/dev`
