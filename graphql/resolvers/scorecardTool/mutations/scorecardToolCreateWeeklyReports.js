@@ -95,9 +95,6 @@ export default {
             }).then( weeklyReport => {
                 return weeklyReport
             })
-
-
-
             
         }
     }
