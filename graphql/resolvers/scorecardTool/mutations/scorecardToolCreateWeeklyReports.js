@@ -42,25 +42,26 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            const foundDriver = await db.driver.findFirst({
+            let foundDrivers = await db.driver.findMany({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
                 }
             })
+            
+            return foundDrivers
 
-            if (!foundDriver) {
+            let driverId 
+
+            if (!foundDriver.id) {
                 throw new Error('Driver does not exist')
             }
 
+            // return driverId
+
             try {
-                const weeklyReport =  await db.weeklyReport.create({
+                return await db.weeklyReport.create({
                     data: {
-                        driver: {
-                            connect: {
-                                id: foundDriver.id
-                            }
-                        },
                         date: date,
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
@@ -81,20 +82,16 @@ export default {
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps: ccOpps
-                    }
-                })
-                return await db.weeklyReport.findUnique({
-                    where: {
-                        id: weeklyReport.id
-                    },
-                    include: {
-                        driver: true
+                        ccOpps: ccOpps,
+                        driverId: driverId,
+                        driver: {
+                            connect: {
+                                id: driverId
+                            }
+                        },
                     }
                 })
             } catch (error) {
-                console.log("\n---------------\n Error in WeeklyReportCreation")
-                console.log(error)
                 throw new Error(error)
             }
             
