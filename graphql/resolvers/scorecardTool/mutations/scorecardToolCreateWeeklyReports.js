@@ -66,6 +66,7 @@ export default {
             console.log("Hit Four: driverID")
             console.log(driverId)
 
+            console.log(dspId)
 
             try {
                 return await db.weeklyReport.create({
@@ -91,12 +92,16 @@ export default {
                         dnr: dnr,
                         podOpps: podOpps,
                         ccOpps: ccOpps,
-                        driverId: driverId,
                         driver: {
                             connect: {
                                 id: driverId
                             }
                         },
+                        dsp: {
+                            connect: {
+                                id: dspId
+                            }
+                        }
                     }
                 })
                 // .then( async (weeklyReport) => {
@@ -127,6 +132,7 @@ export default {
                 //     }
                 // })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
             
