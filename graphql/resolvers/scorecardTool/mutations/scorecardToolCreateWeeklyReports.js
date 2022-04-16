@@ -34,6 +34,8 @@ export default {
             let owner;
             let manager;
 
+            console.log("Hit One")
+
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }
@@ -42,6 +44,8 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
+            console.log("Hit Two")
+
             let foundDrivers = await db.driver.findMany({
                 where: {
                     transporterId: transporterId,
@@ -49,6 +53,8 @@ export default {
                 }
             })
             
+            console.log("Hit Three")
+
             return foundDrivers
 
             let driverId 
@@ -57,7 +63,11 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
-            // return driverId
+            driverId = foundDriver.id 
+
+            console.log("Hit Four: driverID")
+            console.log(driverId)
+
 
             try {
                 return await db.weeklyReport.create({
@@ -89,6 +99,18 @@ export default {
                                 id: driverId
                             }
                         },
+                    }
+                }).then( (weeklyReport) => {
+                    let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
+                    try {
+                        return await db.driver.update({
+                            where: {
+                                id: driverId
+                            },
+                            data: {
+                                weeklyReport: weeklyReports
+                            }
+                        })
                     }
                 })
             } catch (error) {
