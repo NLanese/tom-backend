@@ -100,7 +100,7 @@ export default {
                             }
                         },
                     }
-                }).then( (weeklyReport) => {
+                }).then( async (weeklyReport) => {
                     let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
                     try {
                         return await db.driver.update({
