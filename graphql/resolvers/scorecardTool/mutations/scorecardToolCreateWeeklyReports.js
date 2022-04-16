@@ -111,6 +111,8 @@ export default {
                                 weeklyReport: weeklyReports
                             }
                         })
+                    } catch(error){
+                        throw new Error(error)
                     }
                 })
             } catch (error) {
