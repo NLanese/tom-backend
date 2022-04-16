@@ -34,7 +34,7 @@ export default {
             let owner;
             let manager;
 
-            console.log("Hit One")
+            console.log("\nBEGINNING CREATEWEEKLY \nHit One")
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -46,7 +46,7 @@ export default {
 
             console.log("Hit Two")
 
-            let foundDrivers = await db.driver.findMany({
+            let foundDriver = await db.driver.findFirst({
                 where: {
                     transporterId: transporterId,
                     dspId: dspId
@@ -54,8 +54,6 @@ export default {
             })
             
             console.log("Hit Three")
-
-            return foundDrivers
 
             let driverId 
 
@@ -68,6 +66,7 @@ export default {
             console.log("Hit Four: driverID")
             console.log(driverId)
 
+            console.log(dspId)
 
             try {
                 return await db.weeklyReport.create({
@@ -93,29 +92,47 @@ export default {
                         dnr: dnr,
                         podOpps: podOpps,
                         ccOpps: ccOpps,
-                        driverId: driverId,
                         driver: {
                             connect: {
                                 id: driverId
                             }
                         },
-                    }
-                }).then( async (weeklyReport) => {
-                    let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
-                    try {
-                        return await db.driver.update({
-                            where: {
-                                id: driverId
-                            },
-                            data: {
-                                weeklyReport: weeklyReports
+                        dsp: {
+                            connect: {
+                                id: dspId
                             }
-                        })
-                    } catch(error){
-                        throw new Error(error)
+                        }
                     }
                 })
+                // .then( async (weeklyReport) => {
+                //     let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
+                //     try {
+                //         const thisDriver = await db.driver.update({
+                //             where: {
+                //                 id: driverId
+                //             },
+                //             data: {
+                //                 weeklyReport: weeklyReports
+                //             }
+                //         })
+                //         return await db.weeklyReport.update({
+                //             where: {
+                //                 id: weeklyReport.id
+                //             },
+                //             data: {
+                //                 driver: {
+                //                     connect: {
+                //                         id: thisDriver.id
+                //                     }
+                //                 }
+                //             }
+                //         })
+                //     } catch(error){
+                //         throw new Error(error)
+                //     }
+                // })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
             
