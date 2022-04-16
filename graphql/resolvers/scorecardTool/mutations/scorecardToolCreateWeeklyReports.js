@@ -103,12 +103,24 @@ export default {
                 }).then( async (weeklyReport) => {
                     let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
                     try {
-                        return await db.driver.update({
+                        const thisDriver = await db.driver.update({
                             where: {
                                 id: driverId
                             },
                             data: {
                                 weeklyReport: weeklyReports
+                            }
+                        })
+                        return await db.weeklyReport.update({
+                            where: {
+                                id: weeklyReport.id
+                            },
+                            data: {
+                                driver: {
+                                    connect: {
+                                        id: thisDriver.id
+                                    }
+                                }
                             }
                         })
                     } catch(error){
