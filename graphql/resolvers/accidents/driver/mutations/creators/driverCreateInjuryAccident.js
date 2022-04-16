@@ -28,7 +28,7 @@ export default {
 
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
-            if (collisionAccidentId === undefined) {
+            if (collisionAccidentId === undefined || collisionAccidentId === null || !collisionAccidentId) {
                 try {
                     return await db.injuryAccident.create({
                         data: {
