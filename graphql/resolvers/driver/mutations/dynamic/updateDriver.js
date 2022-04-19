@@ -7,6 +7,7 @@ export default {
     Mutation: {
         dynamicUpdateDriver: async (_, {
             role,
+            token,
             driverId,
             email,
             firstname,
@@ -18,8 +19,8 @@ export default {
             let manager;
 
             // Dynamic authorization check
-            if (role === 'OWNER') owner = await checkOwnerAuth(context)
-            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+            if (role === 'OWNER') owner = await checkOwnerAuth(token)
+            if (role === 'MANAGER') manager = await checkManagerAuth(token)
 
             // Check and change data / hash password
             if (typeof password !== "undefined") password = await hashPassword(password)
@@ -42,7 +43,7 @@ export default {
                     }
                 })
     
-                if (emailCheck) {
+                if (emailCheck && emailCheck.id != driverId) {
                     throw new Error("Email is already in use")
                 }
             }
@@ -62,6 +63,7 @@ export default {
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
