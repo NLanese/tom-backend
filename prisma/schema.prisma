@@ -8,7 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// FOR INTERNAL KING WILLY USE
+/////////////////////////////////////
+///                               ///
+///         Super User            ///
+///                               ///
+/////////////////////////////////////
 model SuperUser {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
@@ -22,6 +26,12 @@ model SuperUser {
   profilePick Json?
 }
 
+/////////////////////////////////////
+///                               ///
+///            Owner              ///
+///                               ///
+/////////////////////////////////////
+
 model Owner {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
@@ -34,19 +44,15 @@ model Owner {
   password    String
   profilePick Json?
 
-  // ACCOUNT INFORMATION
   locked  Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted Boolean @default(false) // Keeps track if the Manager account has been deleted
 
-  // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
-  // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
   signUpToken                  String? @unique // Used for Driver/Manager signing up on the app
 
-  // RELATIONSHIPS
   drivers          Driver[]
   managers         Manager[]
   messages         Messages[]
@@ -55,6 +61,12 @@ model Owner {
   weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
 }
+
+/////////////////////////////////////
+///                               ///
+///            Manager            ///
+///                               ///
+/////////////////////////////////////
 
 model Manager {
   id          String   @id @unique @default(uuid())
@@ -91,6 +103,12 @@ model Manager {
   weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
 }
+
+/////////////////////////////////////
+///                               ///
+///           Driver              ///
+///                               ///
+/////////////////////////////////////
 
 model Driver {
   id          String   @id @unique @default(uuid())
