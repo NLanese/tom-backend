@@ -115,11 +115,11 @@ model Driver {
   createdAt   DateTime @default(now())
   role        Role     @default(DRIVER)
   token       String?
-  firstname   String
-  lastname    String
-  email       String   @unique
-  phoneNumber String
-  password    String
+  firstname   String?
+  lastname    String?
+  email       String?   @unique
+  phoneNumber String?
+  password    String?
   profilePick Json?
   shifts      Json[]
 
@@ -153,6 +153,11 @@ model Driver {
   shiftPlanners    ShiftPlanner[]
 }
 
+/////////////////////////////////////
+///                               ///
+///             DSP               ///
+///                               ///
+/////////////////////////////////////
 model Dsp {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
@@ -191,25 +196,14 @@ model Dsp {
   shifts Shift[]     
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
-  shiftPlannerDates ShiftPlannerDates?
   weeklyReports     WeeklyReport[]
 }
 
-// model VTO {
-//  Related to driver
-//  Date
-//  Want VTO  
-//}
-
-model ShiftPlannerDates {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-  dates     String[]
-
-  dspId            String
-  dsp              Dsp               @relation(fields: [dspId], references: [id])
-}
-
+/////////////////////////////////////
+///                               ///
+///         Shift Planner         ///
+///                               ///
+/////////////////////////////////////
 model ShiftPlanner {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
@@ -259,29 +253,29 @@ model WeeklyReport {
   acknowledgedAt      String?
 
   // DATA FROM SCORECARD TOOL
-  rank                     Int
-  tier                     String
-  delivered                Int
-  keyFocusArea             String
-  fico                     String
-  seatbeltOffRate          String
-  speedingEventRate        String
-  distractionsRate         String
-  followingDistanceRate    String
-  signalViolationsRate     String
-  deliveryCompletionRate   String
-  deliveredAndRecieved     String
-  photoOnDelivery          String
-  attendedDeliveryAccuracy Int
-  dnr                      Int
-  podOpps                  Int
-  ccOpps                   Int
+  rank                     Int?
+  tier                     String?
+  delivered                Int?
+  keyFocusArea             String?
+  fico                     String?
+  seatbeltOffRate          String?
+  speedingEventRate        String?
+  distractionsRate         String?
+  followingDistanceRate    String?
+  signalViolationsRate     String?
+  deliveryCompletionRate   String?
+  deliveredAndRecieved     String?
+  photoOnDelivery          String?
+  customerDeliveryFeedback String?
+  attendedDeliveryAccuracy Int?
+  dnr                      Int?
+  podOpps                  Int?
+  ccOpps                   Int?
 
   // ADDITIONAL INFORMATION
   netradyne                Json?
   deliveryAssociate        Json?
   defects                  Json?
-  customerDeliveryFeedback Json?
   hasManyAccidents         Json?
   belongsToTeam            Json?
   attendance               Json?

@@ -13,7 +13,7 @@ export default {
             firstname,
             lastname,
             phoneNumber,
-            signUpToken
+            ownerEmail
         }, { req }) => {
             const { valid, errors } = validateRegisterInput(email, password)
 
@@ -49,9 +49,11 @@ export default {
 
             password = await hashPassword(password)
 
+            ownerEmail = ownerEmail.toUpperCase()
+
             const owner = await db.owner.findUnique({
                 where: {
-                    signUpToken: signUpToken
+                    email: ownerEmail
                 },
                 include: {
                     drivers: true,
@@ -66,7 +68,6 @@ export default {
 
             try {
                 let newManager
-                const token = await generateManagerToken(newManager.id)
 
                 if (owner.dsp) {
                     newManager = await db.manager.create({
@@ -159,6 +160,10 @@ export default {
                     })
                 }
 
+                console.log("\nNew Manager...")
+                console.log(newManager)
+                const token = await generateManagerToken(newManager.id)
+
                 req.session = {
                     token: `Bearer ${token}`
                 }
@@ -183,6 +188,7 @@ export default {
                 //     token: token
                 // }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

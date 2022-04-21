@@ -521,7 +521,7 @@ const typeDefs = gql`
     #########################
 
     #### MANAGER MUTATIONS ####
-    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Manager
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Manager
     managerSignIn(email: String!, password: String!): Manager
     ###########################
 
@@ -600,8 +600,8 @@ const typeDefs = gql`
     managerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
 
     #### SCORECARD TOOL MUTATIONS ####
-    scorecardToolCreateDriverAccounts(token: String, email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!, dspId: String): Driver
-    scorecardToolCreateWeeklyReports(token: String, dspId: String, role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
+    scorecardToolCreateDriverAccounts(token: String, email: String, firstname: String, lastname: String, phoneNumber: String, password: String, transporterId: String, role: String, dspId: String): Driver
+    scorecardToolCreateWeeklyReports(token: String, dspId: String, role: String, transporterId: String, date: String, feedbackStatus: String, rank: Int, tier: String, delivered: Int, keyFocusArea: String, fico: String, seatbeltOffRate: String, speedingEventRate: String, distractionsRate: String, followingDistanceRate: String, signalViolationsRate: String, deliveryCompletionRate: String, deliveredAndRecieved: String, photoOnDelivery: String, attendedDeliveryAccuracy: Int, dnr: Int, customerDeliveryFeedback: String, podOpps: Int, ccOpps: Int, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
     ##################################
 
     # SHIFT PLANNER TOOL MUTATIONS

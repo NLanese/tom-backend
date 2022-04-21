@@ -28,7 +28,7 @@ export default {
                         managers: true,
                         dsp: {
                             include: {
-                                shiftPlannerDates: true
+                                shifts: true
                             }
                         },
                         messages: true,
