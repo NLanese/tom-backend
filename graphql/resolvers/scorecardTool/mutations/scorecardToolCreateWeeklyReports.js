@@ -27,6 +27,7 @@ export default {
             deliveredAndRecieved,
             photoOnDelivery,
             attendedDeliveryAccuracy,
+            customerDeliveryFeedback,
             dnr,
             podOpps,
             ccOpps
@@ -72,11 +73,14 @@ export default {
                 return await db.weeklyReport.create({
                     data: {
                         date: date,
+
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
                         feedbackMessageSent: feedbackMessageSent,
+
                         rank: rank,
                         tier: tier,
+
                         delivered: delivered,
                         keyFocusArea: keyFocusArea,
                         fico: fico,
@@ -89,6 +93,8 @@ export default {
                         deliveredAndRecieved: deliveredAndRecieved,
                         photoOnDelivery: photoOnDelivery,
                         attendedDeliveryAccuracy: attendedDeliveryAccuracy,
+                        customerDeliveryFeedback: customerDeliveryFeedback,
+
                         dnr: dnr,
                         podOpps: podOpps,
                         ccOpps: ccOpps,
