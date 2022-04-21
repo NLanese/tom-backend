@@ -15,7 +15,7 @@ export default {
                         drivers: true,
                         dsp: {
                             include: {
-                                shiftPlannerDates: true
+                                shifts: true
                             }
                         },
                         messages: true,
@@ -30,6 +30,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }
