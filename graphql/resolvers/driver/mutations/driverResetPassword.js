@@ -8,16 +8,13 @@ export default {
             password,
             token
         }, context) => {
-            const driver = await checkDriverAuth(context)
 
-            const foundDriver = await db.driver.findUnique({
-                where: {
-                    id: driver.id
-                }
+            const foundDriver = await db.driver.findFirst({
+                resetPasswordToken: token
             })
 
-            if (token !== foundDriver.resetPasswordToken) {
-                throw new Error('Token is not correct')
+            if (!foundDriver){
+                throw new Error("Error, there is no driver with this code, or this code has expired. Please get another code from your Mobile App")
             }
 
             if (Date.now() <= foundDriver.resetPasswordTokenExpiration) {

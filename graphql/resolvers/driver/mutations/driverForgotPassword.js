@@ -22,6 +22,17 @@ export default {
             })
 
             let token = generateForgotPasswordToken(email)
+
+            const conflictingDriver = await db.driver.findFirst({
+                where: {
+                    resetPasswordToken: token
+                }
+            })
+
+            if (conflictingDriver){
+                token = generateForgotPasswordToken(generateForgotPasswordToken(email))
+            }
+            
             console.log(Date.now())
 
             const mailOptions = {
