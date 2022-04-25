@@ -134,8 +134,8 @@ model Driver {
   notified Boolean @default(false)
 
   // RESET PASSWORD
-  resetPasswordToken           String?
-  resetPasswordTokenExpiration Int?
+  resetPasswordToken           String?  @unique
+  resetPasswordTokenExpiration String?   
 
   // RELATIONSHIPS
   ownerId          String

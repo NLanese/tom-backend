@@ -44,6 +44,8 @@ export default {
             }
     
             const isValid = await bcrypt.compare(password, foundUser.password)
+            console.log(password)
+            foundUser.password
     
             if (!isValid) {
                 errors.general = 'Incorrect Password'
