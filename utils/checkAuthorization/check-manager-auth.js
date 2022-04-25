@@ -13,7 +13,7 @@ const checkManagerAuth = (context) => {
 
 		if (token) {
 			try {
-				const manager = jwt.verify(token, process.env.JWT_MANAGER_SECRET);
+				const manager = jwt.verify(token, process.env.JWT_ADMIN_SECRET);
 				return manager
 			} catch (err) {
 				throw new AuthenticationError('Error: Invalid token')
