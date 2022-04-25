@@ -13,12 +13,14 @@ import driverForgotPassword from "./mutations/driverForgotPassword.js";
 // DRIVER QUERIES
 import getDriver from "./queries/getDriver.js";
 import getDriversFromDsp from "./queries/getDriversFromDsp.js";
+import getDriverByResetToken from "./queries/getDriverByResetToken.js";
 
 export default {
     Query: {
         // DRIVER QUERIES
         ...getDriver.Query,
         ...getDriversFromDsp.Query,
+        ...getDriverByResetToken.Query
     },
     Mutation: {
         // DYNAMIC MUTATIONS

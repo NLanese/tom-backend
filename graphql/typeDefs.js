@@ -473,6 +473,7 @@ const typeDefs = gql`
     getDriver: Driver
     getDriversFromDsp: [Driver]
     driverGetManagers: [Manager]
+    getDriverByResetToken(token: String): Driver
     ########################
 
     #### DRIVER ACCIDENT QUERIES ####

@@ -12,7 +12,13 @@ export default {
             email
         }, context) => {
             
+///////////////////////////////////
+///                             ///
+///      Mail Configuration     ///
+///                             ///
+///////////////////////////////////
 
+            // Creates the means of sending the email
             const transporter = nodemailer.createTransport({
                 service: "Gmail",
                 auth: {
@@ -21,27 +27,32 @@ export default {
                 }
             })
 
+            // Generates resetToken
             let token = generateForgotPasswordToken(email)
 
+            // Finds if any other driver has the same token somehow
             const conflictingDriver = await db.driver.findFirst({
                 where: {
                     resetPasswordToken: token
                 }
             })
-
+            // Rerandomizes the token 
             if (conflictingDriver){
                 token = generateForgotPasswordToken(generateForgotPasswordToken(email))
             }
-            
+
+            // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
+            let code = `http://localhost:3000/resetPassword/${token}`           // Testing
+
             console.log(Date.now())
 
+            // Configures the actual Email Content
             const mailOptions = {
                 from: `${process.env.EMAIL_ADDRESS}`,
                 to: `${email}`,
                 subject: `Reset your TOM App Password`,
-                text: `Enter the following code on your Phone App to reset your password: \n${token}`
+                text: `Please click the link provided to be sent to the Reset Password page: \n${code}`
               }
-              
             email = email.toUpperCase()
 
             // Finds the driver using the given email
@@ -51,12 +62,19 @@ export default {
                 }
             })
 
+            // SENDS the email through the transporter
             transporter.sendMail(mailOptions, (error, response) => {
                 if (error){
                   throw new Error('Something went wrong, please try again \n' + error)
                 } 
             })
+    
               
+///////////////////////////////////
+///                             ///
+///           Mutation          ///
+///                             ///
+///////////////////////////////////
 
             if (foundDriver){
                 try{
