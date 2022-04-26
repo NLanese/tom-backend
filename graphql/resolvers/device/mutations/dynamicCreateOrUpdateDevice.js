@@ -17,10 +17,13 @@ export default {
 
         }, context) => {
 
-            if (role == "OWNER"){
+            let owner = false
+            let manager = false
+
+            if (role === "OWNER"){
                 owner = checkOwnerAuth(token)
             }
-            else if(role == "MANAGER"){
+            else if(role === "MANAGER"){
                 manager = checkManagerAuth(token)
             }
             else {
@@ -34,14 +37,28 @@ export default {
             
             if (id === "NA") {
                 try{
-                    return db.device.create({
+                    return await db.device.create({
                         data: {
                             number: number,
                             name: name,
                             type: type,
-                            driverId: driverId,
-                            dspId: dspId
+                            dsp: {
+                                connect: {
+                                    id: dspId
+                                }
+                            }
                         }
+                    })
+                    .then( async (resolved) => {
+                        console.log(resolved)
+                        return await db.device.findUnique({
+                            where: {
+                                id: resolved.id
+                            },
+                            include: {
+                                dsp: true
+                            }
+                        })
                     })
                 } catch (error){
                     console.log("Error CREATING the DEVICE")
@@ -74,8 +91,11 @@ export default {
                                 number: number,
                                 name: name,
                                 type: type,
-                                driverId: driverId,
-                                dspId: dspId
+                                dsp: {
+                                    connect: {
+                                        id: dspId
+                                    }
+                            }
                             }
                         })
                         

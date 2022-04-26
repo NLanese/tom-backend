@@ -496,8 +496,8 @@ model Device {
   type                String?
 
   // RELATIONSHIPS
-  driverId            String
-  driver              Driver @relation(fields: [driverId], references: [id])
+  driverId            String?
+  driver              Driver? @relation(fields: [driverId], references: [id])
   dspId               String
   dsp                 Dsp @relation(fields: [dspId], references: [id])
 }
