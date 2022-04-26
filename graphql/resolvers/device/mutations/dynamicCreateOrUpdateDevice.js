@@ -35,7 +35,8 @@ export default {
                 throw new Error("No owner or manager with the give crudentials found")
             }
             
-            if (id === "NA") {
+            if (id < 0) {
+                console.log(id)
                 try{
                     return await db.device.create({
                         data: {
@@ -76,13 +77,16 @@ export default {
                 })
             }
 
-            findDevice(id).then( resolved => {
+            return findDevice(parseInt(id)).then( async (resolved) => {
                 if (resolved === null){
                     console.log("Error matching ID")
                     throw "Device not found"
                 }
 
                 try{
+                    console.log('== update ==')
+                    console.log(resolved)
+                    console.log(name)
                         return db.device.update({
                             where: {
                                 id: resolved.id
@@ -91,12 +95,18 @@ export default {
                                 number: number,
                                 name: name,
                                 type: type,
-                                dsp: {
-                                    connect: {
-                                        id: dspId
-                                    }
+                                
                             }
-                            }
+                        }).then( async (resolved) => {
+                            console.log(resolved)
+                            return await db.device.findUnique({
+                                where: {
+                                    id: resolved.id
+                                },
+                                include: {
+                                    dsp: true
+                                }
+                            })
                         })
                         
                     } catch (error){
