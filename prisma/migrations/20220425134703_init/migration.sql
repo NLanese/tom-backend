@@ -69,11 +69,11 @@ CREATE TABLE "Driver" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'DRIVER',
     "token" TEXT,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "phoneNumber" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "firstname" TEXT,
+    "lastname" TEXT,
+    "email" TEXT,
+    "phoneNumber" TEXT,
+    "password" TEXT,
     "profilePick" JSONB,
     "shifts" JSONB[],
     "transporterId" TEXT,
@@ -119,16 +119,6 @@ CREATE TABLE "Dsp" (
 );
 
 -- CreateTable
-CREATE TABLE "ShiftPlannerDates" (
-    "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dates" TEXT[],
-    "dspId" TEXT NOT NULL,
-
-    CONSTRAINT "ShiftPlannerDates_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "ShiftPlanner" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -169,27 +159,27 @@ CREATE TABLE "WeeklyReport" (
     "feedbackMessageSent" BOOLEAN NOT NULL DEFAULT false,
     "acknowledged" BOOLEAN NOT NULL DEFAULT false,
     "acknowledgedAt" TEXT,
-    "rank" INTEGER NOT NULL,
-    "tier" TEXT NOT NULL,
-    "delivered" INTEGER NOT NULL,
-    "keyFocusArea" TEXT NOT NULL,
-    "fico" TEXT NOT NULL,
-    "seatbeltOffRate" TEXT NOT NULL,
-    "speedingEventRate" TEXT NOT NULL,
-    "distractionsRate" TEXT NOT NULL,
-    "followingDistanceRate" TEXT NOT NULL,
-    "signalViolationsRate" TEXT NOT NULL,
-    "deliveryCompletionRate" TEXT NOT NULL,
-    "deliveredAndRecieved" TEXT NOT NULL,
-    "photoOnDelivery" TEXT NOT NULL,
-    "attendedDeliveryAccuracy" INTEGER NOT NULL,
-    "dnr" INTEGER NOT NULL,
-    "podOpps" INTEGER NOT NULL,
-    "ccOpps" INTEGER NOT NULL,
+    "rank" INTEGER,
+    "tier" TEXT,
+    "delivered" INTEGER,
+    "keyFocusArea" TEXT,
+    "fico" TEXT,
+    "seatbeltOffRate" TEXT,
+    "speedingEventRate" TEXT,
+    "distractionsRate" TEXT,
+    "followingDistanceRate" TEXT,
+    "signalViolationsRate" TEXT,
+    "deliveryCompletionRate" TEXT,
+    "deliveredAndRecieved" TEXT,
+    "photoOnDelivery" TEXT,
+    "customerDeliveryFeedback" TEXT,
+    "attendedDeliveryAccuracy" INTEGER,
+    "dnr" INTEGER,
+    "podOpps" INTEGER,
+    "ccOpps" INTEGER,
     "netradyne" JSONB,
     "deliveryAssociate" JSONB,
     "defects" JSONB,
-    "customerDeliveryFeedback" JSONB,
     "hasManyAccidents" JSONB,
     "belongsToTeam" JSONB,
     "attendance" JSONB,
@@ -421,12 +411,6 @@ CREATE UNIQUE INDEX "Dsp_shortcode_key" ON "Dsp"("shortcode");
 CREATE UNIQUE INDEX "Dsp_ownerId_key" ON "Dsp"("ownerId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ShiftPlannerDates_id_key" ON "ShiftPlannerDates"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "ShiftPlannerDates_dspId_key" ON "ShiftPlannerDates"("dspId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "ShiftPlanner_id_key" ON "ShiftPlanner"("id");
 
 -- CreateIndex
@@ -494,9 +478,6 @@ ALTER TABLE "Driver" ADD CONSTRAINT "Driver_dspId_fkey" FOREIGN KEY ("dspId") RE
 
 -- AddForeignKey
 ALTER TABLE "Dsp" ADD CONSTRAINT "Dsp_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ShiftPlannerDates" ADD CONSTRAINT "ShiftPlannerDates_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ShiftPlanner" ADD CONSTRAINT "ShiftPlanner_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;

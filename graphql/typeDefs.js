@@ -123,6 +123,7 @@ const typeDefs = gql`
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
     shiftPlanners:                [ShiftPlanner]
+    devices:                      [Device]
   }
 
 
@@ -163,6 +164,8 @@ const typeDefs = gql`
     shifts:                       [Shift]
     shiftPlannerDates:            ShiftPlannerDates
     weeklyReports:                [WeeklyReport]
+
+    devices:                       [Device]
   }
 
 
@@ -346,7 +349,7 @@ const typeDefs = gql`
     driverId:   Int
     adminId:    Int 
     driver:     Driver
-    manager:      Manager
+    manager:    Manager
   }
 
 
@@ -454,6 +457,23 @@ const typeDefs = gql`
 
     accident:                 Accident
     accidentId:               String
+  }
+
+####################
+#      Device      #
+####################
+  type Device{
+    id:                  ID
+    createdAt:           Date
+    number:              Int
+    name:                String
+    type:                String
+    
+
+    driverId:            String
+    driver:              Driver
+    dspId:               String
+    dsp:                 Dsp 
   }
 
   # ---------------------------------------- END SCHEMAS ----------------------------------------
@@ -618,6 +638,9 @@ const typeDefs = gql`
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
     dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+
+    # DEVICE MUTATIONS
+    dynamicCreateOrUpdateDevice(token: String, role: String, number: String, type: String, driverId: String, dspId: String, id: String): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
