@@ -15,7 +15,6 @@ export default {
                         owner: true,
                         managers: true,
                         dsp: true,
-                        shiftPlanners: true,
                         chatrooms: {
                             include: {
                                 messages: true
@@ -40,13 +39,6 @@ export default {
                                 selfInjuryAccidents: true
                             }
                         },
-                        shiftPlanners: true /* {
-                            orderBy: [
-                                {
-                                    date: "desc"
-                                }
-                            ]
-                        }, */
                     }
                 })
             } catch (error) {

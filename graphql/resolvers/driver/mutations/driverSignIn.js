@@ -32,7 +32,6 @@ export default {
                             messages: true
                         }
                     },
-                    shiftPlanners: true,
                     notifiedMessages: true,
                 }
             })

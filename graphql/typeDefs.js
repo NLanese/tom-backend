@@ -122,7 +122,7 @@ const typeDefs = gql`
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
-    shiftPlanners:                [ShiftPlanner]
+    dailyRosters:                 [DailyRoster]
   }
 
 
@@ -161,53 +161,7 @@ const typeDefs = gql`
     managers:                     [Manager]
     drivers:                      [Driver]
     shifts:                       [Shift]
-    shiftPlannerDates:            ShiftPlannerDates
     weeklyReports:                [WeeklyReport]
-  }
-
-
-###########################
-#      Shift Planner      #
-###########################
-  type ShiftPlannerDates {
-    id:                           ID
-    createdAt:                    Date
-    dates:                        [String]
-
-    dsp:                          Dsp
-  }
-
-###########################
-#      Shift Planner      #
-###########################
-  type ShiftPlanner {
-    id:                           ID
-    createdAt:                    Date
-
-    sundayDate:      String
-    sundayHours:     String
-    mondayDate:      String
-    mondayHours:     String
-    tuesdayDate:     String
-    tuesdayHours:    String
-    wednesdayDate:   String
-    wednesdayHours:  String
-    thursdayDate:    String
-    thursdayHours:   String
-    fridayDate:      String
-    fridayHours:     String
-    saturdayDate:    String
-    saturdayHours:   String
-    weekStartDate:   String
-    weekEndDate:     String
-
-    phoneId:                      String
-    deviceId:                     String
-    vehicleId:                    String
-    cxNumber:                     String
-    message:                      String
-
-    driver:                       Driver
   }
 
 
@@ -270,25 +224,15 @@ const typeDefs = gql`
     dspId:                        String
   }
 
-###########################
-#     Weekly Planner      #
-###########################
-  type WeeklySchedule {
-    id:                           ID
-    createdAt:                    Date
-    weekStartDate:                String
-    weekEndDate:                  String
-    monday:                       JSON
-    tuesday:                      JSON
-    wednesday:                    JSON
-    thursday:                     JSON
-    friday:                       JSON
-    saturday:                     JSON
-    sunday:                       JSON
 
-    owner:                        Owner
-    manager:                      Manager
-    driver:                       Driver
+###########################
+#       DailyRoster       #
+###########################
+  type DailyRoster {
+    id:           ID 
+    date:         String
+    driverIds:    [String]
+    drivers:      [Driver]
   }
 
 
@@ -461,19 +405,16 @@ const typeDefs = gql`
   type Query {
     #### OWNER QUERIES ####
     getOwner(id: String): Owner
-    ownerGetEmployedDrivers: [Driver]
     #######################
 
     #### MANAGER QUERIES ####
     getManager(id: String): Manager
-    managerGetEmployedDrivers: [Driver]
     #########################
 
     #### DRIVER QUERIES ####
-    getDriver: Driver
-    getDriversFromDsp: [Driver]
-    driverGetManagers: [Manager]
-    getDriverByResetToken(token: String): Driver
+    getDriver: Driver                                     # GOOD
+    getDriversFromDsp: [Driver]                           # GOOD
+    getDriverByResetToken(token: String): Driver          # GOOD
     ########################
 
     #### DRIVER ACCIDENT QUERIES ####
@@ -496,14 +437,7 @@ const typeDefs = gql`
 
     # CHATROOM QUERIES
     dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
-
     driverGetChatroomById(chatroomId: String!): Chatroom
-
-    # SHIFT PLANNER QUERIES
-    driverGetShiftPlaner: [ShiftPlanner]
-
-    # SHIFT PLANNER DATES MUTATIONS
-    dynamicGetDriversForShiftPlannerByDate(role: String!, date: String!): [ShiftPlanner]
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
@@ -517,13 +451,11 @@ const typeDefs = gql`
   type Mutation {
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
-    ownerSignIn(email: String!, password: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
     #########################
 
     #### MANAGER MUTATIONS ####
     managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Manager
-    managerSignIn(email: String!, password: String!): Manager
     ###########################
 
     #### DRIVER MUTATIONS ####                                                                                                                  #
@@ -564,6 +496,7 @@ const typeDefs = gql`
     ###################################
 
     #### DYNAMIC SHIFT MUTATIONS ####
+    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster
     dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDevices: [JSON], dspId: String): Shift
     #################################
 
@@ -605,15 +538,6 @@ const typeDefs = gql`
     scorecardToolCreateWeeklyReports(token: String, dspId: String, role: String, transporterId: String, date: String, feedbackStatus: String, rank: Int, tier: String, delivered: Int, keyFocusArea: String, fico: String, seatbeltOffRate: String, speedingEventRate: String, distractionsRate: String, followingDistanceRate: String, signalViolationsRate: String, deliveryCompletionRate: String, deliveredAndRecieved: String, photoOnDelivery: String, attendedDeliveryAccuracy: Int, dnr: Int, customerDeliveryFeedback: String, podOpps: Int, ccOpps: Int, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
     ##################################
 
-    # SHIFT PLANNER TOOL MUTATIONS
-    dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
-    
-    # SHIFT PLANNER MUTATIONS
-    dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
-
-    # SHIFT PLANNER DATES MUTATIONS
-    dynamicUpdateShiftPlannerDates(role: String!, dates: [String]): ShiftPlannerDates
-
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
@@ -621,7 +545,6 @@ const typeDefs = gql`
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
-    dynamicCreateShiftPlannerDates(role: String!, dates: [String!]): [ShiftPlannerDates]
   }
   #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
 `;
