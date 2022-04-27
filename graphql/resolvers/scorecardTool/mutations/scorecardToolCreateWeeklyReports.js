@@ -55,10 +55,10 @@ export default {
             })
             
             console.log("Hit Three")
-
+            console.log(foundDriver)
             let driverId 
 
-            if (!foundDriver.id) {
+            if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 

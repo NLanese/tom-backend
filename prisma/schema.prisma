@@ -265,26 +265,25 @@ model DailyRoster{
   dsp        Dsp? @relation(fields: [dspId], references: [id])
 }
 
-
-
+/////////////////////////////////////
+///                               ///
+///           Chatroom            ///
+///                               ///
+/////////////////////////////////////
 
 model Chatroom {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
+  id            String        @id @unique @default(uuid())
+  createdAt     DateTime      @default(now())
 
-  // CHATROOM INFORMATION
   chatroomName  String
   guests        Json[]
   chatroomOwner Json
 
-  // KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
   driverJoinOnSignUp  Boolean @default(false)
-  managerJoinOnSignUp Boolean @default(true) // Keeps track on wether manager should be auto added to the chatroom apon signup
+  managerJoinOnSignUp Boolean @default(true) 
 
-
-  // RELATIONSHIPS
   ownerId  String?
-  owner    Owner?     @relation(fields: [ownerId], references: [id])
+  owner    Owner?             @relation(fields: [ownerId], references: [id])
   drivers  Driver[]
   managers Manager[]
   messages Messages[]
