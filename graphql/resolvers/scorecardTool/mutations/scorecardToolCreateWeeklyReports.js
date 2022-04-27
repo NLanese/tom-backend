@@ -58,7 +58,7 @@ export default {
 
             let driverId 
 
-            if (!foundDriver.id) {
+            if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 

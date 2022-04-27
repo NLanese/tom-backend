@@ -44,7 +44,7 @@ export default {
 
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation,
-        ...deviceResolvers.Mutation
+        ...deviceResolvers.Mutation,
         ...dailyRosterResolvers.Mutation
     },
     JSON: GraphQLJSON,
