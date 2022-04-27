@@ -48,19 +48,22 @@ export default {
                                     id: dspId
                                 }
                             }
+                        },
+                        include: {
+                            dsp: true,
                         }
                     })
-                    .then( async (resolved) => {
-                        console.log(resolved)
-                        return await db.device.findUnique({
-                            where: {
-                                id: resolved.id
-                            },
-                            include: {
-                                dsp: true
-                            }
-                        })
-                    })
+                    // .then( async (resolved) => {
+                    //     console.log(resolved)
+                    //     return await db.device.findUnique({
+                    //         where: {
+                    //             id: resolved.id
+                    //         },
+                    //         include: {
+                    //             dsp: true
+                    //         }
+                    //     })
+                    // })
                 } catch (error){
                     console.log("Error CREATING the DEVICE")
                     console.log(error)
