@@ -55,7 +55,7 @@ export default {
                 return foundShift
             }).then( (foundShift) => {
                 // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
-                if (foundShift != null){
+                if (foundShift !== null){
                     console.log("Exisitng  Shift")
                     try{
                         return db.shift.update({
@@ -118,7 +118,7 @@ export default {
         
             allDevices.forEach( async (deviceObj) => {                 
                 for (let i = 0; i < deviceObj.amount; i++){         
-                    if (deviceObj[i].name != 'No Driver Assigned'){
+                    if (deviceObj[i].name !== 'No Driver Assigned'){
 
                         // Finds the driver who has the same Id as the one assigned the current Device
                         findDriver(deviceObj[i].id).then( resolved => {
@@ -145,7 +145,7 @@ export default {
                             // If there is an existing shift array
                             else {
                                 newShifts = resolvedObj.shifts.filter( shift => {
-                                    if (shift.date != resolvedObj.date){
+                                    if (shift.date !== resolvedObj.date){
                                         return shift
                                     }
                                 })

@@ -138,6 +138,7 @@ model Driver {
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
   chatrooms        Chatroom[]
+  devices          Device[]
   dailyRosters     DailyRoster[]    
 }
 
@@ -181,6 +182,7 @@ model Dsp {
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
+  devices              Device[]
   dailyRosters      DailyRoster[]
 }
 
@@ -418,3 +420,24 @@ enum Role {
   OWNER
   SUPERADMIN
 }
+
+/////////////////////////////////////
+///                               ///
+///         DEVICE MODEL          ///
+///                               ///
+/////////////////////////////////////
+
+model Device {
+  id                  Int @id @unique @default(autoincrement())
+  createdAt           DateTime @default(now())
+  number              Int?
+  name                String?
+  type                String?
+
+  // RELATIONSHIPS
+  driverId            String?
+  driver              Driver? @relation(fields: [driverId], references: [id])
+  dspId               String
+  dsp                 Dsp @relation(fields: [dspId], references: [id])
+}
+
