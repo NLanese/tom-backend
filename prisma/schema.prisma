@@ -58,7 +58,6 @@ model Owner {
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   dsp              Dsp?
-  weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
 }
 
@@ -80,19 +79,15 @@ model Manager {
   password    String
   profilePick Json?
 
-  // ACCOUNT INFORMATION
   muted   Boolean @default(false) // Used to disable char features for Driver
   locked  Boolean @default(false) // Used to lock the Managers Account if needed
   deleted Boolean @default(false) // Keeps track if the Managers Account has been deleted
 
-  // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
-  // RESET PASSWORD
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
 
-  // RELATIONSHIPS
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
   drivers          Driver[]
@@ -100,7 +95,6 @@ model Manager {
   notifiedMessages NotifiedMessages[]
   dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
-  weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
 }
 
@@ -123,34 +117,28 @@ model Driver {
   profilePick Json?
   shifts      Json[]
 
-  // ACCOUNT INFORMATION
   transporterId String? 
   muted         Boolean @default(false) // Used to disable char features for Driver
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
   attendence    String?
 
-  // NOTIFACTION SYSTEM
   notified Boolean @default(false)
 
-  // RESET PASSWORD
-  resetPasswordToken           String?
-  resetPasswordTokenExpiration Int?
+  resetPasswordToken           String?  @unique
+  resetPasswordTokenExpiration String?   
 
-  // RELATIONSHIPS
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
   managers         Manager[]
   accidents        Accident[]
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
-  vehicle          Vehicle?
   dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
-  weeklySchedule   WeeklySchedule[]
   chatrooms        Chatroom[]
-  shiftPlanners    ShiftPlanner[]
+  dailyRosters     DailyRoster[]    
 }
 
 /////////////////////////////////////
@@ -158,6 +146,7 @@ model Driver {
 ///             DSP               ///
 ///                               ///
 /////////////////////////////////////
+
 model Dsp {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
@@ -165,8 +154,7 @@ model Dsp {
   shortcode String   @unique
   timeZone  String
 
-  // DSP SETTINGS
-    // Limits
+
     ficoLimits                   Json
     seatbeltLimits               Json
     speedingLimits               Json
@@ -179,67 +167,28 @@ model Dsp {
     topCardLimits                Int
     smallCardLimits              Int
 
-    // Feedback
     feedbackNotifications        Json
     autoSend                     Json
 
-    // Devices
     allDevices                   Json[]
 
-  // DSP INFORMATION
   paid            Boolean @default(false) // Keeps track if the Dsp has paid 
   accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
 
-  // RELATIONSHIPS
   managers Manager[]
   drivers  Driver[]     
   shifts Shift[]     
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
+  dailyRosters      DailyRoster[]
 }
 
 /////////////////////////////////////
 ///                               ///
-///         Shift Planner         ///
+///         Weekly Report         ///
 ///                               ///
 /////////////////////////////////////
-model ShiftPlanner {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-
-  // SHIFT PLANNER REQUIRED DATA
-  sundayDate     String? // 11/1/21
-  sundayHours    String? // Hours working
-  mondayDate     String?
-  mondayHours    String?
-  tuesdayDate    String?
-  tuesdayHours   String?
-  wednesdayDate  String?
-  wednesdayHours String?
-  thursdayDate   String?
-  thursdayHours  String?
-  fridayDate     String?
-  fridayHours    String?
-  saturdayDate   String?
-  saturdayHours  String?
-  weekStartDate  String? // Sunday
-  weekEndDate    String? // Saturday
-
-
-
-
-  // SHIFT PLANNER UNREQUIRED DATA
-  phoneId   String?
-  deviceId  String?
-  vehicleId String?
-  cxNumber  String? // If 'null' Driver is a sweeper
-  message   String?
-
-  // RELATIONSHIPS
-  driverId String?
-  driver   Driver? @relation(fields: [driverId], references: [id])
-}
 
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())
@@ -288,27 +237,11 @@ model WeeklyReport {
   dsp      Dsp @relation(fields: [dspId], references: [id])
 }
 
-model WeeklySchedule {
-  id            String   @id @unique @default(uuid())
-  createdAt     DateTime @default(now())
-  weekStartDate String
-  weekEndDate   String
-  monday        Json
-  tuesday       Json
-  wednesday     Json
-  thursday      Json
-  friday        Json
-  saturday      Json
-  sunday        Json
-
-  // RELATIONSHIPS
-  ownerId   String
-  owner     Owner   @relation(fields: [ownerId], references: [id])
-  managerId String
-  manager   Manager @relation(fields: [managerId], references: [id])
-  driverId  String
-  driver    Driver  @relation(fields: [driverId], references: [id])
-}
+/////////////////////////////////////
+///                               ///
+///             Shift             ///
+///                               ///
+/////////////////////////////////////
 
 model Shift {
   id          String  @id @unique @default(uuid())
@@ -317,6 +250,23 @@ model Shift {
   dspId       String
   dsp         Dsp     @relation(fields: [dspId], references: [id])
 }
+
+/////////////////////////////////////
+///                               ///
+///         Daily Roster          ///
+///                               ///
+/////////////////////////////////////
+
+model DailyRoster{
+  id         String  @id @unique @default(uuid())
+  date       String @unique
+  drivers    Driver[] 
+  dspId      String?
+  dsp        Dsp? @relation(fields: [dspId], references: [id])
+}
+
+
+
 
 model Chatroom {
   id        String   @id @unique @default(uuid())
@@ -375,14 +325,6 @@ model NotifiedMessages {
   owner     Owner?   @relation(fields: [ownerId], references: [id])
   driver    Driver?  @relation(fields: [driverId], references: [id])
   manager   Manager? @relation(fields: [adminId], references: [id])
-}
-
-model Vehicle {
-  id            Int     @id @default(autoincrement())
-  driverId      String  @unique
-  driver        Driver  @relation(fields: [driverId], references: [id])
-  vehicleNumber String?
-  amazonLogo    String?
 }
 
 model Accident {
@@ -451,7 +393,6 @@ model InjuryAccident {
   pain_level          String
   specific_pictures   Json
 
-  // RELATIONSHIPS
   accidentId String
   accident   Accident @relation(fields: [accidentId], references: [id])
   collisionAccidentId String?

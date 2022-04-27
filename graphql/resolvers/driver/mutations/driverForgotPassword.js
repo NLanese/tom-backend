@@ -1,8 +1,9 @@
 import e from "express";
 import db from "../../../../utils/generatePrisma.js";
-import generateDriverToken from "../../../../utils/generateToken/generateDriverToken.js"
+import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken.js";
 import crypto from "crypto"
-
+import nodemailer from 'nodemailer'
+import dotenv from "dotenv";
 
 
 export default {
@@ -10,18 +11,53 @@ export default {
         driverForgotPassword: async (_, {
             email
         }, context) => {
-            
-            // Accesses the hidden .env file
-            require("dotenv").config()
 
+///////////////////////////////////
+///                             ///
+///      Mail Configuration     ///
+///                             ///
+///////////////////////////////////
+
+            // Creates the means of sending the email
             const transporter = nodemailer.createTransport({
-                service: "e",
+                service: "Gmail",
                 auth: {
                   user: `${process.env.EMAIL_ADDRESS}`,
-                  password: `${process.env.EMAIL_PASSWORD}`
+                  pass: `${process.env.EMAIL_PASSWORD}`
                 }
             })
 
+            // Generates resetToken
+            let token = generateForgotPasswordToken(email)
+
+            // Finds if any other driver has the same token somehow
+            const conflictingDriver = await db.driver.findFirst({
+                where: {
+                    resetPasswordToken: token
+                }
+            })
+
+            let randomizer = email + Math.random().toString()
+            // Rerandomizes the token 
+            if (conflictingDriver){
+                token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
+            }
+
+            // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
+            let code = `http://localhost:3000/resetPassword/${token}`           // Testing
+
+            let today = Date.now()
+            let expire = (today + 18000000).toString()
+            console.log(expire)
+
+            // Configures the actual Email Content
+            const mailOptions = {
+                from: `${process.env.EMAIL_ADDRESS}`,
+                to: `${email}`,
+                subject: `Reset your TOM App Password`,
+                text: `Please click the link provided to be sent to the Reset Password page: \n${code}`
+              }
+            email = email.toUpperCase()
 
             // Finds the driver using the given email
             const foundDriver = await db.driver.findUnique({
@@ -30,19 +66,43 @@ export default {
                 }
             })
 
-            let token = generateDriverToken(email)
+            console.log("Sending the email")
+
+            // SENDS the email through the transporter
+            transporter.sendMail(mailOptions, (error, response) => {
+                if (error){
+                  throw new Error('Something went wrong, please try again \n' + error)
+                } 
+            })
+    
+              
+///////////////////////////////////
+///                             ///
+///           Mutation          ///
+///                             ///
+///////////////////////////////////
 
             if (foundDriver){
-                return await db.driver.update({
-                    where: {
-                        id: foundDriver.id
-                    },
-                    data: {
-                        resetPasswordToken: token
-                    }
-                })
+                try{
+                    return await db.driver.update({
+                        where: {
+                            id: foundDriver.id
+                        },
+                        data: {
+                            resetPasswordToken: token,
+                            resetPasswordTokenExpiration: expire
+                        }
+                    }).then( mutation => {
+                        console.log(mutation)
+                        return mutation
+                    })
+                } catch (error){
+                    console.log(error)
+                    throw new Error(error)
+                }
             }
             else{
+                console.log("No driver of this email found")
                 throw new Error("Error: This email is not associated with any account")
             }
 

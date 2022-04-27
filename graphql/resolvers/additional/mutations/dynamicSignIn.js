@@ -34,7 +34,6 @@ export default {
                                 }
                             },
                             weeklyReport: true,
-                            weeklySchedule: true
                         }
                     },
                     managers: true,

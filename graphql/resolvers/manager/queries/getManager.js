@@ -12,7 +12,18 @@ export default {
                     },
                     include: {
                         owner: true,
-                        drivers: true,
+                        drivers: {
+                            include: {
+                                weeklyReport: true,
+                                accidents: {
+                                    include: {
+                                        propertyAccidents: true,
+                                        collisionAccidents: true,
+                                        injuryAccidents: true
+                                    }
+                                }
+                            }
+                        },
                         dsp: {
                             include: {
                                 shifts: true

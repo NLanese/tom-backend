@@ -5,7 +5,7 @@ export default {
     Query: {
     },
     Mutation: {
-        ...dynamicSignIn.Mutation
+        ...dynamicSignIn.Mutation       // Good
     },
     JSON: GraphQLJSON
 }
