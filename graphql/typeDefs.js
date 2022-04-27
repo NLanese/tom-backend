@@ -641,6 +641,7 @@ const typeDefs = gql`
 
     # DEVICE MUTATIONS
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
+    assignDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
