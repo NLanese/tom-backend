@@ -138,7 +138,7 @@ model Driver {
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
   chatrooms        Chatroom[]
-  dailyRosters     DailyRoster[]      @relation()
+  dailyRosters     DailyRoster[]    
 }
 
 /////////////////////////////////////
@@ -181,6 +181,7 @@ model Dsp {
   ownerId  String    @unique
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
+  dailyRosters      DailyRoster[]
 }
 
 /////////////////////////////////////
@@ -257,9 +258,11 @@ model Shift {
 /////////////////////////////////////
 
 model DailyRoster{
-  id          String  @id @unique @default(uuid())
+  id         String  @id @unique @default(uuid())
   date       String @unique
-  drivers    Driver[] @relation()
+  drivers    Driver[] 
+  dspId      String?
+  dsp        Dsp? @relation(fields: [dspId], references: [id])
 }
 
 

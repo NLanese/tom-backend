@@ -162,6 +162,7 @@ const typeDefs = gql`
     drivers:                      [Driver]
     shifts:                       [Shift]
     weeklyReports:                [WeeklyReport]
+    dailyRosters:                 [DailyRoster]
   }
 
 
@@ -231,8 +232,8 @@ const typeDefs = gql`
   type DailyRoster {
     id:           ID 
     date:         String
-    driverIds:    [String]
     drivers:      [Driver]
+    dsp:          Dsp
   }
 
 

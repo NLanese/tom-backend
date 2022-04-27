@@ -8,7 +8,8 @@ export default {
             token, 
             role,
             date,
-            driverIds
+            driverIds,
+            dspId
         }) => {
 
             ///////////////////////////////
@@ -17,36 +18,58 @@ export default {
 
             // Finder Function
             const findDailyRoster = async () => {
-                return await db.dailyRoster.findUnique({
-                    where: {
-                        date: date
-                    }
-                })
+                try{
+                    return await db.dailyRoster.findUnique({
+                        where: {
+                            date: date
+                        }
+                    })
+                }
+                catch (err){
+                    console.log(err)
+                }
             }
 
             // Creates the Daily Roster
             const createDailyRoster = async () => {
-                return await db.dailyRoster.create({
-                    data: {
-                        date: date
-                    }
-                })
+                try{
+                    return await db.dailyRoster.create({
+                        data: {
+                            date: date,
+                            dsp: {
+                                connect: {
+                                    id: dspId
+                                }
+                            }
+                        }
+                    })
+                } catch(err){
+                    console.log(err)
+                }
             }
 
             // Applies driver connections to a newly created DR,
             // or updates the driver connections to an existing one
             const updateDailyRoster = async (rosterId) => {
-                driverIds.forEach( async (driverId) =>  {
-                    return await db.dailyRoster.update({
-                        where: {
-                            id: rosterId
-                        },
-                        drivers: {
-                            connect: {
-                                id: driverId
+                return driverIds.forEach( async (driverId) =>  {
+                    console.log(driverId)
+                    try{
+                        return await db.dailyRoster.update({
+                            where: {
+                                id: rosterId
+                            },
+                            data: {
+                                drivers: {
+                                    connect: {
+                                        id: driverId
+                                    }
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+                    catch(err){
+                        console.log(err)
+                    }
                 })
             }
 
@@ -54,14 +77,18 @@ export default {
             // This will allow the update to add new and existing drivers wihtout
             // duplication
             const clearDailyRoster = async () => {
-                return await db.dailyRoster.update({
-                    where: {
-                        date: date
-                    },
-                    data: {
-                        drivers: []
-                    }
-                })
+                try {
+                    return await db.dailyRoster.update({
+                        where: {
+                            date: date
+                        },
+                        data: {
+                            drivers: []
+                        }
+                    })
+                } catch(err){
+                    console.log(err)
+                }
             }
 
 
@@ -90,21 +117,25 @@ export default {
             ///    Update or Create     ///
             ///////////////////////////////
             
+            console.log("Trying to find previously existing roster for the same date\n")
             return findDailyRoster(date).then(resolved => {
 
                 // There is an already existing Daily
                 if (resolved){
-                    return clearDailyRoster().then( resolved => {
-                        return updateDailyRoster(resolved.id).then(resolved => {
-                            console.log(resolved)
-                            return resolved
-                        })
+                    console.log("Found a Roster\n")
+                    return updateDailyRoster(resolved.id).then(resolved => {
+                        console.log("Roster updated")
+                        console.log(resolved)
+                        return resolved
                     })
                 }
 
                 // There is not an existing Daily
                 else{
+                    console.log("Did not find roster on this date\n")
                     return createDailyRoster().then( resolved => {
+                        console.log("Roster Created\n")
+                        console.log(resolved)
                         return updateDailyRoster(resolved.id).then(resolved => {
                             console.log(resolved)
                             return resolved
