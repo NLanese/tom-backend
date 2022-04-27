@@ -60,7 +60,7 @@ const startApolloServer = async () => {
     })
   );
 
-  app.use(express.json({ limit: "1000kb" }));
+  app.use(express.json({ limit: "500kb" }));
   app.use(
     express.urlencoded({
       extended: true,
@@ -114,7 +114,7 @@ const startApolloServer = async () => {
     path: "/graphql",
     cors: false,
     bodyParserConfig: {
-      limit: "100kb",
+      limit: "500kb",
     },
   });
   await app.listen(process.env.PORT, () =>
@@ -128,3 +128,4 @@ startApolloServer();
 
 //testing the CI/CD
 //testing while offline
+

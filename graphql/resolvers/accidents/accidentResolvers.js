@@ -43,27 +43,27 @@ export default {
     },
     Mutation: {
         // DRIVER MUTATIONS
-        ...driverCreateAccident.Mutation,
-        ...driverCreateCollisionAccident.Mutation,
-        ...driverCreatePropertyAccident.Mutation,
-        ...driverCreateInjuryAccident.Mutation,
-        ...driverCreateSelfInjuryAccident.Mutation,
+        ...driverCreateAccident.Mutation,               // Good
+        ...driverCreateCollisionAccident.Mutation,      // Good
+        ...driverCreatePropertyAccident.Mutation,       // Good
+        ...driverCreateInjuryAccident.Mutation,         // Good
+        ...driverCreateSelfInjuryAccident.Mutation,     // Good
 
-        ...driverUpdateAccident.Mutation,
-        ...driverUpdateCollisionAccident.Mutation,
-        ...driverUpdatePropertyAccident.Mutation,
-        ...driverUpdateInjuryAccident.Mutation,
+        ...driverUpdateAccident.Mutation,               // Good
+        ...driverUpdateCollisionAccident.Mutation,      // Good
+        ...driverUpdatePropertyAccident.Mutation,       // Good
+        ...driverUpdateInjuryAccident.Mutation,         // Good
 
         // DYNAMIC MUTATIONS
-        ...dynamicCreateAccident.Mutation,
-        ...dynamicCreateCollisionAccident.Mutation,
-        ...dynamicCreatePropertyAccident.Mutation,
-        ...dynamicCreateInjuryAccident.Mutation,
+        ...dynamicCreateAccident.Mutation,              // Good
+        ...dynamicCreateCollisionAccident.Mutation,     // Good
+        ...dynamicCreatePropertyAccident.Mutation,      // Good
+        ...dynamicCreateInjuryAccident.Mutation,        // Good
 
-        ...dynamicUpdateAccident.Mutation,
-        ...dynamicUpdateCollisionAccident.Mutation,
-        ...dynamicUpdatePropertyAccident.Mutation,
-        ...dynamicUpdateInjuryAccident.Mutation
+        ...dynamicUpdateAccident.Mutation,              // Good
+        ...dynamicUpdateCollisionAccident.Mutation,     // Good
+        ...dynamicUpdatePropertyAccident.Mutation,      // Good
+        ...dynamicUpdateInjuryAccident.Mutation         // Good
     },
     JSON: GraphQLJSON
 }

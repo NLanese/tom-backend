@@ -25,7 +25,7 @@ export default {
         ...ownerCreateWeeklyReport.Mutation,
 
         // MANAGER MUTATIONS
-        ...managerCreateWeeklyReport.Muitation,
+        ...managerCreateWeeklyReport.Mutation,
 
         // DRIVER MUTATIONS
         ...driverAcknowledgeFeedbackMessage.Mutation,

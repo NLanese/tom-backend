@@ -12,6 +12,7 @@ import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
 import shiftResolvers from './shift/shiftReolvers.js';
 import deviceResolvers from './device/deviceResolvers.js';
+import dailyRosterResolvers from './dailyRoster/dailyRosterResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -44,6 +45,7 @@ export default {
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation,
         ...deviceResolvers.Mutation
+        ...dailyRosterResolvers.Mutation
     },
     JSON: GraphQLJSON,
 }

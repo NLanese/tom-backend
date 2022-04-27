@@ -2,6 +2,8 @@ import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer'
+
 
 // BUGS TO FIX
 // DOESNT HAVE ALL THE DRIVERS JOIN THE BREAKROOM CHAT
@@ -42,6 +44,19 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
+            let actualEmail = email
+            email = email.toUpperCase()
+
+            const duplicateDriver = await db.driver.findUnique({
+                where:{
+                    email: email
+                }
+            })
+
+            if (duplicateDriver){
+                throw new Error("Duplicate Driver Entered")
+            }
+
 
 ///////////////////////////////////
 ///                             ///
@@ -70,6 +85,37 @@ export default {
                 console.log(error)
                 throw new Error(error)
             }
+
+////////////////////////////////
+///                          ///
+///       EMAIL STUFF        ///
+///                          ///
+////////////////////////////////
+
+            // Creates the Transporter
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                  user: `${process.env.EMAIL_ADDRESS}`,
+                  pass: `${process.env.EMAIL_PASSWORD}`
+                }
+            })
+
+            // Creates the Mail Object
+            const mailOptions = {
+                from: `${process.env.EMAIL_ADDRESS}`,
+                to: `${actualEmail}`,
+                subject: `Thank you for joining the TOM Team!`,
+                text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+              }
+            
+            // Sends the mail
+            transporter.sendMail(mailOptions, (error, response) => {
+                if (error){
+                  throw new Error('Something went wrong, please try again \n' + error)
+                } 
+            })
+
             
 ///////////////////////////////////
 ///                             ///
@@ -137,6 +183,7 @@ export default {
                     }
  
                     // Checks to make sure a DSP exists first, if so, conncts the driver to it
+                    console.log(email, "Line 186")
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -168,6 +215,7 @@ export default {
 
                     // If there is no DSP
                     if (!foundOwner.dsp) {
+                        console.log(email, "Line 218")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -344,6 +392,7 @@ export default {
 
                     // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
+                        console.log(email, "Line 395")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -368,6 +417,7 @@ export default {
                     }
 
                     if (!foundOwner.dsp) {
+                        console.log(email, "Line 420")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {

@@ -42,7 +42,7 @@ export default {
         ...dynamicAddManagerToChatroom.Mutation,
         ...dynamicRemoveManagerFromChatroom.Mutation,
         ...dynamicLeaveChatroom.Mutation,
-        ...dynamicUpdateChatroom.Mutataion,
+        ...dynamicUpdateChatroom.Mutation,
 
         // DRIVER MUTATIONS
         ...driverCreateChatroom.Mutation,

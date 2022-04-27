@@ -3,19 +3,16 @@ import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-a
 
 export default {
     Query: {
-        getDriverByResetToken: async (_, {}, context) => {
-            const driver = await checkDriverAuth(context)
-
+        getDriverByResetToken: async (_, {token}) => {
             try {
                 return await db.driver.findUnique({
                     where: {
-                        id: driver.id
+                        resetPasswordToken: token
                     },
                     include: {
                         owner: true,
                         managers: true,
                         dsp: true,
-                        shifts: true,
                         chatrooms: {
                             include: {
                                 messages: true
@@ -30,13 +27,13 @@ export default {
                         },
                         accidents: {
                             include: {
-                                collisionAccident: {
+                                collisionAccidents: {
                                     include: {
-                                        injuryAccident: true
+                                        injuryAccidents: true
                                     }
                                 },
-                                propertyAccident: true,
-                                injuryAccident: true,
+                                propertyAccidents: true,
+                                injuryAccidents: true,
                                 selfInjuryAccidents: true
                             }
                         },

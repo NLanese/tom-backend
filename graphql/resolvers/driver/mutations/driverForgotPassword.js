@@ -11,7 +11,7 @@ export default {
         driverForgotPassword: async (_, {
             email
         }, context) => {
-            
+
 ///////////////////////////////////
 ///                             ///
 ///      Mail Configuration     ///
@@ -36,15 +36,19 @@ export default {
                     resetPasswordToken: token
                 }
             })
+
+            let randomizer = email + Math.random().toString()
             // Rerandomizes the token 
             if (conflictingDriver){
-                token = generateForgotPasswordToken(generateForgotPasswordToken(email))
+                token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
             }
 
             // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
             let code = `http://localhost:3000/resetPassword/${token}`           // Testing
 
-            console.log(Date.now())
+            let today = Date.now()
+            let expire = (today + 18000000).toString()
+            console.log(expire)
 
             // Configures the actual Email Content
             const mailOptions = {
@@ -61,6 +65,8 @@ export default {
                     email: email
                 }
             })
+
+            console.log("Sending the email")
 
             // SENDS the email through the transporter
             transporter.sendMail(mailOptions, (error, response) => {
@@ -83,8 +89,12 @@ export default {
                             id: foundDriver.id
                         },
                         data: {
-                            resetPasswordToken: token
+                            resetPasswordToken: token,
+                            resetPasswordTokenExpiration: expire
                         }
+                    }).then( mutation => {
+                        console.log(mutation)
+                        return mutation
                     })
                 } catch (error){
                     console.log(error)
