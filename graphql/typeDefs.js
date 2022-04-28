@@ -3,6 +3,9 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
 	scalar Date
 	scalar JSON
+###########################
+#       Super User        #
+###########################
 
   type SuperUser {
     id:                           ID
@@ -17,6 +20,10 @@ const typeDefs = gql`
     profilePick:                  JSON
   }
 
+###########################
+#          Owner          #
+###########################
+
   type Owner {
     id:                           ID
     createdAt:                    Date
@@ -29,19 +36,15 @@ const typeDefs = gql`
     phoneNumber:                  String
     profilePick:                  JSON
 
-    # ACCOUNT INFORMATION
     locked:                       Boolean
     deleted:                      Boolean
 
-    # NOTIFACTION SYSTEM
     notified:                     Boolean
 
-    # RESET PASSWORD
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
     signUpToken:                  String
 
-    # RELATIONSHIPS
     drivers:                      [Driver]
     managers:                     [Manager]
     messages:                     [Messages]
@@ -50,6 +53,10 @@ const typeDefs = gql`
     chatrooms:                    [Chatroom]
   }
 
+
+###########################
+#         Manager         #
+###########################
   type Manager {
     id:                           ID
     createdAt:                    Date
@@ -62,19 +69,15 @@ const typeDefs = gql`
     phoneNumber:                  String
     profilePick:                  JSON
 
-    # ACCOUNT INFORMATION
     muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 
-    # NOTIFACTION SYSTEM
     notified:                     Boolean
 
-    # RESET PASSWORD
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
     
-    # RELATIONSHIPS
     owner:                        Owner
     drivers:                      [Driver]
     messages:                     [Messages]
@@ -83,6 +86,10 @@ const typeDefs = gql`
     chatrooms:                    [Chatroom]
   }
 
+
+###########################
+#         Driver          #
+###########################
   type Driver {
     id:                           ID
     createdAt:                    Date
@@ -94,33 +101,33 @@ const typeDefs = gql`
     password:                     String
     phoneNumber:                  String
     profilePick:                  String
+    shifts:                       [JSON]
 
-    # ACCOUNT INFORMATION
     transporterId:                String
     muted:                        Boolean
     locked:                       Boolean
     deleted:                      Boolean
 
-    # NOTIFACTION SYSTEM
     notified:                     Boolean
 
-    # RESET PASSWORD
     resetPasswordToken:           String
     resetPasswordTokenExpiration: Int
 
-    # RELATIONSHIPS
     owner:                        Owner
     accidents:                    [Accident]
-    managers:                       [Manager]
-    vehicle:                      Vehicle
+    managers:                     [Manager]
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
-    shiftPlanners:                [ShiftPlanner]
+    devices:                      [Device]
   }
 
+
+###########################
+#           Dsp           #
+###########################
   type Dsp {
     id:                           ID
     createdAt:                    Date
@@ -128,7 +135,6 @@ const typeDefs = gql`
     shortcode:                    String
     timeZone:                     String
 
-    # DSP SETTINGS
     ficoLimits:                   JSON
     seatbeltLimits:               JSON
     speedingLimits:               JSON
@@ -136,68 +142,44 @@ const typeDefs = gql`
     followLimits:                 JSON
     signalLimits:                 JSON
     deliveryCompletionRateLimits: JSON
-    scanComplianceLimits:         JSON
-    callComplianceLimits:         JSON
     deliveryNotRecievedLimits:    JSON
     photoOnDeliveryLimits:        JSON
+
     topCardLimits:                Int
     smallCardLimits:              Int
+
     feedbackNotifications:        JSON
     autoSend:                     JSON
 
-    # DSP INFORMATION
+    allDevices:                   [JSON]
+
     paid:                         Boolean
     accountStanding:              String
 
-    # RELATIONSHIPS
     owner:                        Owner
     managers:                     [Manager]
     drivers:                      [Driver]
-    shiftPlannerDates:           ShiftPlannerDates
+    shifts:                       [Shift]
+    weeklyReports:                [WeeklyReport]
+    devices:                       [Device]
   }
 
-  type ShiftPlannerDates {
-    id:                           ID
-    createdAt:                    Date
-    dates:                        [String]
 
-    # RELATIONSHIPS
+###########################
+#          Shift          #
+###########################
+  type Shift {
+    id:                           ID
+    date:                         String
+    allDriverShifts:                   [JSON]
+    dspId:                        String
     dsp:                          Dsp
   }
 
-  type ShiftPlanner {
-    id:                           ID
-    createdAt:                    Date
 
-    # SHIFT PLANNER REQUIRED DATA
-    sundayDate:      String
-    sundayHours:     String
-    mondayDate:      String
-    mondayHours:     String
-    tuesdayDate:     String
-    tuesdayHours:    String
-    wednesdayDate:   String
-    wednesdayHours:  String
-    thursdayDate:    String
-    thursdayHours:   String
-    fridayDate:      String
-    fridayHours:     String
-    saturdayDate:    String
-    saturdayHours:   String
-    weekStartDate:   String
-    weekEndDate:     String
-
-    # SHIFT PLANNER UNREQUIRED DATA
-    phoneId:                      String
-    deviceId:                     String
-    vehicleId:                    String
-    cxNumber:                     String
-    message:                      String
-
-    # RELATIONSHIPS
-    driver:                       Driver
-  }
-
+###########################
+#      Weekly Report      #
+###########################
   type WeeklyReport {
     id:                           ID
     createdAt:                    Date
@@ -209,7 +191,6 @@ const typeDefs = gql`
     acknowledged:                 Boolean
     acknowledgedAt:               String
 
-    # DATA FROM SCORECARD TOOL
     rank:                         Int
     tier:                         String
     delivered:                    Int
@@ -223,14 +204,11 @@ const typeDefs = gql`
     deliveryCompletionRate:       String
     deliveredAndRecieved:         String
     photoOnDelivery:              String
-    callCompliance:               String
-    scanCompliance:               String
     attendedDeliveryAccuracy:     Int
     dnr:                          Int
     podOpps:                      Int
     ccOpps:                       Int
 
-    # ADDITIONAL INFORMATION
     netradyne:                    JSON
     deliveryAssociate:            JSON
     defects:                      JSON
@@ -240,67 +218,85 @@ const typeDefs = gql`
     attendence:                   JSON
     productivity:                 JSON
 
-    # RELATIONSHIPS
     driver:                       Driver
+    driverId:                     String
+    dsp:                          Dsp
+    dspId:                        String
   }
 
-  type WeeklySchedule {
-    id:                           ID
-    createdAt:                    Date
-    weekStartDate:                String
-    weekEndDate:                  String
-    monday:                       JSON
-    tuesday:                      JSON
-    wednesday:                    JSON
-    thursday:                     JSON
-    friday:                       JSON
-    saturday:                     JSON
-    sunday:                       JSON
 
-    # RELATIONSHIPS
-    owner:                        Owner
-    manager:                      Manager
-    driver:                       Driver
+###########################
+#       DailyRoster       #
+###########################
+  type DailyRoster {
+    id:           ID 
+    date:         String
+    dsp:          Dsp
+    lineup:       JSON
   }
 
+####################
+#      Device      #
+####################
+type Device{
+    id:                  ID
+    createdAt:           Date
+    number:              String
+    name:                String
+    type:                String
+    deviceIndex:         Int
+
+    driverId:            String
+    driver:              Driver
+    dspId:               String
+    dsp:                 Dsp 
+  }
+
+
+###########################
+#        Chatroom         #
+###########################
   type Chatroom {
     id:                           ID
 		createdAt:                    Date
 
-    # CHATROOM INFORMATION
     chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
 
-    # KEEPS TRACK OF WHO GET AUTO JOINED TO THE ROOM ON SIGN UP
     driverJoinOnSignUp:           Boolean
     managerJoinOnSignUp:          Boolean
 
-    # RELATIONSHIPS
     owner:                        Owner
     managers:                     [Manager]
     drivers:                      [Driver]
     messages:                     [Messages]
   }
 
+
+###########################
+#        Messages         #
+###########################
   type Messages {
     id:        ID
     createdAt: Date
 
-    # MESSAGE INFORMATION
     content: String
     from: JSON
     visable: Boolean
     reported: Boolean
     reportedBy: JSON
 
-    # RELATIONSHIPS
     chatroom: Chatroom
     owner:  Owner
 		driver: Driver
     manager:  Manager
   }
 
+
+###########################
+#   Feedback Messages ?   #
+###########################
   type NotifiedMessages {
     id:         ID
     createdAt:  Date
@@ -311,16 +307,13 @@ const typeDefs = gql`
     driverId:   Int
     adminId:    Int 
     driver:     Driver
-    manager:      Manager
+    manager:    Manager
   }
 
-  type Vehicle {
-    id:         ID
-    driver:     Driver
-    vehicle_number: String
-    amazon_logo: String
-  }
 
+###########################
+#         Accident        #
+###########################
   type Accident {
     id:                     ID
     createdAt:              Date
@@ -329,108 +322,133 @@ const typeDefs = gql`
     time:                   String
     location:               String
 
-    # ACCIDENT DATA
-    amazon_logo:            Boolean
-    vehicleId:              String
-    number_packages_carried: Int
-    police_report_information: JSON
-    general_pictures:          JSON
-    weather:                String
-    rushed_prior:           Boolean
-    distracted:             Boolean
-    extra_info:                String
-    actions_before_accidents:  JSON
-    unsafe_conditions:         JSON
+    accident_report:            JSON
+    has_logo:                   String
+    police_report:              JSON
+    before_accident_report:     JSON
+    selfDamage:                 JSON
+    weather_and_distractions:   JSON
 
     deleted:                 Boolean
     filled:                  Boolean
 
-    # RELATIONSHIPS
-    driver:                 Driver
-    collisionAccident:      [CollisionAccident]
-    injuryAccident:         [InjuryAccident]
-    propertyAccident:       [PropertyAccident]
+    driver:                   Driver
+    collisionAccidents:       [CollisionAccident] 
+    injuryAccidents:          [InjuryAccident] 
+    propertyAccidents:        [PropertyAccident] 
+    selfInjuryAccidents:      [SelfInjuryAccident] 
   }
 
-
+###########################
+#    Collision Accident   #
+###########################
   type CollisionAccident {
-    id:                     ID
-    specific_pictures:        JSON
-    contact_info:           JSON
-    extra_info:             String
+    id:                         ID
+    specific_pictures:          JSON
+    contact_info:               JSON
+    collision_report:           JSON
+    extra_info:                 String
 
-    # RELATIONSHIPS
-    driver:                Driver
-    accident:              [Accident]
+    accident:              Accident
+    accidentId:            String
     injuryAccident:        [InjuryAccident]
   }
 
+###########################
+#     Injury Accident     #
+###########################
   type InjuryAccident{
     id:                     ID
-    medical_attention:      String
-    immediate_attention:    String
-    injury:                 JSON
     contact_info:           JSON
-    specific_pictures:      JSON
-    pain_level:             Int
     extra_info:             String
+    injured_areas:          JSON
+    injury_report:          JSON   
+    pain_level:             String
+    specific_pictures:      JSON
 
-    accident:               [Accident]
-    propertyAccident:       [PropertyAccident]
-    collisionAccident:      [CollisionAccident]
+    accident:               Accident
+    accidentId:             String
+    collisionAccident:      CollisionAccident
+    collisionId:            String
   }
 
+
+###########################
+#  Self Injury Accident   #
+###########################
+  type SelfInjuryAccident{
+    id:                 ID
+    animal_report:      JSON
+    injuries:           JSON
+    injury_report:      JSON
+    extra_info:         String
+    specific_pictures:  JSON
+
+    accidentId:         String
+    accident:           Accident 
+}
+
+###########################
+#    Property Accident    #
+###########################
   type PropertyAccident{
     id:                       ID
-    address:                  String
-    object_hit:               String
+    contact_info:             JSON
+    damage_report:            JSON
+    defective_equip:          [String]
+    safety_equip:             [String]
     specific_pictures:        JSON
-    safety_equipment:         JSON
-    contact_information:      JSON
     extra_info:               String
+    types_of_damage:          JSON
+    package_report:           JSON
 
-    accident:                 [Accident]
-    injuryAccident:           [InjuryAccident]
+    accident:                 Accident
+    accidentId:               String
   }
 
   # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
-    # OWNER QUERIES
-    getOwner: Owner
-    ownerGetEmployedDrivers: [Driver]
+    #### OWNER QUERIES ####
+    getOwner(id: String): Owner
+    #######################
 
-    # MANAGER QUERIES
-    getManager: Manager
-    managerGetEmployedDrivers: [Driver]
+    #### MANAGER QUERIES ####
+    getManager(id: String): Manager
+    #########################
 
-    # DRIVER QUERIES
-    getDriver: Driver
-    getDriversFromDsp: [Driver]
-    driverGetManagers: [Manager]
+    #### DRIVER QUERIES ####
+    getDriver: Driver                                     # GOOD
+    getDriversFromDsp: [Driver]                           # GOOD
+    getDriverByResetToken(token: String): Driver          # GOOD
+    ########################
 
-    # DRIVER ACCIDENT QUERIES
+    #### DRIVER ACCIDENT QUERIES ####
     driverGetAccidents: [Accident]
+    #################################
 
-    # DYNAMIC ACCIDENT QUERIES
-    dynamicGetAccidentById(role: String!, accidentId: String!, driverId: String!): Accident
-    dynamicGetAccidentsByDriverId(role: String!, driverId: String!): [Accident]
+    #### DYNAMIC ACCIDENT QUERIES ####
+    dynamicGetAccidentByDriverId(role: String!, accidentId: String!, driverId: String!): Accident
+    dynamicGetAllAccidents(role: String, token: String): [Accident]
+    ##################################
 
-    # DSP QUERIES
+    #### DSP QUERIES ####
     dynamicGetDriversFromDsp(role: String!): [Driver]
-
     driverGetDriversFromDsp: Dsp
+    #####################
+
+    #### DEVICE QUERIES ####
+    dynamicGetAllDevices(role: String, token: String): [Device]
+    dynamicGetDeviceByType(role: String, token: String, type: String!): [Device]
+    #######################
+
+    #### SHIFT QUERIES ####
+    getShiftByDate(role: String, token: String, date: String!): Shift
+    #######################
 
     # CHATROOM QUERIES
     dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
-
     driverGetChatroomById(chatroomId: String!): Chatroom
-
-    # SHIFT PLANNER QUERIES
-    driverGetShiftPlaner: [ShiftPlanner]
-
-    # SHIFT PLANNER DATES MUTATIONS
-    dynamicGetDriversForShiftPlannerByDate(role: String!, date: String!): [ShiftPlanner]
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
@@ -442,51 +460,66 @@ const typeDefs = gql`
   }
   
   type Mutation {
-    # OWNER MUTATIONS
+    #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
-    ownerSignIn(email: String!, password: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
+    #########################
 
-    # MANAGER MUTATIONS
-    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Manager
-    managerSignIn(email: String!, password: String!): Manager
+    #### MANAGER MUTATIONS ####
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Manager
+    ###########################
 
-    # DRIVER MUTATIONS
-    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver
-    driverSignIn(email: String!, password: String!): Driver
-    driverUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Driver
+    #### DRIVER MUTATIONS ####                                                                                                                  #
+    driverSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signUpToken: String!): Driver  #
+    driverSignIn(email: String!, password: String!): Driver                                                                                     #
+    driverUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Driver                             #
+    driverForgotPassword(email: String): Driver 
     driverResetPassword(password: String!, token: String!): Driver
+    ##########################
 
-    # DRIVER ACCIDENT MUTATIONS
+    #### DRIVER ACCIDENT CREATORS ####
     driverCreateAccident(name: String!, date: String!, time: String!, location: String!): Accident
-    driverCreateCollisionAccident(accidentId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String!): CollisionAccident
-    driverCreatePropertyAccident(accidentId: String!, address: String!, object_hit: String!, specific_pictures: JSON!, safety_equipment: JSON!, contact_info: JSON!, extra_info: String!): PropertyAccident
-    driverCreateInjuryAccident(accidentId: String, collisionAccidentId: String, propertyAccidentId: String, medical_attention: String!, immediate_attention: String!, injury: JSON!, contact_info: JSON!, specific_pictures: JSON!, pain_level: Int!, extra_info: String!): InjuryAccident
+    driverCreateCollisionAccident(accidentId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String, collision_report: JSON!): CollisionAccident
+    driverCreatePropertyAccident(accidentId: String!, contact_info: JSON!, damage_report: JSON!, defective_equip: JSON, safety_equip: JSON, specific_pictures: JSON, extra_info: JSON, package_report: JSON, types_of_damage: JSON!): PropertyAccident
+    driverCreateInjuryAccident(accidentId: String!, collisionAccidentId: String, contact_info: JSON!, extra_info: String, injured_areas: JSON!, injury_report: JSON!, pain_level: String, specific_pictures: JSON): InjuryAccident
+    driverCreateSelfInjuryAccident(accidentId: String!, animal_report: JSON, extra_info: String, injuries: JSON!, injury_report: JSON!, specific_pictures: JSON): SelfInjuryAccident
+    #################################
 
-    driverUpdateAccident(accidentId: String!, name: String, date: String, time: String, location: String, amazon_logo: Boolean, vehicleId: String, number_packages_carried: Int, police_report_information: JSON, general_pictures: JSON, weather: String, rushed_prior: Boolean, distracted: Boolean, extra_info: String, actions_before_accidents: JSON, unsafe_coditions: JSON): Accident
+    #### DRIVER ACCIDENT MUTATORS ####
+    driverUpdateAccident(accidentId: String!, name: String, date: String, time: String, location: String, accident_report: JSON, has_logo: String, police_report: JSON, before_accident_report: JSON, selfDamage: JSON, weather_and_distractions: JSON): Accident
     driverUpdateCollisionAccident(collisionAccidentId: String!, specific_pictures: JSON, contact_info: JSON!, extra_info: String): CollisionAccident
-    driverUpdatePropertyAccident(propertyAccidentId: String!, address: String, object_hit: String, specific_pictures: JSON, safety_equipment: JSON, contact_info: JSON, extra_info: String): PropertyAccident
+    driverUpdatePropertyAccident(propertyAccidentId: String!, address: String, object_hit: String, specific_pictures: JSON, safety_equip: JSON, contact_info: JSON, extra_info: String): PropertyAccident
     driverUpdateInjuryAccident(injuryAccidentId: String!, medical_attention: String, immediate_attention: String, injury: JSON, contact_info: JSON, specific_pictures: JSON, pain_level: Int, extra_info: String): InjuryAccident
+    ##################################
 
-    # DYNAMIC ACCIDENT MUTATIONS
+    #### DYNAMIC ACCIDENT CREATORS ####
     dynamicCreateAccident(driverId: String!, role: String!, name: String, date: String, time: String, location: String, amazon_logo: Boolean, vehicleId: String, number_packages_carried: Int, police_report_information: JSON, general_pictures: JSON, weather: String, rushed_prior: Boolean, distracted: Boolean, extra_info: String, actions_before_accidents: JSON, unsafe_coditions: JSON): Accident
     dynamicCreateCollisionAccident(role: String!, accidentId: String!, driverId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String!): CollisionAccident
     dynamicCreatePropertyAccident(role: String!, accidentId: String!, driverId: String!, address: String!, object_hit: String!, safety_equipment: JSON!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String!): PropertyAccident
     dynamicCreateInjuryAccident(role: String!, accidentId: String, driverId: String!, collisionAccident: String, propertyAccidentId: String, medical_attention: String!, immediate_attention: String!, injury: JSON!, contact_info: JSON!, specific_pictures: JSON!, pain_level: Int!, extra_info: String!): InjuryAccident
+    ####################################
 
+    #### DYNAMIC ACCIDENT UPDATORS ####
     dynamicUpdateAccident(role: String!, accidentId: String!, filed: Boolean, name: String, date: String, time: String, location: String, amazon_logo: Boolean, vehicleId: String, number_packages_carried: Int, police_report_information: JSON, general_pictures: JSON, weather: String, rushed_prior: Boolean, distracted: Boolean, extra_info: String, actions_before_accidents: JSON, unsafe_coditions: JSON): Accident
     dynamicUpdateCollisionAccident(role: String!, collisionAccidentId: String!, driverId: String!, specific_pictures: JSON, contact_info: JSON!, extra_info: String): CollisionAccident
     dynamicUpdatePropertyAccident(role: String!, propertyAccidentId: String!, driverId: String!, address: String, object_hit: String, specific_pictures: JSON, safety_equipment: JSON, contact_info: JSON, extra_info: String): PropertyAccident
     dynamicUpdateInjuryAccident(role: String!, injuryAccidentId: String!, driverId: String!, medical_attention: String, immediate_attention: String, injury: JSON, contact_info: JSON, specific_pictures: JSON, pain_level: Int, extra_info: String): InjuryAccident
+    ###################################
 
-    # DSP MUTATIONS
-    ownerCreateDsp(name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, scanComplianceLimits: JSON!, callComplianceLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!, feedbackNotifications: JSON!, autoSend: JSON!): Dsp
-    ownerUpdateDsp(name: String, shortcode: String, timeZone: String, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
+    #### DYNAMIC SHIFT MUTATIONS ####
+    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster
+    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
+    #################################
+
+    #### DSP MUTATIONS ####
+    ownerCreateDsp(token: String, name: String!, shortcode: String!, timeZone: String!, ficoLimits: JSON!, seatbeltLimits: JSON!, speedingLimits: JSON!, distractionLimits: JSON!, followLimits: JSON!, signalLimits: JSON!, deliveryCompletionRateLimits: JSON!, deliveryNotRecievedLimits: JSON!, photoOnDeliveryLimits: JSON!, topCardLimits: Int!, smallCardLimits: Int!, feedbackNotifications: JSON!, autoSend: JSON!, allDevices: [JSON]): Dsp
+    ownerUpdateDsp(token: String, name: String, shortcode: String, timeZone: String, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDevices: [JSON]): Dsp
     ownerDeleteDsp(dspId: String!): Dsp
+    #######################
 
-    managerUpdateDsp(ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, scanComplianceLimits: JSON, callComplianceLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON): Dsp
+    managerUpdateDsp(token: String!, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDriverShifts: JSON): Dsp
 
-    # CHATROOM MUTATIONS
+    #### CHATROOM MUTATIONS ####
     dynamicCreateChatroom(role: String!, guests: [JSON]!, chatroomName: String!): Chatroom
     dynamicAddDriverToChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicRemoveDriverFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
@@ -507,31 +540,26 @@ const typeDefs = gql`
 
     # WEEKLY REPORT MUTATIONS
     driverAcknowledgeFeedbackMessage(reportId: String!): [WeeklyReport]
-    ownerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
+    ownerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
 
-    managerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
+    managerCreateWeeklyReport(driverId: String!, date: String!, feedbackMessage: String!, feedbackStatus: String!, acknowledgedAt: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!): WeeklyReport
 
-    # SCORECARD TOOL MUTATIONS
-    scorecardToolCreateDriverAccounts(email: String!, firstname: String!, lastname: String!, phoneNumber: String!, password: String!, transporterId: String!, role: String!): Driver
-    scorecardToolCreateWeeklyReports(role: String!, transporterId: String!, date: String!, feedbackStatus: String!, rank: Int!, tier: String!, delivered: Int!, keyFocusArea: String!, fico: String!, seatbeltOffRate: String!, speedingEventRate: String!, distractionsRate: String!, followingDistanceRate: String!, signalViolationsRate: String!, deliveryCompletionRate: String!, deliveredAndRecieved: String!, photoOnDelivery: String!, callCompliance: String!, scanCompliance: String!, attendedDeliveryAccuracy: Int!, dnr: Int!, podOpps: Int!, ccOpps: Int!, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
-
-    # SHIFT PLANNER TOOL MUTATIONS
-    dynamicCreateShiftPlannerFrontEndTool(role: String!, transporterId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
-    
-    # SHIFT PLANNER MUTATIONS
-    dynamicCreateShiftPlannerReport(role: String!, driverId: String!, phoneId: String, deviceId: String, vehicleId: String, cxNumber: String, message: String, sundayDate: String!, sundayHours: String!, mondayDate: String!, mondayHours: String!, tuesdayDate: String!, tuesdayHours: String!, wednesdayDate: String!, wednesdayHours: String!, thursdayDate: String!, thursdayHours: String!, fridayDate: String!, fridayHours: String!, saturdayDate: String!, saturdayHours: String!, weekStartDate: String!, weekEndDate: String!): ShiftPlanner
-
-    # SHIFT PLANNER DATES MUTATIONS
-    dynamicUpdateShiftPlannerDates(role: String!, dates: [String!]): ShiftPlannerDates
+    #### SCORECARD TOOL MUTATIONS ####
+    scorecardToolCreateDriverAccounts(token: String, email: String, firstname: String, lastname: String, phoneNumber: String, password: String, transporterId: String, role: String, dspId: String): Driver
+    scorecardToolCreateWeeklyReports(token: String, dspId: String, role: String, transporterId: String, date: String, feedbackStatus: String, rank: Int, tier: String, delivered: Int, keyFocusArea: String, fico: String, seatbeltOffRate: String, speedingEventRate: String, distractionsRate: String, followingDistanceRate: String, signalViolationsRate: String, deliveryCompletionRate: String, deliveredAndRecieved: String, photoOnDelivery: String, attendedDeliveryAccuracy: Int, dnr: Int, customerDeliveryFeedback: String, podOpps: Int, ccOpps: Int, feedbackMessage: String, feedbackMessageSent: Boolean): WeeklyReport
+    ##################################
 
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
-    dynamicUpdateDriver(role: String!, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+    dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+
+    # DEVICE MUTATIONS
+    dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
+    assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
-    dynamicCreateShiftPlannerDates(role: String!, dates: [String!]): [ShiftPlannerDates]
   }
   #----------------------------------------END QUERIES AND MUTATIONS ----------------------------
 `;

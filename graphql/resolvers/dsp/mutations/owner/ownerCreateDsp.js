@@ -4,6 +4,7 @@ import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-
 export default {
     Mutation: {
         ownerCreateDsp: async (_, {
+            token,
             name,
             shortcode,
             timeZone,
@@ -14,16 +15,16 @@ export default {
             followLimits,
             signalLimits,
             deliveryCompletionRateLimits,
-            scanComplianceLimits,
-            callComplianceLimits,
             deliveryNotRecievedLimits,
             photoOnDeliveryLimits,
             topCardLimits,
             smallCardLimits,
             feedbackNotifications,
-            autoSend
+            autoSend,
+            allDriverShifts,
         }, context) => {
-            const owner = await checkOwnerAuth(context)
+
+            const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({
                 where: {
@@ -75,14 +76,13 @@ export default {
                         followLimits: followLimits,
                         signalLimits: signalLimits,
                         deliveryCompletionRateLimits: deliveryCompletionRateLimits,
-                        scanComplianceLimits: scanComplianceLimits,
-                        callComplianceLimits: callComplianceLimits,
                         deliveryNotRecievedLimits: deliveryNotRecievedLimits,
                         photoOnDeliveryLimits: photoOnDeliveryLimits,
                         topCardLimits: topCardLimits,
                         smallCardLimits: smallCardLimits,
                         feedbackNotifications: feedbackNotifications,
-                        autoSend: autoSend
+                        autoSend: autoSend,
+                        allDriverShifts: allDriverShifts,
                     }
                 })
 
@@ -217,19 +217,9 @@ export default {
                         }
                     })
                 })
-
-                await db.shiftPlannerDates.create({
-                    data: {
-                        dsp: {
-                            connect: {
-                                id: newDsp.id
-                            }
-                        }
-                    }
-                })
-
-                return await newDsp
+                return newDsp
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

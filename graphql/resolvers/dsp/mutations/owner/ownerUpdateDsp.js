@@ -4,6 +4,7 @@ import checkOwnerAuth from "../../../../../utils/checkAuthorization/check-owner-
 export default {
     Mutation: {
         ownerUpdateDsp: async (_, {
+            token,
             name,
             shortcode,
             timeZone,
@@ -14,16 +15,16 @@ export default {
             followLimits,
             signalLimits,
             deliveryCompletionRateLimits,
-            scanComplianceLimits,
-            callComplianceLimits,
             deliveryNotRecievedLimits,
             photoOnDeliveryLimits,
             topCardLimits,
             smallCardLimits,
             feedbackNotifications,
-            autoSend
+            autoSend,
+            allDriverShifts,
         }, context) => {
-            const owner = await checkOwnerAuth(context)
+
+            const owner = await checkOwnerAuth(token)
 
             const foundOwner = await db.owner.findUnique({
                 where: {
@@ -67,17 +68,18 @@ export default {
                         followLimits: followLimits,
                         signalLimits: signalLimits,
                         deliveryCompletionRateLimits: deliveryCompletionRateLimits,
-                        scanComplianceLimits: scanComplianceLimits,
-                        callComplianceLimits: callComplianceLimits,
                         deliveryNotRecievedLimits: deliveryNotRecievedLimits,
                         photoOnDeliveryLimits: photoOnDeliveryLimits,
                         topCardLimits: topCardLimits,
                         smallCardLimits: smallCardLimits,
                         feedbackNotifications: feedbackNotifications,
-                        autoSend: autoSend
+                        autoSend: autoSend,
+                        allDriverShifts: allDriverShifts
                     }
                 })
             } catch (error) {
+                console.log("-------------\nError Updating the DSP\n-------------")
+                console.log(error)
                 throw new Error(error)
             }
         }

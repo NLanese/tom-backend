@@ -5,6 +5,8 @@ import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager
 export default {
     Mutation: {
         scorecardToolCreateWeeklyReports: async (_, {
+            token,
+            dspId,
             role,
             transporterId,
             date,
@@ -23,10 +25,9 @@ export default {
             signalViolationsRate,
             deliveryCompletionRate,
             deliveredAndRecieved,
-            photoOnDelivery,
-            callCompliance,
-            scanCompliance,
-            attendedDeliveryAccuracy,
+            // photoOnDelivery,
+            // attendedDeliveryAccuracy,
+            customerDeliveryFeedback,
             dnr,
             podOpps,
             ccOpps
@@ -34,38 +35,52 @@ export default {
             let owner;
             let manager;
 
+            console.log("\nBEGINNING CREATEWEEKLY \nHit One")
+
             if (role === 'OWNER') {
-                owner = await checkOwnerAuth(context)
+                owner = await checkOwnerAuth(token)
             }
 
             if (role === 'MANAGER') {
-                manager = await checkManagerAuth(context)
+                manager = await checkManagerAuth(token)
             }
 
-            const foundDriver = await db.driver.findUnique({
+            console.log("Hit Two")
+
+            let foundDriver = await db.driver.findFirst({
                 where: {
-                    transporterId
+                    transporterId: transporterId,
+                    dspId: dspId
                 }
             })
+            
+            console.log("Hit Three")
+            console.log(foundDriver)
+            let driverId 
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 
+            driverId = foundDriver.id 
+
+            console.log("Hit Four: driverID")
+            console.log(driverId)
+
+            console.log(dspId)
+
             try {
                 return await db.weeklyReport.create({
                     data: {
-                        driver: {
-                            connect: {
-                                id: foundDriver.id
-                            }
-                        },
                         date: date,
+
                         feedbackStatus: feedbackStatus,
                         feedbackMessage: feedbackMessage,
                         feedbackMessageSent: feedbackMessageSent,
+
                         rank: rank,
                         tier: tier,
+
                         delivered: delivered,
                         keyFocusArea: keyFocusArea,
                         fico: fico,
@@ -76,16 +91,54 @@ export default {
                         signalViolationsRate: signalViolationsRate,
                         deliveryCompletionRate: deliveryCompletionRate,
                         deliveredAndRecieved: deliveredAndRecieved,
-                        photoOnDelivery: photoOnDelivery,
-                        callCompliance: callCompliance,
-                        scanCompliance: scanCompliance,
-                        attendedDeliveryAccuracy: attendedDeliveryAccuracy,
+                        // photoOnDelivery: photoOnDelivery,
+                        // attendedDeliveryAccuracy: attendedDeliveryAccuracy,
+                        customerDeliveryFeedback: customerDeliveryFeedback,
+
                         dnr: dnr,
                         podOpps: podOpps,
-                        ccOpps: ccOpps
+                        ccOpps: ccOpps,
+                        driver: {
+                            connect: {
+                                id: driverId
+                            }
+                        },
+                        dsp: {
+                            connect: {
+                                id: dspId
+                            }
+                        }
                     }
                 })
+                // .then( async (weeklyReport) => {
+                //     let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
+                //     try {
+                //         const thisDriver = await db.driver.update({
+                //             where: {
+                //                 id: driverId
+                //             },
+                //             data: {
+                //                 weeklyReport: weeklyReports
+                //             }
+                //         })
+                //         return await db.weeklyReport.update({
+                //             where: {
+                //                 id: weeklyReport.id
+                //             },
+                //             data: {
+                //                 driver: {
+                //                     connect: {
+                //                         id: thisDriver.id
+                //                     }
+                //                 }
+                //             }
+                //         })
+                //     } catch(error){
+                //         throw new Error(error)
+                //     }
+                // })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
             

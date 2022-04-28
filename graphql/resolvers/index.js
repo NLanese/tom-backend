@@ -8,10 +8,10 @@ import dspResolvers from './dsp/dspResolvers.js';
 import weeklyReportResolvers from './weeklyReport/weeklyReportResolvers.js';
 import scorecardResolvers from './scorecardTool/scorecardResolvers.js';
 import chatroomResolvers from './chatrooms/chatroomResolvers.js';
-import shiftPlannerResolvers from './shiftPlanner/shiftPlannerResolvers.js';
 import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
-import shiftPlannerDatesResolvers from './shiftPlannerDates/shiftPlannerDatesResolvers.js';
+import shiftResolvers from './shift/shiftReolvers.js';
+import deviceResolvers from './device/deviceResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -23,14 +23,12 @@ export default {
         ...driverResolvers.Query,
         ...dspResolvers.Query,
         ...weeklyReportResolvers.Query,
-        ...shiftPlannerResolvers.Query,
         ...chatroomResolvers.Query,
         ...messagesResolvers.Query,
         ...accidentResolvers.Query,
-        ...shiftPlannerDatesResolvers.Query,
-
-        ...scorecardResolvers.Query,
-        ...additionalResolvers.Query
+        ...shiftResolvers.Query,
+        ...additionalResolvers.Query,
+        ...deviceResolvers.Query
     },
     Mutation: {
         ...ownerReslovers.Mutation,
@@ -38,14 +36,13 @@ export default {
         ...driverResolvers.Mutation,
         ...dspResolvers.Mutation,
         ...weeklyReportResolvers.Mutation,
-        ...shiftPlannerResolvers.Mutation,
         ...chatroomResolvers.Mutation,
         ...messagesResolvers.Mutation,
         ...accidentResolvers.Mutation,
-        ...shiftPlannerDatesResolvers.Mutation,
-
+        ...shiftResolvers.Mutation,
         ...scorecardResolvers.Mutation,
-        ...additionalResolvers.Mutation
+        ...additionalResolvers.Mutation,
+        ...deviceResolvers.Mutation,
     },
     JSON: GraphQLJSON,
 }

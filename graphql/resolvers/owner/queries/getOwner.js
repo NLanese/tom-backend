@@ -3,13 +3,14 @@ import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-aut
 
 export default {
     Query: {
-        getOwner: async (_, {}, context) => {
-            const owner = await checkOwnerAuth(context)
+        getOwner: async (_, { id }, context) => {
+
+            console.log("getting owner")
 
             try {
                 return await db.owner.findUnique({
                     where: {
-                        id: owner.id
+                        id: id
                     },
                     include: {
                         drivers: {
@@ -17,17 +18,9 @@ export default {
                                 weeklyReport: true,
                                 accidents: {
                                     include: {
-                                        propertyAccident: {
-                                            include: {
-                                                injuryAccident: true
-                                            }
-                                        },
-                                        collisionAccident: {
-                                            include: {
-                                                injuryAccident: true
-                                            }
-                                        },
-                                        injuryAccident: true
+                                        propertyAccidents: true,
+                                        collisionAccidents: true,
+                                        injuryAccidents: true
                                     }
                                 }
                             }
@@ -35,7 +28,8 @@ export default {
                         managers: true,
                         dsp: {
                             include: {
-                                shiftPlannerDates: true
+                                shifts: true,
+                                devices: true
                             }
                         },
                         messages: true,
@@ -51,6 +45,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

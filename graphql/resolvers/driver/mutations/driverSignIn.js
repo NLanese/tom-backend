@@ -11,7 +11,6 @@ export default {
             password
         }, { req }) => {
             const { errors, valid } = validateLoginInput(email, password)
-    
             if (!valid) {
                 throw new UserInputError('Errors', {
                     errors
@@ -19,7 +18,6 @@ export default {
             }
     
             email = await email.toUpperCase()
-    
             const foundUser = await db.driver.findUnique({
                 where: {
                     email
@@ -34,26 +32,9 @@ export default {
                             messages: true
                         }
                     },
-                    shiftPlanners: true,
                     notifiedMessages: true,
-                    accidents: {
-                        include: {
-                            propertyAccident: {
-                                include: {
-                                    injuryAccident: true
-                                }
-                            },
-                            collisionAccident: {
-                                include: {
-                                    injuryAccident: true
-                                }
-                            },
-                            injuryAccident: true
-                        }
-                    }
                 }
             })
-    
             if (!foundUser) {
                 errors.general = 'Account not found';
                 throw new UserInputError('Incorrect Email', {
@@ -62,6 +43,8 @@ export default {
             }
     
             const isValid = await bcrypt.compare(password, foundUser.password)
+            console.log(password)
+            foundUser.password
     
             if (!isValid) {
                 errors.general = 'Incorrect Password'
@@ -69,7 +52,6 @@ export default {
                     errors
                 })
             }
-
             const token = await generateDriverToken(foundUser.id)
 
             req.session = {

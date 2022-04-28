@@ -2,6 +2,8 @@ import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer'
+
 
 // BUGS TO FIX
 // DOESNT HAVE ALL THE DRIVERS JOIN THE BREAKROOM CHAT
@@ -11,6 +13,8 @@ import bcrypt from 'bcryptjs';
 export default {
     Mutation: {
         scorecardToolCreateDriverAccounts: async (_, {
+            token,
+            dspId,
             email,
             firstname,
             lastname,
@@ -22,19 +26,104 @@ export default {
             let owner;
             let manager;
 
+            console.log("\nhit begin of driver creation")
+
+///////////////////////////////////
+///                             ///
+///      CHECKS VALIDITY        ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nChecking Validity")
+
             if (role === 'OWNER') {
-                owner = await checkOwnerAuth(context)
+                owner = await checkOwnerAuth(token)
             }
 
             if (role === 'MANAGER') {
-                manager = await checkManagerAuth(context)
+                manager = await checkManagerAuth(token)
             }
 
-            const foundDriver = await db.driver.findUnique({
-                where: {
-                    transporterId
+            let actualEmail = email
+            email = email.toUpperCase()
+
+            const duplicateDriver = await db.driver.findUnique({
+                where:{
+                    email: email
                 }
             })
+
+            if (duplicateDriver){
+                throw new Error("Duplicate Driver Entered")
+            }
+
+
+///////////////////////////////////
+///                             ///
+///   ATTEMPT TO FIND DRIVER    ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nFinding or creating driver")
+            console.log(transporterId)
+
+            let findDriver = async (tId, dspId) => {
+                return await db.driver.findFirst({
+                    where: {
+                        transporterId: tId,
+                        dspId: dspId
+                    }
+                })
+            }
+
+            let foundDriver
+            try {
+                findDriver(transporterId, dspId).then( resolved => {
+                   foundDriver = resolved
+                })
+            } catch (error){
+                console.log(error)
+                throw new Error(error)
+            }
+
+////////////////////////////////
+///                          ///
+///       EMAIL STUFF        ///
+///                          ///
+////////////////////////////////
+
+            // Creates the Transporter
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                  user: `${process.env.EMAIL_ADDRESS}`,
+                  pass: `${process.env.EMAIL_PASSWORD}`
+                }
+            })
+
+            // Creates the Mail Object
+            const mailOptions = {
+                from: `${process.env.EMAIL_ADDRESS}`,
+                to: `${actualEmail}`,
+                subject: `Thank you for joining the TOM Team!`,
+                text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+              }
+            
+            // Sends the mail
+            transporter.sendMail(mailOptions, (error, response) => {
+                if (error){
+                  throw new Error('Something went wrong, please try again \n' + error)
+                } 
+            })
+
+            
+///////////////////////////////////
+///                             ///
+///      UPDATE OR CREATE       ///
+///                             ///
+///////////////////////////////////
+
+            console.log("\nBeginning Update or Create Process")
 
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
@@ -43,9 +132,11 @@ export default {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
             password = hash;
-            
-
+        
+            // If a manager used the scorecard tool instead of an owner
             if (manager && !foundDriver) {
+                console.log("No found driver")
+                // Finds the manager
                 const foundManager = await db.manager.findUnique({
                     where: {
                         id: manager.id
@@ -55,10 +146,12 @@ export default {
                     }
                 })
 
+                // error handling
                 if (!foundManager) {
                     throw new Error('Manager does not exist')
                 }
 
+                // finds the Owner by using the Manager as a relational bridge 
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: foundManager.owner.id
@@ -70,6 +163,7 @@ export default {
                     }
                 })
 
+                // error handling
                 if (!foundOwner) {
                     throw new Error('Owner does not exist')
                 }
@@ -88,6 +182,8 @@ export default {
                         throw new Error('Owner does not exist')
                     }
  
+                    // Checks to make sure a DSP exists first, if so, conncts the driver to it
+                    console.log(email, "Line 186")
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -98,7 +194,7 @@ export default {
                                 },
                                 dsp: {
                                     connect: {
-                                        id: foundOwner.dsp.id
+                                        id: dspId
                                     }
                                 },
                                 email: email,
@@ -111,7 +207,15 @@ export default {
                         })
                     }
 
+                    ///////////////////////////////////
+                    ///                             ///
+                    ///       CONNECT TO DSP        ///
+                    ///                             ///
+                    ///////////////////////////////////
+
+                    // If there is no DSP
                     if (!foundOwner.dsp) {
+                        console.log(email, "Line 218")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -129,10 +233,12 @@ export default {
                         })
                     }
 
+                    // If the Driver failed to create
                     if (!newDriver) {
                         throw new Error('Error creating new driver')
                     }
 
+                    // Adds the driver to each of the managers
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -142,6 +248,7 @@ export default {
                             }
                         })
 
+                        // Adds the manager to the driver
                         if (foundManager) {
                             await db.driver.update({
                                 where: {
@@ -158,6 +265,13 @@ export default {
                         }
                     })
 
+
+                    ///////////////////////////////////
+                    ///                             ///
+                    ///    CONNECT TO CHATROOMS     ///
+                    ///                             ///
+                    ///////////////////////////////////
+
                     // Create driver/management chatroom
                     const newChatroom = await db.chatroom.create({
                         data: {
@@ -172,6 +286,7 @@ export default {
                         }
                     })
 
+                    // If there was an error
                     if (!newChatroom) {
                         throw new Error('Error creating chatroom')
                     }
@@ -217,6 +332,7 @@ export default {
     
                             const guestDspArray = await foundChatroom.guests
     
+                            // Adds Drivers to the chat room
                             await db.chatroom.update({
                                 where: {
                                     id: chatroom.id
@@ -239,7 +355,10 @@ export default {
                 }
             }
             
+            // If a Owner used the scorecard tool
             if (owner && !foundDriver) {
+                console.log("\nNo found driver")
+                // Finds the owner makes a variable
                 const foundOwner = await db.owner.findUnique({
                     where: {
                         id: owner.id
@@ -251,9 +370,11 @@ export default {
                     }
                 })
 
+                // if error
                 if (!foundOwner) {
-                    throw new Error('Owner does not exist')
+                    throw new Error('\nOwner does not exist')
                 }
+
 
                 try {
                     let newDriver
@@ -266,10 +387,12 @@ export default {
                     })
 
                     if (!justOwnerRecord) {
-                        throw new Error('Owner does not exist')
+                        throw new Error('\nOwner does not exist')
                     }
 
+                    // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
+                        console.log(email, "Line 395")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -287,12 +410,14 @@ export default {
                                 firstname: firstname,
                                 lastname: lastname,
                                 phoneNumber: phoneNumber,
-                                transporterId: transporterId
+                                transporterId: transporterId,
+                                profilePick: "Default"
                             }
                         })
                     }
 
                     if (!foundOwner.dsp) {
+                        console.log(email, "Line 420")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -305,15 +430,21 @@ export default {
                                 firstname: firstname,
                                 lastname: lastname,
                                 phoneNumber: phoneNumber,
-                                transporterId: transporterId
+                                transporterId: transporterId,
+                                profilePick: "Default"
                             }
                         })
                     }
 
+                    console.log("\nNEW DRIVER:")
+                    console.log(newDriver)
+
+                    // If error on creatiob
                     if (!newDriver) {
                         throw new Error('Error creating driver')
                     }
 
+                    // Connects to all managers
                     foundOwner.managers.forEach( async (manager) => {
                         await guestArray.push(manager)
 
@@ -416,12 +547,12 @@ export default {
 
                     return await newDriver
                 } catch (error) {
-                    console.log(error)
                     throw new Error(error)
                 }
             }
 
             if (foundDriver) {
+                console.log("\nfound driver")
                 try {
                     return await foundDriver
                 } catch (error) {
