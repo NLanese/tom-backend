@@ -122,6 +122,7 @@ const typeDefs = gql`
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
+    devices:                      [Device]
     dailyRosters:                 [DailyRoster]
   }
 
@@ -162,7 +163,7 @@ const typeDefs = gql`
     drivers:                      [Driver]
     shifts:                       [Shift]
     weeklyReports:                [WeeklyReport]
-    dailyRosters:                 [DailyRoster]
+    devices:                       [Device]
   }
 
 
@@ -291,7 +292,7 @@ const typeDefs = gql`
     driverId:   Int
     adminId:    Int 
     driver:     Driver
-    manager:      Manager
+    manager:    Manager
   }
 
 
@@ -399,6 +400,23 @@ const typeDefs = gql`
 
     accident:                 Accident
     accidentId:               String
+  }
+
+####################
+#      Device      #
+####################
+  type Device{
+    id:                  ID
+    createdAt:           Date
+    number:              Int
+    name:                String
+    type:                String
+    
+
+    driverId:            String
+    driver:              Driver
+    dspId:               String
+    dsp:                 Dsp 
   }
 
   # ---------------------------------------- END SCHEMAS ----------------------------------------
@@ -543,6 +561,10 @@ const typeDefs = gql`
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
     dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+
+    # DEVICE MUTATIONS
+    dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
+    assignDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom

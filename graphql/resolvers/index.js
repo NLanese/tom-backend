@@ -11,6 +11,7 @@ import chatroomResolvers from './chatrooms/chatroomResolvers.js';
 import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
 import shiftResolvers from './shift/shiftReolvers.js';
+import deviceResolvers from './device/deviceResolvers.js';
 import dailyRosterResolvers from './dailyRoster/dailyRosterResolvers.js';
 
 // ADDITIONAL RESOLVERS
@@ -42,6 +43,7 @@ export default {
         ...shiftResolvers.Mutation,
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation,
+        ...deviceResolvers.Mutation,
         ...dailyRosterResolvers.Mutation
     },
     JSON: GraphQLJSON,
