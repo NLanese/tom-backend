@@ -438,6 +438,7 @@ type Device{
     #####################
 
     #### DEVICE QUERIES ####
+    dynamicGetAllDevices(role: String, token: String): [Device]
     dynamicGetDeviceByType(role: String, token: String, type: String!): [Device]
     #######################
 

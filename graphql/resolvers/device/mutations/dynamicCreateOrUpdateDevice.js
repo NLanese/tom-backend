@@ -55,6 +55,9 @@ export default {
                         include: {
                             dsp: true,
                         }
+                    }).then( (instance) => {
+                        console.log(instance)
+                        return instance
                     })
                 } catch (error){
                     console.log("Error CREATING the DEVICE")
@@ -90,7 +93,6 @@ export default {
                                 number: number,
                                 name: name,
                                 type: type,
-                                
                             }
                         }).then( async (resolved) => {
                             console.log(resolved)

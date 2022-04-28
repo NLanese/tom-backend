@@ -28,7 +28,8 @@ export default {
                         managers: true,
                         dsp: {
                             include: {
-                                shifts: true
+                                shifts: true,
+                                devices: true
                             }
                         },
                         messages: true,

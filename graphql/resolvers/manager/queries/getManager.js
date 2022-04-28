@@ -26,7 +26,8 @@ export default {
                         },
                         dsp: {
                             include: {
-                                shifts: true
+                                shifts: true,
+                                devices: true
                             }
                         },
                         messages: true,

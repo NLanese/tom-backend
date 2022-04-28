@@ -297,9 +297,10 @@ CREATE TABLE "SelfInjuryAccident" (
 CREATE TABLE "Device" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "number" INTEGER,
+    "number" TEXT,
     "name" TEXT,
     "type" TEXT,
+    "deviceIndex" INTEGER,
     "driverId" TEXT,
     "dspId" TEXT NOT NULL,
 
