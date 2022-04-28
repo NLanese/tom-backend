@@ -55,7 +55,7 @@ export default {
             })
             
             console.log("Hit Three")
-
+            console.log(foundDriver)
             let driverId 
 
             if (!foundDriver) {

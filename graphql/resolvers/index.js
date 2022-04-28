@@ -41,7 +41,6 @@ export default {
         ...messagesResolvers.Mutation,
         ...accidentResolvers.Mutation,
         ...shiftResolvers.Mutation,
-
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation,
         ...deviceResolvers.Mutation,

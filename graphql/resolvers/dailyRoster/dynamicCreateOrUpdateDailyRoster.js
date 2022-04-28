@@ -52,6 +52,7 @@ export default {
             // or updates the driver connections to an existing one
             const updateDailyRoster = async (rosterId) => {
                 return driverIds.forEach( async (driverId) =>  {
+                    console.log(rosterId)
                     console.log(driverId)
                     try{
                         return await db.dailyRoster.update({
