@@ -8,7 +8,7 @@ export default {
             token,
             role,
             date,
-            allDevices,
+            allDriverShifts,
             dspId
         }, context) => {
 
@@ -63,7 +63,7 @@ export default {
                                 id: foundShift.id
                             },
                             data: {
-                                allDevices: allDevices,
+                                allDriverShifts: allDriverShifts,
                                 date: date
                             }
                         })
@@ -81,7 +81,7 @@ export default {
                     try{
                         return db.shift.create({
                             data: {
-                                allDevices: allDevices,
+                                allDriverShifts: allDriverShifts,
                                 date: date,
                                 dsp: {
                                     connect: {
@@ -116,13 +116,13 @@ export default {
                 })
             }
         
-            allDevices.forEach( async (deviceObj) => {                 
-                for (let i = 0; i < deviceObj.amount; i++){         
-                    if (deviceObj[i].name !== 'No Driver Assigned'){
+            allDriverShifts.forEach( async (driverShift) => {                 
+                for (let i = 0; i < driverShift.amount; i++){         
+                    if (driverShift[i].driver.name !== 'No Driver Assigned'){
 
                         // Finds the driver who has the same Id as the one assigned the current Device
-                        findDriver(deviceObj[i].id).then( resolved => {
-                            return {shifts: resolved.shifts, deviceObj: deviceObj[i], date: date, i: i}
+                        findDriver(driverShift[i].driver.id).then( resolved => {
+                            return {shifts: resolved.shifts, driverShift: driverShift[i], date: date, index: i}
 
                         }).then( resolvedObj => {
                             // Creates a new empty array to mimic the existing one. This allows us to make changes to an otherwise read-only
@@ -134,7 +134,7 @@ export default {
                                 // Set the new object
                                 newShifts = [{
                                     date: resolvedObj.date,
-                                    [resolvedObj.deviceObj.type]:  `${resolvedObj.deviceObj.type}${resolvedObj.i}`
+                                    devices: driverShift[index].devices
                                 }]
 
                                 console.log("This is the object that will be the entire new  'Shifts'  value for the driver in question, since he did not have any first")
@@ -144,51 +144,26 @@ export default {
 
                             // If there is an existing shift array
                             else {
+                                // Gets all the existing Shifts in the new object
                                 newShifts = resolvedObj.shifts.filter( shift => {
                                     if (shift.date !== resolvedObj.date){
                                         return shift
                                     }
                                 })
-
-                                // Finds the shift that exists, grabs any other devices present
-                                let oldSpecificShift = resolvedObj.shifts.find( shift => {
-                                    shift.date == resolvedObj.date
-                                })
-
-                                console.log("A shift existed before, we're resuing it")
-                                console.log(oldSpecificShift)
-                                console.log(resolvedObj.date)
-
-                                // If there is no specific shift on THIS DATE
-                                if (!oldSpecificShift){
-                                    newShifts = [
-                                        ...newShifts, {
-                                            [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`,
-                                            date: resolvedObj.date
-                                        }
-                                    ]
-                                }
-                                // There is a specifc shift on this date
-                                else{
-                                    newShifts = [
-                                        ...newShifts, {
-                                            [resolvedObj.deviceObj.type]: `${resolvedObj.deviceObj.type}${resolvedObj.i}`,
-                                            ...oldSpecificShift
-                                        }
-                                    ]
-                                }
-
-                                // New shift takes the old shifts devices, and adds a new property for the new device
-                                
+                                // Adds the new shift to the old array
+                                newShifts = [
+                                    ...newShifts, {
+                                        devices: driverShift[index].devices,
+                                        date: resolvedObj.date
+                                    }
+                                ]
                             }
-                            return {shifts: newShifts, deviceObj: deviceObj[i], date: resolvedObj.date} 
-
-
+                            return {shifts: newShifts, driverShift: driverShift[i], date: resolvedObj.date} 
                         }).then( async (resolved) => {
                             // console.log(resolved)
                             const driver = await db.driver.update({
                                 where: {
-                                    id: resolved.deviceObj.id
+                                    id: resolved.driverShift.id
                                 },
                                 data: {
                                     shifts: resolved.shifts
@@ -196,8 +171,8 @@ export default {
                             })
                             return {mutationObj: resolved, driver: driver}
                         }).then((Obj) => {
-                            // console.log(Obj.mutationObj.shifts)
-                            // console.log(Obj)
+                            console.log(Obj.mutationObj.shifts)
+                            console.log(Obj)
                         })                      
                     }
                 }

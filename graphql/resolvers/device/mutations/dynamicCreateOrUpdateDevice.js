@@ -10,6 +10,7 @@ export default {
             number,
             name,
             type,
+            deviceIndex,
             driverId,
             dspId,
             id
@@ -34,15 +35,17 @@ export default {
             if (!manager && !owner){
                 throw new Error("No owner or manager with the give crudentials found")
             }
+
+            // Determines where to resume the deviceIndex 
             
             if (id < 0) {
-                console.log(id)
                 try{
                     return await db.device.create({
                         data: {
                             number: number,
                             name: name,
                             type: type,
+                            deviceIndex: deviceIndex,
                             dsp: {
                                 connect: {
                                     id: dspId
@@ -53,17 +56,6 @@ export default {
                             dsp: true,
                         }
                     })
-                    // .then( async (resolved) => {
-                    //     console.log(resolved)
-                    //     return await db.device.findUnique({
-                    //         where: {
-                    //             id: resolved.id
-                    //         },
-                    //         include: {
-                    //             dsp: true
-                    //         }
-                    //     })
-                    // })
                 } catch (error){
                     console.log("Error CREATING the DEVICE")
                     console.log(error)

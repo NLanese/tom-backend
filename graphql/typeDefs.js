@@ -116,14 +116,12 @@ const typeDefs = gql`
     owner:                        Owner
     accidents:                    [Accident]
     managers:                     [Manager]
-    vehicle:                      Vehicle
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
     weeklyReport:                 [WeeklyReport]
     chatrooms:                    [Chatroom]
     devices:                      [Device]
-    dailyRosters:                 [DailyRoster]
   }
 
 
@@ -173,7 +171,7 @@ const typeDefs = gql`
   type Shift {
     id:                           ID
     date:                         String
-    allDevices:                   [JSON]
+    allDriverShifts:                   [JSON]
     dspId:                        String
     dsp:                          Dsp
   }
@@ -233,8 +231,25 @@ const typeDefs = gql`
   type DailyRoster {
     id:           ID 
     date:         String
-    drivers:      [Driver]
     dsp:          Dsp
+    lineup:       JSON
+  }
+
+####################
+#      Device      #
+####################
+type Device{
+    id:                  ID
+    createdAt:           Date
+    number:              String
+    name:                String
+    type:                String
+    deviceIndex:         Int
+
+    driverId:            String
+    driver:              Driver
+    dspId:               String
+    dsp:                 Dsp 
   }
 
 
@@ -293,17 +308,6 @@ const typeDefs = gql`
     adminId:    Int 
     driver:     Driver
     manager:    Manager
-  }
-
-
-###########################
-#         Vehicle         #
-###########################
-  type Vehicle {
-    id:         ID
-    driver:     Driver
-    vehicle_number: String
-    amazon_logo: String
   }
 
 
@@ -402,23 +406,6 @@ const typeDefs = gql`
     accidentId:               String
   }
 
-####################
-#      Device      #
-####################
-  type Device{
-    id:                  ID
-    createdAt:           Date
-    number:              Int
-    name:                String
-    type:                String
-    
-
-    driverId:            String
-    driver:              Driver
-    dspId:               String
-    dsp:                 Dsp 
-  }
-
   # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
@@ -449,6 +436,10 @@ const typeDefs = gql`
     dynamicGetDriversFromDsp(role: String!): [Driver]
     driverGetDriversFromDsp: Dsp
     #####################
+
+    #### DEVICE QUERIES ####
+    dynamicGetDeviceByType(role: String, token: String, type: String!): [Device]
+    #######################
 
     #### SHIFT QUERIES ####
     getShiftByDate(role: String, token: String, date: String!): Shift
@@ -516,7 +507,7 @@ const typeDefs = gql`
 
     #### DYNAMIC SHIFT MUTATIONS ####
     dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster
-    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDevices: [JSON], dspId: String): Shift
+    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
     #################################
 
     #### DSP MUTATIONS ####
@@ -525,7 +516,7 @@ const typeDefs = gql`
     ownerDeleteDsp(dspId: String!): Dsp
     #######################
 
-    managerUpdateDsp(token: String!, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDevices: JSON): Dsp
+    managerUpdateDsp(token: String!, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDriverShifts: JSON): Dsp
 
     #### CHATROOM MUTATIONS ####
     dynamicCreateChatroom(role: String!, guests: [JSON]!, chatroomName: String!): Chatroom
@@ -563,8 +554,8 @@ const typeDefs = gql`
     dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
 
     # DEVICE MUTATIONS
-    dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
-    assignDevice(token: String, role: String, name: String, number: Int, type: String, driverId: String, dspId: String, id: Int): Device
+    dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
+    assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom

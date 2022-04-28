@@ -164,19 +164,10 @@ CREATE TABLE "WeeklyReport" (
 CREATE TABLE "Shift" (
     "id" TEXT NOT NULL,
     "date" TEXT NOT NULL,
-    "allDevices" JSONB[],
+    "allDriverShifts" JSONB[],
     "dspId" TEXT NOT NULL,
 
     CONSTRAINT "Shift_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "DailyRoster" (
-    "id" TEXT NOT NULL,
-    "date" TEXT NOT NULL,
-    "dspId" TEXT,
-
-    CONSTRAINT "DailyRoster_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -333,12 +324,6 @@ CREATE TABLE "_ChatroomToDriver" (
     "B" TEXT NOT NULL
 );
 
--- CreateTable
-CREATE TABLE "_DailyRosterToDriver" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "SuperUser_id_key" ON "SuperUser"("id");
 
@@ -391,12 +376,6 @@ CREATE UNIQUE INDEX "Shift_id_key" ON "Shift"("id");
 CREATE UNIQUE INDEX "Shift_date_key" ON "Shift"("date");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "DailyRoster_id_key" ON "DailyRoster"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "DailyRoster_date_key" ON "DailyRoster"("date");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Chatroom_id_key" ON "Chatroom"("id");
 
 -- CreateIndex
@@ -435,12 +414,6 @@ CREATE UNIQUE INDEX "_ChatroomToDriver_AB_unique" ON "_ChatroomToDriver"("A", "B
 -- CreateIndex
 CREATE INDEX "_ChatroomToDriver_B_index" ON "_ChatroomToDriver"("B");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_DailyRosterToDriver_AB_unique" ON "_DailyRosterToDriver"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_DailyRosterToDriver_B_index" ON "_DailyRosterToDriver"("B");
-
 -- AddForeignKey
 ALTER TABLE "Manager" ADD CONSTRAINT "Manager_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -464,9 +437,6 @@ ALTER TABLE "WeeklyReport" ADD CONSTRAINT "WeeklyReport_dspId_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "Shift" ADD CONSTRAINT "Shift_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "DailyRoster" ADD CONSTRAINT "DailyRoster_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Chatroom" ADD CONSTRAINT "Chatroom_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -533,9 +503,3 @@ ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("A") REFERENCES "Chatroom"("id"
 
 -- AddForeignKey
 ALTER TABLE "_ChatroomToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_DailyRosterToDriver" ADD FOREIGN KEY ("A") REFERENCES "DailyRoster"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_DailyRosterToDriver" ADD FOREIGN KEY ("B") REFERENCES "Driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;

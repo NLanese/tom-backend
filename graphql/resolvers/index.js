@@ -12,7 +12,6 @@ import messagesResolvers from './messages/messagesResolvers.js';
 import accidentResolvers from './accidents/accidentResolvers.js';
 import shiftResolvers from './shift/shiftReolvers.js';
 import deviceResolvers from './device/deviceResolvers.js';
-import dailyRosterResolvers from './dailyRoster/dailyRosterResolvers.js';
 
 // ADDITIONAL RESOLVERS
 import additionalResolvers from './additional/additionalResolvers.js';
@@ -28,8 +27,8 @@ export default {
         ...messagesResolvers.Query,
         ...accidentResolvers.Query,
         ...shiftResolvers.Query,
-
-        ...additionalResolvers.Query
+        ...additionalResolvers.Query,
+        ...deviceResolvers.Query
     },
     Mutation: {
         ...ownerReslovers.Mutation,
@@ -44,7 +43,6 @@ export default {
         ...scorecardResolvers.Mutation,
         ...additionalResolvers.Mutation,
         ...deviceResolvers.Mutation,
-        ...dailyRosterResolvers.Mutation
     },
     JSON: GraphQLJSON,
 }

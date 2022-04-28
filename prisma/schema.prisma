@@ -139,7 +139,6 @@ model Driver {
   weeklyReport     WeeklyReport[]
   chatrooms        Chatroom[]
   devices          Device[]
-  dailyRosters     DailyRoster[]    
 }
 
 /////////////////////////////////////
@@ -183,7 +182,6 @@ model Dsp {
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
   devices              Device[]
-  dailyRosters      DailyRoster[]
 }
 
 /////////////////////////////////////
@@ -248,23 +246,11 @@ model WeeklyReport {
 model Shift {
   id          String  @id @unique @default(uuid())
   date        String  @unique
-  allDevices  Json[]
+  allDriverShifts  Json[]                               // {driver: <driverObj>, devices: {
+                                                        //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
+                                                        // }
   dspId       String
   dsp         Dsp     @relation(fields: [dspId], references: [id])
-}
-
-/////////////////////////////////////
-///                               ///
-///         Daily Roster          ///
-///                               ///
-/////////////////////////////////////
-
-model DailyRoster{
-  id         String  @id @unique @default(uuid())
-  date       String @unique
-  drivers    Driver[] 
-  dspId      String?
-  dsp        Dsp? @relation(fields: [dspId], references: [id])
 }
 
 /////////////////////////////////////
@@ -429,11 +415,11 @@ enum Role {
 model Device {
   id                  Int @id @unique @default(autoincrement())
   createdAt           DateTime @default(now())
-  number              Int?
+  number              String?
   name                String?
   type                String?
+  deviceIndex         Int?
 
-  // RELATIONSHIPS
   driverId            String?
   driver              Driver? @relation(fields: [driverId], references: [id])
   dspId               String
