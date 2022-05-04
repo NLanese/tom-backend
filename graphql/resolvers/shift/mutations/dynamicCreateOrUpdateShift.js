@@ -94,10 +94,8 @@ export default {
                         throw new Error(error)
                     }
                 }
-            }).then( resolved => {
-                newShift = resolved
-            })
 
+            })
         
 
             ///////////////////////////////
