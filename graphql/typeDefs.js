@@ -558,6 +558,7 @@ type Device{
     # DEVICE MUTATIONS
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
     assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
+    deleteDevice(token: String, role: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
