@@ -182,6 +182,7 @@ model Dsp {
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
   devices              Device[]
+  devicesObj           Json?
 }
 
 /////////////////////////////////////
