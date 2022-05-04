@@ -2,6 +2,7 @@ import db from "../../../../utils/generatePrisma.js";
 import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js"
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
 
+
 export default {
     Mutation :{
         dynamicCreateOrUpdateDevice: async (_, {
@@ -85,14 +86,21 @@ export default {
                     console.log('== update ==')
                     console.log(resolved)
                     console.log(name)
+                        let device = await db.device.findUnique({
+                            where: {
+                                id: resolved.id
+                            }
+                        })
+
                         return db.device.update({
                             where: {
                                 id: resolved.id
                             },
                             data: {
-                                number: number,
-                                name: name,
-                                type: type,
+                                number: (number === undefined ? device.number : number),
+                                name: (name === undefined ? device.name : name),
+                                type: (type === undefined ? device.type : type),
+                                deviceIndex: (deviceIndex === undefined ? device.deviceIndex : deviceIndex),
                             }
                         }).then( async (resolved) => {
                             console.log(resolved)
