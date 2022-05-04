@@ -507,7 +507,8 @@ type Device{
     ###################################
 
     #### DYNAMIC SHIFT MUTATIONS ####
-    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster
+    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster # may be irrelevant
+    dynamicManualAssignDrivers(token: String, role: String, date: String, driverIds: [String], dspId: String): Shift
     dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
     #################################
 
@@ -557,6 +558,7 @@ type Device{
     # DEVICE MUTATIONS
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
     assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
+    deleteDevice(token: String, role: String, id: Int): Device
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom

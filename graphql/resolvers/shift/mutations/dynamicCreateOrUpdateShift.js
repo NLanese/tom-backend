@@ -18,8 +18,6 @@ export default {
 
             let owner = false
             let manager = false
-            let newShift = false
-
 
             if (role == "OWNER"){
                 owner = checkOwnerAuth(token)
@@ -40,7 +38,6 @@ export default {
             ///////////////////////////////
             ///     Update or Create    ///
             ///////////////////////////////
-            let foundShift = null
 
             const findShift = async (date) => {
                 return await db.shift.findUnique({
@@ -97,10 +94,8 @@ export default {
                         throw new Error(error)
                     }
                 }
-            }).then( resolved => {
-                newShift = resolved
-            })
 
+            })
         
 
             ///////////////////////////////

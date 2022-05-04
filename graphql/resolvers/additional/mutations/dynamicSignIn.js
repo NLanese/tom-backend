@@ -39,7 +39,12 @@ export default {
                     managers: true,
                     dsp: {
                         include: {
-                            owner: true
+                            owner: true,
+                            devices: {
+                                orderBy: {
+                                    deviceIndex: 'asc'
+                                }
+                            },
                         }
                     },
                     messages: true,

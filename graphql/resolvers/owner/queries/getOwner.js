@@ -29,7 +29,11 @@ export default {
                         dsp: {
                             include: {
                                 shifts: true,
-                                devices: true
+                                devices: {
+                                    orderBy: {
+                                        deviceIndex: 'asc'
+                                    }
+                                }
                             }
                         },
                         messages: true,
