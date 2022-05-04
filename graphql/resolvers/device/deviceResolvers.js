@@ -3,6 +3,7 @@ import dynamicCreateOrUpdateDevice from "./mutations/dynamicCreateOrUpdateDevice
 import assignDevice from "./mutations/assignDevice.js";
 import getDeviceByType from "./queries/getDeviceByType.js";
 import getAllDevices from "./queries/getAllDevices.js";
+import deleteDevice from "./mutations/deleteDevice.js";
 
 export default {
     Query: {
@@ -11,7 +12,8 @@ export default {
     },
     Mutation: {
         ...dynamicCreateOrUpdateDevice.Mutation,
-        ...assignDevice.Mutation
+        ...assignDevice.Mutation,
+        ...deleteDevice.Mutation
     },
     JSON: GraphQLJSON
 }
