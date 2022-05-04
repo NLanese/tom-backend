@@ -547,6 +547,7 @@ export default {
 
                     return await newDriver
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -556,6 +557,7 @@ export default {
                 try {
                     return await foundDriver
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
