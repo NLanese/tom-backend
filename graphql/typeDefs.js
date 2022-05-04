@@ -507,7 +507,8 @@ type Device{
     ###################################
 
     #### DYNAMIC SHIFT MUTATIONS ####
-    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster
+    dynamicCreateOrUpdateDailyRoster(token: String, role: String, date: String, driverIds: [String]): DailyRoster # may be irrelevant
+    dynamicManualAssignDrivers(token: String, role: String, date: String, driverIds: [String], dspId: String): Shift
     dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
     #################################
 

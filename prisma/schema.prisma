@@ -244,13 +244,11 @@ model WeeklyReport {
 /////////////////////////////////////
 
 model Shift {
-  id          String  @id @unique @default(uuid())
-  date        String  @unique
-  allDriverShifts  Json[]                               // {driver: <driverObj>, devices: {
-                                                        //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
-                                                        // }
-  dspId       String
-  dsp         Dsp     @relation(fields: [dspId], references: [id])
+  id                String  @id @unique @default(uuid())
+  date              String  @unique
+  allDriverShifts   Json[]  // {driver: <obj>, devices: [{type: "String", id: "Stringabc"}, {type: "String", id: "Stringabc"}]}                         
+  dspId             String
+  dsp               Dsp     @relation(fields: [dspId], references: [id])
 }
 
 /////////////////////////////////////

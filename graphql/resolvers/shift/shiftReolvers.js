@@ -1,5 +1,6 @@
 import GraphQLJSON from "graphql-type-json";
 import dynamicCreateOrUpdateShift from "./mutations/dynamicCreateOrUpdateShift.js";
+import dynamicManualAssignDrivers from "./mutations/dynamicManualAssignDrivers.js";
 import getShiftByDate from "./queries/getShiftByDate.js";
 
 export default {
@@ -7,7 +8,8 @@ export default {
         ...getShiftByDate.Query
     },
     Mutation: {
-        ...dynamicCreateOrUpdateShift.Mutation
+        ...dynamicCreateOrUpdateShift.Mutation,
+        ...dynamicManualAssignDrivers.Mutation
     },
     JSON: GraphQLJSON
 }
