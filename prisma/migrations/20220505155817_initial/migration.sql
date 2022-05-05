@@ -164,6 +164,7 @@ CREATE TABLE "WeeklyReport" (
 CREATE TABLE "Shift" (
     "id" TEXT NOT NULL,
     "date" TEXT NOT NULL,
+    "dateDsp" TEXT NOT NULL,
     "allDriverShifts" JSONB[],
     "dspId" TEXT NOT NULL,
 
@@ -374,7 +375,7 @@ CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 CREATE UNIQUE INDEX "Shift_id_key" ON "Shift"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Shift_date_key" ON "Shift"("date");
+CREATE UNIQUE INDEX "Shift_dateDsp_key" ON "Shift"("dateDsp");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Chatroom_id_key" ON "Chatroom"("id");

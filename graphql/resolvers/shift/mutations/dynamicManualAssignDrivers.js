@@ -48,11 +48,11 @@ export default {
             }
 
             // Finds a Shift by ID
-            const findShift = async (date) => {
+            const findShift = async (dateDsp) => {
                 try{
                     return await db.shift.findUnique({
                         where: {
-                            date: date
+                            dateDsp: dateDsp
                         },
                         
                     })
@@ -63,11 +63,11 @@ export default {
             }
 
             // Updates a shift's allDriverShifts by Dtae
-            const updateShiftByDate = async (date, allDriverShifts) => {
+            const updateShiftByDate = async (dateDsp, allDriverShifts) => {
                 try{
                     return await db.shift.update({
                         where: {
-                            date: date
+                            dateDsp: dateDsp
                         },
                         data: {
                             allDriverShifts: allDriverShifts
@@ -80,11 +80,12 @@ export default {
             }
 
             // Creates a new shift if one does not exist
-            const createNewShiftOnDate = async (date, driverShift) => {
+            const createNewShiftOnDate = async (date, driverShift, dateDsp) => {
                 try{
                     return await db.shift.create({
                         data: {
                             date: date,
+                            dateDsp: dateDsp,
                             allDriverShifts: [{...driverShift}],
                             dsp: {
                                 connect: {
@@ -105,6 +106,7 @@ export default {
 
             let owner = false
             let manager = false
+            const dateDsp = `${date}${dspId}`
 
             if (role == "OWNER"){
                 owner = checkOwnerAuth(token)
@@ -153,7 +155,7 @@ export default {
 
                     // If there is a shift on this date
                     if (!passing){
-                        return 
+                        console.log("New shift")
                     }
 
                     console.log("Passed driverShiftExist?")
@@ -162,7 +164,7 @@ export default {
                     ///     Update or Create Shift    ///
                     /////////////////////////////////////
 
-                    return findShift(date).then( async (resolvedShift) => {
+                    return await findShift(dateDsp).then( async (resolvedShift) => {
 
                         console.log("Passed shiftExist?")
 
@@ -170,7 +172,7 @@ export default {
                         if (resolvedShift){
                             let newShift = resolvedShift
                             let newAllDriverShifts = [...newShift.allDriverShifts, {driver: resolvedDriver, devices: []}]
-                            return updateShiftByDate(date, newAllDriverShifts).then(resolvedShiftTwo => {
+                            return updateShiftByDate(dateDsp, newAllDriverShifts).then(resolvedShiftTwo => {
                                 console.log(resolvedShiftTwo)
                                 return resolvedShiftTwo
                             })
@@ -178,7 +180,7 @@ export default {
 
                         // If there is no shift on this date
                         if (!resolvedShift){
-                            return createNewShiftOnDate(date, {driver: resolvedDriver, devices: []}).then(resolvedShiftTwo => {
+                            return createNewShiftOnDate(date, {driver: resolvedDriver, devices: []}, dateDsp).then(resolvedShiftTwo => {
                                 console.log(resolvedShiftTwo)
                                 return resolvedShiftTwo
                             })

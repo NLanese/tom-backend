@@ -245,7 +245,8 @@ model WeeklyReport {
 
 model Shift {
   id          String  @id @unique @default(uuid())
-  date        String  @unique
+  date        String
+  dateDsp     String @unique
   allDriverShifts  Json[]                               // {driver: <driverObj>, devices: {
                                                         //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
                                                         // }

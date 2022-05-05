@@ -39,15 +39,17 @@ export default {
             ///     Update or Create    ///
             ///////////////////////////////
 
-            const findShift = async (date) => {
+            const dateDsp = `${date}${dspId}`
+
+            const findShift = async (dateDsp) => {
                 return await db.shift.findUnique({
                     where: {
-                        date: date
+                        dateDsp: dateDsp
                     }
                 })
             }
 
-            findShift(date).then( resolved => {
+            findShift(dateDsp).then( resolved => {
                 const foundShift = resolved
                 return foundShift
             }).then( (foundShift) => {
@@ -79,6 +81,7 @@ export default {
                         return db.shift.create({
                             data: {
                                 allDriverShifts: allDriverShifts,
+                                dateDsp: dateDsp,
                                 date: date,
                                 dsp: {
                                     connect: {
@@ -178,7 +181,7 @@ export default {
             ///    Returns the Shift    ///
             ///////////////////////////////
 
-            return findShift(date).then( resolved => {
+            return await findShift(dateDsp).then( resolved => {
                 console.log(resolved)
                 return resolved
             }).then( resolved => {
