@@ -11,7 +11,6 @@ export default {
             password
         }, { req }) => {
 
-            console.log("\n\nlogging in")
             const { errors, valid } = validateLoginInput(email, password)
             if (!valid) {
                 throw new UserInputError('Errors', {

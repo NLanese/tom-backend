@@ -26,7 +26,6 @@ export default {
             let owner;
             let manager;
 
-            console.log("\nhit begin of driver creation")
 
 ///////////////////////////////////
 ///                             ///
@@ -34,7 +33,6 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
-            console.log("\nChecking Validity")
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -64,8 +62,6 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
-            console.log("\nFinding or creating driver")
-            console.log(transporterId)
 
             let findDriver = async (tId, dspId) => {
                 return await db.driver.findFirst({
@@ -123,8 +119,6 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
-            console.log("\nBeginning Update or Create Process")
-
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
             lastname = await lastname.toUpperCase()
@@ -135,7 +129,6 @@ export default {
         
             // If a manager used the scorecard tool instead of an owner
             if (manager && !foundDriver) {
-                console.log("No found driver")
                 // Finds the manager
                 const foundManager = await db.manager.findUnique({
                     where: {
@@ -183,7 +176,6 @@ export default {
                     }
  
                     // Checks to make sure a DSP exists first, if so, conncts the driver to it
-                    console.log(email, "Line 186")
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -215,7 +207,6 @@ export default {
 
                     // If there is no DSP
                     if (!foundOwner.dsp) {
-                        console.log(email, "Line 218")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -357,7 +348,6 @@ export default {
             
             // If a Owner used the scorecard tool
             if (owner && !foundDriver) {
-                console.log("\nNo found driver")
                 // Finds the owner makes a variable
                 const foundOwner = await db.owner.findUnique({
                     where: {
@@ -392,7 +382,6 @@ export default {
 
                     // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
-                        console.log(email, "Line 395")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -417,7 +406,6 @@ export default {
                     }
 
                     if (!foundOwner.dsp) {
-                        console.log(email, "Line 420")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -435,9 +423,6 @@ export default {
                             }
                         })
                     }
-
-                    console.log("\nNEW DRIVER:")
-                    console.log(newDriver)
 
                     // If error on creatiob
                     if (!newDriver) {
@@ -553,7 +538,6 @@ export default {
             }
 
             if (foundDriver) {
-                console.log("\nfound driver")
                 try {
                     return await foundDriver
                 } catch (error) {

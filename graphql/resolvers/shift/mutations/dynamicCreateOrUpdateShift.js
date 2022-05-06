@@ -55,7 +55,6 @@ export default {
             }).then( (foundShift) => {
                 // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
                 if (foundShift !== null){
-                    console.log("Exisitng  Shift")
                     try{
                         return db.shift.update({
                             where: {
@@ -76,7 +75,6 @@ export default {
 
                  // IF TTHERE IS NOT AN EXISTING SHIFT ON THE GIVEN DATE
                 else {
-                    console.log("No existing shift")
                     try{
                         return db.shift.create({
                             data: {
@@ -134,9 +132,6 @@ export default {
                                     date: resolvedObj.date,
                                     devices: driverShift[index].devices
                                 }]
-
-                                console.log("This is the object that will be the entire new  'Shifts'  value for the driver in question, since he did not have any first")
-                                console.log(newShifts)
                             }
 
 
@@ -169,8 +164,7 @@ export default {
                             })
                             return {mutationObj: resolved, driver: driver}
                         }).then((Obj) => {
-                            console.log(Obj.mutationObj.shifts)
-                            console.log(Obj)
+
                         })                      
                     }
                 }
@@ -182,7 +176,6 @@ export default {
             ///////////////////////////////
 
             return await findShift(dateDsp).then( resolved => {
-                console.log(resolved)
                 return resolved
             }).then( resolved => {
                 return resolved

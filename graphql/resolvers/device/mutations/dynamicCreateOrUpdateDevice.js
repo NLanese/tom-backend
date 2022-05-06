@@ -57,7 +57,6 @@ export default {
                             dsp: true,
                         }
                     }).then( (instance) => {
-                        console.log(instance)
                         return instance
                     })
                 } catch (error){
@@ -83,9 +82,6 @@ export default {
                 }
 
                 try{
-                    console.log('== update ==')
-                    console.log(resolved)
-                    console.log(name)
                         let device = await db.device.findUnique({
                             where: {
                                 id: resolved.id
@@ -103,7 +99,6 @@ export default {
                                 deviceIndex: (deviceIndex === undefined ? device.deviceIndex : deviceIndex),
                             }
                         }).then( async (resolved) => {
-                            console.log(resolved)
                             return await db.device.findUnique({
                                 where: {
                                     id: resolved.id
@@ -116,7 +111,6 @@ export default {
                         
                     } catch (error){
                         console.log("Error UPDATING the DEVICE")
-                        console.log(error)
                         throw new Error(error)
                 }
 

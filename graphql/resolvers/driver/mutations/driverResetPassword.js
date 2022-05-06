@@ -21,14 +21,11 @@ export default {
                 console.log(err)
             }
 
-            console.log("hit again")
 
             if (!foundDriver){
                 throw new Error("Error, there is no driver with this code, or this code has expired. Please get another code from your Mobile App")
             }
 
-            console.log(foundDriver.resetPasswordTokenExpiration)
-            console.log(Date.now().toString)
 
 
             if (Date.now().toString() >= foundDriver.resetPasswordTokenExpiration) {

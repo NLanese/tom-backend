@@ -5,8 +5,6 @@ export default {
     Query: {
         getOwner: async (_, { id }, context) => {
 
-            console.log("getting owner")
-
             try {
                 return await db.owner.findUnique({
                     where: {

@@ -35,7 +35,6 @@ export default {
             let owner;
             let manager;
 
-            console.log("\nBEGINNING CREATEWEEKLY \nHit One")
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -45,8 +44,6 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
-            console.log("Hit Two")
-
             let foundDriver = await db.driver.findFirst({
                 where: {
                     transporterId: transporterId,
@@ -54,8 +51,6 @@ export default {
                 }
             })
             
-            console.log("Hit Three")
-            console.log(foundDriver)
             let driverId 
 
             if (!foundDriver) {
@@ -64,10 +59,6 @@ export default {
 
             driverId = foundDriver.id 
 
-            console.log("Hit Four: driverID")
-            console.log(driverId)
-
-            console.log(dspId)
 
             try {
                 return await db.weeklyReport.create({

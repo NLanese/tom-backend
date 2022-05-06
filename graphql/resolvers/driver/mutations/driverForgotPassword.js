@@ -48,7 +48,6 @@ export default {
 
             let today = Date.now()
             let expire = (today + 18000000).toString()
-            console.log(expire)
 
             // Configures the actual Email Content
             const mailOptions = {
@@ -65,8 +64,6 @@ export default {
                     email: email
                 }
             })
-
-            console.log("Sending the email")
 
             // SENDS the email through the transporter
             transporter.sendMail(mailOptions, (error, response) => {
@@ -93,11 +90,9 @@ export default {
                             resetPasswordTokenExpiration: expire
                         }
                     }).then( mutation => {
-                        console.log(mutation)
                         return mutation
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }

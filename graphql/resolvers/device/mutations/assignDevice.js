@@ -56,9 +56,6 @@ export default {
                 }
 
                 try{
-                    console.log('== assign driver ==')
-                    console.log(resolved)
-                    console.log(name)
                         return db.device.update({
                             where: {
                                 id: resolved.id
@@ -93,7 +90,6 @@ export default {
                         // })
                         
                     } catch (error){
-                        console.log("Error UPDATING the DEVICE")
                         console.log(error)
                         throw new Error(error)
                 }
