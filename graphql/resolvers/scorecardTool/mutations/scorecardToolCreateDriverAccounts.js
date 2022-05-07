@@ -33,6 +33,7 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
+            const dspTransporter = `${dspId}${transporterId}`
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -42,12 +43,13 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
+
             let actualEmail = email
             email = email.toUpperCase()
 
             const duplicateDriver = await db.driver.findUnique({
                 where:{
-                    email: email
+                    dspTransporter: dspTransporter
                 }
             })
 
@@ -63,24 +65,15 @@ export default {
 ///////////////////////////////////
 
 
-            let findDriver = async (tId, dspId) => {
-                return await db.driver.findFirst({
+            let findDriver = async (dspTid) => {
+                return await db.driver.findUnique({
                     where: {
-                        transporterId: tId,
-                        dspId: dspId
+                        dspTransporter: dspTid
                     }
                 })
             }
 
-            let foundDriver
-            try {
-                findDriver(transporterId, dspId).then( resolved => {
-                   foundDriver = resolved
-                })
-            } catch (error){
-                console.log(error)
-                throw new Error(error)
-            }
+            let foundDriver = await findDriver(dspTransporter)
 
 ////////////////////////////////
 ///                          ///
@@ -190,6 +183,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -395,6 +389,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -414,6 +409,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -538,12 +534,7 @@ export default {
             }
 
             if (foundDriver) {
-                try {
                     return await foundDriver
-                } catch (error) {
-                    console.log(error)
-                    throw new Error(error)
-                }
             }
 
         }
