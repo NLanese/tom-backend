@@ -160,8 +160,6 @@ export default {
                     })
                 }
 
-                console.log("\nNew Manager...")
-                console.log(newManager)
                 const token = await generateManagerToken(newManager.id)
 
                 req.session = {

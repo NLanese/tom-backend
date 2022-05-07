@@ -69,9 +69,9 @@ CREATE TABLE "Driver" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "Role" NOT NULL DEFAULT E'DRIVER',
     "token" TEXT,
-    "firstname" TEXT,
-    "lastname" TEXT,
-    "email" TEXT,
+    "firstname" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "phoneNumber" TEXT,
     "password" TEXT,
     "profilePick" JSONB,
@@ -86,6 +86,7 @@ CREATE TABLE "Driver" (
     "resetPasswordTokenExpiration" TEXT,
     "ownerId" TEXT NOT NULL,
     "dspId" TEXT,
+    "dspTransporter" TEXT NOT NULL,
 
     CONSTRAINT "Driver_pkey" PRIMARY KEY ("id")
 );
@@ -164,6 +165,7 @@ CREATE TABLE "WeeklyReport" (
 CREATE TABLE "Shift" (
     "id" TEXT NOT NULL,
     "date" TEXT NOT NULL,
+    "dateDsp" TEXT NOT NULL,
     "allDriverShifts" JSONB[],
     "dspId" TEXT NOT NULL,
 
@@ -350,10 +352,10 @@ CREATE UNIQUE INDEX "Manager_email_key" ON "Manager"("email");
 CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
+CREATE UNIQUE INDEX "Driver_resetPasswordToken_key" ON "Driver"("resetPasswordToken");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Driver_resetPasswordToken_key" ON "Driver"("resetPasswordToken");
+CREATE UNIQUE INDEX "Driver_dspTransporter_key" ON "Driver"("dspTransporter");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Dsp_id_key" ON "Dsp"("id");
@@ -374,7 +376,7 @@ CREATE UNIQUE INDEX "WeeklyReport_id_key" ON "WeeklyReport"("id");
 CREATE UNIQUE INDEX "Shift_id_key" ON "Shift"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Shift_date_key" ON "Shift"("date");
+CREATE UNIQUE INDEX "Shift_dateDsp_key" ON "Shift"("dateDsp");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Chatroom_id_key" ON "Chatroom"("id");

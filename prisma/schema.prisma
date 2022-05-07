@@ -109,9 +109,9 @@ model Driver {
   createdAt   DateTime @default(now())
   role        Role     @default(DRIVER)
   token       String?
-  firstname   String?
-  lastname    String?
-  email       String?   @unique
+  firstname   String
+  lastname    String
+  email       String   
   phoneNumber String?
   password    String?
   profilePick Json?
@@ -135,6 +135,7 @@ model Driver {
   messages         Messages[]
   notifiedMessages NotifiedMessages[]
   dspId            String?
+  dspTransporter   String @unique
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   weeklyReport     WeeklyReport[]
   chatrooms        Chatroom[]
@@ -245,7 +246,8 @@ model WeeklyReport {
 
 model Shift {
   id          String  @id @unique @default(uuid())
-  date        String  @unique
+  date        String
+  dateDsp     String @unique
   allDriverShifts  Json[]                               // {driver: <driverObj>, devices: {
                                                         //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
                                                         // }

@@ -26,7 +26,6 @@ export default {
             let owner;
             let manager;
 
-            console.log("\nhit begin of driver creation")
 
 ///////////////////////////////////
 ///                             ///
@@ -34,7 +33,7 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
-            console.log("\nChecking Validity")
+            const dspTransporter = `${dspId}${transporterId}`
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -44,12 +43,13 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
+
             let actualEmail = email
             email = email.toUpperCase()
 
             const duplicateDriver = await db.driver.findUnique({
                 where:{
-                    email: email
+                    dspTransporter: dspTransporter
                 }
             })
 
@@ -64,27 +64,16 @@ export default {
 ///                             ///
 ///////////////////////////////////
 
-            console.log("\nFinding or creating driver")
-            console.log(transporterId)
 
-            let findDriver = async (tId, dspId) => {
-                return await db.driver.findFirst({
+            let findDriver = async (dspTid) => {
+                return await db.driver.findUnique({
                     where: {
-                        transporterId: tId,
-                        dspId: dspId
+                        dspTransporter: dspTid
                     }
                 })
             }
 
-            let foundDriver
-            try {
-                findDriver(transporterId, dspId).then( resolved => {
-                   foundDriver = resolved
-                })
-            } catch (error){
-                console.log(error)
-                throw new Error(error)
-            }
+            let foundDriver = await findDriver(dspTransporter)
 
 ////////////////////////////////
 ///                          ///
@@ -93,28 +82,28 @@ export default {
 ////////////////////////////////
 
             // Creates the Transporter
-            const transporter = nodemailer.createTransport({
-                service: "Gmail",
-                auth: {
-                  user: `${process.env.EMAIL_ADDRESS}`,
-                  pass: `${process.env.EMAIL_PASSWORD}`
-                }
-            })
+            // const transporter = nodemailer.createTransport({
+            //     service: "Gmail",
+            //     auth: {
+            //       user: `${process.env.EMAIL_ADDRESS}`,
+            //       pass: `${process.env.EMAIL_PASSWORD}`
+            //     }
+            // })
 
-            // Creates the Mail Object
-            const mailOptions = {
-                from: `${process.env.EMAIL_ADDRESS}`,
-                to: `${actualEmail}`,
-                subject: `Thank you for joining the TOM Team!`,
-                text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
-              }
+            // // Creates the Mail Object
+            // const mailOptions = {
+            //     from: `${process.env.EMAIL_ADDRESS}`,
+            //     to: `${actualEmail}`,
+            //     subject: `Thank you for joining the TOM Team!`,
+            //     text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+            //   }
             
-            // Sends the mail
-            transporter.sendMail(mailOptions, (error, response) => {
-                if (error){
-                  throw new Error('Something went wrong, please try again \n' + error)
-                } 
-            })
+            // // Sends the mail
+            // transporter.sendMail(mailOptions, (error, response) => {
+            //     if (error){
+            //       throw new Error('Something went wrong, please try again \n' + error)
+            //     } 
+            // })
 
             
 ///////////////////////////////////
@@ -122,8 +111,6 @@ export default {
 ///      UPDATE OR CREATE       ///
 ///                             ///
 ///////////////////////////////////
-
-            console.log("\nBeginning Update or Create Process")
 
             email = await email.toUpperCase()
             firstname = await firstname.toUpperCase()
@@ -135,7 +122,6 @@ export default {
         
             // If a manager used the scorecard tool instead of an owner
             if (manager && !foundDriver) {
-                console.log("No found driver")
                 // Finds the manager
                 const foundManager = await db.manager.findUnique({
                     where: {
@@ -183,7 +169,6 @@ export default {
                     }
  
                     // Checks to make sure a DSP exists first, if so, conncts the driver to it
-                    console.log(email, "Line 186")
                     if (foundOwner.dsp) {
                         newDriver = await db.driver.create({
                             data: {
@@ -198,6 +183,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -215,7 +201,6 @@ export default {
 
                     // If there is no DSP
                     if (!foundOwner.dsp) {
-                        console.log(email, "Line 218")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -357,7 +342,6 @@ export default {
             
             // If a Owner used the scorecard tool
             if (owner && !foundDriver) {
-                console.log("\nNo found driver")
                 // Finds the owner makes a variable
                 const foundOwner = await db.owner.findUnique({
                     where: {
@@ -392,7 +376,6 @@ export default {
 
                     // If there is a DSP currently, connects the driver
                     if (foundOwner.dsp) {
-                        console.log(email, "Line 395")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -406,6 +389,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -417,7 +401,6 @@ export default {
                     }
 
                     if (!foundOwner.dsp) {
-                        console.log(email, "Line 420")
                         newDriver = await db.driver.create({
                             data: {
                                 owner: {
@@ -426,6 +409,7 @@ export default {
                                     }
                                 },
                                 email: email,
+                                dspTransporter: dspTransporter,
                                 password: password,
                                 firstname: firstname,
                                 lastname: lastname,
@@ -435,9 +419,6 @@ export default {
                             }
                         })
                     }
-
-                    console.log("\nNEW DRIVER:")
-                    console.log(newDriver)
 
                     // If error on creatiob
                     if (!newDriver) {
@@ -553,13 +534,7 @@ export default {
             }
 
             if (foundDriver) {
-                console.log("\nfound driver")
-                try {
                     return await foundDriver
-                } catch (error) {
-                    console.log(error)
-                    throw new Error(error)
-                }
             }
 
         }
