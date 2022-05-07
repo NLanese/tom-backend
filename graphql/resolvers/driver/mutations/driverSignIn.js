@@ -19,7 +19,7 @@ export default {
             }
     
             email = await email.toUpperCase()
-            const foundUser = await db.driver.findUnique({
+            const foundUsers = await db.driver.findMany({
                 where: {
                     email
                 },
@@ -36,18 +36,33 @@ export default {
                     notifiedMessages: true,
                 }
             })
-            if (!foundUser) {
+            if (!foundUsers || foundUsers.length < 1) {
                 errors.general = 'Account not found';
                 throw new UserInputError('Incorrect Email', {
                     errors
                 });
             }
     
-            const isValid = await bcrypt.compare(password, foundUser.password)
-            console.log(password)
-            foundUser.password
-    
+            let isValid = false
+            let foundUser = false
+            let cap = foundUsers.length
+            let i = 0
+
+            while (i < cap){
+                foundUsers.forEach( async (user) => {
+                    let test = await bcrypt.compare(password, user.password)
+                    console.log(test)
+                    if (test){
+                        isValid = true
+                        console.log(isValid)
+                        foundUser = user
+                    }
+                    i++
+                })
+            }
+
             if (!isValid) {
+                console.log(isValid)
                 errors.general = 'Incorrect Password'
                 throw new UserInputError('Incorrect Password', {
                     errors
