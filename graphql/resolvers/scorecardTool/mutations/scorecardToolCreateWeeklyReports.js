@@ -51,13 +51,13 @@ export default {
                 }
             })
             
-            let driverId 
+            let dspTransporter 
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 
-            driverId = foundDriver.id 
+            dspTransporter = foundDriver.dspTransporter 
 
 
             try {
@@ -91,7 +91,7 @@ export default {
                         ccOpps: ccOpps,
                         driver: {
                             connect: {
-                                id: driverId
+                                dspTransporter: dspTransporter
                             }
                         },
                         dsp: {
