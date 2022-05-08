@@ -43,45 +43,55 @@ export default {
                 });
             }
     
-            let isValid = false
-            let foundUser = false
-            let cap = foundUsers.length
-            let i = 0
-
-            while (i < cap){
-                foundUsers.forEach( async (user) => {
-                    let test = await bcrypt.compare(password, user.password)
+            
+            const findUser = (users) => {
+                let isValid = false
+                let rUser = false
+                foundUsers.forEach(  (user) => {
+                    let test =  bcrypt.compare(password, user.password)
                     console.log(test)
                     if (test){
                         isValid = true
-                        console.log(isValid)
-                        foundUser = user
+                        rUser = user
                     }
-                    i++
                 })
-            }
-
-            if (!isValid) {
-                console.log(isValid)
-                errors.general = 'Incorrect Password'
-                throw new UserInputError('Incorrect Password', {
-                    errors
-                })
-            }
-            const token = await generateDriverToken(foundUser.id)
-
-            req.session = {
-                token: `Bearer ${token}`
-            }
-
-            try {
-                return await {
-                    ...foundUser,
-                    token: token
+                if (isValid){
+                    console.log("hit true")
+                    return rUser
                 }
-            } catch (error) {
-                throw new Error(error)
+                else{
+                    console.log("hit false")
+                    return false
+                }
             }
+
+                // If false
+                if (!findUser(foundUsers)) {
+                    errors.general = 'Incorrect Password'
+                    throw new UserInputError('Incorrect Password', {
+                        errors
+                    })
+                }
+
+
+                const token =  generateDriverToken(findUser(foundUsers).id)
+                req.session = {
+                    token: `Bearer ${token}`
+                }
+    
+                try {
+                    return  {
+                        ...findUser(foundUsers),
+                        token: token
+                    }
+                } catch (error) {
+                    throw new Error(error)
+                }
+            
+
+            
+
+            
         }
     }
 }
