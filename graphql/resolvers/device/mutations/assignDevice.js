@@ -36,7 +36,6 @@ export default {
             }
             
             if (id < 0) {
-                console.log(id)
                 console.log("Error ASSIGNING the DEVICE")
                 throw "Error ASSIGNING the DEVICE"
             }
@@ -76,18 +75,6 @@ export default {
                                 driver: true
                             }
                         })
-                        // .then( async (resolved) => {
-                        //     console.log(resolved)
-                        //     return await db.device.findUnique({
-                        //         where: {
-                        //             id: resolved.id
-                        //         },
-                        //         include: {
-                        //             dsp: true,
-                        //             driver: true
-                        //         }
-                        //     })
-                        // })
                         
                     } catch (error){
                         console.log(error)

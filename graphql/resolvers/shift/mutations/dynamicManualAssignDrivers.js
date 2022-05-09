@@ -135,7 +135,6 @@ export default {
 
             // Determines if Valid 
             if (!manager && !owner){
-                console.log("No access")
                 throw new Error("No owner or manager with the give crudentials found")
             }
 
@@ -153,21 +152,6 @@ export default {
                 // Finds if a shift with this dateDsp exists
                 findShift(dateDsp).then(  foundShift => {
 
-                    /////////////////
-                    //   TESTING   //
-                    /////////////////
-                    console.log(`${foundShift} on iteration ${i}`)
-                    if (foundShift){
-                        console.log(`Shift found on ${date} during iteration ${i}`)
-                        globalFoundShift = foundShift
-                    }
-                    else{
-                        console.log(`Shift NOT found on ${date} during iteration ${i}`)
-                    }
-                    console.log(`This is iteration ${i}`)
-                    if (!globalFoundShift){
-                        console.log(`For Driver ${driverId}, we have not found a shift on ${date}`)
-                    }
 
                     return findDriverById(driverId).then(  (resolvedDriver) => {
 
@@ -192,7 +176,6 @@ export default {
 
                         // If there is a shift on this date
                         if (foundShift){
-                            console.log("Update")
                             let newAllDriverShifts = [...foundShift.allDriverShifts, {driver: resolvedDriver, devices: []}]
                             return  updateShiftByDate(dateDsp, newAllDriverShifts).then( async (resolvedShiftTwo) => {
                                 return  resolvedShiftTwo
@@ -201,7 +184,6 @@ export default {
 
                         // If there is no shift on this date
                         if (!foundShift){
-                            console.log("Create")
                             return  createNewShiftOnDate(date, {driver: resolvedDriver, devices: []}, dateDsp).then( async (resolvedShiftTwo) => {
                                 return  resolvedShiftTwo
                             })
