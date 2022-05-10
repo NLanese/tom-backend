@@ -66,7 +66,7 @@ export default {
 
             // Updates a shift's allDriverShifts by Dtae
             const updateShiftByDate = async (dateDsp, allDriverShifts) => {
-                console.log("Updating shifts to hold this new boi", allDriverShifts[allDriverShifts.length - 1].driver.firstname)
+                console.log(allDriverShifts, "This is what the thingy should have once it has been updated")
                 try{
                     return await db.shift.update({
                         where: {
@@ -152,23 +152,25 @@ export default {
             }
 
 
-
+            let newAllDriverShifts = [...foundShift.allDriverShifts]
 
             for (i = 0; i < driverIds.length; i ++){
-
-
-            foundShift.allDriverShifts.forEach( driverShift => {
-                console.log(driverShift.driver.firstname)
-            })
-            
                 let driverId = driverIds[i]
                 findDriverById(driverId).then(  (resolvedDriver) => {
                     let newShifts = [...resolvedDriver.shifts, {date: date, devices: []}]
                     updateDriverByIdWithShift(driverId, newShifts)
-                    console.log(foundShift.allDriverShifts.length)
-                    let newAllDriverShifts = [...foundShift.allDriverShifts, {driver: resolvedDriver, devices: []}]
-                    console.log(newAllDriverShifts.length)
-                    updateShiftByDate(dateDsp, newAllDriverShifts)
+                    newAllDriverShifts.push(
+                        {
+                            driver: {
+                                firstname: resolvedDriver.firstname,
+                                lastname: resolvedDriver.lastname,
+                                id: resolvedDriver.id,
+                                dspId: resolvedDriver.dspId
+                            },
+                            devices: []
+                        }
+                    )
+                   updateShiftByDate(dateDsp, newAllDriverShifts)
                 })
             }
         }
