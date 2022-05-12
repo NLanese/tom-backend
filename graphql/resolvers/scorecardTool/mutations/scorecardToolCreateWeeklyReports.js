@@ -75,7 +75,7 @@ export default {
                             dspTransporter: dspTransporter
                         }
                     }
-                }).then( (notiMsg) => {
+                }).then( async (notiMsg) => {
                     await db.driver.update({
                         where: {
                             dspTransporter: dspTransporter
