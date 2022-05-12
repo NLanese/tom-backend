@@ -56,7 +56,6 @@ model Owner {
   drivers          Driver[]
   managers         Manager[]
   messages         Messages[]
-  notifiedMessages NotifiedMessages[]
   dsp              Dsp?
   chatrooms        Chatroom[]
 }
@@ -92,7 +91,6 @@ model Manager {
   owner            Owner              @relation(fields: [ownerId], references: [id])
   drivers          Driver[]
   messages         Messages[]
-  notifiedMessages NotifiedMessages[]
   dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   chatrooms        Chatroom[]
@@ -303,18 +301,14 @@ model Messages {
 
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  createdAt String
   read      Boolean  @default(false)
-  readAt    String 
+  readAt    String   
   content   String
   from      String
   type      String
   driverId  String?
-  adminId   String?
-  ownerId   String?
-  owner     Owner?   @relation(fields: [ownerId], references: [id])
   driver    Driver?  @relation(fields: [driverId], references: [id])
-  manager   Manager? @relation(fields: [adminId], references: [id])
 }
 
 model Accident {

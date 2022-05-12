@@ -35,6 +35,9 @@ export default {
             let owner;
             let manager;
 
+            //////////////////////
+            //    Ownership     //
+            ////////////////////// 
 
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
@@ -44,20 +47,37 @@ export default {
                 manager = await checkManagerAuth(token)
             }
 
+ 
+            //////////////////////
+            //      Driver      //
+            ////////////////////// 
+
+            let dspTransporter = `${dspId}${transporterId}`
             let foundDriver = await db.driver.findFirst({
                 where: {
-                    transporterId: transporterId,
-                    dspId: dspId
+                    dspTransporter: dspTransporter
                 }
             })
             
-            let dspTransporter 
-
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
 
-            dspTransporter = foundDriver.dspTransporter 
+            if (feedbackMessageSent){
+                let notifiedMsg = await dp.notifiedMessage.create({
+                    createdAt: date,
+                    readAt: "Not Read",
+                    content: feedbackMessage,
+                    from: "Automatic Scorecard Feedback",
+                    type: `${feedbackStatus} Notification`,
+                    driver: {
+                        connect: {
+                            dspTransporter: dspTransporter
+                        }
+                    }
+                })
+            }
+
 
 
             try {
@@ -101,33 +121,6 @@ export default {
                         }
                     }
                 })
-                // .then( async (weeklyReport) => {
-                //     let weeklyReports = [...foundDriver.weeklyReport, weeklyReport]
-                //     try {
-                //         const thisDriver = await db.driver.update({
-                //             where: {
-                //                 id: driverId
-                //             },
-                //             data: {
-                //                 weeklyReport: weeklyReports
-                //             }
-                //         })
-                //         return await db.weeklyReport.update({
-                //             where: {
-                //                 id: weeklyReport.id
-                //             },
-                //             data: {
-                //                 driver: {
-                //                     connect: {
-                //                         id: thisDriver.id
-                //                     }
-                //                 }
-                //             }
-                //         })
-                //     } catch(error){
-                //         throw new Error(error)
-                //     }
-                // })
             } catch (error) {
                 console.log(error)
                 throw new Error(error)
