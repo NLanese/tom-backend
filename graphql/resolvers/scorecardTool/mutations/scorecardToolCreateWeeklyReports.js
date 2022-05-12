@@ -64,7 +64,7 @@ export default {
             }
 
             if (feedbackMessageSent){
-                let notifiedMsg = await dp.notifiedMessage.create({
+                await dp.notifiedMessage.create({
                     createdAt: date,
                     readAt: "Not Read",
                     content: feedbackMessage,
