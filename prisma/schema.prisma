@@ -305,6 +305,7 @@ model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   read      Boolean  @default(false)
+  readAt    String 
   content   String
   from      String
   type      String
