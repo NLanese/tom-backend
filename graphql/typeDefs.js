@@ -301,7 +301,7 @@ type Device{
     id:         ID
     createdAt:  Date
     read:       Boolean
-    reatAt:     String
+    readAt:     String
     content:    String
     from:       String
     type:       String

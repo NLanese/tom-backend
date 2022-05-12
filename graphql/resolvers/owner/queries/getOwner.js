@@ -20,7 +20,8 @@ export default {
                                         collisionAccidents: true,
                                         injuryAccidents: true
                                     }
-                                }
+                                },
+                                notifiedMessages: true
                             }
                         },
                         managers: true,
