@@ -553,7 +553,7 @@ type Device{
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
-    dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+    dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String, transporterId: String, dspId: String): Driver
 
     # DEVICE MUTATIONS
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device

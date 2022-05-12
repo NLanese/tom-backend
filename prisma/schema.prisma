@@ -194,7 +194,7 @@ model Dsp {
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())
   createdAt           DateTime @default(now())
-  date                String // 11-1-21 11-8-21
+  date                String 
   hadAccident         Boolean  @default(false)
   feedbackMessage     String?
   feedbackStatus      String?
