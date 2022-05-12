@@ -75,6 +75,19 @@ export default {
                             dspTransporter: dspTransporter
                         }
                     }
+                }).then( (notiMsg) => {
+                    await db.driver.update({
+                        where: {
+                            dspTransporter: dspTransporter
+                        },
+                        data: {
+                            notifiedMessages: {
+                                connect: {
+                                    id: notiMsg.id
+                                }
+                            }
+                        }
+                    })
                 })
             }
 
