@@ -469,6 +469,11 @@ type AnnouncementMessage {
     driverGetChatroomById(chatroomId: String!): Chatroom
     #########################
 
+    #### ANNOUNCEMENT QUERIES ####
+    dynamicFindAllAnnouncements(role: String!, token: String!): [AnnouncementMessage]
+    dynamicfindDriversWhoDidntReadAnnouncementById(role: String! token: String!, announcementId: String!): [Driver]
+    ##############################
+
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
     dynamicGetManagers(role: String!): [Manager]
