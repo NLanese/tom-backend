@@ -293,6 +293,23 @@ type Device{
     manager:  Manager
   }
 
+###########################
+#  Announcement  Message  #
+###########################
+type AnnouncementMessage {
+    id:        ID
+    createdAt: Date
+
+    content: String
+    from: JSON
+    readBy: [JSON]
+
+    chatroom: Chatroom
+    owner:  Owner
+		dsp: Dsp
+    manager:  Manager
+  }
+
 
 ###########################
 #   Feedback Messages ?   #

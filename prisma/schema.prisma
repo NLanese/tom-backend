@@ -56,6 +56,7 @@ model Owner {
   drivers          Driver[]
   managers         Manager[]
   messages         Messages[]
+  announcementMessages AnnouncementMessages[]
   dsp              Dsp?
   chatrooms        Chatroom[]
 }
@@ -91,6 +92,7 @@ model Manager {
   owner            Owner              @relation(fields: [ownerId], references: [id])
   drivers          Driver[]
   messages         Messages[]
+  announcementMessages AnnouncementMessages[]
   dspId            String?
   dsp              Dsp?               @relation(fields: [dspId], references: [id])
   chatrooms        Chatroom[]
@@ -181,6 +183,7 @@ model Dsp {
   owner    Owner     @relation(fields: [ownerId], references: [id])
   weeklyReports     WeeklyReport[]
   devices              Device[]
+  announcementMessages AnnouncementMessages[]
 }
 
 /////////////////////////////////////
@@ -266,6 +269,7 @@ model Chatroom {
   chatroomName  String
   guests        Json[]
   chatroomOwner Json
+  announcementChat    Boolean @default(false)
 
   driverJoinOnSignUp  Boolean @default(false)
   managerJoinOnSignUp Boolean @default(true) 
@@ -275,7 +279,14 @@ model Chatroom {
   drivers  Driver[]
   managers Manager[]
   messages Messages[]
+  announcementMessages AnnouncementMessages[]
 }
+
+/////////////////////////////////////
+///                               ///
+///           Messages            ///
+///                               ///
+/////////////////////////////////////
 
 model Messages {
   id        Int      @id @default(autoincrement())
@@ -299,6 +310,34 @@ model Messages {
   driver     Driver?  @relation(fields: [driverId], references: [id])
 }
 
+/////////////////////////////////////
+///                               ///
+///     Announcement Message      ///
+///                               ///
+/////////////////////////////////////
+model AnnouncementMessages {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // MESSAGE INFORMATION
+  content    String
+  from       Json
+  
+  // Read Tracker
+  readBy   Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ]     
+
+  // RELATIONSHIPS
+  chatroomId String
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+  ownerId    String?
+  owner      Owner?   @relation(fields: [ownerId], references: [id])
+  dspId      String?
+  dsp        Dsp?     @relation(fields: [dspId], references: [id])
+  managerId  String?
+  manager    Manager? @relation(fields: [managerId], references: [id])
+}
+
+// also known as Feedback Messages
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String
@@ -310,6 +349,11 @@ model NotifiedMessages {
   driverId  String?
   driver    Driver?  @relation(fields: [driverId], references: [id])
 }
+/////////////////////////////////////
+///                               ///
+///           Accident            ///
+///                               ///
+/////////////////////////////////////
 
 model Accident {
   id        String   @id @unique @default(uuid())
@@ -338,63 +382,73 @@ model Accident {
   injuryAccidents     InjuryAccident[]
   selfInjuryAccidents SelfInjuryAccident[]
 }
+    ///////////////////////
+    // Property Accident //
+    ///////////////////////
+    model PropertyAccident {
+      id                  String @id @unique @default(uuid())
+      contact_info        Json
+      damage_report       Json
+      defective_equip     String[]
+      safety_equip        String[]
+      package_report      Json?
+      specific_pictures   Json
+      extra_info          String?
+      types_of_damage     Json
 
-model PropertyAccident {
-  id                  String @id @unique @default(uuid())
-  contact_info        Json
-  damage_report       Json
-  defective_equip     String[]
-  safety_equip        String[]
-  package_report      Json?
-  specific_pictures   Json
-  extra_info          String?
-  types_of_damage     Json
+      // RELATIONSHIPS
+      accidentId        String
+      accident          Accident  @relation(fields: [accidentId], references: [id])
+    }
+    ////////////////////////
+    // Collision Accident //
+    ////////////////////////
+    model CollisionAccident {
+      id                String @id @unique @default(uuid())
+      specific_pictures Json
+      contact_info      Json
+      extra_info        String?
+      collision_report  Json
 
-  // RELATIONSHIPS
-  accidentId        String
-  accident          Accident  @relation(fields: [accidentId], references: [id])
-}
+      // RELATIONSHIPS
+      accidentId        String
+      accident          Accident  @relation(fields: [accidentId], references: [id])
+      injuryAccidents    InjuryAccident[]
+    }
 
-model CollisionAccident {
-  id                String @id @unique @default(uuid())
-  specific_pictures Json
-  contact_info      Json
-  extra_info        String?
-  collision_report  Json
+    ///////////////////////
+    //  Injury Accident  //
+    ///////////////////////
+    model InjuryAccident {
+      id                  String @id @unique @default(uuid())
+      contact_info        Json
+      extra_info          String?
+      injured_areas       Json
+      injury_report       Json
+      pain_level          String
+      specific_pictures   Json
 
-  // RELATIONSHIPS
-  accidentId        String
-  accident          Accident  @relation(fields: [accidentId], references: [id])
-  injuryAccidents    InjuryAccident[]
-}
+      accidentId String
+      accident   Accident @relation(fields: [accidentId], references: [id])
+      collisionAccidentId String?
+      collisionAccident   CollisionAccident? @relation(fields: [collisionAccidentId], references: [id])
+    }
 
-model InjuryAccident {
-  id                  String @id @unique @default(uuid())
-  contact_info        Json
-  extra_info          String?
-  injured_areas       Json
-  injury_report       Json
-  pain_level          String
-  specific_pictures   Json
+    //////////////////////////
+    // Self Injury Accident //
+    //////////////////////////
+    model SelfInjuryAccident {
+      id                  String @id @unique @default(uuid())
+      animal_report       Json?
+      injuries            Json
+      injury_report       Json
+      extra_info          String?
+      specific_pictures   Json
 
-  accidentId String
-  accident   Accident @relation(fields: [accidentId], references: [id])
-  collisionAccidentId String?
-  collisionAccident   CollisionAccident? @relation(fields: [collisionAccidentId], references: [id])
-}
-
-model SelfInjuryAccident {
-  id                  String @id @unique @default(uuid())
-  animal_report       Json?
-  injuries            Json
-  injury_report       Json
-  extra_info          String?
-  specific_pictures   Json
-
-  // RELATIONSHIPS
-  accidentId String
-  accident   Accident @relation(fields: [accidentId], references: [id])
-}
+      // RELATIONSHIPS
+      accidentId String
+      accident   Accident @relation(fields: [accidentId], references: [id])
+    }
 
 enum Role {
   DRIVER
