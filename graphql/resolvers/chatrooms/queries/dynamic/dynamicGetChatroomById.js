@@ -6,14 +6,15 @@ export default {
     Query: {
         dynamicGetChatroomById: async (_, {
             role,
+            token,
             chatroomId
-        }, context) => {
+        }) => {
             let owner;
             let manager;
 
             // Dynamic authorization check
-            if (role === 'OWNER') owner = await checkOwnerAuth(context)
-            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+            if (role === 'OWNER') owner = await checkOwnerAuth(token)
+            if (role === 'MANAGER') manager = await checkManagerAuth(token)
 
             const chatroomCheck = await db.chatroom.findUnique({
                 where: {
@@ -42,8 +43,9 @@ export default {
                     throw new Error(error)
                 }
             }
-
-            throw new Error('Something went wrong. Please try again')
+            else{
+                throw new Error("No owner or manager found")
+            }
         }
     }
 }

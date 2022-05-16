@@ -293,6 +293,23 @@ type Device{
     manager:  Manager
   }
 
+###########################
+#  Announcement  Message  #
+###########################
+type AnnouncementMessage {
+    id:        ID
+    createdAt: Date
+
+    content: String
+    from: JSON
+    readBy: [JSON]
+
+    chatroom: Chatroom
+    owner:  Owner
+		dsp: Dsp
+    manager:  Manager
+  }
+
 
 ###########################
 #   Feedback Messages ?   #
@@ -301,6 +318,7 @@ type Device{
     id:         ID
     createdAt:  Date
     read:       Boolean
+    readAt:     String
     content:    String
     from:       String
     type:       String
@@ -446,9 +464,15 @@ type Device{
     getShiftByDate(role: String, token: String, date: String!): Shift
     #######################
 
-    # CHATROOM QUERIES
-    dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
+    #### CHATROOM QUERIES ####
+    dynamicGetChatroomById(role: String!, chatroomId: String!, token: String!): Chatroom
     driverGetChatroomById(chatroomId: String!): Chatroom
+    #########################
+
+    #### ANNOUNCEMENT QUERIES ####
+    dynamicFindAllAnnouncements(role: String!, token: String!): [AnnouncementMessage]
+    dynamicfindDriversWhoDidntReadAnnouncementById(role: String! token: String!, announcementId: String!): [Driver]
+    ##############################
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
@@ -533,7 +557,7 @@ type Device{
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
     # MESSAGES MUTATIONS
-    dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Chatroom
+    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!): Chatroom
     dynamicReportMessage(role: String!, messageId: Int!): Messages
     dynamicRemoveMessage(role: String!, messageId: Int!): Messages
 
@@ -553,7 +577,7 @@ type Device{
     # DYNAMIC MUTATIONS
     dynamicSignIn(email: String!, password: String!): Owner
     dynamicSendFeedbackMessage(role: String!, reportId: String!, message: String!): WeeklyReport
-    dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String): Driver
+    dynamicUpdateDriver(role: String!, token: String, driverId: String!, email: String, firstname: String, lastname: String, password: String, phoneNumber: String, transporterId: String, dspId: String): Driver
 
     # DEVICE MUTATIONS
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device

@@ -20,7 +20,8 @@ export default {
                                         collisionAccidents: true,
                                         injuryAccidents: true
                                     }
-                                }
+                                },
+                                notifiedMessages: true
                             }
                         },
                         managers: true,
@@ -35,7 +36,7 @@ export default {
                             }
                         },
                         messages: true,
-                        notifiedMessages: true,
+                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
                                 owner: true,

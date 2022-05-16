@@ -14,21 +14,23 @@ export default {
             pain_level,
             specific_pictures
         }, context) => {
-            const driver = await checkDriverAuth(context)
 
+            console.log("Starting")
+            const driver = await checkDriverAuth(context)
             const foundAccident = await db.accident.findUnique({
                 where: {
                     id: accidentId
                 }
             })
-
             if (!foundAccident) {
                 throw new Error("Accident does not exist")
             }
-
+            console.log("Found Accident")
             await handleDriverAccidentOwnership(driver.id, accidentId)
 
             if (collisionAccidentId === undefined || collisionAccidentId === null || !collisionAccidentId) {
+                console.log("Non collision")
+                console.log("accidentId", accidentId)
                 try {
                     return await db.injuryAccident.create({
                         data: {
@@ -38,7 +40,6 @@ export default {
                             specific_pictures: specific_pictures,
                             pain_level: pain_level,
                             extra_info: extra_info,
-                            accidentId: foundAccident.id,
                             accident: {
                                 connect: {
                                     id: foundAccident.id
@@ -47,12 +48,14 @@ export default {
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
 
 
             if (collisionAccidentId !== undefined) {
+                console.log("collision")
                 try {
                     return await db.injuryAccident.create({
                         data: {

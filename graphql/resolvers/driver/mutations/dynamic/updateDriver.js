@@ -13,7 +13,9 @@ export default {
             firstname,
             lastname,
             password,
-            phoneNumber
+            phoneNumber,
+            dspId,
+            transporterId,
         }, context) => {
             let owner;
             let manager;
@@ -28,6 +30,8 @@ export default {
 			if (firstname) firstname = firstname.toUpperCase()
 			if (lastname) lastname = lastname.toUpperCase()
 
+            let dspTransporter = `${dspId}${transporterId}`
+
             const foundDriver = await db.driver.findUnique({
                 where: {
                     id: driverId
@@ -37,7 +41,7 @@ export default {
             if (!foundDriver) throw new Error("Driver does not exist")
 
             if (email) {
-                const emailCheck = await db.driver.findUnique({
+                const emailCheck = await db.driver.findFirst({
                     where: {
                         email: email
                     }

@@ -18,65 +18,66 @@ export default {
     
             email = await email.toUpperCase()
 
-            const foundOwner = await db.owner.findUnique({
-                where: {
-                    email
-                },
-                include: {
-                    drivers: {
-                        include: {
-                            accidents: {
-                                include: {
-                                    injuryAccidents: true,
-                                    propertyAccidents: true,
-                                    collisionAccidents: true,
-                                    selfInjuryAccidents: true
-                                }
-                            },
-                            weeklyReport: true,
-                        }
+                const foundOwner = await db.owner.findUnique({
+                    where: {
+                        email
                     },
-                    managers: true,
-                    dsp: {
-                        include: {
-                            owner: true,
-                            devices: {
-                                orderBy: {
-                                    deviceIndex: 'asc'
-                                }
-                            },
-                        }
-                    },
-                    messages: true,
-                    notifiedMessages: true,
-                    chatrooms: {
-                        include: {
-                            messages: true
+                    include: {
+                        drivers: {
+                            include: {
+                                accidents: {
+                                    include: {
+                                        injuryAccidents: true,
+                                        propertyAccidents: true,
+                                        collisionAccidents: true,
+                                        selfInjuryAccidents: true
+                                    }
+                                },
+                                weeklyReport: true,
+                            }
+                        },
+                        managers: true,
+                        dsp: {
+                            include: {
+                                owner: true,
+                                devices: {
+                                    orderBy: {
+                                        deviceIndex: 'asc'
+                                    }
+                                },
+                            }
+                        },
+                        messages: true,
+                        // notifiedMessages: true,
+                        chatrooms: {
+                            include: {
+                                messages: true
+                            }
                         }
                     }
-                }
-            })
+                })
+           
 
-            const foundManager = await db.manager.findUnique({
-                where: {
-                    email
-                },
-                include: {
-                    drivers: true,
-                    dsp: {
-                        include: {
-                            owner: true
-                        }
+                const foundManager = await db.manager.findUnique({
+                    where: {
+                        email
                     },
-                    messages: true,
-                    notifiedMessages: true,
-                    chatrooms: {
-                        include: {
-                            messages: true
+                    include: {
+                        drivers: true,
+                        dsp: {
+                            include: {
+                                owner: true
+                            }
+                        },
+                        messages: true,
+                        // notifiedMessages: true,
+                        chatrooms: {
+                            include: {
+                                messages: true
+                            }
                         }
                     }
-                }
-            })
+                })
 
             if (!foundOwner && !foundManager) {
                 errors.general = 'Account not found';

@@ -56,11 +56,9 @@ export default {
                     }
                 })
                 if (isValid){
-                    console.log("hit true")
                     return rUser
                 }
                 else{
-                    console.log("hit false")
                     return false
                 }
             }
