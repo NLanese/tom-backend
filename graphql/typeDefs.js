@@ -447,9 +447,10 @@ type Device{
     getShiftByDate(role: String, token: String, date: String!): Shift
     #######################
 
-    # CHATROOM QUERIES
-    dynamicGetChatroomById(role: String!, chatroomId: String!): Chatroom
+    #### CHATROOM QUERIES ####
+    dynamicGetChatroomById(role: String!, chatroomId: String!, token: String!): Chatroom
     driverGetChatroomById(chatroomId: String!): Chatroom
+    #########################
 
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
@@ -534,7 +535,7 @@ type Device{
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
     # MESSAGES MUTATIONS
-    dynamicSendMessage(role: String!, chatroomId: String!, content: String!): Chatroom
+    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!): Chatroom
     dynamicReportMessage(role: String!, messageId: Int!): Messages
     dynamicRemoveMessage(role: String!, messageId: Int!): Messages
 

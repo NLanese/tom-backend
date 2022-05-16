@@ -54,7 +54,7 @@ export default {
 
             const updateShift = async (dateDsp, newShifts) => {
                 try{ 
-                    return await db.shift.findUnique({
+                    return await db.shift.update({
                         where: {
                             dateDsp: dateDsp
                         },

@@ -7,14 +7,15 @@ export default {
         dynamicSendMessage: async (_, {
             role,
             chatroomId,
-            content
-        }, context) => {
+            content,
+            token
+        }) => {
             let owner;
             let manager;
 
             // Dynamic authorization check
-            if (role === 'OWNER') owner = await checkOwnerAuth(context)
-            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+            if (role === 'OWNER') owner = await checkOwnerAuth(token)
+            if (role === 'MANAGER') manager = await checkManagerAuth(token)
 
             if (owner) {
                 const foundOwner = await db.owner.findUnique({
