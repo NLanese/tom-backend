@@ -15,6 +15,7 @@ const checkOwnerAuth = (context) => {
 				const owner = jwt.verify(token, process.env.JWT_OWNER_SECRET);
 				return owner
 			} catch (err) {
+				console.log("Invalid Token")
 				throw new AuthenticationError('Error: Invalid token')
 			}
 		}
