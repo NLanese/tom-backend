@@ -323,6 +323,7 @@ type AnnouncementMessage {
     createdAt:  Date
     read:       Boolean
     readAt:     String
+    sentAt:     String
     content:    String
     from:       String
     type:       String
