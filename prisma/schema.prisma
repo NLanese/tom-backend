@@ -174,8 +174,8 @@ model Dsp {
 
     allDevices                   Json[]
 
-  paid            Boolean @default(false) // Keeps track if the Dsp has paid 
-  accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
+  paid                          Boolean @default(false) // Keeps track if the Dsp has paid 
+  accountStanding               String  @default("Free") // Keeps track of the Dsp Account Status
 
   managers              Manager[]
   drivers               Driver[]     
@@ -349,7 +349,7 @@ model NotifiedMessages {
   driverId  String?
   driver    Driver?  @relation(fields: [driverId], references: [id])
   dspId     String?
-  dsp       Dsp?    @relation((fields: [dspId], references: [id]))
+  dsp       Dsp?    @relation(fields: [dspId], references: [id])
 }
 /////////////////////////////////////
 ///                               ///

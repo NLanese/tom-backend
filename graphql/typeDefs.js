@@ -162,7 +162,9 @@ const typeDefs = gql`
     drivers:                      [Driver]
     shifts:                       [Shift]
     weeklyReports:                [WeeklyReport]
-    devices:                       [Device]
+    notifiedMessages:             [NotifiedMessages]
+    devices:                      [Device]
+    announcementMessages:         [AnnouncementMessage]
   }
 
 
@@ -316,7 +318,7 @@ type AnnouncementMessage {
 
 
 ###########################
-#   Feedback Messages ?   #
+#    Notified Messages   #
 ###########################
   type NotifiedMessages {
     id:         ID
@@ -328,9 +330,9 @@ type AnnouncementMessage {
     from:       String
     type:       String
     driverId:   Int
-    adminId:    Int 
     driver:     Driver
-    manager:    Manager
+    dspId:      String
+    Dsp:        Dsp
   }
 
 

@@ -28,6 +28,8 @@ export default {
                         dsp: {
                             include: {
                                 shifts: true,
+                                notifiedMessages: true,
+                                announcementMessages: true,
                                 devices: {
                                     orderBy: {
                                         deviceIndex: 'asc'

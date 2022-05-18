@@ -40,6 +40,8 @@ export default {
                         dsp: {
                             include: {
                                 owner: true,
+                                notifiedMessages: true,
+                                announcementMessages: true,
                                 devices: {
                                     orderBy: {
                                         deviceIndex: 'asc'
