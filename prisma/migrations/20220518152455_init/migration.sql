@@ -77,7 +77,8 @@ CREATE TABLE "Driver" (
     "profilePick" JSONB,
     "shifts" JSONB[],
     "transporterId" TEXT,
-    "muted" BOOLEAN NOT NULL DEFAULT false,
+    "globallyMuted" BOOLEAN NOT NULL DEFAULT false,
+    "mutedDrivers" JSONB[],
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "attendence" TEXT,
@@ -178,7 +179,9 @@ CREATE TABLE "Chatroom" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "chatroomName" TEXT NOT NULL,
     "guests" JSONB[],
+    "mutedDrivers" JSONB[],
     "chatroomOwner" JSONB NOT NULL,
+    "announcementChat" BOOLEAN NOT NULL DEFAULT false,
     "driverJoinOnSignUp" BOOLEAN NOT NULL DEFAULT false,
     "managerJoinOnSignUp" BOOLEAN NOT NULL DEFAULT true,
     "ownerId" TEXT,
@@ -191,6 +194,7 @@ CREATE TABLE "Messages" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
+    "sentAt" TEXT,
     "from" JSONB NOT NULL,
     "visable" BOOLEAN NOT NULL DEFAULT true,
     "reported" BOOLEAN NOT NULL DEFAULT false,
@@ -204,16 +208,32 @@ CREATE TABLE "Messages" (
 );
 
 -- CreateTable
-CREATE TABLE "NotifiedMessages" (
+CREATE TABLE "AnnouncementMessages" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "sentAt" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "from" JSONB NOT NULL,
+    "readBy" JSONB[],
+    "chatroomId" TEXT NOT NULL,
+    "ownerId" TEXT,
+    "dspId" TEXT,
+    "managerId" TEXT,
+
+    CONSTRAINT "AnnouncementMessages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotifiedMessages" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TEXT NOT NULL,
+    "sentAt" TEXT,
     "read" BOOLEAN NOT NULL DEFAULT false,
+    "readAt" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "from" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "driverId" TEXT,
-    "adminId" TEXT,
-    "ownerId" TEXT,
 
     CONSTRAINT "NotifiedMessages_pkey" PRIMARY KEY ("id")
 );
@@ -457,13 +477,19 @@ ALTER TABLE "Messages" ADD CONSTRAINT "Messages_managerId_fkey" FOREIGN KEY ("ma
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "AnnouncementMessages" ADD CONSTRAINT "AnnouncementMessages_chatroomId_fkey" FOREIGN KEY ("chatroomId") REFERENCES "Chatroom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AnnouncementMessages" ADD CONSTRAINT "AnnouncementMessages_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AnnouncementMessages" ADD CONSTRAINT "AnnouncementMessages_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AnnouncementMessages" ADD CONSTRAINT "AnnouncementMessages_managerId_fkey" FOREIGN KEY ("managerId") REFERENCES "Manager"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Manager"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

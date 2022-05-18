@@ -174,17 +174,18 @@ model Dsp {
 
     allDevices                   Json[]
 
-  paid            Boolean @default(false) // Keeps track if the Dsp has paid 
-  accountStanding String  @default("Free") // Keeps track of the Dsp Account Status
+  paid                          Boolean @default(false) // Keeps track if the Dsp has paid 
+  accountStanding               String  @default("Free") // Keeps track of the Dsp Account Status
 
-  managers Manager[]
-  drivers  Driver[]     
-  shifts Shift[]     
-  ownerId  String    @unique
-  owner    Owner     @relation(fields: [ownerId], references: [id])
-  weeklyReports     WeeklyReport[]
-  devices              Device[]
-  announcementMessages AnnouncementMessages[]
+  managers              Manager[]
+  drivers               Driver[]     
+  shifts                Shift[]     
+  ownerId               String    @unique
+  owner                 Owner     @relation(fields: [ownerId], references: [id])
+  weeklyReports         WeeklyReport[]
+  notifiedMessages      NotifiedMessages[]
+  devices               Device[]
+  announcementMessages  AnnouncementMessages[]
 }
 
 /////////////////////////////////////
@@ -294,7 +295,6 @@ model Messages {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  // MESSAGE INFORMATION
   content    String
   sentAt     String?
   from       Json
@@ -302,7 +302,6 @@ model Messages {
   reported   Boolean @default(false)
   reportedBy Json?
 
-  // RELATIONSHIPS
   chatroomId String
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
   ownerId    String?
@@ -319,18 +318,14 @@ model Messages {
 ///                               ///
 /////////////////////////////////////
 model AnnouncementMessages {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  sentAt    String
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  sentAt      String
 
-  // MESSAGE INFORMATION
-  content    String
-  from       Json
-  
-  // Read Tracker
-  readBy   Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ]     
+  content     String
+  from        Json
+  readBy      Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ]     
 
-  // RELATIONSHIPS
   chatroomId String
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
   ownerId    String?
@@ -353,6 +348,8 @@ model NotifiedMessages {
   type      String
   driverId  String?
   driver    Driver?  @relation(fields: [driverId], references: [id])
+  dspId     String?
+  dsp       Dsp?    @relation(fields: [dspId], references: [id])
 }
 /////////////////////////////////////
 ///                               ///
@@ -368,7 +365,6 @@ model Accident {
   time      String
   location  String
 
-  // ACCIDENT DATA
   accident_report            Json?
   has_logo                   String?
   police_report              Json?
@@ -379,7 +375,6 @@ model Accident {
   deleted Boolean @default(false)
   filled  Boolean @default(false)
 
-  // RELATIONSHIPS
   driverId            String
   driver              Driver              @relation(fields: [driverId], references: [id])
   collisionAccidents  CollisionAccident[]
@@ -401,7 +396,6 @@ model Accident {
       extra_info          String?
       types_of_damage     Json
 
-      // RELATIONSHIPS
       accidentId        String
       accident          Accident  @relation(fields: [accidentId], references: [id])
     }
@@ -415,7 +409,6 @@ model Accident {
       extra_info        String?
       collision_report  Json
 
-      // RELATIONSHIPS
       accidentId        String
       accident          Accident  @relation(fields: [accidentId], references: [id])
       injuryAccidents    InjuryAccident[]
@@ -450,7 +443,6 @@ model Accident {
       extra_info          String?
       specific_pictures   Json
 
-      // RELATIONSHIPS
       accidentId String
       accident   Accident @relation(fields: [accidentId], references: [id])
     }
