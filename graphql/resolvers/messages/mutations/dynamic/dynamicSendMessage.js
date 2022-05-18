@@ -8,7 +8,8 @@ export default {
             role,
             chatroomId,
             content,
-            token
+            token,
+            sentAt
         }) => {
             let owner;
             let manager;
@@ -42,7 +43,8 @@ export default {
                                 }
                             },
                             content: content,
-                            from: foundOwner
+                            from: foundOwner,
+                            sentAt: sentAt
                         }
                     })
 

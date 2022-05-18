@@ -104,7 +104,8 @@ const typeDefs = gql`
     shifts:                       [JSON]
 
     transporterId:                String
-    muted:                        Boolean
+    globallyMuted:                        Boolean
+    mutedDrivers:                 [JSON]
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -263,6 +264,7 @@ type Device{
     chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
+    mutedDrivers:                 [JSON]
 
     driverJoinOnSignUp:           Boolean
     managerJoinOnSignUp:          Boolean
@@ -283,6 +285,7 @@ type Device{
 
     content: String
     from: JSON
+    sentAt: String
     visable: Boolean
     reported: Boolean
     reportedBy: JSON
@@ -302,6 +305,7 @@ type AnnouncementMessage {
 
     content: String
     from: JSON
+    sentAt: String
     readBy: [JSON]
 
     chatroom: Chatroom
@@ -319,6 +323,7 @@ type AnnouncementMessage {
     createdAt:  Date
     read:       Boolean
     readAt:     String
+    sentAt:     String
     content:    String
     from:       String
     type:       String
@@ -553,6 +558,7 @@ type AnnouncementMessage {
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
     dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!): Chatroom
+    ############################
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
