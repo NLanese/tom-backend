@@ -104,7 +104,8 @@ const typeDefs = gql`
     shifts:                       [JSON]
 
     transporterId:                String
-    muted:                        Boolean
+    globallyMuted:                        Boolean
+    mutedDrivers:                 [JSON]
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -161,7 +162,9 @@ const typeDefs = gql`
     drivers:                      [Driver]
     shifts:                       [Shift]
     weeklyReports:                [WeeklyReport]
-    devices:                       [Device]
+    notifiedMessages:             [NotifiedMessages]
+    devices:                      [Device]
+    announcementMessages:         [AnnouncementMessage]
   }
 
 
@@ -263,6 +266,7 @@ type Device{
     chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
+    mutedDrivers:                 [JSON]
 
     driverJoinOnSignUp:           Boolean
     managerJoinOnSignUp:          Boolean
@@ -281,16 +285,17 @@ type Device{
     id:        ID
     createdAt: Date
 
-    content: String
-    from: JSON
-    visable: Boolean
-    reported: Boolean
+    content:    String
+    from:       JSON
+    sentAt:     String
+    visable:    Boolean
+    reported:   Boolean
     reportedBy: JSON
 
-    chatroom: Chatroom
-    owner:  Owner
-		driver: Driver
-    manager:  Manager
+    chatroom:   Chatroom
+    owner:      Owner
+		driver:     Driver
+    manager:    Manager
   }
 
 ###########################
@@ -300,32 +305,34 @@ type AnnouncementMessage {
     id:        ID
     createdAt: Date
 
-    content: String
-    from: JSON
-    readBy: [JSON]
+    content:    String
+    from:       JSON
+    sentAt:     String
+    readBy:     [JSON]
 
-    chatroom: Chatroom
-    owner:  Owner
-		dsp: Dsp
-    manager:  Manager
+    chatroom:   Chatroom
+    owner:      Owner
+		dsp:        Dsp
+    manager:    Manager
   }
 
 
 ###########################
-#   Feedback Messages ?   #
+#    Notified Messages   #
 ###########################
   type NotifiedMessages {
     id:         ID
     createdAt:  Date
     read:       Boolean
     readAt:     String
+    sentAt:     String
     content:    String
     from:       String
     type:       String
     driverId:   Int
-    adminId:    Int 
     driver:     Driver
-    manager:    Manager
+    dspId:      String
+    Dsp:        Dsp
   }
 
 
@@ -553,11 +560,12 @@ type AnnouncementMessage {
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
     dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!): Chatroom
+    ############################
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
     # MESSAGES MUTATIONS
-    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!): Chatroom
+    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!, sentAt: String!): Chatroom
     dynamicReportMessage(role: String!, messageId: Int!): Messages
     dynamicRemoveMessage(role: String!, messageId: Int!): Messages
 
