@@ -283,17 +283,17 @@ type Device{
     id:        ID
     createdAt: Date
 
-    content: String
-    from: JSON
-    sentAt: String
-    visable: Boolean
-    reported: Boolean
+    content:    String
+    from:       JSON
+    sentAt:     String
+    visable:    Boolean
+    reported:   Boolean
     reportedBy: JSON
 
-    chatroom: Chatroom
-    owner:  Owner
-		driver: Driver
-    manager:  Manager
+    chatroom:   Chatroom
+    owner:      Owner
+		driver:     Driver
+    manager:    Manager
   }
 
 ###########################
@@ -303,15 +303,15 @@ type AnnouncementMessage {
     id:        ID
     createdAt: Date
 
-    content: String
-    from: JSON
-    sentAt: String
-    readBy: [JSON]
+    content:    String
+    from:       JSON
+    sentAt:     String
+    readBy:     [JSON]
 
-    chatroom: Chatroom
-    owner:  Owner
-		dsp: Dsp
-    manager:  Manager
+    chatroom:   Chatroom
+    owner:      Owner
+		dsp:        Dsp
+    manager:    Manager
   }
 
 
@@ -563,7 +563,7 @@ type AnnouncementMessage {
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
 
     # MESSAGES MUTATIONS
-    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!): Chatroom
+    dynamicSendMessage(role: String!, chatroomId: String!, content: String!, token: String!, sentAt: String!): Chatroom
     dynamicReportMessage(role: String!, messageId: Int!): Messages
     dynamicRemoveMessage(role: String!, messageId: Int!): Messages
 
