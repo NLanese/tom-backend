@@ -118,7 +118,8 @@ model Driver {
   shifts      Json[]
 
   transporterId String? 
-  muted         Boolean @default(false) // Used to disable char features for Driver
+  globallyMuted         Boolean @default(false) // Used to disable char features for Driver
+  mutedDrivers  Json[]
   locked        Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
   attendence    String?
@@ -268,6 +269,7 @@ model Chatroom {
 
   chatroomName  String
   guests        Json[]
+  mutedDrivers  Json[]
   chatroomOwner Json
   announcementChat    Boolean @default(false)
 
@@ -294,6 +296,7 @@ model Messages {
 
   // MESSAGE INFORMATION
   content    String
+  sentAt     String?
   from       Json
   visable    Boolean @default(true)
   reported   Boolean @default(false)
@@ -318,6 +321,7 @@ model Messages {
 model AnnouncementMessages {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+  sentAt    String
 
   // MESSAGE INFORMATION
   content    String
@@ -341,6 +345,7 @@ model AnnouncementMessages {
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String
+  sentAt    String?
   read      Boolean  @default(false)
   readAt    String   
   content   String
