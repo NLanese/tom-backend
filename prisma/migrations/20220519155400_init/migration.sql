@@ -234,6 +234,7 @@ CREATE TABLE "NotifiedMessages" (
     "from" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "driverId" TEXT,
+    "dspId" TEXT,
 
     CONSTRAINT "NotifiedMessages_pkey" PRIMARY KEY ("id")
 );
@@ -490,6 +491,9 @@ ALTER TABLE "AnnouncementMessages" ADD CONSTRAINT "AnnouncementMessages_managerI
 
 -- AddForeignKey
 ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

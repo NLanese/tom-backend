@@ -100,7 +100,7 @@ const startApolloServer = async () => {
     setTimeout(async () => {
       const parseData = await parseExcel(req.file);
       await res.send(parseData);
-    }, 10000);
+    }, 15000);
   });
 
   app.post("/excelparse", uploadStorage.single("file"), async (req, res) => {
