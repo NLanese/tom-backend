@@ -340,7 +340,8 @@ model AnnouncementMessages {
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String
-  sentAt    String?
+  sentAt    String
+  date      String
   read      Boolean  @default(false)
   readAt    String   
   content   String

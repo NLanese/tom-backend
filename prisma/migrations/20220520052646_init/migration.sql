@@ -227,7 +227,8 @@ CREATE TABLE "AnnouncementMessages" (
 CREATE TABLE "NotifiedMessages" (
     "id" SERIAL NOT NULL,
     "createdAt" TEXT NOT NULL,
-    "sentAt" TEXT,
+    "sentAt" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
     "read" BOOLEAN NOT NULL DEFAULT false,
     "readAt" TEXT NOT NULL,
     "content" TEXT NOT NULL,
