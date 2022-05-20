@@ -79,11 +79,11 @@ model Manager {
   password    String
   profilePick Json?
 
-  muted   Boolean @default(false) // Used to disable char features for Driver
-  locked  Boolean @default(false) // Used to lock the Managers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Managers Account has been deleted
+  muted       Boolean @default(false) // Used to disable char features for Driver
+  locked      Boolean @default(false) // Used to lock the Managers Account if needed
+  deleted     Boolean @default(false) // Keeps track if the Managers Account has been deleted
 
-  notified Boolean @default(false)
+  notified    Boolean @default(false)
 
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
@@ -117,14 +117,14 @@ model Driver {
   profilePick Json?
   shifts      Json[]
 
-  transporterId String? 
-  globallyMuted         Boolean @default(false) // Used to disable char features for Driver
-  mutedDrivers  Json[]
-  locked        Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted       Boolean @default(false) // Keeps track if the Drivers account has been deleted
-  attendence    String?
+  transporterId   String? 
+  globallyMuted   Boolean @default(false) // Used to disable char features for Driver
+  mutedDrivers    Json[]
+  locked          Boolean @default(false) // Used to lock the Drivers Account if needed
+  deleted         Boolean @default(false) // Keeps track if the Drivers account has been deleted
+  attendence      String?
 
-  notified Boolean @default(false)
+  notified        Boolean @default(false)
 
   resetPasswordToken           String?  @unique
   resetPasswordTokenExpiration String?   
@@ -265,14 +265,14 @@ model Shift {
 /////////////////////////////////////
 
 model Chatroom {
-  id            String        @id @unique @default(uuid())
-  createdAt     DateTime      @default(now())
+  id                String        @id @unique @default(uuid())
+  createdAt         DateTime      @default(now())
 
-  chatroomName  String
-  guests        Json[]
-  mutedDrivers  Json[]
-  chatroomOwner Json
-  announcementChat    Boolean @default(false)
+  chatroomName      String
+  guests            Json[]
+  mutedDrivers      Json[]
+  chatroomOwner     Json
+  announcementChat  Boolean @default(false)
 
   driverJoinOnSignUp  Boolean @default(false)
   managerJoinOnSignUp Boolean @default(true) 
@@ -340,7 +340,8 @@ model AnnouncementMessages {
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String
-  sentAt    String?
+  sentAt    String
+  date      String
   read      Boolean  @default(false)
   readAt    String   
   content   String

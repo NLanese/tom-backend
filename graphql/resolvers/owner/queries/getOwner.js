@@ -38,7 +38,6 @@ export default {
                             }
                         },
                         messages: true,
-                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
                                 owner: true,

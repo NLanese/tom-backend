@@ -7,16 +7,17 @@ export default {
     Mutation: {
         dynamicReportMessage: async (_, {
             role,
-            messageId
-        }, context) => {
+            messageId,
+            token
+        }) => {
             let owner;
             let manager;
             let driver;
             let reportedBy;
 
             // Dynamic authorization check
-            if (role === 'OWNER') owner = await checkOwnerAuth(context)
-            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+            if (role === 'OWNER') owner = await checkOwnerAuth(token)
+            if (role === 'MANAGER') manager = await checkManagerAuth(token)
             if (role === 'DRIVER') driver = await checkDriverAuth(context)
 
             if (owner) {

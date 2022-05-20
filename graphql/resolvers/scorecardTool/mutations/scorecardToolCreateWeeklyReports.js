@@ -10,6 +10,7 @@ export default {
             role,
             transporterId,
             date,
+            sentAt,
             feedbackStatus,
             feedbackMessage,
             feedbackMessageSent,
@@ -46,7 +47,6 @@ export default {
             if (role === 'MANAGER') {
                 manager = await checkManagerAuth(token)
             }
-
  
             //////////////////////
             //      Driver      //
@@ -63,20 +63,28 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
+            console.log(feedbackMessageSent)
             if (feedbackMessageSent){
-                await dp.notifiedMessage.create({
-                    createdAt: date,
-                    readAt: "Not Read",
-                    content: feedbackMessage,
-                    from: "Automatic Scorecard Feedback",
-                    type: `${feedbackStatus} Notification`,
-                    driver: {
-                        connect: {
-                            dspTransporter: dspTransporter
+                console.log("hit")
+                try{
+                    return await db.notifiedMessages.create({
+                        data: {
+                            date: date,
+                            sentAt: sentAt,
+                            createdAt: `${sentAt} - ${date}`,
+                            readAt: "Not Read",
+                            content: feedbackMessage,
+                            from: "Automatic Scorecard Feedback",
+                            type: `${feedbackStatus} Notification`,
+                            driver: {
+                                connect: {
+                                    dspTransporter: dspTransporter
+                                }
+                            }
                         }
-                    }
-                }).then( async (notiMsg) => {
-                    await db.driver.update({
+                    }).then( async (notiMsg) => {
+                    console.log(notiMsg)
+                    return await db.driver.update({
                         where: {
                             dspTransporter: dspTransporter
                         },
@@ -87,8 +95,13 @@ export default {
                                 }
                             }
                         }
+                    }).then( resolved => {
+                        console.log(resolved)
                     })
                 })
+                } catch(err){
+                    console.log(err)
+                }
             }
 
 
