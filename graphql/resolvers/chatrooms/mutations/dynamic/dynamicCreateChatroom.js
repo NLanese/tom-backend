@@ -17,6 +17,10 @@ export default {
             if (role === 'OWNER') owner = await checkOwnerAuth(token)
             if (role === 'MANAGER') manager = await checkManagerAuth(token)
 
+            if (!guests){
+                guests = []
+            }
+
             if (owner) {
                 try {
                     const justOwnerRecord = await db.owner.findUnique({

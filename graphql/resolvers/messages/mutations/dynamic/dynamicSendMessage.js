@@ -58,7 +58,6 @@ export default {
                         
                     })
                 } catch (error) {
-                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -71,7 +70,6 @@ export default {
                 })
 
                 if (!foundManager) {
-                    console.log('Manager not found')
                     throw new Error('Manager does not exist')
                 }
 
@@ -93,12 +91,10 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.log(error)
                     throw new Error(error)
                 }
             }
 
-            console.log("Something went wrong. Please try again")
             throw new Error('Something went wrong. Please try again')
         }
     }

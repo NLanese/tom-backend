@@ -553,7 +553,7 @@ type AnnouncementMessage {
     managerUpdateDsp(token: String!, ficoLimits: JSON, seatbeltLimits: JSON, speedingLimits: JSON, distractionLimits: JSON, followLimits: JSON, signalLimits: JSON, deliveryCompletionRateLimits: JSON, deliveryNotRecievedLimits: JSON, photoOnDeliveryLimits: JSON, topCardLimits: Int, smallCardLimits: Int, feedbackNotifications: JSON, autoSend: JSON, allDriverShifts: JSON): Dsp
 
     #### CHATROOM MUTATIONS ####
-    dynamicCreateChatroom(role: String!, guests: [JSON]!, chatroomName: String!, token: String!): Chatroom
+    dynamicCreateChatroom(role: String!, guests: [JSON], chatroomName: String!, token: String!): Chatroom
     dynamicAddDriverToChatroom(role: String!, chatroomId: String!, guestId: String!, token: String): Chatroom
     dynamicRemoveDriverFromChatroom(role: String!, chatroomId: String!, guestId: String!, token: String): Chatroom
     dynamicAddManagerToChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
@@ -561,6 +561,7 @@ type AnnouncementMessage {
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
     dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, token: String): Chatroom
+    dynamincReassignOwnership(role: String!, chatroomId: String!, guestId: String!, token: String): Chatroom
     ############################
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
