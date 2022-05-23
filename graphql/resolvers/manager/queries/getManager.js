@@ -26,7 +26,11 @@ export default {
                         },
                         dsp: {
                             include: {
-                                shifts: true,
+                                shifts: {
+                                    orderBy: {
+                                        date: 'asc'
+                                    }
+                                },
                                 devices: true
                             }
                         },
