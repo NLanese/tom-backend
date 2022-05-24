@@ -27,7 +27,6 @@ export default {
                     }
                 })
             } catch (error){
-                console.log(error)
                 throw new Error(error)
             }
         }

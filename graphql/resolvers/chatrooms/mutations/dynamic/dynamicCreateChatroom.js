@@ -7,14 +7,19 @@ export default {
         dynamicCreateChatroom: async (_, {
             role,
             guests,
+            token,
             chatroomName
         }, context) => {
             let owner;
             let manager;
 
             // DYNAMIC AUTHORIZATION CHECK
-            if (role === 'OWNER') owner = await checkOwnerAuth(context)
-            if (role === 'MANAGER') manager = await checkManagerAuth(context)
+            if (role === 'OWNER') owner = await checkOwnerAuth(token)
+            if (role === 'MANAGER') manager = await checkManagerAuth(token)
+
+            if (!guests){
+                guests = []
+            }
 
             if (owner) {
                 try {

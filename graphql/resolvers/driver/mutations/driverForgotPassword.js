@@ -97,7 +97,6 @@ export default {
                 }
             }
             else{
-                console.log("No driver of this email found")
                 throw new Error("Error: This email is not associated with any account")
             }
 

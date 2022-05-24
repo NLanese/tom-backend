@@ -17,6 +17,7 @@ import dynamicRemoveManagerFromChatroom from "./mutations/dynamic/dynamicRemoveM
 import dynamicMuteAndUnmute from "./mutations/dynamic/dynamicMuteAndUnmute.js";
 import dynamicLeaveChatroom from "./mutations/dynamic/dynamicLeaveChatroom.js";
 import dynamicUpdateChatroom from "./mutations/dynamic/dynamicUpdateChatroom.js";
+import dynamicReassignOwnership from "./mutations/dynamic/dynamicReassignOwnership.js";
 
 // DRIVER MUTATIONS
 import driverCreateChatroom from "./mutations/driver/driverCreateChatroom.js";
@@ -43,6 +44,7 @@ export default {
         ...dynamicRemoveManagerFromChatroom.Mutation,
         ...dynamicLeaveChatroom.Mutation,
         ...dynamicUpdateChatroom.Mutation,
+        ...dynamicReassignOwnership.Mutation,
 
         // DRIVER MUTATIONS
         ...driverCreateChatroom.Mutation,

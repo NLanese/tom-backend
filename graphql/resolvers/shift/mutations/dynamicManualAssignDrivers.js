@@ -12,7 +12,6 @@ export default {
             dspId
         }, context) => {
 
-            console.log(driverIds, "All Driver IDS filtered in")
 
             ///////////////////////////////
             ///    Finders / Mutators   ///
@@ -27,7 +26,6 @@ export default {
                         }
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -44,7 +42,6 @@ export default {
                         }
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -59,14 +56,12 @@ export default {
                         
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }
 
             // Updates a shift's allDriverShifts by Dtae
             const updateShiftByDate = async (dateDsp, allDriverShifts) => {
-                console.log(allDriverShifts, "This is what the thingy should have once it has been updated")
                 try{
                     return await db.shift.update({
                         where: {
@@ -77,7 +72,6 @@ export default {
                         }
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -97,7 +91,6 @@ export default {
                         }
                     })
                 } catch (error){
-                    console.log(error)
                     throw new Error(error)
                 }
             }
@@ -147,7 +140,6 @@ export default {
 
             let foundShift = await findShift(dateDsp)
             if (!foundShift){
-                console.log(foundShift, "Should be null, shift not found")
                 foundShift = await createNewShiftOnDate(date, dateDsp)
             }
 

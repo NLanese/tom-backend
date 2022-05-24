@@ -27,7 +27,11 @@ export default {
                         managers: true,
                         dsp: {
                             include: {
-                                shifts: true,
+                                shifts: {
+                                    orderBy: {
+                                        date: 'asc'
+                                    }
+                                },
                                 notifiedMessages: true,
                                 announcementMessages: true,
                                 devices: {
@@ -38,7 +42,6 @@ export default {
                             }
                         },
                         messages: true,
-                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
                                 owner: true,
@@ -50,7 +53,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }

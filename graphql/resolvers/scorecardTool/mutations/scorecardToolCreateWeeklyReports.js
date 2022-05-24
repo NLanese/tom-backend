@@ -10,6 +10,7 @@ export default {
             role,
             transporterId,
             date,
+            sentAt,
             feedbackStatus,
             feedbackMessage,
             feedbackMessageSent,
@@ -46,7 +47,6 @@ export default {
             if (role === 'MANAGER') {
                 manager = await checkManagerAuth(token)
             }
-
  
             //////////////////////
             //      Driver      //
@@ -63,38 +63,8 @@ export default {
                 throw new Error('Driver does not exist')
             }
 
-            if (feedbackMessageSent){
-                await dp.notifiedMessage.create({
-                    createdAt: date,
-                    readAt: "Not Read",
-                    content: feedbackMessage,
-                    from: "Automatic Scorecard Feedback",
-                    type: `${feedbackStatus} Notification`,
-                    driver: {
-                        connect: {
-                            dspTransporter: dspTransporter
-                        }
-                    }
-                }).then( async (notiMsg) => {
-                    await db.driver.update({
-                        where: {
-                            dspTransporter: dspTransporter
-                        },
-                        data: {
-                            notifiedMessages: {
-                                connect: {
-                                    id: notiMsg.id
-                                }
-                            }
-                        }
-                    })
-                })
-            }
-
-
-
             try {
-                return await db.weeklyReport.create({
+                await db.weeklyReport.create({
                     data: {
                         date: date,
 
@@ -135,9 +105,45 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
+
+            if (feedbackMessageSent){
+                try{
+                    return await db.notifiedMessages.create({
+                        data: {
+                            date: date,
+                            sentAt: sentAt,
+                            createdAt: `${sentAt} - ${date}`,
+                            readAt: "Not Read",
+                            content: feedbackMessage,
+                            from: "Automatic Scorecard Feedback",
+                            type: `${feedbackStatus} Notification`,
+                            driver: {
+                                connect: {
+                                    dspTransporter: dspTransporter
+                                }
+                            }
+                        }
+                    }).then( async (notiMsg) => {
+                    return await db.driver.update({
+                        where: {
+                            dspTransporter: dspTransporter
+                        },
+                        data: {
+                            notifiedMessages: {
+                                connect: {
+                                    id: notiMsg.id
+                                }
+                            }
+                        }
+                    }).then( resolved => {
+                    })
+                })
+                } catch(err){
+                }
+            }
+
             
         }
     }

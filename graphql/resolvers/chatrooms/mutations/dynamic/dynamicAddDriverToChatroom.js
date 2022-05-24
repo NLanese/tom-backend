@@ -20,7 +20,7 @@ export default {
             // DYNAMIC AUTHORIZATION CHECK
             if (role === 'OWNER') owner = await checkOwnerAuth(token)
             if (role === 'MANAGER') manager = await checkManagerAuth(token)
-            if (role === 'DRIVER') driver = await checkDriverAuth(token)
+            if (role === 'DRIVER') driver = await checkDriverAuth(context)
 
             const foundChatroom = await db.chatroom.findUnique({
                 where: {
@@ -42,8 +42,8 @@ export default {
             if (!foundChatroom) throw new Error('Chatroom does not exist')
             if (!foundDriver) throw new Error('Driver does not exist')
 
-            let guests = foundChatroom.guests
-            await guests.push(foundDriver)
+            let guests = [...foundChatroom.guests, foundDriver]
+            
 
             if (owner || manager || driver) {
                 if (owner) {
@@ -91,7 +91,6 @@ export default {
                             }
                         }
                     })
-
                     return await db.chatroom.update({
                         where: {
                             id: chatroomId
