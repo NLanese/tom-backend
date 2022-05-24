@@ -111,7 +111,7 @@ model Driver {
   token       String?
   firstname   String
   lastname    String
-  email       String   
+  email       String   @unique
   phoneNumber String?
   password    String?
   profilePick Json?
@@ -336,7 +336,11 @@ model AnnouncementMessages {
   manager    Manager? @relation(fields: [managerId], references: [id])
 }
 
-// also known as Feedback Messages
+/////////////////////////////////////
+///                               ///
+///       Notified Message        ///
+///                               ///
+/////////////////////////////////////
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String
