@@ -36,7 +36,6 @@ export default {
             }
             
             if (id < 0) {
-                console.log("Error ASSIGNING the DEVICE")
                 throw "Error ASSIGNING the DEVICE"
             }
 
@@ -50,7 +49,6 @@ export default {
 
             return findDevice(parseInt(id)).then( async (resolved) => {
                 if (resolved === null){
-                    console.log("Error matching ID")
                     throw "Device not found"
                 }
 
@@ -77,7 +75,6 @@ export default {
                         })
                         
                     } catch (error){
-                        console.log(error)
                         throw new Error(error)
                 }
 

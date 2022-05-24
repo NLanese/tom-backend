@@ -19,7 +19,7 @@ export default {
             }
     
             email = await email.toUpperCase()
-            const foundUsers = await db.driver.findMany({
+            const foundUser = await db.driver.findUnique({
                 where: {
                     email
                 },
@@ -36,59 +36,35 @@ export default {
                     notifiedMessages: true,
                 }
             })
-            if (!foundUsers || foundUsers.length < 1) {
+
+            if (!foundUser) {
+                console.log("No driver found")
                 errors.general = 'Account not found';
                 throw new UserInputError('Incorrect Email', {
                     errors
                 });
             }
     
-            
-            const findUser = (users) => {
-                let isValid = false
-                let rUser = false
-                foundUsers.forEach(  (user) => {
-                    let test =  bcrypt.compare(password, user.password)
-                    console.log(test)
-                    if (test){
-                        isValid = true
-                        rUser = user
-                    }
-                })
-                if (isValid){
-                    return rUser
-                }
-                else{
-                    return false
-                }
+        
+
+            if (!bcrypt.compare(password, foundUser.password)){
+                throw new Error("Wrong Passowrd!")
             }
-
-                // If false
-                if (!findUser(foundUsers)) {
-                    errors.general = 'Incorrect Password'
-                    throw new UserInputError('Incorrect Password', {
-                        errors
-                    })
-                }
-
-
-                const token =  generateDriverToken(findUser(foundUsers).id)
+            else{
+                const token =  generateDriverToken(foundUser.id)
                 req.session = {
                     token: `Bearer ${token}`
                 }
-    
+
                 try {
                     return  {
-                        ...findUser(foundUsers),
+                        ...foundUser,
                         token: token
                     }
                 } catch (error) {
                     throw new Error(error)
                 }
-            
-
-            
-
+            }
             
         }
     }

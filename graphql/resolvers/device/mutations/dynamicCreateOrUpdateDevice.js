@@ -60,8 +60,6 @@ export default {
                         return instance
                     })
                 } catch (error){
-                    console.log("Error CREATING the DEVICE")
-                    console.log(error)
                     throw new Error(error)
                 }
 
@@ -77,7 +75,6 @@ export default {
 
             return findDevice(parseInt(id)).then( async (resolved) => {
                 if (resolved === null){
-                    console.log("Error matching ID")
                     throw "Device not found"
                 }
 
@@ -110,7 +107,6 @@ export default {
                         })
                         
                     } catch (error){
-                        console.log("Error UPDATING the DEVICE")
                         throw new Error(error)
                 }
 

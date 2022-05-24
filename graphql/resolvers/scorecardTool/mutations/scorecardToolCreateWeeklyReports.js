@@ -56,58 +56,21 @@ export default {
             let foundDriver = await db.driver.findFirst({
                 where: {
                     dspTransporter: dspTransporter
+                },
+                include: {
+                    weeklyReport: true
                 }
             })
             
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }
-
-            console.log(feedbackMessageSent)
-            if (feedbackMessageSent){
-                console.log("hit")
-                try{
-                    return await db.notifiedMessages.create({
-                        data: {
-                            date: date,
-                            sentAt: sentAt,
-                            createdAt: `${sentAt} - ${date}`,
-                            readAt: "Not Read",
-                            content: feedbackMessage,
-                            from: "Automatic Scorecard Feedback",
-                            type: `${feedbackStatus} Notification`,
-                            driver: {
-                                connect: {
-                                    dspTransporter: dspTransporter
-                                }
-                            }
-                        }
-                    }).then( async (notiMsg) => {
-                    console.log(notiMsg)
-                    return await db.driver.update({
-                        where: {
-                            dspTransporter: dspTransporter
-                        },
-                        data: {
-                            notifiedMessages: {
-                                connect: {
-                                    id: notiMsg.id
-                                }
-                            }
-                        }
-                    }).then( resolved => {
-                        console.log(resolved)
-                    })
-                })
-                } catch(err){
-                    console.log(err)
-                }
+            else{
+                console.log(foundDriver)
             }
 
-
-
             try {
-                return await db.weeklyReport.create({
+                await db.weeklyReport.create({
                     data: {
                         date: date,
 
@@ -137,7 +100,7 @@ export default {
                         ccOpps: ccOpps,
                         driver: {
                             connect: {
-                                dspTransporter: dspTransporter
+                                id: foundDriver.id
                             }
                         },
                         dsp: {
@@ -148,9 +111,49 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
+
+            if (feedbackMessageSent){
+                try{
+                    return await db.notifiedMessages.create({
+                        data: {
+                            date: date,
+                            sentAt: sentAt,
+                            createdAt: `${sentAt} - ${date}`,
+                            readAt: "Not Read",
+                            content: feedbackMessage,
+                            from: "Automatic Scorecard Feedback",
+                            type: `${feedbackStatus} Notification`,
+                            driver: {
+                                connect: {
+                                    dspTransporter: dspTransporter
+                                }
+                            }
+                        }
+                    }).then( async (notiMsg) => {
+                    return await db.driver.update({
+                        where: {
+                            dspTransporter: dspTransporter
+                        },
+                        data: {
+                            notifiedMessages: {
+                                connect: {
+                                    id: notiMsg.id
+                                }
+                            }
+                        },
+                        include: {
+                            weeklyReport: true
+                        }
+                    }).then( resolved => {
+                        console.log(resolved)
+                    })
+                })
+                } catch(err){
+                }
+            }
+
             
         }
     }

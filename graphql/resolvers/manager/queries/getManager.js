@@ -26,7 +26,11 @@ export default {
                         },
                         dsp: {
                             include: {
-                                shifts: true,
+                                shifts: {
+                                    orderBy: {
+                                        date: 'asc'
+                                    }
+                                },
                                 devices: true
                             }
                         },
@@ -42,7 +46,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }
