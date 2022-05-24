@@ -19,7 +19,6 @@ export default {
 
 
             if (!user){
-                console.log("Invalid token")
                 throw new Error("Invalid User Token")
             }
             ////////////////
@@ -59,7 +58,6 @@ export default {
 
             let foundChat = findChatroom() 
             if (!foundChat){
-                console.log("Invalid Chat ID")
                 throw new Error("Invalid Chat ID")
             }
 
@@ -67,7 +65,6 @@ export default {
 
             let foundDriver = findDriver()
             if (!foundDriver){
-                console.log("Invalid Driver ID")
                 throw new Error("Invalid Driver ID")
             }
 

@@ -68,7 +68,6 @@ export default {
                         }
                     })
                 } catch (err){
-                    console.log(err)
                 }
             }
 
@@ -83,7 +82,6 @@ export default {
                         }
                     })
                 } catch(error){
-                    console.log(error)
                 }
             }
 

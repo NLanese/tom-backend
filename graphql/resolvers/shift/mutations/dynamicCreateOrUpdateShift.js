@@ -67,8 +67,6 @@ export default {
                         })
                         
                     } catch (error){
-                        console.log("Error UPDATING the SHIFT")
-                        console.log(error)
                         throw new Error(error)
                     }
                 }
@@ -90,8 +88,6 @@ export default {
                         })
                         
                     } catch (error){
-                        console.log("Error CREATING the SHIFT")
-                        console.log(error)
                         throw new Error(error)
                     }
                 }
@@ -153,7 +149,6 @@ export default {
                             }
                             return {shifts: newShifts, driverShift: driverShift[i], date: resolvedObj.date} 
                         }).then( async (resolved) => {
-                            // console.log(resolved)
                             const driver = await db.driver.update({
                                 where: {
                                     id: resolved.driverShift.id

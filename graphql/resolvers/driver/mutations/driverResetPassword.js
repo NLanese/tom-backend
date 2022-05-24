@@ -18,7 +18,6 @@ export default {
                     }
                 })
             } catch (err){
-                console.log(err)
             }
 
 
@@ -29,7 +28,6 @@ export default {
 
 
             if (Date.now().toString() >= foundDriver.resetPasswordTokenExpiration) {
-                console.log("Expired token bro")
                 throw new Error('Token is expired')
             }
 
@@ -45,7 +43,6 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
         }

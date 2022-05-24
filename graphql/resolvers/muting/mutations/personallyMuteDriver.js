@@ -21,7 +21,6 @@ export default {
             }
 
             if (!user){
-                console.log("Invalid token")
                 throw new Error("Invalid User Token")
             }
         }

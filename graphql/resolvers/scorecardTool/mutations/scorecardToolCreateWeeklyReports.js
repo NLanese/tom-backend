@@ -105,12 +105,10 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
                 throw new Error(error)
             }
 
             if (feedbackMessageSent){
-                console.log("hit")
                 try{
                     return await db.notifiedMessages.create({
                         data: {
@@ -128,7 +126,6 @@ export default {
                             }
                         }
                     }).then( async (notiMsg) => {
-                    console.log(notiMsg)
                     return await db.driver.update({
                         where: {
                             dspTransporter: dspTransporter
@@ -141,11 +138,9 @@ export default {
                             }
                         }
                     }).then( resolved => {
-                        console.log(resolved)
                     })
                 })
                 } catch(err){
-                    console.log(err)
                 }
             }
 

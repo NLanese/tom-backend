@@ -49,7 +49,6 @@ export default {
                 let rUser = false
                 foundUsers.forEach(  (user) => {
                     let test =  bcrypt.compare(password, user.password)
-                    console.log(test)
                     if (test){
                         isValid = true
                         rUser = user
