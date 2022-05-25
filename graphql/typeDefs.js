@@ -47,6 +47,7 @@ const typeDefs = gql`
 
     drivers:                      [Driver]
     managers:                     [Manager]
+    mutedListIds:                 [String]
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
@@ -80,6 +81,7 @@ const typeDefs = gql`
     
     owner:                        Owner
     drivers:                      [Driver]
+    mutedListIds:                 [String]
     messages:                     [Messages]
     notifiedMessages:             [NotifiedMessages]
     dsp:                          Dsp
@@ -561,7 +563,7 @@ type AnnouncementMessage {
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
     dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, token: String): Chatroom
-    dynamicReassignOwnership(role: String!, chatroomId: String!, guestId: String!, token: String): Chatroom
+    dynamicReassignOwnership(role: String!, chatId: String!, guestId: String!, token: String): Chatroom
     ############################
 
     driverCreateChatroom(guests: [JSON]!, chatroomName: String!): Chatroom
