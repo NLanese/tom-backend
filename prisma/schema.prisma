@@ -55,6 +55,7 @@ model Owner {
 
   drivers          Driver[]
   managers         Manager[]
+  mutedListIds    String[]
   messages         Messages[]
   announcementMessages AnnouncementMessages[]
   dsp              Dsp?
@@ -91,6 +92,7 @@ model Manager {
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
   drivers          Driver[]
+  mutedListIds     String[]
   messages         Messages[]
   announcementMessages AnnouncementMessages[]
   dspId            String?
@@ -270,7 +272,7 @@ model Chatroom {
 
   chatroomName      String
   guests            Json[]
-  mutedDrivers      Json[]
+  mutedIds          String[]
   chatroomOwner     Json
   announcementChat  Boolean @default(false)
 
