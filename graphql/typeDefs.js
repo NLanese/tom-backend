@@ -268,7 +268,7 @@ type Device{
     chatroomName:                 String
   	guests:                       [JSON]
     chatroomOwner:                JSON
-    mutedDrivers:                 [JSON]
+    mutedIds:                     [String]
 
     driverJoinOnSignUp:           Boolean
     managerJoinOnSignUp:          Boolean
