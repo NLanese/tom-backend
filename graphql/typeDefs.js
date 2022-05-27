@@ -106,8 +106,8 @@ const typeDefs = gql`
     shifts:                       [JSON]
 
     transporterId:                String
-    globallyMuted:                        Boolean
-    mutedDrivers:                 [JSON]
+    globallyMuted:                Boolean
+    mutedIds:                     [String]
     locked:                       Boolean
     deleted:                      Boolean
 
