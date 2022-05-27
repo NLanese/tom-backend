@@ -53,14 +53,22 @@ export default {
             ////////////////////// 
 
             let dspTransporter = `${dspId}${transporterId}`
-            let foundDriver = await db.driver.findFirst({
-                where: {
-                    dspTransporter: dspTransporter
-                },
-                include: {
-                    weeklyReport: true
-                }
-            })
+            let foundDriver = false 
+
+            try {
+                foundDriver = await db.driver.findFirst({
+                    where: {
+                        dspTransporter: dspTransporter
+                    },
+                    include: {
+                        weeklyReport: true
+                    }
+                })
+            }
+            catch(err){
+                throw new Error(err)
+            }
+            
             
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
@@ -148,6 +156,7 @@ export default {
                         }
                     }).then( resolved => {
                         console.log(resolved)
+                        return resolved
                     })
                 })
                 } catch(err){
