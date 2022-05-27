@@ -374,6 +374,9 @@ CREATE UNIQUE INDEX "Manager_email_key" ON "Manager"("email");
 CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Driver_resetPasswordToken_key" ON "Driver"("resetPasswordToken");
 
 -- CreateIndex
