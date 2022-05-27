@@ -19,52 +19,68 @@ export default {
             }
     
             email = await email.toUpperCase()
-            const foundUser = await db.driver.findUnique({
-                where: {
-                    email
-                },
-                include: {
-                    owner: true,
-                    managers: true,
-                    dsp: true,
-                    weeklyReport: true,
-                    chatrooms: {
-                        include: {
-                            messages: true
-                        }
+            try {
+                const foundUser = await db.driver.findUnique({
+                    where: {
+                        email
                     },
-                    notifiedMessages: true,
+                    include: {
+                        owner: true,
+                        managers: true,
+                        dsp: {
+                            include: {
+                                drivers: {
+                                    include: {
+                                        weeklyReport: true
+                                    }
+                                },
+                            }
+                        },
+                        weeklyReport: true,
+                        // shifts: true,
+                        chatrooms: {
+                            include: {
+                                messages: true
+                            }
+                        },
+                        notifiedMessages: true,
+                    }
+                }) 
+                if (!foundUser) {
+                    console.log("No driver found")
+                    errors.general = 'Account not found';
+                    throw new UserInputError('Incorrect Email', {
+                        errors
+                    });
                 }
-            })
-
-            if (!foundUser) {
-                console.log("No driver found")
-                errors.general = 'Account not found';
-                throw new UserInputError('Incorrect Email', {
-                    errors
-                });
+                if (!bcrypt.compare(password, foundUser.password)){
+                    throw new Error("Wrong Passowrd!")
+                }
+                else{
+                    const token =  generateDriverToken(foundUser.id)
+                    req.session = {
+                        token: `Bearer ${token}`
+                    }
+    
+                    try {
+                        return  {
+                            ...foundUser,
+                            token: token
+                        }
+                    } catch (error) {
+                        throw new Error(error)
+                    }
+                }
+            } catch(err){
+                console.log(err)
             }
+            
+
+            
     
         
 
-            if (!bcrypt.compare(password, foundUser.password)){
-                throw new Error("Wrong Passowrd!")
-            }
-            else{
-                const token =  generateDriverToken(foundUser.id)
-                req.session = {
-                    token: `Bearer ${token}`
-                }
-
-                try {
-                    return  {
-                        ...foundUser,
-                        token: token
-                    }
-                } catch (error) {
-                    throw new Error(error)
-                }
-            }
+            
             
         }
     }

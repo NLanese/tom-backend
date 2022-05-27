@@ -53,17 +53,26 @@ export default {
             ////////////////////// 
 
             let dspTransporter = `${dspId}${transporterId}`
-            let foundDriver = await db.driver.findFirst({
-                where: {
-                    dspTransporter: dspTransporter
-                },
-                include: {
-                    weeklyReport: true
-                }
-            })
+            let foundDriver = false 
+
+            try {
+                foundDriver = await db.driver.findFirst({
+                    where: {
+                        transporterId: transporterId
+                    },
+                    include: {
+                        weeklyReport: true
+                    }
+                })
+            }
+            catch(err){
+                console.log("No driver found error")
+                throw new Error(`Driver with transporter Id ${transporterId} does not exist!`)
+            }
+            
             
             if (!foundDriver) {
-                throw new Error('Driver does not exist')
+                throw new Error(`Driver with transporter Id ${transporterId} does not exist!`)
             }
             else{
                 console.log(foundDriver)
@@ -111,6 +120,7 @@ export default {
                     }
                 })
             } catch (error) {
+                console.log("scorecard failed for ", foundDriver.firstname)
                 throw new Error(error)
             }
 
@@ -132,26 +142,36 @@ export default {
                             }
                         }
                     }).then( async (notiMsg) => {
-                    return await db.driver.update({
-                        where: {
-                            dspTransporter: dspTransporter
-                        },
-                        data: {
-                            notifiedMessages: {
-                                connect: {
-                                    id: notiMsg.id
+                        try{
+                            return await db.driver.update({
+                                where: {
+                                    dspTransporter: dspTransporter
+                                },
+                                data: {
+                                    notifiedMessages: {
+                                        connect: {
+                                            id: notiMsg.id
+                                        }
+                                    }
+                                },
+                                include: {
+                                    weeklyReport: true
                                 }
-                            }
-                        },
-                        include: {
-                            weeklyReport: true
+                            }).then( resolved => {
+                                console.log(resolved)
+                                return resolved
+                            })
+                        } catch(err){
+                            console.log("Error updating ", foundDriver.firstname )
                         }
-                    }).then( resolved => {
-                        console.log(resolved)
                     })
-                })
                 } catch(err){
+                    console.log(err)
                 }
+            }
+
+            else{
+
             }
 
             

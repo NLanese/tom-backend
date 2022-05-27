@@ -121,7 +121,7 @@ model Driver {
 
   transporterId   String? 
   globallyMuted   Boolean @default(false) // Used to disable char features for Driver
-  mutedDrivers    Json[]
+  mutedIds        String[]
   locked          Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted         Boolean @default(false) // Keeps track if the Drivers account has been deleted
   attendence      String?

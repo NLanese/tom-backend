@@ -106,8 +106,8 @@ const typeDefs = gql`
     shifts:                       [JSON]
 
     transporterId:                String
-    globallyMuted:                        Boolean
-    mutedDrivers:                 [JSON]
+    globallyMuted:                Boolean
+    mutedIds:                     [String]
     locked:                       Boolean
     deleted:                      Boolean
 
@@ -494,6 +494,11 @@ type AnnouncementMessage {
   }
   
   type Mutation {
+    #### REFRESH ####
+    refreshManager(role: String!, token: String!): Manager
+    refreshOwner(role: String!, token: String!): Owner
+    #################
+
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
