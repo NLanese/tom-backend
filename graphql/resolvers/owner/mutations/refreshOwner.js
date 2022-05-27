@@ -14,6 +14,7 @@ export default {
                         drivers: {
                             include: {
                                 weeklyReport: true,
+                                dsp: true,
                                 accidents: {
                                     include: {
                                         propertyAccidents: true,
