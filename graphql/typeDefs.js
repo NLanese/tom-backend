@@ -484,6 +484,11 @@ type AnnouncementMessage {
     dynamicfindDriversWhoDidntReadAnnouncementById(role: String! token: String!, announcementId: String!): [Driver]
     ##############################
 
+    #### MUTING QUERIES ####
+    
+    ########################
+
+
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
     dynamicGetManagers(role: String!): [Manager]
@@ -595,6 +600,13 @@ type AnnouncementMessage {
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
     assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
     deleteDevice(token: String, role: String, id: Int): Device
+
+    #### MUTING MUTATIONS ####
+    muteDriverGlobally(token: String, role: String, driverId: String): Driver
+    muteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
+    unmuteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
+    
+    ##########################
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom

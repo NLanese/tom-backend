@@ -5,7 +5,7 @@ import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-a
 
 export default {
     Mutation: {
-        muteDriverInConversation: (_, {chatId, driverId, role, token}) => {
+        unmuteDriverInConversation: (_, {chatId, driverId, role, token}) => {
             /////////////////
             //  Ownership  //
             /////////////////
@@ -44,14 +44,6 @@ export default {
                 })
             }
 
-            const findDriver = async () => {
-                return await db.driver.findUnique({
-                    where: {
-                        id: driverId
-                    }
-                })
-            }
-
             /////////////////
             // The Process //
             /////////////////
@@ -61,21 +53,9 @@ export default {
                 throw new Error("Invalid Chat ID")
             }
 
-            let foundMuted = foundChat.mutedDrivers
+            let newMutedArray = [...foundChat.mutedDrivers]
+            newMutedArray = foundMuted.filter(userId => userId.id !== driverId)
 
-            let foundDriver = findDriver()
-            if (!foundDriver){
-                throw new Error("Invalid Driver ID")
-            }
-
-            let newDriverObj = {
-                firstname: foundDriver.firstname,
-                lastname: foundDriver.lastname,
-                id: foundDriver.id,
-                profilePick: foundDriver.profilePick
-            }
-
-            let newMutedArray = [...foundMuted, newDriverObj]
 
             return updateChatroom(newMutedArray)
         }
