@@ -39,7 +39,7 @@ export default {
                         id: chatId
                     },
                     data: {
-                        mutedDrivers: newMutedList
+                        mutedIds: newMutedList
                     }
                 })
             }
@@ -48,16 +48,13 @@ export default {
             // The Process //
             /////////////////
 
-            let foundChat = findChatroom() 
-            if (!foundChat){
+            findChatroom().then(chatroom => {
+                let newMutedArray = chatroom.mutedIds.filter(userId => userId !== driverId)
+                return updateChatroom(newMutedArray)
+            }).catch(e => {
                 throw new Error("Invalid Chat ID")
-            }
+            })
 
-            let newMutedArray = [...foundChat.mutedDrivers]
-            newMutedArray = foundMuted.filter(userId => userId.id !== driverId)
-
-
-            return updateChatroom(newMutedArray)
         }
     }
 }

@@ -39,45 +39,51 @@ export default {
                         id: chatId
                     },
                     data: {
-                        mutedDrivers: newMutedList
+                        mutedIds: newMutedList
                     }
                 })
             }
 
-            const findDriver = async () => {
-                return await db.driver.findUnique({
-                    where: {
-                        id: driverId
-                    }
-                })
-            }
+            // const findDriver = async () => {
+            //     return await db.driver.findUnique({
+            //         where: {
+            //             id: driverId
+            //         }
+            //     })
+            // }
 
             /////////////////
             // The Process //
             /////////////////
+            let newMutedArray
+            findChatroom().then(chatroom =>{
+                console.log(chatroom.mutedIds)
+                newMutedArray = [...chatroom.mutedIds, driverId]
+                return updateChatroom(newMutedArray)
+            }).catch(e => {
+                console.log(e)
+                 throw new Error("Invalid Chat ID")
+            }) 
+            
 
-            let foundChat = findChatroom() 
-            if (!foundChat){
-                throw new Error("Invalid Chat ID")
-            }
+           
 
-            let foundMuted = foundChat.mutedDrivers
+            // let foundDriver = findDriver()
+            // if (!foundDriver){
+            //     throw new Error("Invalid Driver ID")
+            // }
 
-            let foundDriver = findDriver()
-            if (!foundDriver){
-                throw new Error("Invalid Driver ID")
-            }
+            // let newDriverObj = {
+            //     firstname: foundDriver.firstname,
+            //     lastname: foundDriver.lastname,
+            //     id: foundDriver.id,
+            //     profilePick: foundDriver.profilePick
+            // }
+            // let newMutedArray = Object.assign([], foundMuted, driverId)
+            
+            
 
-            let newDriverObj = {
-                firstname: foundDriver.firstname,
-                lastname: foundDriver.lastname,
-                id: foundDriver.id,
-                profilePick: foundDriver.profilePick
-            }
-
-            let newMutedArray = [...foundMuted, newDriverObj]
-
-            return updateChatroom(newMutedArray)
+            
         }
     }
 }
