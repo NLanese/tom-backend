@@ -24,8 +24,8 @@ export default {
         ...muteDriverGlobally.Mutation,
         ...muteDriverInConversation.Mutation,
         ...unmuteDriverInConversation.Mutation,
-        // ...personallyMuteDriver.Mutation,
-        // ...personallyUnmuteDriver.Mutation,
+        ...personallyMuteDriver.Mutation,
+        ...personallyUnmuteDriver.Mutation,
     },
     JSON: GraphQLJSON,
 }

@@ -610,6 +610,8 @@ type AnnouncementMessage {
     muteDriverGlobally(token: String, role: String, driverId: String): Driver
     muteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
     unmuteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
+    personallyMuteDriver(token: String, role: String, driverId: String!, muteId: String!): Driver
+    personallyUnmuteDriver(token: String, role: String, driverId: String!, muteId: String!): Driver
     
     ##########################
 
