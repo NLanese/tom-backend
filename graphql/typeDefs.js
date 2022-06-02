@@ -499,6 +499,11 @@ type AnnouncementMessage {
   }
   
   type Mutation {
+    #### REFRESH ####
+    refreshManager(role: String!, token: String!): Manager
+    refreshOwner(role: String!, token: String!): Owner
+    #################
+
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner

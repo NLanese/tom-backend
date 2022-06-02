@@ -55,7 +55,7 @@ export default {
                     return foundShift
                 }).then( (foundShift) => {
                     // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
-                    if (foundShift !== null){
+                    if (foundShift){
                         try{
                             return db.shift.update({
                                 where: {
