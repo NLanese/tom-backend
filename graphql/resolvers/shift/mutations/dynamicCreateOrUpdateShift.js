@@ -49,50 +49,54 @@ export default {
                 })
             }
 
-            findShift(dateDsp).then( resolved => {
-                const foundShift = resolved
-                return foundShift
-            }).then( (foundShift) => {
-                // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
-                if (foundShift !== null){
-                    try{
-                        return db.shift.update({
-                            where: {
-                                id: foundShift.id
-                            },
-                            data: {
-                                allDriverShifts: allDriverShifts,
-                                date: date
-                            }
-                        })
-                        
-                    } catch (error){
-                        throw new Error(error)
+            try {
+                findShift(dateDsp).then( resolved => {
+                    const foundShift = resolved
+                    return foundShift
+                }).then( (foundShift) => {
+                    // IF TTHERE IS AN EXISTING SHIFT ON THE GIVEN DATE
+                    if (foundShift){
+                        try{
+                            return db.shift.update({
+                                where: {
+                                    id: foundShift.id
+                                },
+                                data: {
+                                    allDriverShifts: allDriverShifts,
+                                    date: date
+                                }
+                            })
+                            
+                        } catch (error){
+                            throw new Error(error)
+                        }
                     }
-                }
 
-                 // IF TTHERE IS NOT AN EXISTING SHIFT ON THE GIVEN DATE
-                else {
-                    try{
-                        return db.shift.create({
-                            data: {
-                                allDriverShifts: allDriverShifts,
-                                dateDsp: dateDsp,
-                                date: date,
-                                dsp: {
-                                    connect: {
-                                        id: dspId
+                    // IF TTHERE IS NOT AN EXISTING SHIFT ON THE GIVEN DATE
+                    else {
+                        try{
+                            return db.shift.create({
+                                data: {
+                                    allDriverShifts: allDriverShifts,
+                                    dateDsp: dateDsp,
+                                    date: date,
+                                    dsp: {
+                                        connect: {
+                                            id: dspId
+                                        }
                                     }
                                 }
-                            }
-                        })
-                        
-                    } catch (error){
-                        throw new Error(error)
+                            })
+                            
+                        } catch (error){
+                            throw new Error(error)
+                        }
                     }
-                }
 
-            })
+                })
+            } catch(err){
+                throw new Error(err)
+            }
         
 
             ///////////////////////////////

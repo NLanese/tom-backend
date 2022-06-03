@@ -1,28 +1,27 @@
-import db from "../../../../utils/generatePrisma.js";
 import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
-
+import db from "../../../../utils/generatePrisma.js";
 export default {
-    Query: {
-        getManager: async (_, { id }, context) => {
-
+    Mutation: {
+        managerSignUp: async (_, { role, token} ) => {
+            let manager = checkManagerAuth(token)
             try {
                 return await db.manager.findUnique({
                     where: {
-                        id: id
+                        id:  manager.id
                     },
                     include: {
                         owner: true,
                         drivers: {
                             include: {
                                 weeklyReport: true,
+                                dsp: true,
                                 accidents: {
                                     include: {
                                         propertyAccidents: true,
                                         collisionAccidents: true,
                                         injuryAccidents: true
                                     }
-                                },
-                                notifiedMessages: true
+                                }
                             }
                         },
                         dsp: {
@@ -32,13 +31,7 @@ export default {
                                         date: 'asc'
                                     }
                                 },
-                                notifiedMessages: true,
-                                announcementMessages: true,
-                                devices: {
-                                    orderBy: {
-                                        deviceIndex: 'asc'
-                                    }
-                                }
+                                devices: true
                             }
                         },
                         messages: true,

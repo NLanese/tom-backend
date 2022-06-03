@@ -11,7 +11,7 @@ export default {
             driverId,
             dspId
         }, context) => {
-
+            console.log('dynamicRemoveDriverFromShit')
             ///////////////////////////////
             ///        Ownership        ///
             ///////////////////////////////
@@ -33,6 +33,26 @@ export default {
             if (!manager && !owner){
                 throw new Error("No owner or manager with the give crudentials found")
             }
+
+            ///////////////////////////////
+            ///    Finders / Mutators   ///
+            ///////////////////////////////
+
+            // Finds an existing Driver by ID
+            const findDriverById = async (driverId) => {
+                try{
+                    return await db.driver.findUnique({
+                        where: {
+                            id: driverId
+                        }
+                    })
+                } catch (error){
+                    console.log(error)
+                    throw new Error(error)
+                }
+            }
+
+            
 
             ///////////////////////////////
             ///     Update or Create    ///
@@ -65,13 +85,35 @@ export default {
                 }
             }
 
+            // Updates a Driver selected by ID with a provided shift (overwrite)
+            const updateDriverByIdWithShift = async (driverId, shiftArr) => {
+                try{
+                    return await db.driver.update({
+                        where: {
+                            id: driverId
+                        },
+                        data: {
+                            shifts: shiftArr
+                        }
+                    })
+                } catch (error){
+                    console.log(error)
+                    throw new Error(error)
+                }
+            }
+
             return findShift(dateDsp).then( resolved => {
                 let newShift = {...resolved}
                 let newAllDriverShifts = [...newShift.allDriverShifts]
                 newAllDriverShifts = newAllDriverShifts.filter( (driverShift) => {
-                    if (driverShift.driver.id != driverId){
+                    if (driverShift.driver.id !== driverId){
                         return driverShift
                     }
+                })
+                console.log(newAllDriverShifts)
+                findDriverById(driverId).then((resolvedDriver) => {
+                    let newShifts = resolvedDriver.shifts.filter(shift => shift.dateDsp !== dateDsp)
+                    updateDriverByIdWithShift(driverId, newShifts)
                 })
                 return updateShift(dateDsp, newAllDriverShifts)
             })

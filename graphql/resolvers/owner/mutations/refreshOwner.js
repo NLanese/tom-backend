@@ -1,20 +1,20 @@
 import db from "../../../../utils/generatePrisma.js";
-import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js";
+import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js";
 
 export default {
-    Query: {
-        getManager: async (_, { id }, context) => {
-
+    Mutation: {
+        refreshOwner: async (_, {token, role}) => {
+            let owner = checkOwnerAuth(token)
             try {
-                return await db.manager.findUnique({
+                return await db.owner.findUnique({
                     where: {
-                        id: id
+                        id: owner.id
                     },
                     include: {
-                        owner: true,
                         drivers: {
                             include: {
                                 weeklyReport: true,
+                                dsp: true,
                                 accidents: {
                                     include: {
                                         propertyAccidents: true,
@@ -25,6 +25,7 @@ export default {
                                 notifiedMessages: true
                             }
                         },
+                        managers: true,
                         dsp: {
                             include: {
                                 shifts: {
@@ -55,6 +56,6 @@ export default {
             } catch (error) {
                 throw new Error(error)
             }
-        }
+        }  
     }
 }

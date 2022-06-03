@@ -35,6 +35,7 @@ CREATE TABLE "Owner" (
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
     "signUpToken" TEXT,
+    "mutedListIds" TEXT[],
 
     CONSTRAINT "Owner_pkey" PRIMARY KEY ("id")
 );
@@ -58,6 +59,7 @@ CREATE TABLE "Manager" (
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
     "ownerId" TEXT NOT NULL,
+    "mutedListIds" TEXT[],
     "dspId" TEXT,
 
     CONSTRAINT "Manager_pkey" PRIMARY KEY ("id")
@@ -78,7 +80,7 @@ CREATE TABLE "Driver" (
     "shifts" JSONB[],
     "transporterId" TEXT,
     "globallyMuted" BOOLEAN NOT NULL DEFAULT false,
-    "mutedDrivers" JSONB[],
+    "mutedIds" TEXT[],
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "attendence" TEXT,
@@ -179,7 +181,7 @@ CREATE TABLE "Chatroom" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "chatroomName" TEXT NOT NULL,
     "guests" JSONB[],
-    "mutedDrivers" JSONB[],
+    "mutedIds" TEXT[],
     "chatroomOwner" JSONB NOT NULL,
     "announcementChat" BOOLEAN NOT NULL DEFAULT false,
     "driverJoinOnSignUp" BOOLEAN NOT NULL DEFAULT false,
@@ -372,6 +374,9 @@ CREATE UNIQUE INDEX "Manager_email_key" ON "Manager"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_id_key" ON "Driver"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_resetPasswordToken_key" ON "Driver"("resetPasswordToken");

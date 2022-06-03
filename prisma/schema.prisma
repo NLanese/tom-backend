@@ -55,6 +55,7 @@ model Owner {
 
   drivers          Driver[]
   managers         Manager[]
+  mutedListIds    String[]
   messages         Messages[]
   announcementMessages AnnouncementMessages[]
   dsp              Dsp?
@@ -78,7 +79,6 @@ model Manager {
   phoneNumber String
   password    String
   profilePick Json?
-
   muted       Boolean @default(false) // Used to disable char features for Driver
   locked      Boolean @default(false) // Used to lock the Managers Account if needed
   deleted     Boolean @default(false) // Keeps track if the Managers Account has been deleted
@@ -91,6 +91,7 @@ model Manager {
   ownerId          String
   owner            Owner              @relation(fields: [ownerId], references: [id])
   drivers          Driver[]
+  mutedListIds     String[]
   messages         Messages[]
   announcementMessages AnnouncementMessages[]
   dspId            String?
@@ -111,7 +112,7 @@ model Driver {
   token       String?
   firstname   String
   lastname    String
-  email       String   
+  email       String   @unique
   phoneNumber String?
   password    String?
   profilePick Json?
@@ -119,7 +120,7 @@ model Driver {
 
   transporterId   String? 
   globallyMuted   Boolean @default(false) // Used to disable char features for Driver
-  mutedDrivers    Json[]
+  mutedIds        String[]
   locked          Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted         Boolean @default(false) // Keeps track if the Drivers account has been deleted
   attendence      String?
@@ -270,7 +271,7 @@ model Chatroom {
 
   chatroomName      String
   guests            Json[]
-  mutedDrivers      Json[]
+  mutedIds          String[]
   chatroomOwner     Json
   announcementChat  Boolean @default(false)
 
@@ -336,7 +337,11 @@ model AnnouncementMessages {
   manager    Manager? @relation(fields: [managerId], references: [id])
 }
 
-// also known as Feedback Messages
+/////////////////////////////////////
+///                               ///
+///       Notified Message        ///
+///                               ///
+/////////////////////////////////////
 model NotifiedMessages {
   id        Int      @id @default(autoincrement())
   createdAt String

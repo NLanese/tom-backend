@@ -6,7 +6,7 @@ import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-a
 
 export default {
     Mutation: {
-        personallyMuteDriver: async (_, {muteId, driverId, role, token}, context) => {
+        personallyUnmuteDriver: async (_, {muteId, driverId, role, token}, context) => {
             /////////////////
             //  Ownership  //
             /////////////////
@@ -26,6 +26,7 @@ export default {
             } 
 
             let user
+            let updatedUser
             switch(role){
                 case "MANAGER":
                     user = await db.manager.findUnique({
@@ -33,31 +34,35 @@ export default {
                             id: driverId
                         }
                     })
-                    break
+                    if (!user)  break
+                    updatedUser = await db.owner.update({
+                        where: {
+                            id: driverId
+                        },
+                        data: {
+                            mutedListIds: user.mutedListIds.filter(id => id !== muteId),
+                        }
+                    })
+                    return updatedUser
                 case "OWNER":
                     user = await db.owner.findUnique({
                         where: {
                             id: driverId
                         }
                     })
-                    break
-            }
-
-
-            if (user) {
-                
-                user.mutedListIds.push(muteId)
-                
-                const updatedUser = await db.owner.update({
-                    where: {
-                        id: driverId
-                    },
-                    data: {
-                        mutedListIds: user.mutedListIds,
-                    }
-                })
-                return updatedUser
-            }
+                    if (!user)  break
+                    updatedUser = await db.owner.update({
+                        where: {
+                            id: driverId
+                        },
+                        data: {
+                            mutedListIds: user.mutedListIds.filter(id => id !== muteId),
+                        }
+                    })
+                    return updatedUser
+                    
+                   
+                }
            
             
             
