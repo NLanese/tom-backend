@@ -47,16 +47,13 @@ export default {
                     }
                 }) 
                 if (!foundUser) {
-                    console.log("No driver found")
-                    errors.general = 'Account not found';
-                    throw new UserInputError('Incorrect Email', {
-                        errors
-                    });
+                    throw new Error("No User exists with this email!")
                 }
-                if (!bcrypt.compare(password, foundUser.password)){
+                let passing = await bcrypt.compare(password, foundUser.password)
+                if (!passing){
                     throw new Error("Wrong Passowrd!")
                 }
-                else{
+                else if (passing){
                     const token =  generateDriverToken(foundUser.id)
                     req.session = {
                         token: `Bearer ${token}`
@@ -72,16 +69,8 @@ export default {
                     }
                 }
             } catch(err){
-                console.log(err)
+                throw new Error(err)
             }
-            
-
-            
-    
-        
-
-            
-            
         }
     }
 }
