@@ -36,7 +36,8 @@ export default {
                             owner: true,
                             managers: true,
                             drivers: true,
-                            messages: true 
+                            messages: true,
+                            mutedIds: true
                         }
                     })
                 } catch (error) {
