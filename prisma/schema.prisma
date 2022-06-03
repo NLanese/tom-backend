@@ -79,7 +79,6 @@ model Manager {
   phoneNumber String
   password    String
   profilePick Json?
-
   muted       Boolean @default(false) // Used to disable char features for Driver
   locked      Boolean @default(false) // Used to lock the Managers Account if needed
   deleted     Boolean @default(false) // Keeps track if the Managers Account has been deleted
