@@ -259,6 +259,7 @@ CREATE TABLE "Accident" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "filled" BOOLEAN NOT NULL DEFAULT false,
     "driverId" TEXT NOT NULL,
+    "dspId" TEXT NOT NULL,
 
     CONSTRAINT "Accident_pkey" PRIMARY KEY ("id")
 );
@@ -503,6 +504,9 @@ ALTER TABLE "NotifiedMessages" ADD CONSTRAINT "NotifiedMessages_dspId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "Accident" ADD CONSTRAINT "Accident_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Accident" ADD CONSTRAINT "Accident_dspId_fkey" FOREIGN KEY ("dspId") REFERENCES "Dsp"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PropertyAccident" ADD CONSTRAINT "PropertyAccident_accidentId_fkey" FOREIGN KEY ("accidentId") REFERENCES "Accident"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

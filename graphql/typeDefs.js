@@ -167,6 +167,7 @@ const typeDefs = gql`
     notifiedMessages:             [NotifiedMessages]
     devices:                      [Device]
     announcementMessages:         [AnnouncementMessage]
+    accidents:                    [Accident]
   }
 
 
@@ -365,6 +366,8 @@ type AnnouncementMessage {
     injuryAccidents:          [InjuryAccident] 
     propertyAccidents:        [PropertyAccident] 
     selfInjuryAccidents:      [SelfInjuryAccident] 
+    dspId:                    String
+    dsp:                      Dsp
   }
 
 ###########################
