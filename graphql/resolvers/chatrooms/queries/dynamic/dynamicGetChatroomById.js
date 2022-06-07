@@ -36,8 +36,11 @@ export default {
                             owner: true,
                             managers: true,
                             drivers: true,
-                            messages: true,
-                            mutedIds: true
+                            messages: {
+                                orderBy: {
+                                    createdAt: 'asc'
+                                }
+                            }
                         }
                     })
                 } catch (error) {

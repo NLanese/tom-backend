@@ -34,7 +34,7 @@ const sendForgotPasswordEmail = async (email) => {
 
     // Creates the transporter and email object
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'Gmail',
         auth: {
             user: `${process.env.EMAIL_ADDRESS}`,
             pass: `${process.env.EMAIL_PASSWORD}`

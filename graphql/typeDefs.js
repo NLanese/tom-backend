@@ -167,6 +167,7 @@ const typeDefs = gql`
     notifiedMessages:             [NotifiedMessages]
     devices:                      [Device]
     announcementMessages:         [AnnouncementMessage]
+    accidents:                    [Accident]
   }
 
 
@@ -365,6 +366,8 @@ type AnnouncementMessage {
     injuryAccidents:          [InjuryAccident] 
     propertyAccidents:        [PropertyAccident] 
     selfInjuryAccidents:      [SelfInjuryAccident] 
+    dspId:                    String
+    dsp:                      Dsp
   }
 
 ###########################
@@ -527,6 +530,7 @@ type AnnouncementMessage {
     driverCreatePropertyAccident(accidentId: String!, contact_info: JSON!, damage_report: JSON!, defective_equip: JSON, safety_equip: JSON, specific_pictures: JSON, extra_info: JSON, package_report: JSON, types_of_damage: JSON!): PropertyAccident
     driverCreateInjuryAccident(accidentId: String!, collisionAccidentId: String, contact_info: JSON!, extra_info: String, injured_areas: JSON!, injury_report: JSON!, pain_level: String, specific_pictures: JSON): InjuryAccident
     driverCreateSelfInjuryAccident(accidentId: String!, animal_report: JSON, extra_info: String, injuries: JSON!, injury_report: JSON!, specific_pictures: JSON): SelfInjuryAccident
+    markAccidentComplete(accidentId: String!): Accident
     #################################
 
     #### DRIVER ACCIDENT MUTATORS ####
