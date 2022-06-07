@@ -7,6 +7,9 @@ export default {
             chatroomId,
             content
         }, context) => {
+            ////////////////////
+            // AUTHORIZATION //
+            ///////////////////
             const driver = await checkDriverAuth(context)
 
             const foundDriver = await db.driver.findUnique({
