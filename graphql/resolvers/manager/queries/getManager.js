@@ -21,7 +21,8 @@ export default {
                                         collisionAccidents: true,
                                         injuryAccidents: true
                                     }
-                                }
+                                },
+                                notifiedMessages: true
                             }
                         },
                         dsp: {
@@ -31,7 +32,13 @@ export default {
                                         date: 'asc'
                                     }
                                 },
-                                devices: true
+                                notifiedMessages: true,
+                                announcementMessages: true,
+                                devices: {
+                                    orderBy: {
+                                        deviceIndex: 'asc'
+                                    }
+                                }
                             }
                         },
                         messages: true,

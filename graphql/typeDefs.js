@@ -487,6 +487,11 @@ type AnnouncementMessage {
     dynamicfindDriversWhoDidntReadAnnouncementById(role: String! token: String!, announcementId: String!): [Driver]
     ##############################
 
+    #### MUTING QUERIES ####
+    
+    ########################
+
+
     # DYNAMIC QUERIES
     dynamicGetWeeklyReportsByDate(role: String!, date: String!): [WeeklyReport]
     dynamicGetManagers(role: String!): [Manager]
@@ -550,7 +555,7 @@ type AnnouncementMessage {
     ###################################
 
     #### DYNAMIC SHIFT MUTATIONS ####
-    dynamicRemoveDriverFromShift(token: String, role: String, date: String, driverId: String): Shift 
+    dynamicRemoveDriverFromShift(token: String, role: String, date: String, driverId: String, dspId: String): Shift 
     dynamicManualAssignDrivers(token: String, role: String, date: String, driverIds: [String], dspId: String): Shift
     dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
     #################################
@@ -604,6 +609,15 @@ type AnnouncementMessage {
     dynamicCreateOrUpdateDevice(token: String, role: String, name: String, number: String, type: String, deviceIndex: Int, driverId: String, dspId: String, id: Int): Device
     assignDevice(token: String, role: String, name: String, number: String, type: String, driverId: String, dspId: String, id: Int): Device
     deleteDevice(token: String, role: String, id: Int): Device
+
+    #### MUTING MUTATIONS ####
+    muteDriverGlobally(token: String, role: String, driverId: String): Driver
+    muteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
+    unmuteDriverInConversation(token: String, role: String, driverId: String!, chatId: String!): Chatroom
+    personallyMuteDriver(token: String, role: String, driverId: String!, muteId: String!): Driver
+    personallyUnmuteDriver(token: String, role: String, driverId: String!, muteId: String!): Driver
+    
+    ##########################
 
     # USED FOR TESTING MUTATIONS
     dynamicCreateDriverManagementChatroom(role: String!, driverId: String!, chatroomName: String!): Chatroom
