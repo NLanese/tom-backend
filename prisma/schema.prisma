@@ -187,6 +187,7 @@ model Dsp {
   notifiedMessages      NotifiedMessages[]
   devices               Device[]
   announcementMessages  AnnouncementMessages[]
+  accidents             Accident[]
 }
 
 /////////////////////////////////////
@@ -387,6 +388,8 @@ model Accident {
   propertyAccidents   PropertyAccident[]
   injuryAccidents     InjuryAccident[]
   selfInjuryAccidents SelfInjuryAccident[]
+  dspId               String
+  dsp                 Dsp                 @relation(fields: [dspId], references: [id])
 }
     ///////////////////////
     // Property Accident //

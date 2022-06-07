@@ -1,10 +1,13 @@
 import db from "../../../../utils/generatePrisma.js";
 import nodemailer from 'nodemailer'
+import sendinBlue from 'nodemailer-sendinblue'
+import SibApiV3Sdk from 'sib-api-v3-sdk'
 import hashPassword from "../../../../utils/passwordHashing.js";
 import { UserInputError } from "apollo-server-errors";
 import { validateRegisterInput } from "../../../../utils/validators.js";
 import tokenGenerator from "../../../../utils/tokenGenerator.js"
 import generateOwnerToken from "../../../../utils/generateToken/generateOwnerToken.js"
+
 
 export default {
     Mutation: {
@@ -23,6 +26,8 @@ export default {
                     errors
                 })
             }
+
+            console.log("hit")
 
             // CAPS everything. No cap.
             let actualEmail = email
@@ -63,29 +68,30 @@ export default {
 ///                          ///
 ////////////////////////////////
 
-            // Creates the Transporter
-            const transporter = nodemailer.createTransport({
-                service: "Gmail",
-                auth: {
-                  user: `${process.env.EMAIL_ADDRESS}`,
-                  pass: `${process.env.EMAIL_PASSWORD}`
-                }
-            })
+    // Creates the Transporter
+    const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: `${process.env.EMAIL_ADDRESS}`,
+            pass: `${process.env.EMAIL_PASSWORD}`
+        }
+    })
 
-            // Creates the Mail Object
-            const mailOptions = {
-                from: `${process.env.EMAIL_ADDRESS}`,
-                to: `${actualEmail}`,
-                subject: `Thank you for joining the TOM Team!`,
-                text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
-              }
-            
-            // Sends the mail
-            transporter.sendMail(mailOptions, (error, response) => {
-                if (error){
-                  throw new Error('Something went wrong, please try again \n' + error)
-                } 
-            })
+    // Creates the Mail Object
+    const mailOptions = {
+        from: `${process.env.EMAIL_ADDRESS}`,
+        to: `${actualEmail}`,
+        subject: `Thank you for joining the TOM Team!`,
+        text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+        }
+    
+    // Sends the mail
+    transporter.sendMail(mailOptions, (error, response) => {
+        if (error){
+            throw new Error('Something went wrong, please try again \n' + error)
+        } 
+    })
+    
 
 
 ////////////////////////////////

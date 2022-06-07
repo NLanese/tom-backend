@@ -8,16 +8,18 @@ export default {
             role,
             token,
         }, context) => {
-            let owner;
-            let manager;
+            let user
 
             
             // DYNAMIC AUTHORIZATION CHECK
-            if (role === 'OWNER') owner = await checkOwnerAuth(token)
-            if (role === 'MANAGER') manager = await checkManagerAuth(token)
+            if (role === 'OWNER') user = await checkOwnerAuth(token)
+            if (role === 'MANAGER') user = await checkManagerAuth(token)
 
             try{
                 return await db.accident.findMany({
+                    where: {
+                        dspId: user.dsp.id
+                    },
                     include: {
                         injuryAccidents: true,
                         collisionAccidents: true,
