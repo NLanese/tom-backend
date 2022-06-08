@@ -12,6 +12,7 @@ export default {
             date,
             time,
             location,
+            dspId,
             amazon_logo,
             vehicleId,
             number_packages_carried,
@@ -36,6 +37,8 @@ export default {
                     id: driverId
                 }
             })
+
+            console.log("hit")
 
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
@@ -71,10 +74,16 @@ export default {
                             connect: {
                                 id: driverId
                             }
-                        } 
+                        }, 
+                        dsp: {
+                            connect: {
+                                id: dspId
+                            }
+                        }
                     }
                 })
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
               

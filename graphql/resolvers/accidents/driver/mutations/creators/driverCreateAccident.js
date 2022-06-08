@@ -7,7 +7,8 @@ export default {
             name,
             date,
             time,
-            location
+            location,
+            dspId
         }, context) => {
             const driver = await checkDriverAuth(context)
 
@@ -21,6 +22,11 @@ export default {
                         driver: {
                             connect: {
                                 id: driver.id
+                            }
+                        },
+                        dsp: {
+                            connect: {
+                                id: dspId
                             }
                         }
                     }

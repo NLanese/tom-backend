@@ -525,7 +525,7 @@ type AnnouncementMessage {
     ##########################
 
     #### DRIVER ACCIDENT CREATORS ####
-    driverCreateAccident(name: String!, date: String!, time: String!, location: String!): Accident
+    driverCreateAccident(name: String!, date: String!, time: String!, location: String!, dspId: String!): Accident
     driverCreateCollisionAccident(accidentId: String!, specific_pictures: JSON!, contact_info: JSON!, extra_info: String, collision_report: JSON!): CollisionAccident
     driverCreatePropertyAccident(accidentId: String!, contact_info: JSON!, damage_report: JSON!, defective_equip: JSON, safety_equip: JSON, specific_pictures: JSON, extra_info: JSON, package_report: JSON, types_of_damage: JSON!): PropertyAccident
     driverCreateInjuryAccident(accidentId: String!, collisionAccidentId: String, contact_info: JSON!, extra_info: String, injured_areas: JSON!, injury_report: JSON!, pain_level: String, specific_pictures: JSON): InjuryAccident

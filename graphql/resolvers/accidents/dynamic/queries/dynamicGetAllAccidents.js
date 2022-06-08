@@ -9,16 +9,42 @@ export default {
             token,
         }, context) => {
             let user
+            let foundUser = false
+
+            // DYNAMIC AUTHORIZATION CHECK
+            if (role === 'OWNER'){
+                user = await checkOwnerAuth(token)
+                foundUser = await db.owner.findUnique({
+                    where: {
+                        id: user.id
+                    },
+                    include: {
+                        dsp: true
+                    }
+                })
+            } 
+            else if (role === 'MANAGER'){
+                 user = await checkManagerAuth(token)
+                 foundUser = await db.manager.findUnique({
+                    where: {
+                        id: user.id
+                    },
+                    include: {
+                        dsp: true
+                    }
+                })
+            }
+            else{
+                throw new Error("Invalid attempt at accessing accidents! Please make sure you are signed in properly!")
+            }
 
             
-            // DYNAMIC AUTHORIZATION CHECK
-            if (role === 'OWNER') user = await checkOwnerAuth(token)
-            if (role === 'MANAGER') user = await checkManagerAuth(token)
-
+            console.log(foundUser)
+    
             try{
                 return await db.accident.findMany({
                     where: {
-                        dspId: user.dsp.id
+                        dspId: foundUser.dsp.id
                     },
                     include: {
                         injuryAccidents: true,
