@@ -28,7 +28,6 @@ export default {
                  foundUser = await db.manager.findUnique({
                     where: {
                         id: user.id,
-                        filled: true
                     },
                     include: {
                         dsp: true
@@ -42,7 +41,8 @@ export default {
             try{
                 return await db.accident.findMany({
                     where: {
-                        dspId: foundUser.dsp.id
+                        dspId: foundUser.dsp.id,
+                        filled: true
                     },
                     include: {
                         injuryAccidents: true,

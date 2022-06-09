@@ -373,7 +373,6 @@ model Accident {
   location  String
 
   accident_report            Json?
-  has_logo                   String?
   police_report              Json?
   before_accident_report     Json?
   selfDamage                 Json?
