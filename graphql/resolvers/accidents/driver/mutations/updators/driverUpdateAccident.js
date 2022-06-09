@@ -46,7 +46,8 @@ export default {
                         police_report: police_report,
                         before_accident_report: before_accident_report,
                         selfDamage: selfDamage,
-                        weather_and_distractions: weather_and_distractions
+                        weather_and_distractions: weather_and_distractions,
+                        filled: true
                     }
                 })
             } catch (error) {

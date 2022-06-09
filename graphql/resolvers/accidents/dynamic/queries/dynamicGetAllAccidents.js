@@ -27,7 +27,8 @@ export default {
                  user = await checkManagerAuth(token)
                  foundUser = await db.manager.findUnique({
                     where: {
-                        id: user.id
+                        id: user.id,
+                        filled: true
                     },
                     include: {
                         dsp: true
