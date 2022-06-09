@@ -58,12 +58,20 @@ export default {
                     req.session = {
                         token: `Bearer ${token}`
                     }
-    
+                    console.log("INSIDE OF DRIVER SIGN IN THIS IS THE RETURN OBJECT\n===================")
+                    console.log({
+                        ...foundUser,
+                        token: token
+                    })
                     try {
-                        return  {
-                            ...foundUser,
-                            token: token
-                        }
+                        return await db.driver.update({
+                            where: {
+                                id: foundUser.id
+                            },
+                            data: {
+                                token: token
+                            }
+                        })
                     } catch (error) {
                         throw new Error(error)
                     }

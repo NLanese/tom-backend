@@ -37,9 +37,6 @@ export default {
             else{
                 throw new Error("Invalid attempt at accessing accidents! Please make sure you are signed in properly!")
             }
-
-            
-            console.log(foundUser)
     
             try{
                 return await db.accident.findMany({
