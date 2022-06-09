@@ -66,7 +66,6 @@ export default {
                 })
             }
             catch(err){
-                console.log("No driver found error")
                 throw new Error(`Driver with transporter Id ${transporterId} does not exist!`)
             }
             
@@ -74,10 +73,7 @@ export default {
             if (!foundDriver) {
                 throw new Error(`Driver with transporter Id ${transporterId} does not exist!`)
             }
-            else{
-                console.log(foundDriver)
-            }
-
+            
             try {
                 await db.weeklyReport.create({
                     data: {

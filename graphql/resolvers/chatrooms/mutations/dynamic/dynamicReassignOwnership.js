@@ -29,8 +29,6 @@ export default {
             // The Process // 
             /////////////////
 
-            console.log(chatId)
-
             const findDriver = async () => {
                 try{
                     return await db.driver.findUnique({
@@ -44,7 +42,6 @@ export default {
             }
 
             const editChat = async (newOwner) => {
-                console.log(chatId)
                 try{
                     return await db.chatroom.update({
                         where: {
@@ -66,7 +63,6 @@ export default {
             let foundDriver = findDriver()
 
             return findDriver().then( resolved =>{
-                // console.log(resolved)
                 return editChat(resolved)
             })
         }

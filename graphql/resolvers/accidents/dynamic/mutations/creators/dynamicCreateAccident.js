@@ -38,8 +38,6 @@ export default {
                 }
             })
 
-            console.log("hit")
-
             if (!foundDriver) {
                 throw new Error('Driver does not exist')
             }

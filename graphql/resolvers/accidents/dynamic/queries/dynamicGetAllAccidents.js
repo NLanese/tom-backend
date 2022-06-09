@@ -50,6 +50,9 @@ export default {
                         selfInjuryAccidents: true,
                         driver: true
                     }
+                }).then( resolved => {
+                    console.log(resolved)
+                    return resolved
                 })
             } catch (error){
                 throw new Error(error)

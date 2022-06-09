@@ -5,9 +5,6 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const checkDriverAuth = (context) => {
-
-	console.log(context.req.headers)
-
 	const authHeader = context.req.headers.authorization
 		
 	if (authHeader) {

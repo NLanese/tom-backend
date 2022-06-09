@@ -11,7 +11,6 @@ export default {
             driverId,
             dspId
         }, context) => {
-            console.log('dynamicRemoveDriverFromShit')
             ///////////////////////////////
             ///        Ownership        ///
             ///////////////////////////////
@@ -110,7 +109,6 @@ export default {
                         return driverShift
                     }
                 })
-                console.log(newAllDriverShifts)
                 findDriverById(driverId).then((resolvedDriver) => {
                     let newShifts = resolvedDriver.shifts.filter(shift => shift.dateDsp !== dateDsp)
                     updateDriverByIdWithShift(driverId, newShifts)

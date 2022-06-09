@@ -27,8 +27,6 @@ export default {
                 })
             }
 
-            console.log("hit")
-
             // CAPS everything. No cap.
             let actualEmail = email
             email = await email.toUpperCase()

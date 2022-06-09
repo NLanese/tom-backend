@@ -57,7 +57,6 @@ export default {
             /////////////////
             let newMutedArray
             findChatroom().then(chatroom =>{
-                console.log(chatroom.mutedIds)
                 newMutedArray = [...chatroom.mutedIds, driverId]
                 return updateChatroom(newMutedArray)
             }).catch(e => {

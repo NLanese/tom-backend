@@ -58,11 +58,6 @@ export default {
                     req.session = {
                         token: `Bearer ${token}`
                     }
-                    console.log("INSIDE OF DRIVER SIGN IN THIS IS THE RETURN OBJECT\n===================")
-                    console.log({
-                        ...foundUser,
-                        token: token
-                    })
                     try {
                         return await db.driver.update({
                             where: {
@@ -70,6 +65,27 @@ export default {
                             },
                             data: {
                                 token: token
+                            },
+                            include: {
+                                owner: true,
+                                managers: true,
+                                dsp: {
+                                    include: {
+                                        drivers: {
+                                            include: {
+                                                weeklyReport: true
+                                            }
+                                        },
+                                    }
+                                },
+                                weeklyReport: true,
+                                // shifts: true,
+                                chatrooms: {
+                                    include: {
+                                        messages: true
+                                    }
+                                },
+                                notifiedMessages: true,
                             }
                         })
                     } catch (error) {

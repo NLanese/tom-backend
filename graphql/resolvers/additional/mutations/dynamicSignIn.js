@@ -131,10 +131,49 @@ export default {
                 }
 
                 try {
-                    return await {
-                        ...foundManager,
-                        token: token
-                    }
+                    return await db.owner.update({
+                        where: {
+                            id: foundOwner.id
+                        },
+                        data: {
+                            token: token
+                        },
+                        include: {
+                            drivers: {
+                                include: {
+                                    accidents: {
+                                        include: {
+                                            injuryAccidents: true,
+                                            propertyAccidents: true,
+                                            collisionAccidents: true,
+                                            selfInjuryAccidents: true
+                                        }
+                                    },
+                                    weeklyReport: true,
+                                }
+                            },
+                            managers: true,
+                            dsp: {
+                                include: {
+                                    owner: true,
+                                    notifiedMessages: true,
+                                    announcementMessages: true,
+                                    devices: {
+                                        orderBy: {
+                                            deviceIndex: 'asc'
+                                        }
+                                    },
+                                }
+                            },
+                            messages: true,
+                            // notifiedMessages: true,
+                            chatrooms: {
+                                include: {
+                                    messages: true
+                                }
+                            }
+                        }
+                    })
                 } catch (error) {
                     console.lopg(error)
                     throw new Error(error)
