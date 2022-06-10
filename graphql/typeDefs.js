@@ -45,6 +45,11 @@ const typeDefs = gql`
     resetPasswordTokenExpiration: Int
     signUpToken:                  String
 
+    subscriptionToken:           String
+    subscriptionStartDate:       String
+    subscriptionEndDate:         String
+    autoPayEnabled:              Boolean
+
     drivers:                      [Driver]
     managers:                     [Manager]
     mutedListIds:                 [String]

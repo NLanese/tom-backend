@@ -251,7 +251,6 @@ CREATE TABLE "Accident" (
     "time" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "accident_report" JSONB,
-    "has_logo" TEXT,
     "police_report" JSONB,
     "before_accident_report" JSONB,
     "selfDamage" JSONB,

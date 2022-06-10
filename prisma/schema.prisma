@@ -44,14 +44,17 @@ model Owner {
   password    String
   profilePick Json?
 
-  locked  Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted Boolean @default(false) // Keeps track if the Manager account has been deleted
+  deleted Boolean @default(false) // Keeps track if the Owner account has been deleted
 
   notified Boolean @default(false)
-
   resetPasswordToken           String?
   resetPasswordTokenExpiration Int?
   signUpToken                  String? @unique // Used for Driver/Manager signing up on the app
+
+  subscriptionToken            String
+  subscriptionStartDate        String
+  subscriptionEndDate          String
+  autoPayEnabled               Boolean @default(false)
 
   drivers          Driver[]
   managers         Manager[]
@@ -178,6 +181,11 @@ model Dsp {
   paid                          Boolean @default(false) // Keeps track if the Dsp has paid 
   accountStanding               String  @default("Free") // Keeps track of the Dsp Account Status
 
+  subscriptionToken            String
+  subscriptionStartDate        String
+  subscriptionEndDate          String
+  autoPayEnabled               Boolean @default(false)
+
   managers              Manager[]
   drivers               Driver[]     
   shifts                Shift[]     
@@ -250,14 +258,15 @@ model WeeklyReport {
 /////////////////////////////////////
 
 model Shift {
-  id          String  @id @unique @default(uuid())
-  date        String
-  dateDsp     String @unique
-  allDriverShifts  Json[]                               // {driver: <driverObj>, devices: {
+  id              String  @id @unique @default(uuid())
+  date            String
+  dateDsp         String @unique
+  allDriverShifts Json[]                               // {driver: <driverObj>, devices: {
                                                         //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
                                                         // }
-  dspId       String
-  dsp         Dsp     @relation(fields: [dspId], references: [id])
+  dspId           String
+  dsp             Dsp     @relation(fields: [dspId], references: [id])
+  shiftMessage    String
 }
 
 /////////////////////////////////////
