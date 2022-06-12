@@ -129,7 +129,10 @@ export default {
                         phoneNumber: phoneNumber,
                         signUpToken: signUpToken,
                         profilePick: 'Default',
-                        token: token
+                        token: token,
+                        subscriptionToken: "Free",
+                        subscriptionStartDate: "Free-Version",
+                        subscriptionEndDate: "Free-Version"
                     }
                 })
             } catch (error) {
