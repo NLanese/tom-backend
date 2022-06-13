@@ -40,7 +40,6 @@ export default {
             //    Ownership     //
             ////////////////////// 
 
-            console.log(token, "TOKEN")
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }
@@ -156,7 +155,7 @@ export default {
                                     weeklyReport: true
                                 }
                             })
-                            .then(() => {
+                            .then( async () => {
                                 return await db.weeklyReport.findUnique({
                                     where: {
                                         id: weeklyReport.id
@@ -165,6 +164,7 @@ export default {
                             })
                         } catch(err){
                             console.log("Error updating ", foundDriver.firstname )
+                            console.log(err)
                         }
                     })
                 } catch(err){
@@ -179,12 +179,10 @@ export default {
                         where: {
                             id: weeklyReport.id
                         },
-                        include: {
-                            weeklyReport: true
-                        }
                     })
                 } catch(err){
-                    console.log("Error updating ", foundDriver.firstname )
+                    console.log("Error returning ", foundDriver.firstname )
+                    console.log(err)
                 }
             }
         }
