@@ -52,7 +52,6 @@ export default {
                         driver: true
                     }
                 }).then( resolved => {
-                    console.log(resolved)
                     return resolved
                 })
             } catch (error){

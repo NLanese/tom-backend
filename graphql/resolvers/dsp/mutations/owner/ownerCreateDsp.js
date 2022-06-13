@@ -83,6 +83,9 @@ export default {
                         feedbackNotifications: feedbackNotifications,
                         autoSend: autoSend,
                         allDriverShifts: allDriverShifts,
+                        subscriptionToken: "Free",
+                        subscriptionStartDate: "Free-Version",
+                        subscriptionEndDate: "Free-Version"
                     }
                 })
 

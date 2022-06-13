@@ -15,6 +15,9 @@ export default {
             phoneNumber,
             ownerEmail
         }, { req }) => {
+
+            console.log("hit")
+
             const { valid, errors } = validateRegisterInput(email, password)
 
             if (!valid) {
@@ -186,6 +189,7 @@ export default {
                 //     token: token
                 // }
             } catch (error) {
+                console.log(error)
                 throw new Error(error)
             }
         }

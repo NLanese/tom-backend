@@ -45,6 +45,11 @@ const typeDefs = gql`
     resetPasswordTokenExpiration: Int
     signUpToken:                  String
 
+    subscriptionToken:           String
+    subscriptionStartDate:       String
+    subscriptionEndDate:         String
+    autoPayEnabled:              Boolean
+
     drivers:                      [Driver]
     managers:                     [Manager]
     mutedListIds:                 [String]
@@ -557,7 +562,7 @@ type AnnouncementMessage {
     #### DYNAMIC SHIFT MUTATIONS ####
     dynamicRemoveDriverFromShift(token: String, role: String, date: String, driverId: String, dspId: String): Shift 
     dynamicManualAssignDrivers(token: String, role: String, date: String, driverIds: [String], dspId: String): Shift
-    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String): Shift
+    dynamicCreateOrUpdateShift(token: String, role: String, date: String, allDriverShifts: [JSON], dspId: String, shiftMessage: String): Shift
     #################################
 
     #### DSP MUTATIONS ####

@@ -29,12 +29,15 @@ CREATE TABLE "Owner" (
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "profilePick" JSONB,
-    "locked" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "notified" BOOLEAN NOT NULL DEFAULT false,
     "resetPasswordToken" TEXT,
     "resetPasswordTokenExpiration" INTEGER,
     "signUpToken" TEXT,
+    "subscriptionToken" TEXT NOT NULL,
+    "subscriptionStartDate" TEXT NOT NULL,
+    "subscriptionEndDate" TEXT NOT NULL,
+    "autoPayEnabled" BOOLEAN NOT NULL DEFAULT false,
     "mutedListIds" TEXT[],
 
     CONSTRAINT "Owner_pkey" PRIMARY KEY ("id")
@@ -117,6 +120,10 @@ CREATE TABLE "Dsp" (
     "allDevices" JSONB[],
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "accountStanding" TEXT NOT NULL DEFAULT E'Free',
+    "subscriptionToken" TEXT NOT NULL,
+    "subscriptionStartDate" TEXT NOT NULL,
+    "subscriptionEndDate" TEXT NOT NULL,
+    "autoPayEnabled" BOOLEAN NOT NULL DEFAULT false,
     "ownerId" TEXT NOT NULL,
 
     CONSTRAINT "Dsp_pkey" PRIMARY KEY ("id")
@@ -171,6 +178,7 @@ CREATE TABLE "Shift" (
     "dateDsp" TEXT NOT NULL,
     "allDriverShifts" JSONB[],
     "dspId" TEXT NOT NULL,
+    "shiftMessage" TEXT NOT NULL,
 
     CONSTRAINT "Shift_pkey" PRIMARY KEY ("id")
 );
@@ -251,7 +259,6 @@ CREATE TABLE "Accident" (
     "time" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "accident_report" JSONB,
-    "has_logo" TEXT,
     "police_report" JSONB,
     "before_accident_report" JSONB,
     "selfDamage" JSONB,

@@ -13,41 +13,34 @@ export default {
                     include: {
                         drivers: {
                             include: {
-                                weeklyReport: true,
-                                dsp: true,
                                 accidents: {
                                     include: {
+                                        injuryAccidents: true,
                                         propertyAccidents: true,
                                         collisionAccidents: true,
-                                        injuryAccidents: true
+                                        selfInjuryAccidents: true
                                     }
                                 },
-                                notifiedMessages: true
+                                weeklyReport: true,
                             }
                         },
                         managers: true,
                         dsp: {
                             include: {
-                                shifts: {
-                                    orderBy: {
-                                        date: 'asc'
-                                    }
-                                },
+                                owner: true,
                                 notifiedMessages: true,
                                 announcementMessages: true,
                                 devices: {
                                     orderBy: {
                                         deviceIndex: 'asc'
                                     }
-                                }
+                                },
                             }
                         },
                         messages: true,
+                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
-                                owner: true,
-                                managers: true,
-                                drivers: true,
                                 messages: true
                             }
                         }
