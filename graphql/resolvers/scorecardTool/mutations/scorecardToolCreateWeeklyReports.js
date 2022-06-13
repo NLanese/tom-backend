@@ -40,6 +40,7 @@ export default {
             //    Ownership     //
             ////////////////////// 
 
+            console.log(token, "TOKEN")
             if (role === 'OWNER') {
                 owner = await checkOwnerAuth(token)
             }

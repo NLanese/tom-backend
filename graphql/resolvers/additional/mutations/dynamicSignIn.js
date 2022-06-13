@@ -50,10 +50,10 @@ export default {
                             }
                         },
                         messages: true,
-                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
-                                messages: true
+                                messages: true,
+                                drivers: true,
                             }
                         }
                     }
@@ -68,14 +68,22 @@ export default {
                         drivers: true,
                         dsp: {
                             include: {
-                                owner: true
+                                owner: true,
+                                notifiedMessages: true,
+                                announcementMessages: true,
+                                devices: {
+                                    orderBy: {
+                                        deviceIndex: 'asc'
+                                    }
+                                },
                             }
                         },
+                        owner: true,
                         messages: true,
-                        // notifiedMessages: true,
                         chatrooms: {
                             include: {
-                                messages: true
+                                messages: true,
+                                drivers: true,
                             }
                         }
                     }
@@ -99,32 +107,6 @@ export default {
                 }
 
                 const token = await generateOwnerToken(foundOwner.id)
-
-                req.session = {
-                    token: `Bearer ${token}`
-                }
-
-                try {
-                    return await {
-                        ...foundOwner,
-                        token: token
-                    }
-                } catch (error) {
-                    throw new Error(error)
-                }
-            }
-
-            if (foundManager) {
-                const isValid = await bcrypt.compare(password, foundManager.password)
-    
-                if (!isValid) {
-                    errors.general = 'Incorrect Password'
-                    throw new UserInputError('Incorrect Password', {
-                        errors
-                    })
-                }
-
-                const token = await generateManagerToken(foundManager.id)
 
                 req.session = {
                     token: `Bearer ${token}`
@@ -175,7 +157,71 @@ export default {
                         }
                     })
                 } catch (error) {
-                    console.lopg(error)
+                    throw new Error(error)
+                }
+            }
+
+            if (foundManager) {
+                const isValid = await bcrypt.compare(password, foundManager.password)
+    
+                if (!isValid) {
+                    errors.general = 'Incorrect Password'
+                    throw new UserInputError('Incorrect Password', {
+                        errors
+                    })
+                }
+
+                const token = await generateManagerToken(foundManager.id)
+
+                req.session = {
+                    token: `Bearer ${token}`
+                }
+
+                try {
+                    return await db.manager.update({
+                        where: {
+                            id: foundManager.id
+                        },
+                        data: {
+                            token: token
+                        },
+                        include: {
+                            drivers: {
+                                include: {
+                                    accidents: {
+                                        include: {
+                                            injuryAccidents: true,
+                                            propertyAccidents: true,
+                                            collisionAccidents: true,
+                                            selfInjuryAccidents: true
+                                        }
+                                    },
+                                    weeklyReport: true,
+                                }
+                            },
+                            dsp: {
+                                include: {
+                                    owner: true,
+                                    notifiedMessages: true,
+                                    announcementMessages: true,
+                                    devices: {
+                                        orderBy: {
+                                            deviceIndex: 'asc'
+                                        }
+                                    },
+                                }
+                            },
+                            messages: true,
+                            // notifiedMessages: true,
+                            chatrooms: {
+                                include: {
+                                    messages: true
+                                }
+                            }
+                        }
+                    })
+                } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
 

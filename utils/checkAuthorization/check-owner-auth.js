@@ -10,6 +10,8 @@ const checkOwnerAuth = (context) => {
 	// if (authHeader) {
 	// 	const token = authHeader;
 
+	console.log(token)
+
 		if (token) {
 			try {
 				const owner = jwt.verify(token, process.env.JWT_OWNER_SECRET);
