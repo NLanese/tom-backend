@@ -55,6 +55,7 @@ export default {
 
             let dspTransporter = `${dspId}${transporterId}`
             let foundDriver = false 
+            let weeklyReport = false
 
             try {
                 foundDriver = await db.driver.findFirst({
@@ -76,7 +77,7 @@ export default {
             }
             
             try {
-                await db.weeklyReport.create({
+                weeklyReport = await db.weeklyReport.create({
                     data: {
                         date: date,
 
@@ -155,6 +156,13 @@ export default {
                                     weeklyReport: true
                                 }
                             })
+                            .then(() => {
+                                return await db.weeklyReport.findUnique({
+                                    where: {
+                                        id: weeklyReport.id
+                                    }
+                                })
+                            })
                         } catch(err){
                             console.log("Error updating ", foundDriver.firstname )
                         }
@@ -167,9 +175,9 @@ export default {
             else{
                 try{
                     
-                    return await db.driver.findUnique({
+                    return await db.weeklyReport.findUnique({
                         where: {
-                            dspTransporter: dspTransporter
+                            id: weeklyReport.id
                         },
                         include: {
                             weeklyReport: true
