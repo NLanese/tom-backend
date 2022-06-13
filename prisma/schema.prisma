@@ -36,7 +36,7 @@ model Owner {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
   role        Role     @default(OWNER)
-  token       String?
+  token       String?  
   firstname   String
   lastname    String
   email       String   @unique

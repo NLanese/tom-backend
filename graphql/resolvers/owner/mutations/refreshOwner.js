@@ -8,7 +8,7 @@ export default {
             try {
                 return await db.owner.findUnique({
                     where: {
-                        token: token
+                        id: owner.id
                     },
                     include: {
                         drivers: {
