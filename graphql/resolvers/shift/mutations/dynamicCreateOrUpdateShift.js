@@ -80,6 +80,7 @@ export default {
                                     allDriverShifts: allDriverShifts,
                                     dateDsp: dateDsp,
                                     date: date,
+                                    shiftMessage: "Have a safe and successful day!",
                                     dsp: {
                                         connect: {
                                             id: dspId
