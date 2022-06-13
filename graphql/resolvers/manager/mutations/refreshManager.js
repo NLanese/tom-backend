@@ -2,7 +2,7 @@ import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager
 import db from "../../../../utils/generatePrisma.js";
 export default {
     Mutation: {
-        managerSignUp: async (_, { role, token} ) => {
+        refreshManager: async (_, { role, token} ) => {
             let manager = checkManagerAuth(token)
             try {
                 return await db.manager.findUnique({
