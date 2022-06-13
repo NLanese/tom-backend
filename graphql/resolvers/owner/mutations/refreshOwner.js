@@ -8,9 +8,6 @@ export default {
             try {
                 return await db.owner.findUnique({
                     where: {
-                        id: foundOwner.id
-                    },
-                    data: {
                         token: token
                     },
                     include: {

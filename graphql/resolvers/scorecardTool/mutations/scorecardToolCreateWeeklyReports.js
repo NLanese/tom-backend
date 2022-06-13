@@ -154,9 +154,6 @@ export default {
                                 include: {
                                     weeklyReport: true
                                 }
-                            }).then( resolved => {
-                                console.log(resolved)
-                                return resolved
                             })
                         } catch(err){
                             console.log("Error updating ", foundDriver.firstname )
@@ -168,10 +165,20 @@ export default {
             }
 
             else{
-
+                try{
+                    
+                    return await db.driver.findUnique({
+                        where: {
+                            dspTransporter: dspTransporter
+                        },
+                        include: {
+                            weeklyReport: true
+                        }
+                    })
+                } catch(err){
+                    console.log("Error updating ", foundDriver.firstname )
+                }
             }
-
-            
         }
     }
 }
