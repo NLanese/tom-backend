@@ -9,7 +9,8 @@ export default {
             role,
             date,
             allDriverShifts,
-            dspId
+            dspId,
+            shiftMessage
         }, context) => {
 
             ///////////////////////////////
@@ -32,6 +33,11 @@ export default {
             // Determines if Valid 
             if (!manager && !owner){
                 throw new Error("No owner or manager with the give crudentials found")
+            }
+
+            // Determines Shift Message or Default
+            if (!shiftMessage){
+                shiftMessage = "Have a safe and successful day!"
             }
 
 
@@ -63,7 +69,8 @@ export default {
                                 },
                                 data: {
                                     allDriverShifts: allDriverShifts,
-                                    date: date
+                                    date: date,
+                                    shiftMessage: shiftMessage
                                 }
                             })
                             
@@ -80,7 +87,7 @@ export default {
                                     allDriverShifts: allDriverShifts,
                                     dateDsp: dateDsp,
                                     date: date,
-                                    shiftMessage: "Have a safe and successful day!",
+                                    shiftMessage: shiftMessage,
                                     dsp: {
                                         connect: {
                                             id: dspId
