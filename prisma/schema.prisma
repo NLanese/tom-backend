@@ -335,7 +335,8 @@ model AnnouncementMessages {
 
   content     String
   from        Json
-  readBy      Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ]     
+  readBy      Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ] 
+  readyByIds  String[]    
 
   chatroomId String
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])

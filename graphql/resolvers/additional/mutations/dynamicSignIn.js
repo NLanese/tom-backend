@@ -131,7 +131,11 @@ export default {
                                             selfInjuryAccidents: true
                                         }
                                     },
-                                    weeklyReport: true,
+                                    weeklyReport: {
+                                        orderBy: {
+                                            date: 'desc'
+                                        },
+                                    },
                                 }
                             },
                             managers: true,
