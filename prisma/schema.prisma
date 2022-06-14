@@ -52,9 +52,10 @@ model Owner {
   resetPasswordTokenExpiration Int?
   signUpToken                  String? @unique // Used for Driver/Manager signing up on the app
 
-  subscriptionToken            String
-  subscriptionStartDate        String
-  subscriptionEndDate          String
+  subscriptionToken            String?
+  subscriptionStartDate        String?
+  subscriptionEndDate          String?
+  stripeCustomerId             String?
   autoPayEnabled               Boolean @default(false)
 
   drivers          Driver[]
@@ -185,6 +186,8 @@ model Dsp {
   subscriptionToken            String
   subscriptionStartDate        String
   subscriptionEndDate          String
+  stripeCustomerId             String?
+
   autoPayEnabled               Boolean @default(false)
 
   managers              Manager[]

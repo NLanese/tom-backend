@@ -38,7 +38,7 @@ export default {
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: guests,
-                            chatroomOwner: justDriverRecord,
+                            chatroomOwner: justOwnerRecord,
                             chatroomName: chatroomName,
                             managerJoinOnSignUp: false,
                             mutedIds: [],
@@ -99,6 +99,7 @@ export default {
                         }
                     })
                 } catch (error) {
+                    console.log(error)
                     throw new Error(error)
                 }
             }
