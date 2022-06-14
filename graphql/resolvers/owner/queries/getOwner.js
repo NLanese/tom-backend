@@ -13,7 +13,11 @@ export default {
                     include: {
                         drivers: {
                             include: {
-                                weeklyReport: true,
+                                weeklyReport: {
+                                    orderBy: {
+                                        date: 'desc'
+                                    },
+                                },
                                 accidents: {
                                     include: {
                                         propertyAccidents: true,

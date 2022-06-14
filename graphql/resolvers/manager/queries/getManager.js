@@ -14,7 +14,11 @@ export default {
                         owner: true,
                         drivers: {
                             include: {
-                                weeklyReport: true,
+                                weeklyReport: {
+                                    orderBy: {
+                                        date: 'desc'
+                                    },
+                                },
                                 accidents: {
                                     include: {
                                         propertyAccidents: true,
