@@ -28,11 +28,12 @@ export default {
                         chatroomOwner: justDriverRecord,
                         chatroomName: chatroomName,
                         managerJoinOnSignUp: false,
+                        mutedIds: [],
                         drivers: {
                             connect: {
                                 id: driver.id
                             }
-                        }
+                        },
                     }
                 })
 

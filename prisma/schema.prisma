@@ -281,7 +281,7 @@ model Chatroom {
 
   chatroomName      String
   guests            Json[]
-  mutedIds          String[]
+  mutedIds          String[] 
   chatroomOwner     Json
   announcementChat  Boolean @default(false)
 

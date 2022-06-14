@@ -84,29 +84,37 @@ export default {
 
     // var sendinBlue = require('nodemailer-sendinblue-transport');
 
-    const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-            user: `${process.env.EMAIL_ADDRESS}`,
-            pass: `${process.env.EMAIL_PASSWORD}`
-        }
-    })
-
-    // Creates the Mail Object
-    const mailOptions = {
-        from: `${process.env.EMAIL_ADDRESS}`,
-        to: `${actualEmail}`,
-        subject: `Thank you for joining the TOM Team!`,
-        text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience! \nUpon recieving this email, you will have a new TOM Account for the mobile app. Please use this email, and the password "${passwordToUse}" to login and get started!`
-        }
+    try{
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user: `${process.env.EMAIL_ADDRESS}`,
+                pass: `${process.env.EMAIL_PASSWORD}`
+            }
+        })
     
-    // Sends the mail
-    transporter.sendMail(mailOptions, (error, response) => {
-        if (error){
-            console.log(error)
-            throw new Error('Something went wrong, please try again \n' + error)
-        } 
-    })
+        // Creates the Mail Object
+        const mailOptions = {
+            from: `${process.env.EMAIL_ADDRESS}`,
+            to: `${actualEmail}`,
+            subject: `Thank you for joining the TOM Team!`,
+            text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience! \nUpon recieving this email, you will have a new TOM Account for the mobile app. Please use this email, and the password "${passwordToUse}" to login and get started!`
+            }
+        
+        // Sends the mail
+        transporter.sendMail(mailOptions, (error, response) => {
+            if (error){
+                console.log(error)
+                throw new Error('Something went wrong, please try again \n' + error)
+            } 
+        })
+    }
+    catch(err){
+        console.log(err)
+        throw new Error(`Something went wrong emailing ${actualEmail}. Please check this is the proper address.`)
+    }
+
+    
 
             
 ///////////////////////////////////
@@ -423,7 +431,7 @@ export default {
                         })
                     }
 
-                    // If error on creatiob
+                    // If error on creation
                     if (!newDriver) {
                         throw new Error('Error creating driver')
                     }
@@ -455,52 +463,52 @@ export default {
                     })
 
                     // Create driver/management chatroom
-                    const newChatroom = await db.chatroom.create({
-                        data: {
-                            guests: [ newDriver, justOwnerRecord, ...guestArray ],
-                            chatroomOwner: justOwnerRecord,
-                            chatroomName: `${newDriver.firstname} ${newDriver.lastname} management chatroom`,
-                            owner: {
-                                connect: {
-                                    id: foundOwner.id
-                                }
-                            }
-                        }
-                    })
+                    // const newChatroom = await db.chatroom.create({
+                    //     data: {
+                    //         guests: [ newDriver, justOwnerRecord, ...guestArray ],
+                    //         chatroomOwner: justOwnerRecord,
+                    //         chatroomName: `${newDriver.firstname} ${newDriver.lastname} management chatroom`,
+                    //         owner: {
+                    //             connect: {
+                    //                 id: foundOwner.id
+                    //             }
+                    //         }
+                    //     }
+                    // })
 
-                    if (!newChatroom) {
-                        throw new Error('Error creating chatroom')
-                    }
+                    // if (!newChatroom) {
+                    //     throw new Error('Error creating chatroom')
+                    // }
 
                     // Updates the newChatroom record to handle Driver Relationship
-                    await db.chatroom.update({
-                        where: {
-                            id: newChatroom.id
-                        },
-                        data: {
-                            drivers: {
-                                connect: {
-                                    id: newDriver.id
-                                }
-                            }
-                        }
-                    })
+                    // await db.chatroom.update({
+                    //     where: {
+                    //         id: newChatroom.id
+                    //     },
+                    //     data: {
+                    //         drivers: {
+                    //             connect: {
+                    //                 id: newDriver.id
+                    //             }
+                    //         }
+                    //     }
+                    // })
 
                     // Relates the rest of the Managers to newChatroom
-                    await guestArray.forEach( async (guest) => {
-                        await db.chatroom.update({
-                            where: {
-                                id: newChatroom.id
-                            },
-                            data: {
-                                managers: {
-                                    connect: {
-                                        id: guest.id
-                                    }
-                                }
-                            }
-                        })
-                    })
+                    // await guestArray.forEach( async (guest) => {
+                    //     await db.chatroom.update({
+                    //         where: {
+                    //             id: newChatroom.id
+                    //         },
+                    //         data: {
+                    //             managers: {
+                    //                 connect: {
+                    //                     id: guest.id
+                    //                 }
+                    //             }
+                    //         }
+                    //     })
+                    // })
 
                     // Joins all other chatrooms driver is suppose to join
                     await foundOwner.chatrooms.forEach( async (chatroom) => {

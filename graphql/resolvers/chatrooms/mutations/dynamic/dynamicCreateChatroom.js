@@ -38,9 +38,10 @@ export default {
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: guests,
-                            chatroomOwner: justOwnerRecord,
+                            chatroomOwner: justDriverRecord,
                             chatroomName: chatroomName,
                             managerJoinOnSignUp: false,
+                            mutedIds: [],
                             owner: {
                                 connect: {
                                     id: owner.id
@@ -119,9 +120,10 @@ export default {
                     const newChatroom = await db.chatroom.create({
                         data: {
                             guests: guests,
-                            chatroomOwner: justManagerRecord,
+                            chatroomOwner: justDriverRecord,
                             chatroomName: chatroomName,
                             managerJoinOnSignUp: false,
+                            mutedIds: [],
                             managers: {
                                 connect: {
                                     id: manager.id

@@ -150,6 +150,7 @@ export default {
                         chatroomName: `${newDsp.name} Announcements`,
                         driverJoinOnSignUp: true,
                         announcementChat: true,
+                        mutedIds: [],
                         owner: {
                             connect: {
                                 id: foundOwner.id
@@ -199,6 +200,7 @@ export default {
                         guests: [ ...managementArray, justOwnerRecord ],
                         chatroomOwner: justOwnerRecord,
                         chatroomName: `${newDsp.name} management chatroom`,
+                        mutedIds: [],
                         owner: {
                             connect: {
                                 id: foundOwner.id
