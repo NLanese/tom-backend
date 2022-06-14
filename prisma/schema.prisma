@@ -43,6 +43,7 @@ model Owner {
   phoneNumber String
   password    String
   profilePick Json?
+  locked      Boolean @default(false) // Used to lock the Managers Account if needed
 
   deleted Boolean @default(false) // Keeps track if the Owner account has been deleted
 
