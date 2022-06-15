@@ -70,6 +70,9 @@ export default {
                         data: {
                             allDriverShifts: allDriverShifts
                         }
+                    }).then((resolved) => {
+                        console.log(resolved, "UPDATE")
+                        return resolved
                     })
                 } catch (error){
                     throw new Error(error)
@@ -105,6 +108,29 @@ export default {
                         shifts: true
                     }
                 })
+            }
+
+            const runUpdateMutations = async () => {
+                for (i = 0; i < driverIds.length; i ++){
+                    let driverId = driverIds[i]
+                    await findDriverById(driverId).then(  async (resolvedDriver) => {
+                        let newShifts = [...resolvedDriver.shifts, {date: date, devices: []}]
+                        updateDriverByIdWithShift(driverId, newShifts)
+                        newAllDriverShifts.push(
+                            {
+                                driver: {
+                                    firstname: resolvedDriver.firstname,
+                                    lastname: resolvedDriver.lastname,
+                                    id: resolvedDriver.id,
+                                    dspId: resolvedDriver.dspId
+                                },
+                                devices: []
+                            }
+                        )
+                        await updateShiftByDate(dateDsp, newAllDriverShifts)
+                    })
+                }
+                return
             }
 
 
@@ -146,27 +172,14 @@ export default {
 
             let newAllDriverShifts = [...foundShift.allDriverShifts]
 
-            for (i = 0; i < driverIds.length; i ++){
-                let driverId = driverIds[i]
-                findDriverById(driverId).then(  (resolvedDriver) => {
-                    let newShifts = [...resolvedDriver.shifts, {date: date, devices: []}]
-                    updateDriverByIdWithShift(driverId, newShifts)
-                    newAllDriverShifts.push(
-                        {
-                            driver: {
-                                firstname: resolvedDriver.firstname,
-                                lastname: resolvedDriver.lastname,
-                                id: resolvedDriver.id,
-                                dspId: resolvedDriver.dspId
-                            },
-                            devices: []
-                        }
-                    )
-                   updateShiftByDate(dateDsp, newAllDriverShifts)
-                })
-            }
+            return await runUpdateMutations().then( async () => {
+                const printer = await findShift(dateDsp)
+                console.log(printer, "FINAL FIND")
 
-            return await findShift(dateDsp)
+                return await findShift(dateDsp)
+            })
+
+            
         }
     }
 }
