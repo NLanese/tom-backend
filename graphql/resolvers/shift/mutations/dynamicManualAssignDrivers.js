@@ -165,6 +165,8 @@ export default {
                    updateShiftByDate(dateDsp, newAllDriverShifts)
                 })
             }
+
+            return await findShift(dateDsp)
         }
     }
 }

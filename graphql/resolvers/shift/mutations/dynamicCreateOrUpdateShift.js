@@ -186,6 +186,7 @@ export default {
             ///////////////////////////////
 
             return await findShift(dateDsp).then( resolved => {
+                console.log(resolved)
                 return resolved
             }).then( resolved => {
                 return resolved
