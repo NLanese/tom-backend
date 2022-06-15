@@ -119,62 +119,65 @@ export default {
                     }                                               
                 })
             }
-        
-            allDriverShifts.forEach( async (driverShift) => {                 
-                for (let i = 0; i < driverShift.amount; i++){         
-                    if (driverShift[i].driver.name !== 'No Driver Assigned'){
 
-                        // Finds the driver who has the same Id as the one assigned the current Device
-                        findDriver(driverShift[i].driver.id).then( resolved => {
-                            return {shifts: resolved.shifts, driverShift: driverShift[i], date: date, index: i}
+            // The Process
+            allDriverShifts.forEach( async (driverShift) => {      
 
-                        }).then( resolvedObj => {
-                            // Creates a new empty array to mimic the existing one. This allows us to make changes to an otherwise read-only
-                            let newShifts
+                // Finds the driver who has the same Id as the one assigned the current Device
+                findDriver(driverShift.driver.id).then( resolved => {
+                    return {shifts: resolved.shifts, driverShift: driverShift, devices: driverShift.devices, date: date}
+                }).then( resolvedObj => {
 
-                            // If there are no shifts with this date
-                            if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
+                    // Creates a new empty array to mimic the existing one. This allows us to make changes to an otherwise read-only
+                    let newShifts = []
 
-                                // Set the new object
-                                newShifts = [{
-                                    date: resolvedObj.date,
-                                    devices: driverShift[index].devices
-                                }]
-                            }
+                    // If there are no shifts with this date
+                    if (!resolvedObj.shifts || resolvedObj.shifts == [] || resolvedObj.shifts == null || resolvedObj.shifts == "undefined"){
 
-
-                            // If there is an existing shift array
-                            else {
-                                // Gets all the existing Shifts in the new object
-                                newShifts = resolvedObj.shifts.filter( shift => {
-                                    if (shift.date !== resolvedObj.date){
-                                        return shift
-                                    }
-                                })
-                                // Adds the new shift to the old array
-                                newShifts = [
-                                    ...newShifts, {
-                                        devices: driverShift[index].devices,
-                                        date: resolvedObj.date
-                                    }
-                                ]
-                            }
-                            return {shifts: newShifts, driverShift: driverShift[i], date: resolvedObj.date} 
-                        }).then( async (resolved) => {
-                            const driver = await db.driver.update({
-                                where: {
-                                    id: resolved.driverShift.id
-                                },
-                                data: {
-                                    shifts: resolved.shifts
-                                }
-                            })
-                            return {mutationObj: resolved, driver: driver}
-                        }).then((Obj) => {
-
-                        })                      
+                        // Set the new object
+                        newShifts = [{
+                            date: resolvedObj.date,
+                            devices: device
+                        }]
                     }
-                }
+
+
+                    // If there is an existing shift array
+                    else {
+
+                        // Gets all the existing Shifts in the new object
+                        newShifts = resolvedObj.shifts.filter( shift => {
+                            if (shift.date !== resolvedObj.date){
+                                return shift
+                            }
+                        })
+
+                        // Adds the new shift to the old array
+                        newShifts = [
+                            ...newShifts, {
+                                devices: resolvedObj.devices,
+                                date: resolvedObj.date
+                            }
+                        ]
+                    }
+
+                    return {shifts: newShifts, driverShift: driverShift, date: resolvedObj.date} 
+
+                }).then( async (resolved) => {
+
+                    console.log(resolved)
+
+                    return await db.driver.update({
+                        where: {
+                            id: resolved.driverShift.driver.id
+                        },
+                        data: {
+                            shifts: resolved.shifts
+                        }
+                    })
+                }).then( resolved => {
+                    console.log(resolved.shifts)
+                })                     
             })
 
 
