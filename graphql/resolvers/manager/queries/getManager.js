@@ -45,6 +45,7 @@ export default {
                                 }
                             }
                         },
+                        managers: true,
                         messages: true,
                         chatrooms: {
                             include: {
