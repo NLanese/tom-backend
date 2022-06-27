@@ -521,7 +521,7 @@ type AnnouncementMessage {
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
-    ownerChangePaymentStatus(subscriptionToken: String, subscriptionEndDate: String, subscriptionStartDate: String, stripeCustomerId: String): Dsp
+    ownerChangePaymentStatus(subscriptionToken: String, subscriptionEndDate: String, subscriptionStartDate: String, stripeCustomerId: String, token: String!): Dsp
     #########################
 
     #### MANAGER MUTATIONS ####

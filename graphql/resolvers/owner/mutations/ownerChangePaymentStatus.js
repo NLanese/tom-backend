@@ -24,6 +24,14 @@ export default {
 
             // Owner Exists
             else{
+                owner = await db.owner.findUnique({
+                    where: {
+                        id: owner.id
+                    },
+                    include: {
+                        dsp: true
+                    }
+                })
                 const dsp = await db.dsp.update({
                     where: {
                         id: owner.dsp.id
