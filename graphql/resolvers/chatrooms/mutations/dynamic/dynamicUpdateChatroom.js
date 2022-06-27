@@ -9,6 +9,7 @@ export default {
             role,
             chatroomId,
             name,
+            guests,
             token
         }, context) => {
             let owner;
@@ -40,7 +41,8 @@ export default {
                             id: chatroomId
                         },
                         data: {
-                            chatroomName: name
+                            chatroomName: name,
+                            guests: guests
                         }
                     })
                 } catch (error) {

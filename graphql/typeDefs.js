@@ -582,7 +582,7 @@ type AnnouncementMessage {
     dynamicRemoveManagerFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
-    dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, token: String): Chatroom
+    dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, guests: JSON, token: String): Chatroom
     dynamicReassignOwnership(role: String!, chatId: String!, guestId: String!, token: String): Chatroom
     ############################
 
