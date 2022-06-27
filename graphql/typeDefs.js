@@ -163,6 +163,12 @@ const typeDefs = gql`
     paid:                         Boolean
     accountStanding:              String
 
+    subscriptionToken:           String
+    subscriptionStartDate:       String
+    subscriptionEndDate:         String
+    autoPayEnabled:              Boolean
+    stripeCustomerId:            String
+
     owner:                        Owner
     managers:                     [Manager]
     drivers:                      [Driver]

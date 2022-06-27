@@ -66,29 +66,34 @@ export default {
 ///                          ///
 ////////////////////////////////
 
-    // Creates the Transporter
-    const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-            user: `${process.env.EMAIL_ADDRESS}`,
-            pass: `${process.env.EMAIL_PASSWORD}`
-        }
-    })
+        try{
+            // Creates the Transporter
+            const transporter = nodemailer.createTransport({
+                service: "Gmail",
+                auth: {
+                    user: `${process.env.EMAIL_ADDRESS}`,
+                    pass: `${process.env.EMAIL_PASSWORD}`
+                }
+            })
 
-    // Creates the Mail Object
-    const mailOptions = {
-        from: `${process.env.EMAIL_ADDRESS}`,
-        to: `${actualEmail}`,
-        subject: `Thank you for joining the TOM Team!`,
-        text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+            // Creates the Mail Object
+            const mailOptions = {
+                from: `${process.env.EMAIL_ADDRESS}`,
+                to: `${actualEmail}`,
+                subject: `Thank you for joining the TOM Team!`,
+                text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience!`
+                }
+            
+            // Sends the mail
+            transporter.sendMail(mailOptions, (error, response) => {
+                if (error){
+                    throw new Error('Something went wrong, please try again \n' + error)
+                } 
+            })
+        } catch(error){
+            console.log(error)
         }
     
-    // Sends the mail
-    transporter.sendMail(mailOptions, (error, response) => {
-        if (error){
-            throw new Error('Something went wrong, please try again \n' + error)
-        } 
-    })
     
 
 

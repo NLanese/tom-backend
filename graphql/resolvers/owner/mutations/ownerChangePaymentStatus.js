@@ -31,7 +31,7 @@ export default {
                     data: {
                         subscriptionEndDate: subscriptionEndDate,
                         subscriptionStartDate: subscriptionStartDate,
-                        sub,scriptionToken: subscriptionToken,
+                        subscriptionToken: subscriptionToken,
                         stripeCustomerId: stripeCustomerId
                     }
                 })
