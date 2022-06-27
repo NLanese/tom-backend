@@ -3,10 +3,10 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
 	scalar Date
 	scalar JSON
+  
 ###########################
 #       Super User        #
 ###########################
-
   type SuperUser {
     id:                           ID
     createdAt:                    Date
@@ -17,7 +17,6 @@ const typeDefs = gql`
     email:                        String
     password:                     String
     phoneNumber:                  String
-    profilePick:                  JSON
   }
 
 ###########################
@@ -516,6 +515,7 @@ type AnnouncementMessage {
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
+    ownerChangePaymentStatus(subscriptionToken: String, subscriptionEndDate: String, subscriptionStartDate: String, stripeCustomerId: String): Dsp
     #########################
 
     #### MANAGER MUTATIONS ####
@@ -582,7 +582,7 @@ type AnnouncementMessage {
     dynamicRemoveManagerFromChatroom(role: String!, chatroomId: String!, guestId: String!): Chatroom
     dynamicMuteAndUnmute(role: String!, driverId: String, managerId: String): Driver
     dynamicLeaveChatroom(role: String!, chatroomId: String!): Chatroom
-    dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, token: String): Chatroom
+    dynamicUpdateChatroom(role: String!, chatroomId: String!, name: String!, guests: JSON, token: String): Chatroom
     dynamicReassignOwnership(role: String!, chatId: String!, guestId: String!, token: String): Chatroom
     ############################
 

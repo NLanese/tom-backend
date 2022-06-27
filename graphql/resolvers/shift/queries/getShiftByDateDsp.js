@@ -14,22 +14,27 @@ export default {
             let driver = false
             let manager = false
     
+            let dateDsp = ""
         
             if (role){
                 if (role == "OWNER"){
                     owner = checkOwnerAuth(token)
+                    dateDsp = `${date}${owner.dsp.id}`
                 }
                 if (role == "MANAGER"){
                     manager = checkManagerAuth(token)
+                    dateDsp = `${date}${manager.dsp.id}`
                 }
                 if (role == "DRIVER"){
                     driver = checkDriverAuth(context)
+                    dateDsp = `${date}${driver.dsp.id}`
                 }
             }
 
+
             const foundShift = await db.shift.findUnique({
                 where: {
-                    date: date
+                    dateDsp: dateDsp
                 }
             })
 

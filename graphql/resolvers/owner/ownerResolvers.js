@@ -4,6 +4,7 @@ import GraphQLJSON from 'graphql-type-json';
 import ownerSignUp from './mutations/ownerSignUp.js';
 import ownerUpdate from './mutations/ownerUpdate.js';
 import refreshOwner from './mutations/refreshOwner.js';
+import ownerChangePaymentStatus from './mutations/ownerChangePaymentStatus.js';
 
 // OWNER QUERIES
 import getOwner from './queries/getOwner.js';
@@ -17,7 +18,8 @@ export default {
         // OWNER MUTATIONS
         ...ownerSignUp.Mutation,
         ...ownerUpdate.Mutation,
-        ...refreshOwner.Mutation
+        ...refreshOwner.Mutation,
+        ...ownerChangePaymentStatus.Mutation
 
     },
     JSON: GraphQLJSON,
