@@ -55,12 +55,15 @@ export default {
                 }
             }
 
+            const findShift = async () => {
+                return await db.shift.findUnique({
+                    where: {
+                        dateDsp: dateDsp
+                    }
+                })
+            }
 
-            const foundShift = await db.shift.findUnique({
-                where: {
-                    dateDsp: dateDsp
-                }
-            })
+            const foundShift = await findShift()
 
             if (!foundShift){
                 return ({id: "There is no shift on this date"})
