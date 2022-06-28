@@ -12,7 +12,7 @@ export default {
         }) => {
 
             // Finds Owner
-            const owner = await checkOwnerAuth(token)
+            let owner = await checkOwnerAuth(token)
 
             // NO Owner
             if (!owner) {
