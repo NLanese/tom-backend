@@ -43,7 +43,8 @@ export default {
             }
 
             // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
-            let code = `http://localhost:3000/resetPassword/${token}`           // Testing
+            let code = 'https://www.thetomapp.com/reset-password/${token}'
+            // let code = `http://localhost:3000/resetPassword/${token}`           // Testing
 
             let today = Date.now()
             let expire = (today + 18000000).toString()

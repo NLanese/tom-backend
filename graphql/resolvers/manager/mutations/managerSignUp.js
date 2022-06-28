@@ -13,7 +13,7 @@ export default {
             firstname,
             lastname,
             phoneNumber,
-            ownerEmail
+            signupToken
         }, { req }) => {
 
             console.log("hit")
@@ -56,7 +56,7 @@ export default {
 
             const owner = await db.owner.findUnique({
                 where: {
-                    email: ownerEmail
+                    signUpToken: signupToken
                 },
                 include: {
                     drivers: true,
