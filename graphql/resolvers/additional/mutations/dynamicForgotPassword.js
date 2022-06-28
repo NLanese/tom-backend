@@ -1,16 +1,9 @@
-import db from "../../../../utils/generatePrisma.js";
-import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken.js";
-import crypto from "crypto"
-import nodemailer from 'nodemailer'
-import dotenv from "dotenv";
-
+import db from "../../../../utils/generatePrisma";
+import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken";
 
 export default {
     Mutation: {
-        driverForgotPassword: async (_, {
-            email
-        }, context) => {
-
+        dynamicForgotPassword: async (_, {email}, context) => {
 ///////////////////////////////////
 ///                             ///
 ///      Mail Configuration     ///
@@ -30,7 +23,13 @@ export default {
             let token = generateForgotPasswordToken(email)
 
             // Finds if any other driver has the same token somehow
-            const conflictingDriver = await db.driver.findFirst({
+            const conflictingEmail = await db.owner.findFirst({
+                where: {
+                    resetPasswordToken: token
+                }
+            })
+
+            const otherConflictingEmqil = await db.manager.findFirst({
                 where: {
                     resetPasswordToken: token
                 }
@@ -38,12 +37,11 @@ export default {
 
             let randomizer = email + Math.random().toString()
             // Rerandomizes the token 
-            if (conflictingDriver){
+            if (conflictingEmail || otherConflictingEmqil){
                 token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
             }
 
-            // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
-            let code = `http://localhost:3000/resetPassword/${token}`           // Testing
+            let code = 'https://www.thetomapp.com/reset-password/${token}'
 
             let today = Date.now()
             let expire = (today + 18000000).toString()
@@ -57,12 +55,31 @@ export default {
               }
             email = email.toUpperCase()
 
-            // Finds the driver using the given email
-            const foundDriver = await db.driver.findUnique({
+            let user
+            let tableType
+
+             // Finds the driver using the given email
+            const foundOwner = await db.owner.findUnique({
                 where: {
                     email: email
                 }
             })
+            if (!foundOwner){
+                const foundManager = await db.manager.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
+                user = foundManager
+                tableType = 'manager'
+            }
+            else{
+                user = foundOwner
+                tableType = "owner"
+            }
+
+
+
 
             // SENDS the email through the transporter
             transporter.sendMail(mailOptions, (error, response) => {
@@ -70,19 +87,12 @@ export default {
                   throw new Error('Something went wrong, please try again \n' + error)
                 } 
             })
-    
-              
-///////////////////////////////////
-///                             ///
-///           Mutation          ///
-///                             ///
-///////////////////////////////////
 
-            if (foundDriver){
+            if (user){
                 try{
-                    return await db.driver.update({
+                    return await db.tableType.update({
                         where: {
-                            id: foundDriver.id
+                            id: user.id
                         },
                         data: {
                             resetPasswordToken: token,
@@ -98,8 +108,6 @@ export default {
             else{
                 throw new Error("Error: This email is not associated with any account")
             }
-
-
         }
     }
 }

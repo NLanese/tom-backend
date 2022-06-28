@@ -88,14 +88,14 @@ export default {
         const transporter = nodemailer.createTransport({
             service: "Gmail",
             auth: {
-                user: `${process.env.EMAIL_ADDRESS}`,
-                pass: `${process.env.EMAIL_PASSWORD}`
+                user: `${process.env.SIGNUP_EMAIL}`,
+                pass: `${process.env.SIGNUP_PASSWORD}`
             }
         })
     
         // Creates the Mail Object
         const mailOptions = {
-            from: `${process.env.EMAIL_ADDRESS}`,
+            from: `${process.env.SIGNUP_EMAIL}`,
             to: `${actualEmail}`,
             subject: `Thank you for joining the TOM Team!`,
             text: `We have recieved your Account Signup and are please to welcome you to the TOM Experience! \nUpon recieving this email, you will have a new TOM Account for the mobile app. Please use this email, and the password "${passwordToUse}" to login and get started!`
