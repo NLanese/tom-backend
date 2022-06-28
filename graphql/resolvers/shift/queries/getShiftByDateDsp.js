@@ -19,14 +19,38 @@ export default {
             if (role){
                 if (role == "OWNER"){
                     owner = checkOwnerAuth(token)
+                    owner = db.owner.findUnique({
+                        where: {
+                            id: id
+                        },
+                        include: {
+                            dsp: true
+                        }
+                    })
                     dateDsp = `${date}${owner.dsp.id}`
                 }
                 if (role == "MANAGER"){
                     manager = checkManagerAuth(token)
+                    manager = db.manager.findUnique({
+                        where: {
+                            id: id
+                        },
+                        include: {
+                            dsp: true
+                        }
+                    })
                     dateDsp = `${date}${manager.dsp.id}`
                 }
                 if (role == "DRIVER"){
                     driver = checkDriverAuth(context)
+                    driver = db.driver.findUnique({
+                        where: {
+                            id: id
+                        },
+                        include: {
+                            dsp: true
+                        }
+                    })
                     dateDsp = `${date}${driver.dsp.id}`
                 }
             }
