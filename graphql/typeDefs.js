@@ -187,7 +187,7 @@ const typeDefs = gql`
   type Shift {
     id:                           ID
     date:                         String
-    allDriverShifts:                   [JSON]
+    allDriverShifts:              [JSON]
     dateDsp:                      String
     dspId:                        String
     dsp:                          Dsp

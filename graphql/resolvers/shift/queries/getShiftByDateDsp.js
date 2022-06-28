@@ -21,7 +21,7 @@ export default {
                     owner = checkOwnerAuth(token)
                     owner = db.owner.findUnique({
                         where: {
-                            id: id
+                            id: owner.id
                         },
                         include: {
                             dsp: true
@@ -33,7 +33,7 @@ export default {
                     manager = checkManagerAuth(token)
                     manager = db.manager.findUnique({
                         where: {
-                            id: id
+                            id: manager.id
                         },
                         include: {
                             dsp: true
@@ -45,7 +45,7 @@ export default {
                     driver = checkDriverAuth(context)
                     driver = db.driver.findUnique({
                         where: {
-                            id: id
+                            id: driver.id
                         },
                         include: {
                             dsp: true
