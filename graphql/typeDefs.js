@@ -188,6 +188,7 @@ const typeDefs = gql`
     id:                           ID
     date:                         String
     allDriverShifts:                   [JSON]
+    dateDsp:                      String
     dspId:                        String
     dsp:                          Dsp
   }
