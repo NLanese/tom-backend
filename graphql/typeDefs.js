@@ -520,7 +520,8 @@ type AnnouncementMessage {
     #################
 
     #### EMAILS ####
-    sendNativeErrorEmail(errorCode: String!, userId: String!): String
+    sendNativeErrorEmail(errorCode: String!): String
+    sendAdminErrorEmail(errorCode: String!, token: String!, role: String!): String
     ################
 
     #### OWNER MUTATIONS ####

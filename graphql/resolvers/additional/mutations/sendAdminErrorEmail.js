@@ -1,17 +1,30 @@
-import checkDriverAuth from "../../../../utils/checkAuthorization/check-driver-auth.js"
+import checkManagerAuth from "../../../../utils/checkAuthorization/check-manager-auth.js"
+import checkOwnerAuth from "../../../../utils/checkAuthorization/check-owner-auth.js"
 import db from "../../../../utils/generatePrisma.js"
 
 export default {
     Mutation: {
-        sendNativeErrorEmail: async (_, {errorCode}, context) => {
+        sendAdminErrorEmail: async (_, {errorCode, token, role}) => {
 
-            let user = await checkDriverAuth(context)
+            let user 
 
-            const foundDriver = await db.driver.findUnique({
-                where: {
-                    id: user.id
-                }
-            })
+            if (role === "OWNER"){
+                user = await checkOwnerAuth(token)
+                user = await db.owner.findUnique({
+                    where: {
+                        id: user.id
+                    }
+                })
+            }
+            else if (role === "MANAGER"){
+                user = await checkManagerAuth(token)
+                user = await db.manager.findUnique({
+                    where: {
+                        id: user.id 
+                    }
+                })
+            }
+            
 
             // Creates the means of sending the email
             const transporter = nodemailer.createTransport({
@@ -27,7 +40,7 @@ export default {
                 from: `${process.env.EMAIL_ADDRESS}`,
                 to: `nick@kingwillystudios.com`,
                 subject: `TOM User Experienced ${errorCode} Error`,
-                text: `User ${foundDriver.firstname} ${foundDriver.lastname} experienced a(n) ${errorCode} error. Please look into this.`
+                text: `User ${user.firstname} ${user.lastname} experienced a(n) ${errorCode} error. Please look into this.`
               }
 
             // SENDS the email through the transporter
