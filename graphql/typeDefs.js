@@ -519,6 +519,10 @@ type AnnouncementMessage {
     refreshOwner(role: String!, token: String!): Owner
     #################
 
+    #### EMAILS ####
+    sendNativeErrorEmail(errorCode: String!, userId: String!): String
+    ################
+
     #### OWNER MUTATIONS ####
     ownerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!): Owner
     ownerUpdate(email: String, password: String, firstname: String, lastname: String, phoneNumber: String): Owner
