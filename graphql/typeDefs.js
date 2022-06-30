@@ -519,6 +519,8 @@ type AnnouncementMessage {
     refreshOwner(role: String!, token: String!): Owner
     #################
 
+    dynamicResetPassword(password: String!, token: String!): String
+
     #### EMAILS ####
     sendNativeErrorEmail(errorCode: String!): String
     sendAdminErrorEmail(errorCode: String!, token: String!, role: String!): String
@@ -531,7 +533,7 @@ type AnnouncementMessage {
     #########################
 
     #### MANAGER MUTATIONS ####
-    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, ownerEmail: String!): Manager
+    managerSignUp(email: String!, password: String!, firstname: String!, lastname: String!, phoneNumber: String!, signupToken: String!): Manager
     ###########################
 
     #### DRIVER MUTATIONS ####                                                                                                                  #
