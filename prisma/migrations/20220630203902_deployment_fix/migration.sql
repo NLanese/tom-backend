@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('DRIVER', 'MANAGER', 'OWNER', 'SUPERADMIN');
-
 -- CreateTable
 CREATE TABLE "SuperUser" (
     "id" TEXT NOT NULL,
