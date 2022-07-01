@@ -52,8 +52,6 @@ export default {
 
             password = await hashPassword(password)
 
-            ownerEmail = ownerEmail.toUpperCase()
-
             const owner = await db.owner.findUnique({
                 where: {
                     signUpToken: signupToken
