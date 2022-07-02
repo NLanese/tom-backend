@@ -1,5 +1,5 @@
-import db from "../../../../utils/generatePrisma";
-import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken";
+import db from "../../../../utils/generatePrisma.js";
+import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken.js";
 
 export default {
     Mutation: {

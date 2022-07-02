@@ -520,6 +520,7 @@ type AnnouncementMessage {
     #################
 
     dynamicResetPassword(password: String!, token: String!): String
+    dynamicForgotPassword(email: String!): Owner
 
     #### EMAILS ####
     sendNativeErrorEmail(errorCode: String!): String
