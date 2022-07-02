@@ -43,7 +43,7 @@ export default {
                 token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
             }
 
-            let code = 'https://www.thetomapp.com/reset-password/${token}'
+            et code = 'https://dashboard.thetomapp.com/authentication/password-reset-key?key=${token}'
 
             let today = Date.now()
             let expire = (today + 18000000).toString()
