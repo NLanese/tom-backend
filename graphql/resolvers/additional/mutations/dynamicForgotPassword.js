@@ -1,5 +1,7 @@
 import db from "../../../../utils/generatePrisma.js";
 import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken.js";
+import nodemailer from 'nodemailer'
+
 
 export default {
     Mutation: {
