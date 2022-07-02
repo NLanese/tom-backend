@@ -5,7 +5,7 @@ import hashPassword from "../../../../utils/passwordHashing.js";
 
 export default {
     Mutation: {
-        dynamicResetPassword: (_,{
+        dynamicResetPassword: async (_, {
             password, 
             token
         }, context) => {
