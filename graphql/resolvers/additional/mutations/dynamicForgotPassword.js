@@ -21,8 +21,13 @@ export default {
                 }
             })
 
+            console.log(email)
+
+            console.log("hit -1")
             // Generates resetToken
             let token = generateForgotPasswordToken(email)
+
+            console.log("hit0")
 
             // Finds if any other driver has the same token somehow
             const conflictingEmail = await db.owner.findFirst({
@@ -31,11 +36,15 @@ export default {
                 }
             })
 
+            console.log("hit1")
+
             const otherConflictingEmqil = await db.manager.findFirst({
                 where: {
                     resetPasswordToken: token
                 }
             })
+
+            console.log("hit2")
 
             let randomizer = email + Math.random().toString()
             // Rerandomizes the token 
@@ -48,6 +57,8 @@ export default {
             let today = Date.now()
             let expire = (today + 18000000).toString()
 
+            console.log("hit3")
+
             // Configures the actual Email Content
             const mailOptions = {
                 from: `${process.env.EMAIL_ADDRESS}`,
@@ -56,6 +67,8 @@ export default {
                 text: `Please click the link provided to be sent to the Reset Password page: \n${code}`
               }
             email = email.toUpperCase()
+
+            console.log("hit4")
 
             let user
             let tableType
@@ -66,6 +79,7 @@ export default {
                     email: email
                 }
             })
+            console.log("hit5")
             if (!foundOwner){
                 const foundManager = await db.manager.findUnique({
                     where: {
@@ -80,7 +94,7 @@ export default {
                 tableType = "owner"
             }
 
-
+            console.log("hit6")
 
 
             // SENDS the email through the transporter
@@ -91,21 +105,40 @@ export default {
             })
 
             if (user){
-                try{
-                    return await db.tableType.update({
-                        where: {
-                            id: user.id
-                        },
-                        data: {
-                            resetPasswordToken: token,
-                            resetPasswordTokenExpiration: expire
-                        }
-                    }).then( mutation => {
-                        return mutation
-                    })
-                } catch (error){
-                    throw new Error(error)
+                if (tableType === "owner"){
+                    try{
+                        await db.owner.update({
+                            where: {
+                                id: user.id
+                            },
+                            data: {
+                                resetPasswordToken: token,
+                                resetPasswordTokenExpiration: parseInt(expire, 10)
+                            }
+                        })
+                        return "Email Sent"
+                    } catch (error){
+                        console.log(error)
+                        throw new Error(error)
+                    }
                 }
+                else{
+                    try{
+                        await db.manager.update({
+                            where: {
+                                id: user.id
+                            },
+                            data: {
+                                resetPasswordToken: token,
+                                resetPasswordTokenExpiration: expire
+                            }
+                        })
+                        return "Email Sent"
+                    } catch (error){
+                        throw new Error(error)
+                    }
+                }
+                
             }
             else{
                 throw new Error("Error: This email is not associated with any account")
