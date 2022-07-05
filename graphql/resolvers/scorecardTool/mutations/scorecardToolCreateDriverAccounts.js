@@ -89,7 +89,7 @@ export default {
             service: "Gmail",
             auth: {
                 user: `${process.env.SIGNUP_EMAIL}`,
-                pass: `${process.env.SIGNUP_PASSWORD}`
+                pass: `${process.env.SIGNUP_PASS}`
             }
         })
     
