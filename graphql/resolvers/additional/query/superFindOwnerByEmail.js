@@ -1,4 +1,4 @@
-import db from "../../../../utils/generatePrisma"
+import db from "../../../../utils/generatePrisma.js"
 import dotenv from "dotenv";
 
 
