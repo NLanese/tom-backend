@@ -55,7 +55,7 @@ export default {
             let code = `https://dashboard.thetomapp.com/authentication/password-reset-key?key=${token}`
 
             let today = Date.now()
-            let expire = (today + 18000000).toString()
+            let expire = `${today + 18000000}`
 
             console.log("hit3")
 

@@ -5,8 +5,11 @@ import sendNativeErrorEmail from "./mutations/sendNativeErrorEmail.js";
 import dynamicForgotPassword from "./mutations/dynamicForgotPassword.js";
 import dynamicResetPassword from "./mutations/dynamicResetPassword.js";
 
+import superFindOwnerByEmail from "./query/superFindOwnerByEmail.js";
+
 export default {
     Query: {
+        ...superFindOwnerByEmail.Query
     },
     Mutation: {
         ...dynamicSignIn.Mutation,       // Good

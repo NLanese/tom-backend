@@ -452,6 +452,11 @@ type AnnouncementMessage {
   # ---------------------------------------- END SCHEMAS ----------------------------------------
 
   type Query {
+
+    #### SUPER QUERIES ####
+    superFindOwnerByEmail(email: String!, code: String!): Owner
+    #######################
+
     #### OWNER QUERIES ####
     getOwner(id: String): Owner
     #######################
