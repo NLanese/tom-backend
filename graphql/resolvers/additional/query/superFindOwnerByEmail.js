@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 export default {
     Query: {
-        getOwner: async (_, { id, code }, context) => {
+        superFindOwnerByEmail: async (_, { email, code }, context) => {
 
             if (code != process.env.SUPER_KEY_ONE){
                 throw new error("SUPER ACCESS DENIED")
