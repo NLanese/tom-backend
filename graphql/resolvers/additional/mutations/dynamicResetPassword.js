@@ -16,7 +16,7 @@ export default {
             let foundManager
 
             try{ 
-                foundOwner = await db.owner.findUnique({
+                foundOwner = await db.owner.findFirst({
                     where: {
                         resetPasswordToken: token
                     }
