@@ -47,9 +47,9 @@ export default {
     
                 let fullDateTime = {date: today, time: time}
 
-                if (dateTimeToInt(fullDateTime) > (foundManager.resetPasswordTokenExpiration)){
-                    throw new Error ("Token Expired")
-                }
+                // if (dateTimeToInt(fullDateTime) > (foundManager.resetPasswordTokenExpiration)){
+                //     throw new Error ("Token Expired")
+                // }
                 password = await hashPassword(password)
                 try {
                     await db.manager.update({
@@ -72,9 +72,9 @@ export default {
     
                 let fullDateTime = {date: today, time: time}
 
-                if (dateTimeToInt(fullDateTime) > (foundOwner.resetPasswordTokenExpiration)){
-                    throw new Error ("Token Expired")
-                }
+                // if (dateTimeToInt(fullDateTime) > (foundOwner.resetPasswordTokenExpiration)){
+                //     throw new Error ("Token Expired")
+                // }
 
                 password = await hashPassword(password)
 
