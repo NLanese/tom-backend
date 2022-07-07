@@ -1,6 +1,10 @@
 import db from "../../../../utils/generatePrisma.js";
 import generateForgotPasswordToken from "../../../../utils/generateToken/generateForgotPasswordToken.js";
 import nodemailer from 'nodemailer'
+import getTodaysDate from "../../../../utils/DateAndTime/getTodaysDate.js";
+import getCurrentTime from "../../../../utils/DateAndTime/getCurrentTime.js";
+import addTime from "../../../../utils/DateAndTime/addTime.js";
+import dateTimeToInt from "../../../../utils/DateAndTime/dateTimeToInt.js";
 
 
 export default {
@@ -133,10 +137,13 @@ export default {
                 }
             })
 
-            let today = Date.now()
-            console.log(today)
-            let expire = `${today + 18000000}`
-            console.log(expire)
+            let today = getTodaysDate().date 
+            let time = getCurrentTime().hourMin
+
+            let fullDateTime = {date: today, time: time}
+            let expire = addTime(30, fullDateTime)
+            expire = dateTimeToInt(expire)
+
 
             // Configures the actual Email Content
             const mailOptions = {
@@ -163,6 +170,8 @@ export default {
 
 
             if (user){
+                console.log(token, "Token pre mutation")
+                console.log(expire, "Expire int pre mutation")
                 if (tableType === "owner"){
                     try{
                         await db.owner.update({
@@ -174,7 +183,8 @@ export default {
                                 resetPasswordTokenExpiration: expire
                             }
                         }).then(resolved => {
-                            console.log(resolved.resetPasswordTokenExpiration)
+                            console.log(token, "Token POST mutation")
+                console.log(expire, "Expire int POST mutation")
                         })
                         return "Email Sent"
                     } catch (error){
