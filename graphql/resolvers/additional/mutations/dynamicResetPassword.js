@@ -25,7 +25,7 @@ export default {
                 console.log(err)
             }
             try{ 
-                foundManager = await db.manager.findUnique({
+                foundManager = await db.manager.findFirst({
                     where: {
                         resetPasswordToken: token
                     }
@@ -57,6 +57,8 @@ export default {
                 }
             }
             else if (foundOwner){
+                console.log(Date.now())
+                console.log(foundOwner.resetPasswordTokenExpiration)
                 if (Date.now().toString() >= foundOwner.resetPasswordTokenExpiration) {
                     throw new Error('Token is expired')
                 }

@@ -6,11 +6,123 @@ import nodemailer from 'nodemailer'
 export default {
     Mutation: {
         dynamicForgotPassword: async (_, {email}, context) => {
-///////////////////////////////////
-///                             ///
-///      Mail Configuration     ///
-///                             ///
-///////////////////////////////////
+                 
+            ///////////////////////////
+            ///                     ///
+            ///     Finds  User     ///
+            ///                     ///
+            ///////////////////////////
+            email = email.toUpperCase()
+
+            let user
+            let tableType
+
+             // Finds the Owner using the given email
+            const foundOwner = await db.owner.findUnique({
+                where: {
+                    email: email
+                }
+            })
+
+            // If the email does not belong to an owner but rather a manager
+            if (!foundOwner){
+                const foundManager = await db.manager.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
+                user = foundManager
+            }
+            else{
+                user = foundOwner
+                tableType = "owner"
+            }
+
+
+
+
+            ///////////////////////////
+            ///                     ///
+            ///   Generates Token   ///
+            ///                     ///
+            ///////////////////////////       
+            
+            let rand
+            let token
+
+            // Generates resetToken
+            try{
+                rand = (x) => {
+                    return ((Math.random() + Math.random() * 100).toString())
+                };
+                token = rand()
+            }
+            catch(error){
+                console.log(error)
+            }
+            
+
+            let conflictingToken = []
+            let otherConflictingToken = false
+            let thirdPotentialConflictingToken = false
+
+            // Finds if any other driver has the same token somehow
+            try{
+                conflictingToken = await db.owner.findMany({
+                    where: {
+                        resetPasswordToken: token
+                    }
+                })
+            }
+            catch(err){
+                console.log(err)
+            }
+            
+
+            // Finds if a manager has the token
+            try{
+                otherConflictingToken = await db.manager.findFirst({
+                    where: {
+                        resetPasswordToken: token
+                    }
+                })
+            }
+            catch(err){
+                console.log(err)
+            }
+            
+
+            // Finds if a driver has the token
+            try{
+                thirdPotentialConflictingToken = await db.driver.findFirst({
+                    where: {
+                        resetPasswordToken: token
+                    }
+                })
+            }
+            catch(err){
+                console.log(err)
+            }
+            
+
+            // Generates a random string
+            let randomizer = email + Math.random().toString() + user.id
+
+            // Rerandomizes the token 
+            if (conflictingToken.length > 1 || otherConflictingToken || thirdPotentialConflictingToken){
+                token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
+            }
+
+            let code = `https://dashboard.thetomapp.com/authentication/password-reset-key?key=${token}`
+
+
+
+
+            ///////////////////////////
+            ///                     ///
+            /// Email Config / Send ///
+            ///                     ///
+            ///////////////////////////
 
             // Creates the means of sending the email
             const transporter = nodemailer.createTransport({
@@ -20,31 +132,6 @@ export default {
                   pass: `${process.env.EMAIL_PASSWORD}`
                 }
             })
-
-
-            // Generates resetToken
-            let token = generateForgotPasswordToken(email)
-
-            // Finds if any other driver has the same token somehow
-            const conflictingEmail = await db.owner.findFirst({
-                where: {
-                    resetPasswordToken: token
-                }
-            })
-
-            const otherConflictingEmqil = await db.manager.findFirst({
-                where: {
-                    resetPasswordToken: token
-                }
-            })
-
-            let randomizer = email + Math.random().toString()
-            // Rerandomizes the token 
-            if (conflictingEmail || otherConflictingEmqil){
-                token = generateForgotPasswordToken(generateForgotPasswordToken(randomizer))
-            }
-
-            let code = `https://dashboard.thetomapp.com/authentication/password-reset-key?key=${token}`
 
             let today = Date.now()
             console.log(today)
@@ -57,40 +144,23 @@ export default {
                 to: `${email}`,
                 subject: `Reset your TOM App Password`,
                 text: `Please click the link provided to be sent to the Reset Password page: \n${code}`
-              }
-            email = email.toUpperCase()
-
-            let user
-            let tableType
-
-             // Finds the driver using the given email
-            const foundOwner = await db.owner.findUnique({
-                where: {
-                    email: email
-                }
-            })
-            if (!foundOwner){
-                const foundManager = await db.manager.findUnique({
-                    where: {
-                        email: email
-                    }
-                })
-                user = foundManager
-                tableType = 'manager'
-            }
-            else{
-                user = foundOwner
-                tableType = "owner"
             }
 
-
-
-            // SENDS the email through the transporter
+            // If all works, sends the email
             transporter.sendMail(mailOptions, (error, response) => {
                 if (error){
                   throw new Error('Something went wrong, please try again \n' + error)
                 } 
             })
+
+
+
+            ///////////////////////////
+            ///                     ///
+            /// Email Config / Send ///
+            ///                     ///
+            ///////////////////////////
+
 
             if (user){
                 if (tableType === "owner"){
@@ -101,8 +171,10 @@ export default {
                             },
                             data: {
                                 resetPasswordToken: token,
-                                resetPasswordTokenExpiration: parseInt(expire, 10)
+                                resetPasswordTokenExpiration: expire
                             }
+                        }).then(resolved => {
+                            console.log(resolved.resetPasswordTokenExpiration)
                         })
                         return "Email Sent"
                     } catch (error){
