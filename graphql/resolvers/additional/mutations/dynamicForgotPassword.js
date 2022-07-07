@@ -21,13 +21,9 @@ export default {
                 }
             })
 
-            console.log(email)
 
-            console.log("hit -1")
             // Generates resetToken
             let token = generateForgotPasswordToken(email)
-
-            console.log("hit0")
 
             // Finds if any other driver has the same token somehow
             const conflictingEmail = await db.owner.findFirst({
@@ -36,15 +32,11 @@ export default {
                 }
             })
 
-            console.log("hit1")
-
             const otherConflictingEmqil = await db.manager.findFirst({
                 where: {
                     resetPasswordToken: token
                 }
             })
-
-            console.log("hit2")
 
             let randomizer = email + Math.random().toString()
             // Rerandomizes the token 
@@ -57,8 +49,7 @@ export default {
             let today = Date.now()
             console.log(today)
             let expire = `${today + 18000000}`
-
-            console.log("hit3")
+            console.log(expire)
 
             // Configures the actual Email Content
             const mailOptions = {
@@ -69,8 +60,6 @@ export default {
               }
             email = email.toUpperCase()
 
-            console.log("hit4")
-
             let user
             let tableType
 
@@ -80,7 +69,6 @@ export default {
                     email: email
                 }
             })
-            console.log("hit5")
             if (!foundOwner){
                 const foundManager = await db.manager.findUnique({
                     where: {
@@ -95,7 +83,6 @@ export default {
                 tableType = "owner"
             }
 
-            console.log("hit6")
 
 
             // SENDS the email through the transporter
