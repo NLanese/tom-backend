@@ -298,6 +298,8 @@ model Chatroom {
   managers Manager[]
   messages Messages[]
   announcementMessages AnnouncementMessages[]
+
+  notifications   Notifications[]
 }
 
 /////////////////////////////////////
@@ -371,6 +373,18 @@ model NotifiedMessages {
   driver    Driver?  @relation(fields: [driverId], references: [id])
   dspId     String?
   dsp       Dsp?    @relation(fields: [dspId], references: [id])
+}
+
+model Notifications {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  sentAt    String  
+  date      String
+  content   String
+  
+  chatId    String?
+  chatroom  Chatroom?  @relation(fields: [chatId], references: [id])
+
 }
 /////////////////////////////////////
 ///                               ///
