@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 /////////////////////////////////////
 ///                               ///
 ///         Super User            ///
@@ -25,6 +26,8 @@ model SuperUser {
   phoneNumber String
   profilePick Json?
 }
+
+
 /////////////////////////////////////
 ///                               ///
 ///             User              ///
@@ -44,7 +47,8 @@ model User{
   ///////////////////////
 
   // Muting //
-  mutedUsers      User[]
+  mutedId         String
+  muted           User @relation(fields: [mutedId], references: [id], name: "muted")
   ////////////
 
   //  Configurations //
@@ -62,15 +66,15 @@ model User{
   globallyMuted                 Boolean @default(false)
   ownerId                       String
   attendance                    String
-  owner                         User @relation(fields: [ownerId], references: [id])
   weeklyReports                 WeeklyReport[]
   shifts                        Shift[]
+  driverShifts                  DriverShift[]
   accidents                     Accident[]
   //////////////////
 
   // Managers and Owners //
   dspOwner                      Boolean @default(false)
-  drivers                       User[]
+  drivers                       User[] @relation(name: "drivers")
   /////////////////////////
 
   // Payment //
@@ -85,17 +89,16 @@ model User{
   dspId                         String?
   dsp                           Dsp?
   chatrooms                     Chatroom[]
-  ownedChatrooms                Chatroom[]
   announcements                 AnnouncementMessages[]
   /////////////////////////
 }
+
 
 /////////////////////////////////////
 ///                               ///
 ///             DSP               ///
 ///                               ///
 /////////////////////////////////////
-
 model Dsp {
   id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
@@ -104,22 +107,20 @@ model Dsp {
   timeZone  String
 
 
-    ficoLimits                   Json
-    seatbeltLimits               Json
-    speedingLimits               Json
-    distractionLimits            Json
-    followLimits                 Json
-    signalLimits                 Json
-    deliveryCompletionRateLimits Json
-    deliveryNotRecievedLimits    Json
-    photoOnDeliveryLimits        Json
-    topCardLimits                Int
-    smallCardLimits              Int
+  ficoLimits                   Json
+  seatbeltLimits               Json
+  speedingLimits               Json
+  distractionLimits            Json
+  followLimits                 Json
+  signalLimits                 Json
+  deliveryCompletionRateLimits Json
+  deliveryNotRecievedLimits    Json
+  photoOnDeliveryLimits        Json
+  topCardLimits                Int
+  smallCardLimits              Int
 
-    feedbackNotifications        Json
-    autoSend                     Json
-
-    allDevices                   Json[]
+  feedbackNotifications        Json
+  autoSend                     Json
 
   paid                          Boolean @default(false) // Keeps track if the Dsp has paid 
   accountStanding               String  @default("Free") // Keeps track of the Dsp Account Status
@@ -131,14 +132,14 @@ model Dsp {
 
   autoPayEnabled               Boolean @default(false)
    
-  shifts                Shift[]     
-  ownerId               String    @unique
-  owner                 User     @relation(fields: [ownerId], references: [id])
-  weeklyReports         WeeklyReport[]
-  notifiedMessages      NotifiedMessages[]
-  devices               Device[]
-  announcementMessages  AnnouncementMessages[]
-  accidents             Accident[]
+  shifts                      Shift[]     
+  ownerId                     String    @unique
+  owner                       User     @relation(fields: [ownerId], references: [id])
+  weeklyReports               WeeklyReport[]
+  notifiedMessages            NotifiedMessages[]
+  devices                     Device[]
+  announcementMessages        AnnouncementMessages[]
+  accidents                   Accident[]
 }
 
 /////////////////////////////////////
@@ -146,7 +147,6 @@ model Dsp {
 ///         Weekly Report         ///
 ///                               ///
 /////////////////////////////////////
-
 model WeeklyReport {
   id                  String   @id @unique @default(uuid())
   createdAt           DateTime @default(now())
@@ -196,20 +196,67 @@ model WeeklyReport {
 
 /////////////////////////////////////
 ///                               ///
+///         DEVICE MODEL          ///
+///                               ///
+/////////////////////////////////////
+model Device {
+  id                  Int @id @unique @default(autoincrement())
+  createdAt           DateTime @default(now())
+  number              String?
+  name                String?
+  type                String?
+  deviceIndex         Int?
+
+  dspId               String
+  dsp                 Dsp @relation(fields: [dspId], references: [id])
+  categoryId          String
+  category            DeviceCategory @relation(fields: [categoryId], references: [id])
+  driverShifts        DriverShift[]  
+}
+
+/////////////////////////////////////
+///                               ///
+///         DEVICE Category          ///
+///                               ///
+/////////////////////////////////////
+model DeviceCategory {
+  id                  Int @id @unique @default(autoincrement())
+  createdAt           DateTime @default(now())
+  number              String?
+  name                String?
+  type                String?
+  deviceIndex         Int?
+
+  dspId               String
+  dsp                 Dsp @relation(fields: [dspId], references: [id])
+}
+
+/////////////////////////////////////
+///                               ///
 ///             Shift             ///
 ///                               ///
 /////////////////////////////////////
-
 model Shift {
   id              String  @id @unique @default(uuid())
   date            String
   dateDsp         String @unique
-  allDriverShifts Json[]                               // {driver: <driverObj>, devices: {
-                                                        //      device1: { <deviceObj>, device2: <deviceObj> ... deviceN: <deviceIbj> }
-                                                        // }
   dspId           String
   dsp             Dsp     @relation(fields: [dspId], references: [id])
   shiftMessage    String
+}
+
+/////////////////////////////////////
+///                               ///
+///         Driver Shift          ///
+///                               ///
+/////////////////////////////////////
+model DriverShift{
+  id              String  @id @unique @default(uuid())
+  date            String
+  dateDriver      String @unique
+  userId          String
+  user            User @relation(fields: [userId], references: [id])
+  devices         Device[]
 }
 
 /////////////////////////////////////
@@ -219,26 +266,22 @@ model Shift {
 /////////////////////////////////////
 
 model Chatroom {
-  id                String        @id @unique @default(uuid())
-  createdAt         DateTime      @default(now())
+  id                    String        @id @unique @default(uuid())
+  createdAt             DateTime      @default(now())
 
-  chatroomName      String
-  guests            Json[]
-  mutedIds          String[] 
-  chatroomOwner     Json
-  announcementChat  Boolean @default(false)
+  chatroomName          String
+  mutedIds              String[] 
+  chatroomOwner         User
+  announcementChat      Boolean @default(false)
 
-  driverJoinOnSignUp  Boolean @default(false)
-  managerJoinOnSignUp Boolean @default(true) 
+  driverJoinOnSignUp    Boolean @default(false)
+  managerJoinOnSignUp   Boolean @default(true) 
+  
+  guests                User[]
+  messages              Messages[]
+  announcementMessages  AnnouncementMessages[]
 
-  ownerId  String?
-  owner    Owner?             @relation(fields: [ownerId], references: [id])
-  drivers  Driver[]
-  managers Manager[]
-  messages Messages[]
-  announcementMessages AnnouncementMessages[]
-
-  notifications   Notifications[]
+  notifications         Notifications[]
 }
 
 /////////////////////////////////////
@@ -260,12 +303,8 @@ model Messages {
 
   chatroomId String
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
-  ownerId    String?
-  owner      Owner?   @relation(fields: [ownerId], references: [id])
-  managerId  String?
-  manager    Manager? @relation(fields: [managerId], references: [id])
-  driverId   String?
-  driver     Driver?  @relation(fields: [driverId], references: [id])
+  userId     String
+  user       User @relation(fields: [userId], references: [id])
 }
 
 /////////////////////////////////////
@@ -283,14 +322,10 @@ model AnnouncementMessages {
   readBy      Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ] 
   readyByIds  String[]    
 
-  chatroomId String
-  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
-  ownerId    String?
-  owner      Owner?   @relation(fields: [ownerId], references: [id])
-  dspId      String?
-  dsp        Dsp?     @relation(fields: [dspId], references: [id])
-  managerId  String?
-  manager    Manager? @relation(fields: [managerId], references: [id])
+  chatroomId  String
+  chatroom    Chatroom @relation(fields: [chatroomId], references: [id])
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
 }
 
 /////////////////////////////////////
@@ -309,7 +344,7 @@ model NotifiedMessages {
   from      String
   type      String
   driverId  String?
-  driver    Driver?  @relation(fields: [driverId], references: [id])
+  driver    User?  @relation(fields: [driverId], references: [id])
   dspId     String?
   dsp       Dsp?    @relation(fields: [dspId], references: [id])
 }
@@ -349,7 +384,7 @@ model Accident {
   filled  Boolean @default(false)
 
   driverId            String
-  driver              Driver              @relation(fields: [driverId], references: [id])
+  driver              User              @relation(fields: [driverId], references: [id])
   collisionAccidents  CollisionAccident[]
   propertyAccidents   PropertyAccident[]
   injuryAccidents     InjuryAccident[]
@@ -429,23 +464,5 @@ enum Role {
   SUPERADMIN
 }
 
-/////////////////////////////////////
-///                               ///
-///         DEVICE MODEL          ///
-///                               ///
-/////////////////////////////////////
 
-model Device {
-  id                  Int @id @unique @default(autoincrement())
-  createdAt           DateTime @default(now())
-  number              String?
-  name                String?
-  type                String?
-  deviceIndex         Int?
-
-  driverId            String?
-  driver              Driver? @relation(fields: [driverId], references: [id])
-  dspId               String
-  dsp                 Dsp @relation(fields: [dspId], references: [id])
-}
 
