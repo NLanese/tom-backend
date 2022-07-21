@@ -51,6 +51,7 @@ model User{
   mutedId         String
   muted           User @relation(fields: [mutedId], references: [id], name: "muted")
   mutedBy         User[] @relation("muted")
+  messagesSent    Messages[]
   ////////////
 
   //  Configurations //
@@ -73,12 +74,14 @@ model User{
   driverShifts                  DriverShift[]
   accidents                     Accident[]
   owner                         User[] @relation("OwnerDrivers")
-  announcementsRead             AnnouncementMessages @relation("announcementsRead")
-  //////////////////
+  announcementsRead             AnnouncementMessages[] @relation("driverSideAnnouncement")
+  notifedMessages               NotifiedMessages[] @relation("driverSideNotifedMessages")
+  /////////////////
 
   // Managers and Owners //
   dspOwner                      Boolean @default(false)
   drivers                       User[] @relation(name: "OwnerDrivers")
+  sentNotifiedMessages          NotifiedMessages[] @relation("ownerSideNotifiedMessages")
   /////////////////////////
 
   // Payment //
@@ -93,7 +96,7 @@ model User{
   dspId                         String?
   dsp                           Dsp?
   chatrooms                     Chatroom[]  @relation(name: "guests")
-  announcements                 AnnouncementMessages[]
+  announcements                 AnnouncementMessages[] @relation("ownerSideAnnouncement")
   /////////////////////////
 }
 
@@ -142,6 +145,7 @@ model Dsp {
   weeklyReports               WeeklyReport[]
   notifiedMessages            NotifiedMessages[]
   devices                     Device[]
+  deviceCategories            DeviceCategory[]
   announcementMessages        AnnouncementMessages[]
   accidents                   Accident[]
 }
@@ -224,7 +228,7 @@ model Device {
 ///                               ///
 /////////////////////////////////////
 model DeviceCategory {
-  id                  Int @id @unique @default(autoincrement())
+  id                  String @id @unique @default(uuid())
   createdAt           DateTime @default(now())
   number              String?
   name                String?
@@ -233,6 +237,7 @@ model DeviceCategory {
 
   dspId               String
   dsp                 Dsp @relation(fields: [dspId], references: [id])
+  devices             Device[]
 }
 
 /////////////////////////////////////
@@ -244,9 +249,10 @@ model Shift {
   id              String  @id @unique @default(uuid())
   date            String
   dateDsp         String @unique
+  shiftMessage    String
   dspId           String
   dsp             Dsp     @relation(fields: [dspId], references: [id])
-  shiftMessage    String
+  users           User[]
 }
 
 /////////////////////////////////////
@@ -295,20 +301,20 @@ model Chatroom {
 /////////////////////////////////////
 
 model Messages {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
 
-  content    String
-  sentAt     String?
-  from       Json
-  visable    Boolean @default(true)
-  reported   Boolean @default(false)
-  reportedBy Json?
+  content     String
+  sentAt      String?
+  from        Json
+  visable     Boolean @default(true)
+  reported    Boolean @default(false)
+  reportedBy  Json?
 
-  chatroomId String
-  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
-  userId     String
-  user       User @relation(fields: [userId], references: [id])
+  chatroomId  String
+  chatroom    Chatroom @relation(fields: [chatroomId], references: [id])
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
 }
 
 /////////////////////////////////////
@@ -323,12 +329,14 @@ model AnnouncementMessages {
 
   content     String
   from        Json
-  readBy      User[]  @relation("announcementsRead")
+  readBy      User[] @relation("driverSideAnnouncement")
 
   chatroomId  String
   chatroom    Chatroom @relation(fields: [chatroomId], references: [id])
   userId      String
-  user        User @relation(fields: [userId], references: [id])
+  user        User @relation(fields: [userId], references: [id], name: "ownerSideAnnouncement")
+  dspId       String 
+  dsp         Dsp @relation(fields: [dspId], references: [id])
 }
 
 /////////////////////////////////////
@@ -344,10 +352,11 @@ model NotifiedMessages {
   read      Boolean  @default(false)
   readAt    String   
   content   String
-  from      String
+  fromId    String
+  from      User @relation(fields: [fromId], references: [id], name: "ownerSideNotifiedMessages")
   type      String
   driverId  String?
-  driver    User?  @relation(fields: [driverId], references: [id])
+  driver    User?  @relation(fields: [driverId], references: [id], name: "driverSideNotifedMessages")
   dspId     String?
   dsp       Dsp?    @relation(fields: [dspId], references: [id])
 }
