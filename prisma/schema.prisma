@@ -40,139 +40,54 @@ model User{
   phoneNumber     String @unique
   password        String
   createdAt       DateTime @default(now())
+  profilePick     Json?
+  ///////////////////////
 
   // Muting //
-  globallyMuted   Boolean @default(false)
   mutedUsers      User[]
   ////////////
 
-  //
+  //  Configurations //
+  token                         String?  
+  locked                        Boolean @default(false) // Used to lock the Managers Account if needed
+  deleted                       Boolean @default(false) // Keeps track if the Owner account has been deleted
+  resetPasswordToken            String?
+  resetPasswordTokenExpiration  Int?
+  signUpToken                   String? @unique // Used for Driver/Manager signing up on the app
+  notified                      Boolean @default(false)
+  ////////////////////
 
+  // Drivers Only //
+  transporterId                 String @unique
+  globallyMuted                 Boolean @default(false)
+  ownerId                       String
+  attendance                    String
+  owner                         User @relation(fields: [ownerId], references: [id])
+  weeklyReports                 WeeklyReport[]
+  shifts                        Shift[]
+  accidents                     Accident[]
+  //////////////////
 
-}
+  // Managers and Owners //
+  dspOwner                      Boolean @default(false)
+  drivers                       User[]
+  /////////////////////////
 
+  // Payment //
+  subscriptionToken             String?
+  subscriptionStartDate         String?
+  subscriptionEndDate           String?
+  stripeCustomerId              String?
+  autoPayEnabled                Boolean @default(false)
+  /////////////
 
-/////////////////////////////////////
-///                               ///
-///            Owner              ///
-///                               ///
-/////////////////////////////////////
-
-model Owner {
-  id          String   @id @unique @default(uuid())
-  createdAt   DateTime @default(now())
-  role        Role     @default(OWNER)
-  token       String?  
-  firstname   String
-  lastname    String
-  email       String   @unique
-  phoneNumber String
-  password    String
-  profilePick Json?
-  locked      Boolean @default(false) // Used to lock the Managers Account if needed
-
-  deleted Boolean @default(false) // Keeps track if the Owner account has been deleted
-
-  notified Boolean @default(false)
-  resetPasswordToken           String?
-  resetPasswordTokenExpiration Int?
-  signUpToken                  String? @unique // Used for Driver/Manager signing up on the app
-
-  subscriptionToken            String?
-  subscriptionStartDate        String?
-  subscriptionEndDate          String?
-  stripeCustomerId             String?
-  autoPayEnabled               Boolean @default(false)
-
-  drivers          Driver[]
-  mutedDrivers     Driver[]
-  managers         Manager[]
-  messages         Messages[]
-  announcementMessages AnnouncementMessages[]
-  dsp              Dsp?
-  chatrooms        Chatroom[]
-}
-
-/////////////////////////////////////
-///                               ///
-///            Manager            ///
-///                               ///
-/////////////////////////////////////
-
-model Manager {
-  id          String   @id @unique @default(uuid())
-  createdAt   DateTime @default(now())
-  role        Role     @default(MANAGER)
-  token       String?
-  firstname   String
-  lastname    String
-  email       String   @unique
-  phoneNumber String
-  password    String
-  profilePick Json?
-  muted       Boolean @default(false) // Used to disable char features for Driver
-  locked      Boolean @default(false) // Used to lock the Managers Account if needed
-  deleted     Boolean @default(false) // Keeps track if the Managers Account has been deleted
-
-  notified    Boolean @default(false)
-
-  resetPasswordToken           String?
-  resetPasswordTokenExpiration Int?
-
-  ownerId          String
-  owner            Owner              @relation(fields: [ownerId], references: [id])
-  drivers          Driver[]
-  mutedListIds     String[]
-  messages         Messages[]
-  announcementMessages AnnouncementMessages[]
-  dspId            String?
-  dsp              Dsp?               @relation(fields: [dspId], references: [id])
-  chatrooms        Chatroom[]
-}
-
-/////////////////////////////////////
-///                               ///
-///           Driver              ///
-///                               ///
-/////////////////////////////////////
-
-model Driver {
-  id          String   @id @unique @default(uuid())
-  createdAt   DateTime @default(now())
-  role        Role     @default(DRIVER)
-  token       String?
-  firstname   String
-  lastname    String
-  email       String   @unique
-  phoneNumber String?
-  password    String?
-  profilePick Json?
-  shifts      Json[]
-
-  transporterId   String? 
-  globallyMuted   Boolean @default(false) // Used to disable char features for Driver
-  mutedIds        String[]
-  locked          Boolean @default(false) // Used to lock the Drivers Account if needed
-  deleted         Boolean @default(false) // Keeps track if the Drivers account has been deleted
-  attendence      String?
-
-  notified        Boolean @default(false)
-
-  resetPasswordToken           String?  @unique
-  resetPasswordTokenExpiration String?   
-
-  ownerId          String
-  owner            Owner              @relation(fields: [ownerId], references: [id])
-  managers         Manager[]
-  accidents        Accident[]
-  messages         Messages[]
-  notifiedMessages NotifiedMessages[]
-  dspId            String?
-  dspTransporter   String @unique
-  dsp              Dsp?               @relation(fields: [dspId], references: [id])
-  weeklyReport     WeeklyReport[]
-  chatrooms        Chatroom[]
-  devices          Device[]
+  // General Connections //
+  dspId                         String?
+  dsp                           Dsp?
+  chatrooms                     Chatroom[]
+  ownedChatrooms                Chatroom[]
+  announcements                 AnnouncementMessages[]
+  /////////////////////////
 }
 
 /////////////////////////////////////
@@ -215,12 +130,10 @@ model Dsp {
   stripeCustomerId             String?
 
   autoPayEnabled               Boolean @default(false)
-
-  managers              Manager[]
-  drivers               Driver[]     
+   
   shifts                Shift[]     
   ownerId               String    @unique
-  owner                 Owner     @relation(fields: [ownerId], references: [id])
+  owner                 User     @relation(fields: [ownerId], references: [id])
   weeklyReports         WeeklyReport[]
   notifiedMessages      NotifiedMessages[]
   devices               Device[]
@@ -276,7 +189,7 @@ model WeeklyReport {
 
   // RELATIONSHIPS
   driverId String
-  driver   Driver @relation(fields: [driverId], references: [id])
+  driver   User @relation(fields: [driverId], references: [id])
   dspId    String
   dsp      Dsp @relation(fields: [dspId], references: [id])
 }
