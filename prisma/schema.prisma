@@ -46,9 +46,11 @@ model User{
   profilePick     Json?
   ///////////////////////
 
-  // Muting //
+  // Chatrooms //
+  ownerChatrooms  Chatroom[] @relation(name: "chatOwner")
   mutedId         String
   muted           User @relation(fields: [mutedId], references: [id], name: "muted")
+  mutedBy         User[] @relation("muted")
   ////////////
 
   //  Configurations //
@@ -70,11 +72,13 @@ model User{
   shifts                        Shift[]
   driverShifts                  DriverShift[]
   accidents                     Accident[]
+  owner                         User[] @relation("OwnerDrivers")
+  announcementsRead             AnnouncementMessages @relation("announcementsRead")
   //////////////////
 
   // Managers and Owners //
   dspOwner                      Boolean @default(false)
-  drivers                       User[] @relation(name: "drivers")
+  drivers                       User[] @relation(name: "OwnerDrivers")
   /////////////////////////
 
   // Payment //
@@ -88,7 +92,7 @@ model User{
   // General Connections //
   dspId                         String?
   dsp                           Dsp?
-  chatrooms                     Chatroom[]
+  chatrooms                     Chatroom[]  @relation(name: "guests")
   announcements                 AnnouncementMessages[]
   /////////////////////////
 }
@@ -270,14 +274,14 @@ model Chatroom {
   createdAt             DateTime      @default(now())
 
   chatroomName          String
-  mutedIds              String[] 
-  chatroomOwner         User
+  chatroomOwnerId       String
+  chatroomOwner         User @relation(fields: [chatroomOwnerId], references: [id], name: "chatOwner") 
   announcementChat      Boolean @default(false)
 
   driverJoinOnSignUp    Boolean @default(false)
   managerJoinOnSignUp   Boolean @default(true) 
   
-  guests                User[]
+  guests                User[] @relation("guests")
   messages              Messages[]
   announcementMessages  AnnouncementMessages[]
 
@@ -319,8 +323,7 @@ model AnnouncementMessages {
 
   content     String
   from        Json
-  readBy      Json[]      // [   {driver: {driverObj}, readAt: {date: '01/27/1999', time: '05:35'}  }     ] 
-  readyByIds  String[]    
+  readBy      User[]  @relation("announcementsRead")
 
   chatroomId  String
   chatroom    Chatroom @relation(fields: [chatroomId], references: [id])
@@ -399,8 +402,8 @@ model Accident {
       id                  String @id @unique @default(uuid())
       contact_info        Json
       damage_report       Json
-      defective_equip     String[]
-      safety_equip        String[]
+      defective_equip     Json
+      safety_equip        Json
       package_report      Json?
       specific_pictures   Json
       extra_info          String?
