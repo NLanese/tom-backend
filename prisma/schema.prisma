@@ -25,6 +25,32 @@ model SuperUser {
   phoneNumber String
   profilePick Json?
 }
+/////////////////////////////////////
+///                               ///
+///             User              ///
+///                               ///
+/////////////////////////////////////
+model User{
+  // Basic Information //
+  id              String   @id @unique @default(uuid())
+  role            Role
+  firstname       String
+  lastname        String
+  email           String @unique
+  phoneNumber     String @unique
+  password        String
+  createdAt       DateTime @default(now())
+
+  // Muting //
+  globallyMuted   Boolean @default(false)
+  mutedUsers      User[]
+  ////////////
+
+  //
+
+
+}
+
 
 /////////////////////////////////////
 ///                               ///
@@ -59,8 +85,8 @@ model Owner {
   autoPayEnabled               Boolean @default(false)
 
   drivers          Driver[]
+  mutedDrivers     Driver[]
   managers         Manager[]
-  mutedListIds    String[]
   messages         Messages[]
   announcementMessages AnnouncementMessages[]
   dsp              Dsp?
