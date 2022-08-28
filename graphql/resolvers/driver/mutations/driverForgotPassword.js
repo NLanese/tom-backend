@@ -43,7 +43,7 @@ export default {
             }
 
             // let code = `http://thetomapp.com/resetPassword/${token}`         // Deployed
-            let code = 'https://www.thetomapp.com/reset-password/${token}'
+            let code = `https://dashboard.thetomapp.com/authentication/password-reset-key?key=${token}`
             // let code = `http://localhost:3000/resetPassword/${token}`           // Testing
 
             let today = Date.now()

@@ -48,6 +48,20 @@ export default {
                         }
                     })
 
+                    // Create new chat room notification
+                    const newNotification = await db.notifications.create({
+                        data: {
+                            chatroom: {
+                                connect: {
+                                    id: chatroomId
+                                }
+                            },
+                            content: content,
+                            sentAt: sentAt,
+                            date: sentAt,
+                        }
+                    })
+
                     return await db.chatroom.findUnique({
                         where: {
                             id: newMessage.chatroomId
