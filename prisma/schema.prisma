@@ -13,6 +13,7 @@ datasource db {
 ///         Super User            ///
 ///                               ///
 /////////////////////////////////////
+
 model SuperUser {
   id          String   @id @unique @default(uuid())
   createdAt   DateTime @default(now())
@@ -42,7 +43,7 @@ model Owner {
   email       String   @unique
   phoneNumber String
   password    String
-  profilePick Json?
+  profilePick String?
   locked      Boolean @default(false) // Used to lock the Managers Account if needed
 
   deleted Boolean @default(false) // Keeps track if the Owner account has been deleted
@@ -60,8 +61,8 @@ model Owner {
 
   drivers          Driver[]
   managers         Manager[]
-  mutedListIds    String[]
-  messages         Messages[]
+  mutedListIds    String[] // Ids of drivers that this user muted
+  messages         Messages[] 
   announcementMessages AnnouncementMessages[]
   dsp              Dsp?
   chatrooms        Chatroom[]
@@ -84,7 +85,7 @@ model Manager {
   phoneNumber String
   password    String
   profilePick Json?
-  muted       Boolean @default(false) // Used to disable char features for Driver
+  muted       Boolean @default(false) // Used to disable chat features for Driver or Manager
   locked      Boolean @default(false) // Used to lock the Managers Account if needed
   deleted     Boolean @default(false) // Keeps track if the Managers Account has been deleted
 
@@ -125,7 +126,7 @@ model Driver {
 
   transporterId   String? 
   globallyMuted   Boolean @default(false) // Used to disable char features for Driver
-  mutedIds        String[]
+  mutedIds        String[]                // List of drivers that this driver has muted
   locked          Boolean @default(false) // Used to lock the Drivers Account if needed
   deleted         Boolean @default(false) // Keeps track if the Drivers account has been deleted
   attendence      String?
